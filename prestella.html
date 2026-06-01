@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;color:#1a1a1a;font-size:14px;line-height:1.6}
+.app{max-width:900px;margin:0 auto;padding:16px}
+.tool-header{background:#1e3a5f;color:#fff;border-radius:12px;padding:14px 20px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.tool-header h1{font-size:15px;font-weight:600}
+.tool-header p{font-size:11px;opacity:.65}
+.hbadge{background:rgba(255,255,255,.18);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;margin-left:auto}
+.steps{display:flex;gap:5px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
+.sbtn{flex-shrink:0;padding:5px 13px;border-radius:18px;border:1.5px solid #d0cfc8;background:#fff;font-size:11px;font-weight:500;cursor:pointer;color:#777;display:flex;align-items:center;gap:4px}
+.sbtn.active{background:#1e3a5f;color:#fff;border-color:#1e3a5f}
+.sbtn.done{border-color:#2d7a4f;color:#2d7a4f;background:#eaf3de}
+.card{background:#fff;border:0.5px solid #e0dfd8;border-radius:12px;padding:16px 20px;margin-bottom:10px}
+.ctitle{font-size:11px;font-weight:600;color:#999;letter-spacing:.6px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.ctitle i{font-size:14px;color:#1e3a5f}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+label{display:block;font-size:11px;color:#666;margin-bottom:3px;font-weight:500}
+input[type=text],input[type=number],select,textarea{width:100%;border:1px solid #ddd;border-radius:8px;padding:7px 10px;font-size:13px;font-family:inherit;color:#1a1a1a;background:#fff;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#1e3a5f}
+textarea{resize:vertical}
+.sbox{background:#f8f7f4;border-radius:8px;padding:9px;text-align:center}
+.sbox .dom{font-size:10px;color:#888;font-weight:600;margin-bottom:2px}
+.sbox .frac{font-size:10px;color:#bbb;margin-bottom:3px}
+.sbox input{width:52px;text-align:center;font-size:19px;font-weight:700;border:1.5px solid #e0dfd8;border-radius:6px;padding:3px 0;color:#1e3a5f}
+.qtabs{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
+.qtab{padding:4px 11px;border-radius:13px;border:1px solid #ddd;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:#888}
+.qtab.on{background:#1e3a5f;color:#fff;border-color:#1e3a5f}
+.qgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:4px}
+.qbtn{background:#f8f7f4;border:1.5px solid #e0dfd8;border-radius:8px;padding:7px 0;text-align:center;cursor:pointer}
+.qbtn .qn{display:block;font-size:10px;color:#aaa;margin-bottom:1px}
+.qbtn .qt{font-size:11px;font-weight:600;color:#555}
+.qbtn .qsk{display:block;font-size:9px;color:#999;margin-top:2px;line-height:1.2;word-break:keep-all}
+.qbtn.wrong{background:#fcebeb;border-color:#e24b4a}
+.qbtn.wrong .qn,.qbtn.wrong .qt{color:#a32d2d}
+.dombar{margin-bottom:9px}
+.dbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.dbn{font-weight:500;color:#444}.dbpct{color:#888}
+.bg{background:#ece9e0;border-radius:4px;height:7px;overflow:hidden}
+.bf{height:100%;border-radius:4px}
+.g{background:#63991e}.am{background:#ef9f27}.r{background:#e24b4a}
+.atbl{border-radius:8px;overflow:hidden;border:0.5px solid #e8e6de;font-size:11px}
+.ah{display:grid;grid-template-columns:46px 70px 1fr 88px 1fr;background:#f0ede6;border-bottom:1px solid #e0dfd8}
+.ar{display:grid;grid-template-columns:46px 70px 1fr 88px 1fr;border-bottom:0.5px solid #ece9e0}
+.ar:last-child{border-bottom:none}
+.ah>div,.ar>div{padding:6px 8px}
+.ah>div{font-weight:700;color:#666}
+.tag{display:inline-block;padding:1px 6px;border-radius:9px;font-size:10px;font-weight:600;white-space:nowrap}
+.tok{background:#eaf3de;color:#2d7a4f}.twrn{background:#faeeda;color:#854f0b}
+.tinfo{background:#e6f1fb;color:#185fa5}.tgray{background:#f0ede6;color:#666}
+.code{font-family:monospace;font-size:10px;background:#f0ede6;padding:1px 5px;border-radius:4px;color:#444}
+.abox{border-radius:8px;padding:9px 12px;font-size:12px;display:flex;gap:7px;margin-top:7px;align-items:flex-start}
+.abox i{font-size:14px;flex-shrink:0;margin-top:1px}
+.abox-warn{background:#faeeda;border:1px solid #f0b040;color:#633806}
+.abox-alert{background:#fcebeb;border:1px solid #f09595;color:#7a1f1f}
+.abox-ok{background:#eaf3de;border:1px solid #90c060;color:#2d7a4f}
+.abox-info{background:#e6f1fb;border:1px solid #80b4e8;color:#185fa5}
+.lvinfo{background:#e6f1fb;border-radius:8px;padding:10px 13px;font-size:12px;color:#185fa5;margin-bottom:12px;display:flex;gap:7px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{padding:4px 10px;border-radius:13px;font-size:12px;border:1px solid #d0d0cc;background:#fff;cursor:pointer;color:#444;user-select:none;transition:.12s}
+.chip:hover{border-color:#1e3a5f;background:#f4f6f9}
+.chip.sel{background:#1e3a5f;color:#fff;border-color:#1e3a5f}
+.chip.sel:hover{background:#16304f}
+.chip.sel .kw-dom{background:rgba(255,255,255,.22)!important;color:#fff!important}
+.wbadge{background:#fcebeb;color:#a32d2d;border-radius:5px;font-size:10px;font-weight:600;padding:2px 7px;margin-top:5px;display:none}
+.navrow{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:0.5px solid #ece9e0}
+.btn{padding:7px 16px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px}
+.bprim{background:#1e3a5f;color:#fff}
+.bsec{background:#fff;color:#555;border:1px solid #ddd}
+.bgrn{background:#2d7a4f;color:#fff}
+.totrow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:7px}
+.schip{background:#f0ede6;border-radius:6px;padding:3px 8px;font-size:12px;color:#555;font-weight:500}
+.schip b{color:#1e3a5f}
+.sigbox{background:#f0ede6;border-radius:8px;padding:10px 13px;margin-top:8px}
+.sigtitle{font-size:10px;font-weight:600;color:#666;margin-bottom:6px}
+.sigrow{display:flex;gap:6px;flex-wrap:wrap}
+.sigitem{background:#fff;border-radius:6px;padding:3px 9px;font-size:11px;color:#444;border:0.5px solid #d0d0cc}
+.sec-divider{border:none;border-top:0.5px solid #ece9e0;margin:14px 0}
+.hidden{display:none}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.rpt{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e0dfd8}
+.rpt-title-bar{background:#1e3a5f;padding:22px 28px 18px}
+.rpt-title-bar .course{font-size:11px;font-weight:600;letter-spacing:1.5px;color:rgba(255,255,255,.6);text-transform:uppercase;margin-bottom:4px}
+.rpt-title-bar h2{font-size:20px;font-weight:700;color:#fff;margin-bottom:2px}
+.rpt-title-bar .subtitle{font-size:12px;color:rgba(255,255,255,.55)}
+.rpt-info-band{background:#f0ede6;padding:12px 28px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;border-bottom:1px solid #e0dfd8}
+.rpt-info-item .ril{font-size:10px;color:#999;font-weight:600;margin-bottom:2px}
+.rpt-info-item .riv{font-size:13px;font-weight:600;color:#1a1a1a}
+.rpt-body{padding:0 28px 24px}
+.rpt-sec{padding-top:22px}
+.rpt-sec-hdr{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #1e3a5f}
+.rpt-sec-num{width:22px;height:22px;background:#1e3a5f;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.rpt-sec-title{font-size:13px;font-weight:700;color:#1e3a5f}
+.book-card{background:#f8f7f4;border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.book-title-rpt{font-size:15px;font-weight:700;color:#1e3a5f;margin-bottom:4px}
+.pattern-item{font-size:12px;color:#1e3a5f;font-family:Georgia,serif;padding:2px 0 2px 10px;border-left:2px solid #c8d8ee;margin-bottom:3px}
+.summary-box{margin-top:12px;font-size:13px;color:#444;line-height:1.85;padding:14px 16px;background:#f8f7f4;border-radius:8px;border-left:3px solid #1e3a5f}
+.score-grid-rpt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.score-domain-box{background:#f8f7f4;border-radius:10px;padding:12px 10px;text-align:center}
+.sdb-name{font-size:10px;font-weight:700;color:#999;margin-bottom:6px}
+.sdb-score{font-size:22px;font-weight:800;color:#1e3a5f;line-height:1}
+.sdb-total{font-size:11px;color:#aaa;margin-bottom:6px}
+.sdb-bar-bg{background:#e0dfd8;border-radius:3px;height:5px;overflow:hidden}
+.sdb-bar-fill{height:100%;border-radius:3px}
+.total-row{display:flex;align-items:center;justify-content:space-between;background:#1e3a5f;border-radius:8px;padding:10px 16px;margin-bottom:16px}
+.total-label{font-size:12px;color:rgba(255,255,255,.7);font-weight:500}
+.total-score-rpt{font-size:20px;font-weight:800;color:#fff}
+.total-pct{font-size:13px;color:rgba(255,255,255,.6);margin-left:6px}
+.comment-block{background:#f8f7f4;border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.cb-label-rpt{font-size:10px;font-weight:700;color:#1e3a5f;letter-spacing:.5px;margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.cb-text{font-size:13px;color:#333;line-height:1.85}
+.rpt-footer{background:#f0ede6;padding:12px 28px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e0dfd8}
+.rpt-footer .academy{font-size:12px;font-weight:600;color:#555}
+.rpt-footer .stamp{font-size:11px;color:#aaa}
+/* B 과정 배지 */
+.course-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;margin-left:6px;vertical-align:middle}
+.badge-a{background:#e6f1fb;color:#185fa5}
+.badge-b{background:#eaf3de;color:#2d7a4f}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="tool-header">
+  <div><h1>Pre Stella Monthly Report</h1><p>린쌤파머스 국제어학원 · 강사용 작성 시스템 · Pre Stella A1~A6 + B1~B6</p></div>
+  <div class="hbadge">v5.3 A+B</div>
+</div>
+<div class="steps">
+  <button class="sbtn active" onclick="go(0)" id="sb0"><i class="ti ti-user"></i>학생정보</button>
+  <button class="sbtn" onclick="go(1)" id="sb1"><i class="ti ti-target"></i>오답입력</button>
+  <button class="sbtn" onclick="go(2)" id="sb2"><i class="ti ti-chart-bar"></i>역량분석</button>
+  <button class="sbtn" onclick="go(3)" id="sb3"><i class="ti ti-message"></i>코멘트</button>
+  <button class="sbtn" onclick="go(4)" id="sb4"><i class="ti ti-eye"></i>리포트</button>
+</div>
+
+<!-- S0 -->
+<div id="s0">
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-user"></i>학생 기본 정보</div>
+    <div class="row3">
+      <div><label>학생 이름</label><input type="text" id="sName" placeholder="예: 김민준" oninput="onNameInput()"></div>
+      <div><label>학교</label><input type="text" id="sSchool" placeholder="예: 광교초등학교" oninput="onNameInput()"></div>
+      <div><label>학년</label><input type="text" id="sGrade" placeholder="예: 3학년"></div>
+    </div>
+    <div id="historyAlert" style="display:none;background:#e6f1fb;border:1px solid #80b4e8;border-radius:8px;margin-bottom:12px;font-size:12px;overflow:hidden">
+      <div id="historyAlertHead" onclick="toggleHistoryPanel()" style="padding:11px 14px;cursor:pointer;display:flex;align-items:center;gap:7px"></div>
+      <div id="historyAlertBody" style="display:none;padding:0 14px 12px;border-top:0.5px solid #bcd4ee"></div>
+    </div>
+    <div class="row3">
+      <div><label>학원 반</label><input type="text" id="sClass" placeholder="예: 화목 4시반"></div>
+      <div><label>담임 강사</label><input type="text" id="sTeacher" placeholder="예: Sarah T."></div>
+      <div><label>보고서 월</label><input type="text" id="sMonth" placeholder="예: 2025년 5월"></div>
+    </div>
+    <div class="row2">
+      <div><label>레벨 (교재)</label>
+        <select id="sLevel" onchange="onLvChange()">
+          <optgroup label="── Pre Stella A 과정 ──">
+            <option value="A1">Pre Stella A1 — It's a Good Day</option>
+            <option value="A2">Pre Stella A2 — Little Penguin Bobo</option>
+            <option value="A3">Pre Stella A3 — Together</option>
+            <option value="A4">Pre Stella A4 — Cookie Family</option>
+            <option value="A5">Pre Stella A5 — Spring, Summer, Fall, and Winter</option>
+            <option value="A6">Pre Stella A6 — We Are Good Friends</option>
+          </optgroup>
+          <optgroup label="── Pre Stella B 과정 ──">
+            <option value="B1">Pre Stella B1 — Happy Soup</option>
+            <option value="B2">Pre Stella B2 — Let's go camping!</option>
+            <option value="B3">Pre Stella B3 — Irene's first time Riding a horse</option>
+            <option value="B4">Pre Stella B4 — Dear Austin</option>
+            <option value="B5">Pre Stella B5 — The Golden Card</option>
+            <option value="B6">Pre Stella B6 — I am sorry</option>
+          </optgroup>
+        </select>
+      </div><div></div>
+    </div>
+    <div class="lvinfo"><i class="ti ti-info-circle"></i><div id="lvinfoTxt"></div></div>
+  </div>
+  <div class="navrow"><div></div><button class="btn bprim" onclick="go(1)">다음 <i class="ti ti-arrow-right"></i></button></div>
+</div>
+
+<!-- S1 -->
+<div id="s1" class="hidden">
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-target"></i>틀린 문항 선택 — 점수는 자동 계산됩니다</div>
+    <p style="font-size:11px;color:#888;margin-bottom:10px">문항을 클릭해 오답으로 표시하세요. 각 문항 1점이며, 영역별 점수와 총점이 자동으로 산출됩니다.</p>
+    <div class="qtabs">
+      <button class="qtab on" onclick="filterDom('all',this)">전체</button>
+      <button class="qtab" onclick="filterDom('Vocabulary',this)">Vocabulary</button>
+      <button class="qtab" onclick="filterDom('Reading',this)">Reading</button>
+      <button class="qtab" onclick="filterDom('Listening',this)">Listening</button>
+      <button class="qtab" onclick="filterDom('Structure',this)">Structure</button>
+    </div>
+    <div class="qgrid" id="qgrid"></div>
+    <div style="margin-top:8px;font-size:12px;color:#aaa" id="wrongCount">오답: 0문항</div>
+    <div class="totrow" style="margin-top:10px"><div class="schip">자동 합계 <b id="totNum">25</b> / 25</div><div class="schip" id="totGrade" style="display:none"></div></div>
+  </div>
+  <div class="navrow">
+    <button class="btn bsec" onclick="go(0)"><i class="ti ti-arrow-left"></i> 이전</button>
+    <button class="btn bprim" onclick="go(2)">역량 분석 <i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- (구 점수입력 단계 제거됨) -->
+
+<!-- S2 역량분석 -->
+<div id="s2" class="hidden">
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-chart-bar"></i>영역별 분석</div>
+    <div id="domBars"></div>
+    <div class="sigbox" id="sigBox" style="display:none"><div class="sigtitle">약점 역량 코드</div><div class="sigrow" id="sigRow"></div></div>
+  </div>
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-microscope"></i>문항별 역량 분석</div>
+    <div class="atbl">
+      <div class="ah"><div>문항</div><div>코드</div><div>측정 역량</div><div>판정</div><div>해석</div></div>
+      <div id="atblBody"></div>
+    </div>
+  </div>
+  <div id="alertZone"></div>
+  <div class="navrow">
+    <button class="btn bsec" onclick="go(1)"><i class="ti ti-arrow-left"></i> 이전</button>
+    <button class="btn bprim" onclick="go(3)">코멘트 작성 <i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- S3 코멘트 -->
+<div id="s3" class="hidden">
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-sparkles"></i>분석 기반 자동 피드백 초안</div>
+    <div style="position:relative">
+      <textarea id="autoFb" rows="5" style="font-size:13px;line-height:1.85;color:#333;background:#f8f7f4;border:1px solid #e0dfd8;border-radius:8px;padding:11px 16px;border-left:3px solid #1e3a5f;width:100%;resize:vertical;font-family:inherit;padding-right:110px"></textarea>
+      <button onclick="refineText('autoFb','auto')" style="position:absolute;bottom:8px;right:8px;background:#1e3a5f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+    </div>
+    <div id="refineStatus_auto" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
+  </div>
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-pencil"></i>이달의 강점 & 파악된 보완점</div>
+    <div style="margin-bottom:12px">
+      <button onclick="showHistoryWarnings()" style="background:#f8f7f4;border:1px solid #d0d0cc;border-radius:7px;padding:6px 14px;font-size:12px;cursor:pointer;color:#666;display:flex;align-items:center;gap:5px"><i class="ti ti-history" style="font-size:13px"></i>지난 보고서 키워드 확인</button>
+    </div>
+    <div id="historyBox" style="display:none;background:#fff8f0;border:1px solid #f0b040;border-radius:8px;padding:12px 14px;margin-bottom:14px"></div>
+    <p style="font-size:11px;color:#888;margin-bottom:14px">각 영역에서 1~2개 키워드를 선택하면 자동으로 작성됩니다.</p>
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:#2d7a4f;margin-bottom:7px;display:flex;align-items:center;gap:5px"><i class="ti ti-star" style="font-size:13px"></i>이달의 강점</div>
+      <div style="font-size:10px;font-weight:700;color:#1a6640;margin-bottom:5px">📊 Layer 1 — 영어 역량 분석 <span style="font-weight:400;color:#888">(오답 기반 자동 생성)</span></div>
+      <div id="strengthAutoBox" style="margin-bottom:10px"></div>
+      <div style="font-size:10px;font-weight:700;color:#1a6640;margin-bottom:5px">👀 Layer 2 — 수업 태도·관찰 <span style="font-weight:400;color:#888">(키워드 선택)</span></div>
+      <div class="chips" id="strengthChips" style="margin-bottom:8px"></div>
+      <div style="position:relative">
+        <textarea id="cmtStrength" rows="4" placeholder="키워드를 선택하면 자동으로 채워집니다." oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+        <button onclick="refineText('cmtStrength','strength')" style="position:absolute;bottom:8px;right:8px;background:#2d7a4f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+      </div>
+      <div id="refineStatus_strength" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
+    </div>
+    <hr class="sec-divider">
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:#854f0b;margin-bottom:7px;display:flex;align-items:center;gap:5px"><i class="ti ti-adjustments" style="font-size:13px"></i>파악된 보완점</div>
+      <div style="font-size:10px;font-weight:700;color:#854f0b;margin-bottom:5px">📊 Layer 1 — 영어 역량 분석 <span style="font-weight:400;color:#888">(오답 기반 자동 생성)</span></div>
+      <div id="improveAutoBox" style="display:none;margin-bottom:10px"></div>
+      <div style="font-size:10px;font-weight:700;color:#854f0b;margin-bottom:5px">👀 Layer 2 — 수업 태도·관찰 <span style="font-weight:400;color:#888">(키워드 선택)</span></div>
+      <div class="chips" id="attitudeChips" style="margin-bottom:8px"></div>
+      <div style="position:relative">
+        <textarea id="cmtImprove" rows="4" placeholder="키워드를 선택하면 자동으로 채워집니다." oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+        <button onclick="refineText('cmtImprove','improve')" style="position:absolute;bottom:8px;right:8px;background:#854f0b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+      </div>
+      <div id="refineStatus_improve" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
+    </div>
+    <hr class="sec-divider">
+    <div>
+      <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:6px">추가 관찰 메모 <span style="font-weight:400;color:#aaa">(선택)</span></div>
+      <div style="background:#f0ede6;border-radius:8px;padding:9px 12px;margin-bottom:7px"><div id="promptQs" style="font-size:11px;color:#666;line-height:2"></div></div>
+      <textarea id="cmtExtra" rows="3" placeholder="예: ○○는 Storytelling 활동에서 처음으로 손을 들고 영어로 문장을 말했습니다." style="font-size:12px"></textarea>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</div>
+    <div style="background:#f4f6f9;border:0.5px solid #d8e0ea;border-radius:9px;padding:11px 13px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:#1e3a5f;margin-bottom:7px;display:flex;align-items:center;gap:5px"><i class="ti ti-stethoscope" style="font-size:13px"></i>STEP 1. 영역별 우선순위 진단 <span style="font-weight:500;color:#94a3b8">— 참고용 (클릭 아님)</span></div>
+      <div id="nextPriorityBar"></div>
+    </div>
+    <div style="font-size:10px;font-weight:700;color:#1e3a5f;margin-bottom:7px;display:flex;align-items:center;gap:5px"><i class="ti ti-hand-click" style="font-size:13px"></i>STEP 2. 지도 키워드 선택 <span style="font-weight:500;color:#94a3b8">— 클릭하면 아래 문장이 채워집니다</span></div>
+    <div class="chips" id="nextChips" style="margin-bottom:10px"></div>
+    <div style="position:relative">
+      <textarea id="cmtNext" rows="3" placeholder="키워드를 선택하거나 직접 입력하세요." style="font-size:12px;padding-right:110px"></textarea>
+      <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#1e3a5f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+    </div>
+    <div id="refineStatus_next" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
+  </div>
+  <div class="navrow">
+    <button class="btn bsec" onclick="go(2)"><i class="ti ti-arrow-left"></i> 이전</button>
+    <button class="btn bprim" onclick="go(4)">리포트 보기 <i class="ti ti-eye"></i></button>
+  </div>
+</div>
+
+<!-- S4 리포트 -->
+<div id="s4" class="hidden">
+  <div id="reportOut"></div>
+  <div class="navrow" style="margin-top:12px">
+    <button class="btn bsec" onclick="go(3)"><i class="ti ti-arrow-left"></i> 이전</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn bsec" onclick="copyRpt()"><i class="ti ti-copy"></i>텍스트 복사</button>
+      <button class="btn bgrn" id="saveBtn" onclick="saveReport()"><i class="ti ti-device-floppy"></i>이력 저장</button>
+    </div>
+  </div>
+  <div id="saveStatus" style="font-size:12px;color:#2d7a4f;margin-top:8px;text-align:right;display:none"></div>
+  <div id="resetConfirmBox" style="display:none;margin-top:10px;background:#eaf3de;border:1px solid #90c060;border-radius:10px;padding:13px 16px;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    <div style="font-size:12px;color:#2d7a4f;font-weight:500"><i class="ti ti-circle-check" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i><span id="resetConfirmMsg"></span></div>
+    <div style="display:flex;gap:7px;margin-top:8px">
+      <button onclick="resetAll()" style="background:#2d7a4f;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">초기화하고 다음 학생 작성</button>
+      <button onclick="g('resetConfirmBox').style.display='none'" style="background:#fff;color:#555;border:1px solid #ccc;border-radius:7px;padding:6px 14px;font-size:12px;cursor:pointer">이 화면 유지</button>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+// ═══ LV 데이터베이스 — A1~A6 (v5.2 그대로) + B1 추가 ═══
+const LV = {
+  A1:{course:"A",book:"It's a Good Day",theme:"자연과 탐험",mainTheme:"Day / Stuff / Position / Count",pattern:"What is this(that)? / Is this(that)~? / What are these(those)? / Are these(those)~?",grammar:"be동사 (단수·복수 명사)",growth:"사물 묻고 답하기",msg:"사물과 위치를 묻고 답하며 영어 말문을 시작하는 단계",cefr:"Below A1",lexile:"50L",funcFlow:"영어 노출 시작 단계",summary:"「It's a Good Day」 스토리를 통해 하루 동안 만나는 사물과 자연물을 영어로 표현하는 연습을 했습니다. \"What is this?\"와 \"Are these shoes?\" 같은 질문 패턴을 반복 훈련하며 사물의 이름을 묻고 답하는 힘을 키웠습니다. be동사를 활용해 단수와 복수 명사를 자연스럽게 접하고, 그림을 보며 짧은 문장으로 말하는 Storytelling 활동도 함께 진행했습니다."},
+  A2:{course:"A",book:"Little Penguin Bobo",theme:"우정과 협력",mainTheme:"School Activities",pattern:"Who is she/he? / Is she happy?",grammar:"인칭대명사 + be동사",growth:"사람·감정 표현",msg:"사람과 감정을 영어로 표현하기 시작하는 단계",cefr:"Below A1",lexile:"50L",funcFlow:"사람·감정 표현 단계",summary:"「Little Penguin Bobo」 스토리를 통해 새로운 환경에서 친구를 만나고 감정을 표현하는 내용을 배웠습니다. \"Who is she?\"와 \"Is she happy?\" 같은 질문 패턴을 반복 훈련하며 사람을 소개하고 감정을 묻고 답하는 연습을 했습니다. 인칭대명사와 be동사를 문장 속에서 자연스럽게 익히고, Storytelling 활동도 진행했습니다."},
+  A3:{course:"A",book:"Together",theme:"우정과 협력",mainTheme:"Brothers and Sisters",pattern:"Where is the town? / What is on the book?",grammar:"일반동사 + be동사",growth:"장소·시간 표현",msg:"장소와 시간, 계절을 연결해 상황을 설명하기 시작하는 단계",cefr:"Below A1",lexile:"50L",funcFlow:"장소·상황 표현 단계",summary:"「Together」 스토리를 통해 장소와 위치를 영어로 표현하는 연습을 했습니다. \"Where is the town?\"과 \"What is on the book?\" 패턴을 반복 훈련하며 사물이 어디에 있는지 묻고 답하는 힘을 키웠습니다. be동사와 일반동사를 함께 접하며 Storytelling 활동도 진행했습니다."},
+  A4:{course:"A",book:"Cookie Family",theme:"창의성과 문제 해결",mainTheme:"Cooking for Family",pattern:"What do you do? / Where do you work?",grammar:"일반동사 현재",growth:"행동·직업 표현",msg:"행동과 직업을 영어 문장으로 표현하는 단계",cefr:"Below A1",lexile:"50L",funcFlow:"행동·직업 표현 단계",summary:"「Cookie Family」 스토리를 통해 가족과 직업, 일상적인 행동을 영어로 표현하는 연습을 했습니다. \"What do you do?\"와 \"Where do you work?\" 패턴을 반복 훈련하며 사람의 역할과 장소를 묻고 답하는 힘을 키웠습니다. 일반동사 현재형을 중심으로 Storytelling 활동도 함께 진행했습니다."},
+  A5:{course:"A",book:"Spring, Summer, Fall, and Winter",theme:"자연과 탐험",mainTheme:"Four Seasons",pattern:"Whose jacket is this? / I always listen to music.",grammar:"일반동사 현재·빈도부사",growth:"비교·과거 표현",msg:"현재뿐 아니라 과거 경험까지 영어로 연결하는 단계",cefr:"Below A1",lexile:"50L",funcFlow:"소유·빈도 표현 단계",summary:"「Spring, Summer, Fall, and Winter」 스토리를 통해 계절과 날씨, 계절별 활동을 영어로 배웠습니다. \"Whose jacket is this?\"를 통해 소유를 묻는 표현을 익히고, 빈도부사 패턴을 반복 훈련했습니다. 일반동사 현재형과 빈도부사를 자연스럽게 접하며 Storytelling 활동도 진행했습니다."},
+  A6:{course:"A",book:"We Are Good Friends",theme:"우정과 협력",mainTheme:"My Foreign Friends",pattern:"What did you do last weekend? / Can you water the plant?",grammar:"일반동사 과거 + can",growth:"과거·미래·가능 표현",msg:"과거·현재·미래를 영어로 표현하기 시작하는 단계",cefr:"Below A1",lexile:"50L",funcFlow:"과거·가능 표현 단계",summary:"「We Are Good Friends」 스토리를 통해 다양한 친구들의 차이를 인정하고 배려하는 이야기를 배웠습니다. \"What did you do last weekend?\"와 \"Can you water the plant?\" 패턴을 반복 훈련하며 지난 일을 묻고 답하고, 할 수 있는 일을 영어로 말하는 연습을 했습니다. 일반동사 과거형과 can을 자연스럽게 익히며 Storytelling 활동도 진행했습니다."},
+  // ─── B1 추가 ───
+  B1:{course:"B",book:"Happy Soup",theme:"Cooking Together",mainTheme:"Yes/No, Colors, Shapes, Feeling",pattern:"Is it an eraser? / Do you have paintings? / Is it yellow? / Is this a triangle? / How are you feeling now?",grammar:"be동사 Yes/No + 형용사 묘사",growth:"색깔·모양·감정으로 사물과 상태를 설명",msg:"관찰한 사물과 상태를 색깔, 모양, 감정으로 설명하는 단계",cefr:"A1",lexile:"125L",funcFlow:"설명형 영어 시작 단계",summary:"「Happy Soup」 스토리를 통해 사물의 이름과 상태를 묻고 답하는 연습을 했습니다. \"Is it yellow?\" \"Is this a triangle?\" 같은 패턴을 반복 훈련하며 색깔, 모양, 감정을 설명하는 힘을 키웠습니다. Yes/No 반응과 형용사 묘사를 문장 속에서 자연스럽게 익히고, 스토리와 I-pattern 활동도 함께 진행했습니다."},
+  B2:{course:"B",book:"Let's go camping!",theme:"Camping",mainTheme:"Relationship, Animals, Playground",pattern:"Who is she/he? / Is your father tall? / Do you like cows? / Can I have that toy? / What do you like?",grammar:"관계 표현 + 선호 묻기 + can",growth:"취향·관계·요청 표현으로 상대와 대화 이어가기",msg:"취향, 관계, 요청 표현을 통해 상대와 대화를 이어가는 단계",cefr:"A1",lexile:"125L",funcFlow:"상호작용 영어 시작 단계",summary:"「Let's go camping!」 스토리를 통해 가족 관계를 소개하고 동물과 활동에 대한 선호를 묻고 답하는 연습을 했습니다. Who is~, Do you like~, Can I~ 패턴을 반복 훈련하며 상대방과 자연스럽게 대화를 이어가는 힘을 키웠습니다. 관계 표현, 선호 묻기, 요청 패턴을 스토리와 I-pattern 활동과 함께 진행했습니다."},
+  B3:{course:"B",book:"Irene's first time Riding a horse",theme:"At the Zoo",mainTheme:"Time, Job, Place, Food",pattern:"What time is it? / What do you do? / Where's the library? / What do you like? / What do you eat for~?",grammar:"일반동사 현재 + 시간·장소 표현",growth:"시간, 장소, 직업, 음식 등 생활 정보를 상황 속에서 전달",msg:"시간, 장소, 직업, 음식 등 생활 정보를 상황 속에서 전달하는 단계",cefr:"A1",lexile:"125L",funcFlow:"정보 전달 영어 단계",summary:"「Irene's first time Riding a horse」 스토리를 통해 시간, 장소, 직업 등 생활 속 정보를 영어로 묻고 답하는 연습을 했습니다. What time is it~, Where is~, What do you do~ 패턴을 반복 훈련하며 상황 속 정보를 전달하는 힘을 키웠습니다. 일반동사 현재형과 시간·장소 표현을 스토리와 I-pattern 활동과 함께 진행했습니다."},
+  B4:{course:"B",book:"Dear Austin",theme:"My Future",mainTheme:"Place, Doing, Weather, Collective Nouns",pattern:"Where did you go yesterday? / What do you do on Mondays? / How was the weather yesterday? / Which car is faster? / I need a can of peaches.",grammar:"일반동사 과거 + 비교 표현 + 수량 단위",growth:"과거 경험, 습관, 비교 표현을 연결해 자기 이야기",msg:"과거 경험, 습관, 비교 표현을 연결해 자기 이야기를 시작하는 단계",cefr:"A1",lexile:"125L",funcFlow:"자기 경험 이야기 단계",summary:"「Dear Austin」 스토리를 통해 자신의 과거 경험과 일상 습관, 비교 표현을 영어로 연결하는 연습을 했습니다. Where did you go~, What do you do on~, How was the weather~ 패턴을 반복 훈련하며 자기 이야기를 영어로 풀어가는 힘을 키웠습니다. 과거시제, 빈도 표현, 비교급을 스토리와 I-pattern 활동과 함께 진행했습니다."},
+  B5:{course:"B",book:"The Golden Card",theme:"Shopping",mainTheme:"Doing, Feeling, Count, Can",pattern:"What are you doing? / I have a headache. / How much jelly is there? / What will you do after school? / Can she play the flute?",grammar:"현재진행 + 수량 표현 + will 미래",growth:"현재 상황, 수량, 미래 계획을 연결해 설명",msg:"현재 상황, 수량, 미래 계획을 연결해 설명하는 단계",cefr:"A1",lexile:"125L",funcFlow:"계획/상황 연결 단계",summary:"「The Golden Card」 스토리를 통해 현재 진행 중인 상황과 신체 상태, 미래 계획을 영어로 연결하는 연습을 했습니다. What are you doing~, I have a~, What will you do~ 패턴을 반복 훈련하며 상황을 연결해 설명하는 힘을 키웠습니다. 현재진행형, 수량 표현, will 미래 표현을 스토리와 I-pattern 활동과 함께 진행했습니다."},
+  B6:{course:"B",book:"I am sorry",theme:"My friends",mainTheme:"Country, City, be going to, have to, frequency",pattern:"Where are you from? / Where will you go this summer? / Are you going to do your homework? / How often do you go jogging? / What do you have to do?",grammar:"be going to + have to + 빈도 표현",growth:"장소, 계획, 빈도, 의무 표현을 연결해 자기 생각을 확장",msg:"장소, 계획, 빈도, 의무 표현을 연결해 자기 생각을 확장하는 단계",cefr:"A1",lexile:"125L",funcFlow:"독립적 자기표현 단계",summary:"「I am sorry」 스토리를 통해 출신 국가, 미래 계획, 빈도, 의무 표현을 영어로 연결하는 연습을 했습니다. Where are you from~, Are you going to~, How often do you~ 패턴을 반복 훈련하며 자기 생각을 스스로 확장하는 힘을 키웠습니다. be going to, have to, 빈도 표현을 스토리와 I-pattern 활동과 함께 진행했습니다."}
+};
+
+// ═══ QM — A 과정 공통 (v5.2 그대로) ═══
+const QM_A=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"SP",skill:"단수 패턴 반응",norm:"is/are 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"VR",skill:"descriptive vocab",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"SP",skill:"복수 패턴 반응",norm:"this/those 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"FC",skill:"plural yes/no",norm:"Do/Does 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"WH-question",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"plural response",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"yes/no automation",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+
+// ═══ QM — B1 전용 ═══
+// B1 Monthly Test 구조: Vocabulary 1~6 / Reading 7~12 / Listening 13~17 / Structure 18~25
+// 출처: B1 데이터 패키지 (Answer Key + 문항 구조 분석)
+const QM_B1=[
+  // Vocabulary — 사물 묘사 어휘 + 스펠링 + 문맥 선택
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 묘사 어휘",norm:"유사 사물어 혼동 — 정상",warn:"기초 명사 반복 오답 → 어휘 노출 부족"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 묘사 어휘",norm:"유사 사물어 혼동 — 정상",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"스펠링 완성 (모음)",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"스펠링 완성 (자음)",norm:"유사 자음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  // Reading — Story 이해 + 세부 정보
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  // Listening — 그림 선택 + Yes/No 반응
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"YN",skill:"Yes/No 반응 선택",norm:"반응 지연 — 정상",warn:"반응 없음"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  // Structure — B1 핵심 4패턴 + 문장 배열
+  {n:18,dom:"Structure",code:"IQ",skill:"Is it / Is this~ 패턴",norm:"is/this 혼동 — 정상",warn:"패턴 자체 미이해 → 개별 점검 필요"},
+  {n:19,dom:"Structure",code:"DH",skill:"Do you have~ 패턴",norm:"do/does 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"CL",skill:"색깔 묘사 패턴 (Is it~색깔?)",norm:"색깔 어휘 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"FL",skill:"감정 표현 (How are you feeling?)",norm:"감정어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"}
+];
+
+// QM 레벨별 매핑
+// ═══ QM_B2 — 상호작용 (관계·선호·요청) ═══
+const QM_B2=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"외모 묘사 어휘",norm:"유사 단어 혼동 — 정상",warn:"기초 어휘 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"동물 어휘",norm:"—",warn:"기초 어휘 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"스펠링 완성",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"스펠링 완성",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"선호 표현 듣기",norm:"반응 지연 — 정상",warn:"반응 없음"},
+  {n:16,dom:"Listening",code:"QR",skill:"선호 표현 듣기",norm:"유사 발음 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"RX",skill:"Who is~ 관계 패턴",norm:"인칭 혼동 — 정상",warn:"패턴 자체 미이해"},
+  {n:19,dom:"Structure",code:"PF",skill:"Do you like~ 선호 패턴",norm:"do/does 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"RQ",skill:"Can I~ 요청 패턴",norm:"can/could 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"HM",skill:"How much~ 가격 패턴",norm:"수량 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"}
+];
+// ═══ QM_B3 — 정보 전달 (시간·직업·장소·음식) ═══
+const QM_B3=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"일과 동작 어휘",norm:"유사 동작 혼동 — 정상",warn:"기초 어휘 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"직업 어휘",norm:"—",warn:"기초 어휘 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"스펠링 완성",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"스펠링 완성",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PL",skill:"장소 정보 파악",norm:"장소 혼동 — 정상",warn:"위치 개념 미형성"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"TM",skill:"시간 표현 듣기",norm:"숫자 혼동 — 정상",warn:"반응 없음"},
+  {n:16,dom:"Listening",code:"JB",skill:"직업 표현 듣기",norm:"직업어 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"TM",skill:"What time is it~ 패턴",norm:"숫자 혼동 — 정상",warn:"패턴 자체 미이해"},
+  {n:19,dom:"Structure",code:"JB",skill:"What do you do~ 직업 패턴",norm:"do/does 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"PL",skill:"Where is~ 장소 패턴",norm:"전치사 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"FD",skill:"What do you eat for~ 식사 패턴",norm:"음식어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"}
+];
+// ═══ QM_B4 — 자기 경험 (과거·습관·비교) ═══
+const QM_B4=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"장소 어휘",norm:"유사 단어 혼동 — 정상",warn:"기초 어휘 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"날씨 어휘",norm:"유사 날씨어 혼동 — 정상",warn:"기초 어휘 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"스펠링 완성",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"스펠링 완성",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"PT",skill:"과거 표현 듣기",norm:"시제 혼동 — 정상",warn:"반응 없음"},
+  {n:16,dom:"Listening",code:"PT",skill:"과거 표현 듣기",norm:"동사 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"CP",skill:"비교 표현 듣기",norm:"비교급 혼동 — 정상",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"PT",skill:"Where did you go~ 과거 패턴",norm:"시제 혼동 — 정상",warn:"과거시제 미이해"},
+  {n:19,dom:"Structure",code:"HB",skill:"요일 습관 패턴 (What do you do on~)",norm:"빈도부사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"PT",skill:"과거시제 문장 완성",norm:"불규칙 과거형 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"CN",skill:"수량 단위 표현 (a can of~)",norm:"단위명사 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"}
+];
+// ═══ QM_B5 — 계획/상황 (현재진행·수량·미래) ═══
+const QM_B5=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"장소 어휘",norm:"유사 단어 혼동 — 정상",warn:"기초 어휘 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"부사 표현",norm:"유사 의미 혼동 — 정상",warn:"기초 어휘 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"스펠링 완성",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"스펠링 완성",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"PT",skill:"과거 표현 듣기",norm:"시제 혼동 — 정상",warn:"반응 없음"},
+  {n:16,dom:"Listening",code:"QT",skill:"수량 표현 듣기",norm:"수량어 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"CA",skill:"능력 표현 듣기 (can)",norm:"can/can't 혼동 — 정상",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"PG",skill:"현재진행 패턴 (What are you doing?)",norm:"be동사 혼동 — 정상",warn:"진행형 미이해"},
+  {n:19,dom:"Structure",code:"BH",skill:"신체 증상 표현 (I have a~)",norm:"신체어 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"FT",skill:"be going to 미래 패턴",norm:"going to 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"TR",skill:"교통수단 표현",norm:"교통어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"}
+];
+// ═══ QM_B6 — 독립 표현 (출신·계획·빈도·의무) ═══
+const QM_B6=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"국가·도시 어휘",norm:"유사 단어 혼동 — 정상",warn:"기초 어휘 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"음식 문화 어휘",norm:"유사 의미 혼동 — 정상",warn:"기초 어휘 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"스펠링 완성",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"스펠링 완성",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VC",skill:"문맥 어휘 선택",norm:"유사 의미 혼동 — 정상",warn:"문맥 의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"Story 세부 정보",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"WL",skill:"여행·도시 정보 듣기",norm:"도시명 혼동 — 정상",warn:"반응 없음"},
+  {n:16,dom:"Listening",code:"SL",skill:"상황 표현 듣기",norm:"상황어 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"CA",skill:"능력 표현 듣기 (can)",norm:"can/can't 혼동 — 정상",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"OR",skill:"Where are you from~ 출신 패턴",norm:"전치사 혼동 — 정상",warn:"패턴 자체 미이해"},
+  {n:19,dom:"Structure",code:"FT",skill:"be going to 계획 패턴",norm:"going to 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"OB",skill:"have to 의무 패턴",norm:"have to 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"SN",skill:"감각 표현 (How does it~)",norm:"감각어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"}
+];
+const QM_MAP={A1:QM_A,A2:QM_A,A3:QM_A,A4:QM_A,A5:QM_A,A6:QM_A,B1:QM_B1,B2:QM_B2,B3:QM_B3,B4:QM_B4,B5:QM_B5,B6:QM_B6};
+
+// CODELAB — A + B1 통합
+const CODELAB={
+  VR:"어휘 인식",PR:"스펠링 Decoding",QR:"질문 반응",SP:"단수/복수 패턴",
+  SC:"문장 Chunk",SO:"문장 어순",PC:"그림-문장 연결",LS:"Listening 신호",
+  FC:"기능 소통",VC:"문맥 어휘",YN:"Yes/No 반응",
+  IQ:"Is it/Is this 패턴",DH:"Do you have~ 패턴",CL:"색깔 묘사",FL:"감정 표현",
+  RX:"관계 표현",PF:"선호 표현",RQ:"요청 패턴",HM:"가격 표현",
+  TM:"시간 표현",JB:"직업 표현",PL:"장소 표현",FD:"식사 표현",
+  PT:"과거 표현",HB:"습관 표현",CP:"비교 표현",CN:"수량 단위",
+  PG:"현재진행",BH:"신체 증상",FT:"미래 계획",TR:"교통수단",QT:"수량 듣기",CA:"능력 표현",
+  OR:"출신 표현",OB:"의무 표현",SN:"감각 표현",WL:"여행 정보",SL:"상황 표현"
+};
+
+const DMMAX={Vocabulary:6,Reading:6,Listening:5,Structure:8};
+const PROMPT_QS=["수업 중 영어로 처음 말했거나 전보다 더 길게 말한 순간이 있었나요?","질문을 들었을 때 바로 반응했나요, 아니면 망설이다가 답했나요?","발표할 때 긴장하는 편인가요, 자신 있게 나서는 편인가요?","Storytelling 활동에서 적극적으로 참여했나요?","이번 달 특별히 기억에 남는 이 아이만의 장면이나 에피소드가 있나요?"];
+
+// A 과정 Next 목록 (v5.2 그대로)
+const NEXTLIST_A=["단수/복수 질문 패턴 안정화","sentence chunk 길이 확장","Storytelling 연결 확장","반복 패턴 자동화","질문 응답 속도 향상","그림-문장 연결 심화","자신감 있는 발화 유지","I-pattern 질문 반응 강화","sight word 반복 노출","그림 보고 문장 말하기 확장"];
+const NEXT2S_A={"단수/복수 질문 패턴 안정화":"다음 수업에서는 단수·복수를 구분하는 질문 패턴에 자연스럽게 반응할 수 있도록 반복 게임과 그림 활동을 통해 집중적으로 훈련할 예정입니다.","sentence chunk 길이 확장":"앞으로는 짧은 단어 단위에서 벗어나 배운 문장을 chunk 단위로 이어 말하는 연습을 단계적으로 확장해 나갈 예정입니다.","Storytelling 연결 확장":"그림을 보고 단어를 말하는 것에서 나아가 이야기를 짧은 문장으로 연결해 말하는 Storytelling 활동을 심화할 예정입니다.","반복 패턴 자동화":"배운 핵심 질문 패턴이 자동으로 입에서 나올 수 있도록 반복 훈련을 꾸준히 이어갈 예정입니다.","질문 응답 속도 향상":"질문을 듣고 머뭇거리지 않고 짧게라도 바로 반응하는 힘을 키울 수 있도록 빠른 응답 훈련 활동을 진행할 예정입니다.","그림-문장 연결 심화":"그림을 보고 단어를 떠올리는 것에서 나아가 완전한 문장으로 연결해 말하는 연습을 심화할 예정입니다.","자신감 있는 발화 유지":"영어로 말하려는 자신감과 시도하는 태도가 유지될 수 있도록 발표 기회를 충분히 제공할 예정입니다.","I-pattern 질문 반응 강화":"I-pattern 40개 질문에 짧게라도 스스로 답하는 힘을 키울 수 있도록 짝 활동과 개별 훈련을 병행할 예정입니다.","sight word 반복 노출":"자주 등장하는 sight word를 게임과 읽기 활동 속에서 자연스럽게 반복 노출해 의미와 형태가 함께 자리잡히도록 도울 예정입니다.","그림 보고 문장 말하기 확장":"32개 삽화를 활용해 그림을 보고 단어뿐 아니라 완전한 문장으로 말하는 Storytelling 훈련을 이어갈 예정입니다."};
+
+// B1 전용 Next 목록
+// ── B 과정 레벨별 Next 목록 ──
+const NEXTLIST_B={
+  B1:["Is it / Is this 패턴 자동화","Do you have~ 패턴 안정화","색깔·모양 묘사 확장","감정 표현 어휘 확장","Yes/No 반응 속도 향상","sentence chunk 배열 훈련","I-pattern 반응 강화","Storytelling 문장 연결","스펠링 완성 반복 훈련","그림 보고 설명하기 확장"],
+  B2:["Who is~ 관계 표현 자동화","Do you like~ 선호 패턴 안정화","Can I~ 요청 패턴 확장","How much~ 가격 표현 훈련","선호·취향 어휘 확장","짝 대화 반응 속도 향상","sentence chunk 배열 훈련","I-pattern 반응 강화","Storytelling 문장 연결","스펠링 완성 반복 훈련"],
+  B3:["What time is it~ 패턴 자동화","What do you do~ 직업 패턴 안정화","Where is~ 장소 패턴 확장","식사 표현 어휘 확장","시간·직업·장소 어휘 복습","정보 전달 속도 향상","sentence chunk 배열 훈련","I-pattern 반응 강화","Storytelling 문장 연결","스펠링 완성 반복 훈련"],
+  B4:["Where did you go~ 과거 패턴 자동화","요일 습관 표현 안정화","과거시제 문장 완성 훈련","수량 단위 표현 확장","비교 표현 어휘 확장","자기 경험 이야기 확장","sentence chunk 배열 훈련","I-pattern 반응 강화","Storytelling 문장 연결","스펠링 완성 반복 훈련"],
+  B5:["현재진행 패턴 자동화","신체 증상 표현 안정화","be going to 미래 패턴 확장","교통수단 표현 어휘 확장","수량 표현 훈련","현재·미래 상황 연결 훈련","sentence chunk 배열 훈련","I-pattern 반응 강화","Storytelling 문장 연결","스펠링 완성 반복 훈련"],
+  B6:["Where are you from~ 출신 패턴 자동화","be going to 계획 표현 안정화","have to 의무 표현 확장","빈도 표현 어휘 확장","감각 표현 훈련","자기 표현 연결 훈련","sentence chunk 배열 훈련","I-pattern 반응 강화","Storytelling 문장 연결","스펠링 완성 반복 훈련"]
+};
+const NEXT2S_B={
+  "Is it / Is this 패턴 자동화":"다음 수업에서는 Is it~? Is this~? 패턴이 자동으로 입에서 나올 수 있도록 그림 카드 활동과 짝 대화를 통해 반복 훈련할 예정입니다.",
+  "Do you have~ 패턴 안정화":"Do you have~? 패턴에 안정적으로 반응하고 스스로 질문을 만드는 힘을 키울 수 있도록 역할 활동을 꾸준히 이어갈 예정입니다.",
+  "색깔·모양 묘사 확장":"익힌 색깔과 모양 표현을 활용해 사물을 더 구체적으로 설명하는 연습을 단계적으로 확장해 나갈 예정입니다.",
+  "감정 표현 어휘 확장":"How are you feeling? 패턴에서 시작해 다양한 감정 어휘를 문장 속에서 자연스럽게 사용할 수 있도록 확장 훈련을 진행할 예정입니다.",
+  "Yes/No 반응 속도 향상":"질문을 듣고 머뭇거리지 않고 바로 Yes/No로 반응하는 힘을 키울 수 있도록 빠른 응답 게임을 수업에 활용할 예정입니다.",
+  "sentence chunk 배열 훈련":"주어진 단어를 올바른 순서로 배열해 완전한 문장을 만드는 chunk 훈련을 꾸준히 이어갈 예정입니다.",
+  "I-pattern 반응 강화":"I-pattern 핵심 질문에 짧게라도 스스로 답하는 힘을 키울 수 있도록 짝 활동과 개별 훈련을 병행할 예정입니다.",
+  "Storytelling 문장 연결":"그림을 보고 배운 패턴을 활용해 짧은 이야기를 문장으로 연결하는 Storytelling 훈련을 이어갈 예정입니다.",
+  "스펠링 완성 반복 훈련":"음가와 철자를 연결하는 스펠링 완성 활동을 게임 형태로 반복하여 자연스럽게 익힐 수 있도록 도울 예정입니다.",
+  "그림 보고 설명하기 확장":"그림을 보고 색깔, 모양, 감정을 조합해 한 문장으로 설명하는 힘을 키울 수 있도록 묘사 훈련을 심화할 예정입니다.",
+  "Who is~ 관계 표현 자동화":"Who is she/he? 패턴이 자연스럽게 입에서 나올 수 있도록 가족·관계 어휘와 함께 반복 훈련할 예정입니다.",
+  "Do you like~ 선호 패턴 안정화":"Do you like~? 패턴을 활용해 다양한 주제로 선호를 묻고 답하는 짝 대화 활동을 꾸준히 이어갈 예정입니다.",
+  "Can I~ 요청 패턴 확장":"Can I~? 요청 표현을 다양한 상황에서 자연스럽게 사용할 수 있도록 역할 활동과 게임을 병행할 예정입니다.",
+  "How much~ 가격 표현 훈련":"How much is it? 패턴과 숫자 표현을 연결해 가격을 묻고 답하는 훈련을 수업에서 꾸준히 진행할 예정입니다.",
+  "선호·취향 어휘 확장":"배운 선호 표현에 새로운 어휘를 연결해 표현 범위를 점진적으로 넓혀나갈 예정입니다.",
+  "짝 대화 반응 속도 향상":"짝 활동에서 질문을 듣고 바로 반응하는 힘을 키울 수 있도록 빠른 대화 게임을 활용할 예정입니다.",
+  "What time is it~ 패턴 자동화":"What time is it? 패턴과 시간 숫자를 연결해 자동으로 반응하는 훈련을 꾸준히 이어갈 예정입니다.",
+  "What do you do~ 직업 패턴 안정화":"What do you do? 패턴과 직업 어휘를 활용해 역할 활동과 그림 설명 훈련을 진행할 예정입니다.",
+  "Where is~ 장소 패턴 확장":"Where is~? 패턴과 위치 전치사를 연결해 장소를 묻고 안내하는 훈련을 단계적으로 확장할 예정입니다.",
+  "식사 표현 어휘 확장":"What do you eat for~? 패턴에 새로운 음식 어휘를 연결해 식사 관련 표현을 자연스럽게 확장할 예정입니다.",
+  "시간·직업·장소 어휘 복습":"배운 핵심 어휘를 게임과 그림 활동을 통해 반복 노출하며 기억을 강화할 예정입니다.",
+  "정보 전달 속도 향상":"질문을 듣고 정보를 빠르고 정확하게 전달하는 힘을 키울 수 있도록 응답 속도 훈련 활동을 진행할 예정입니다.",
+  "Where did you go~ 과거 패턴 자동화":"Where did you go~? 패턴과 과거동사를 연결해 자동으로 반응하는 훈련을 꾸준히 이어갈 예정입니다.",
+  "요일 습관 표현 안정화":"What do you do on Mondays? 패턴에 다양한 요일과 활동을 연결해 습관 표현을 안정화할 예정입니다.",
+  "과거시제 문장 완성 훈련":"규칙·불규칙 과거동사를 활용한 문장 완성 훈련을 반복 게임 형태로 꾸준히 진행할 예정입니다.",
+  "수량 단위 표현 확장":"a can of~, a carton of~ 등 수량 단위 표현을 다양한 물건과 연결해 확장 훈련을 진행할 예정입니다.",
+  "비교 표현 어휘 확장":"비교급 표현과 어휘를 활용해 두 가지를 비교하는 문장 만들기 활동을 단계적으로 확장할 예정입니다.",
+  "자기 경험 이야기 확장":"배운 과거·습관 표현을 활용해 자신의 경험을 짧은 이야기로 연결하는 Storytelling 활동을 심화할 예정입니다.",
+  "현재진행 패턴 자동화":"What are you doing? 패턴과 동작 어휘를 연결해 자동으로 반응하는 훈련을 꾸준히 이어갈 예정입니다.",
+  "신체 증상 표현 안정화":"I have a~ 패턴과 신체 어휘를 연결해 증상을 자연스럽게 표현하는 훈련을 진행할 예정입니다.",
+  "be going to 미래 패턴 확장":"be going to~ 패턴에 다양한 활동 어휘를 연결해 미래 계획 표현을 단계적으로 확장할 예정입니다.",
+  "교통수단 표현 어휘 확장":"교통수단 어휘와 표현을 활용해 이동 방법을 묻고 답하는 대화 훈련을 꾸준히 이어갈 예정입니다.",
+  "수량 표현 훈련":"How much/many 패턴과 수량 어휘를 연결한 실생활 표현 훈련을 진행할 예정입니다.",
+  "현재·미래 상황 연결 훈련":"현재진행과 미래 계획 표현을 연결해 상황을 설명하는 문장 확장 훈련을 이어갈 예정입니다.",
+  "Where are you from~ 출신 패턴 자동화":"Where are you from? 패턴과 국가·도시 어휘를 연결해 자연스럽게 묻고 답하는 훈련을 꾸준히 이어갈 예정입니다.",
+  "be going to 계획 표현 안정화":"Are you going to~? 패턴으로 계획을 묻고 답하는 짝 대화 활동을 꾸준히 진행할 예정입니다.",
+  "have to 의무 표현 확장":"What do you have to do? 패턴에 다양한 활동 어휘를 연결해 의무 표현을 확장 훈련할 예정입니다.",
+  "빈도 표현 어휘 확장":"How often~, always, usually, never 등 빈도 표현을 다양한 상황과 연결해 자연스럽게 사용하는 훈련을 진행할 예정입니다.",
+  "감각 표현 훈련":"It looks~, It smells~, It tastes~ 등 감각 표현 패턴을 그림과 실물 활동을 통해 훈련할 예정입니다.",
+  "자기 표현 연결 훈련":"B 과정에서 배운 모든 표현을 연결해 자신의 생각과 경험을 스스로 말하는 통합 표현 훈련을 심화할 예정입니다."
+};
+
+// ═══ 강점 키워드 — A 과정 ═══
+const STRENGTH_LIST_A=[
+  {key:"s_speaking",label:"영어로 말하기 시도",sent:"영어로 말하려는 시도가 꾸준히 이어지고 있습니다. 짧은 단어라도 스스로 표현하려는 용기가 눈에 띄게 성장했습니다."},
+  {key:"s_response",label:"질문 반응 빠름",sent:"선생님의 질문에 빠르게 반응하며 영어로 대답하려는 모습이 안정적으로 자리잡히고 있습니다."},
+  {key:"s_confidence",label:"영어 자신감 향상",sent:"영어에 대한 자신감이 눈에 띄게 향상되었습니다. 이전보다 긴장감 없이 편안하게 수업에 참여하는 모습이 인상적입니다."},
+  {key:"s_storytell",label:"Storytelling 참여",sent:"Storytelling 활동에서 그림을 보고 짧은 문장으로 이야기를 이어가려는 시도가 적극적으로 이어지고 있습니다."},
+  {key:"s_picture",label:"그림-문장 연결",sent:"그림을 보고 관련 단어와 문장을 자연스럽게 연결하는 힘이 좋아지고 있습니다."},
+  {key:"s_reading",label:"큰 소리로 읽기",sent:"배운 문장을 큰 소리로 자신 있게 읽는 태도가 매우 좋습니다. 반복 읽기를 통해 문장이 점점 입에 붙고 있습니다."},
+  {key:"s_pattern",label:"패턴 반응 안정",sent:"반복 질문 패턴에 안정적으로 반응하는 힘이 잘 형성되고 있습니다. 배운 패턴이 자동화되는 단계로 이어지고 있습니다."},
+  {key:"s_effort",label:"끝까지 포기하지 않음",sent:"어려운 문장도 끝까지 포기하지 않고 말하려는 태도가 매우 훌륭합니다. 이 꾸준함이 영어 성장의 가장 큰 원동력입니다."},
+  {key:"s_growth",label:"지난 학기 대비 성장",sent:"처음 수업을 시작할 때와 비교해 영어로 반응하는 속도와 표현의 범위가 눈에 띄게 넓어졌습니다."},
+  {key:"s_friend",label:"짝 활동 참여 우수",sent:"짝 활동이나 그룹 활동에서 친구와 영어로 소통하려는 모습이 자연스럽게 이어지고 있습니다."},
+  {key:"s_vocab",label:"단어 기억력 우수",sent:"배운 단어를 다음 수업에서도 잘 기억하고 활용하는 모습이 인상적입니다. 어휘가 차곡차곡 쌓이면서 표현력이 함께 성장하고 있습니다."},
+  {key:"s_longer",label:"문장 길이 확장",sent:"단어 하나에서 시작해 점점 더 긴 문장으로 표현하려는 변화가 눈에 띕니다. 영어 말문이 자연스럽게 열려가고 있는 좋은 신호입니다."},
+  {key:"s_pronun",label:"발음 정확도 향상",sent:"음가를 바탕으로 한 읽기가 안정되면서 발음이 점점 또렷해지고 있습니다. 정확하게 소리 내어 읽으려는 노력이 잘 이어지고 있습니다."},
+  {key:"s_enjoy",label:"영어 수업 즐기는 태도",sent:"영어 수업 자체를 즐기고 기대하는 모습이 느껴집니다. 긍정적인 영어 경험이 쌓이면서 학습 동기가 함께 높아지고 있습니다."},
+  {key:"s_question",label:"질문하기 시도",sent:"수동적으로 대답하는 것에서 나아가 스스로 영어로 질문을 건네려는 시도가 나타나고 있습니다."},
+  {key:"s_nohint",label:"힌트 없이 말하기",sent:"따라 말하기 단계에서 벗어나 힌트 없이 스스로 문장을 말하려는 모습이 보이기 시작했습니다."},
+  {key:"s_plural",label:"단수·복수 구분 시작",sent:"this/these, that/those를 상황에 맞게 구분해 반응하기 시작했습니다. 단수와 복수 패턴이 자연스럽게 자리잡혀 가고 있습니다."},
+  {key:"s_sight",label:"sight word 자동 인식",sent:"자주 등장하는 sight word를 보자마자 바로 읽어내는 자동화가 이루어지고 있습니다."}
+];
+
+// ═══ 강점 키워드 — B 과정 (B1 기준, 이후 레벨별 확장 예정) ═══
+const STRENGTH_LIST_B=[
+  {key:"b_yesno",label:"Yes/No 반응 안정",sent:"질문을 듣고 Yes/No로 자신 있게 반응하는 힘이 안정적으로 자리잡히고 있습니다. 짧게라도 스스로 먼저 답하려는 모습이 인상적입니다."},
+  {key:"b_describe",label:"색깔·모양 묘사 시작",sent:"색깔과 모양을 활용해 사물을 설명하려는 시도가 자연스럽게 이어지고 있습니다. 묘사 표현이 점점 입에 붙어가고 있습니다."},
+  {key:"b_feeling",label:"감정 표현 적극적",sent:"'How are you feeling?' 질문에 자신의 감정을 영어로 표현하려는 시도가 꾸준히 이어지고 있습니다."},
+  {key:"b_pattern",label:"핵심 패턴 반응 빠름",sent:"이번 달 배운 핵심 질문 패턴에 빠르고 자연스럽게 반응하는 힘이 잘 형성되고 있습니다."},
+  {key:"b_ipattern",label:"I-pattern 발화 시도",sent:"I-pattern 질문에 짧게라도 스스로 답하려는 시도가 적극적으로 이어지고 있습니다. 이 시도 자체가 중요한 성장 신호입니다."},
+  {key:"b_interact",label:"짝 대화 참여 우수",sent:"짝 활동에서 배운 패턴을 활용해 친구와 영어로 묻고 답하려는 모습이 자연스럽게 이어지고 있습니다."},
+  {key:"b_vocab",label:"묘사 어휘 기억력 우수",sent:"배운 색깔, 모양, 감정 어휘를 다음 수업에서도 잘 기억하고 활용하는 모습이 인상적입니다."},
+  {key:"b_confidence",label:"영어 자신감 향상",sent:"영어로 표현하는 것에 대한 부담감이 줄어들면서, 먼저 말하려는 시도가 눈에 띄게 늘어났습니다."},
+  {key:"b_reading",label:"패턴 문장 소리 내어 읽기",sent:"배운 패턴 문장을 소리 내어 읽는 태도가 매우 좋습니다. 반복 읽기를 통해 표현이 자연스럽게 자리잡히고 있습니다."},
+  {key:"b_spelling",label:"스펠링 완성 향상",sent:"소리와 철자를 연결하는 힘이 점차 안정되면서 스펠링 완성 문제에서 자신감 있는 모습을 보여주고 있습니다."},
+  {key:"b_chunk",label:"문장 배열 도전적",sent:"단어를 올바른 순서로 배열하는 문장 chunk 활동에 적극적으로 도전하는 태도가 좋습니다. 어순 감각이 조금씩 형성되고 있습니다."},
+  {key:"b_effort",label:"끝까지 포기하지 않음",sent:"어려운 표현도 끝까지 시도하려는 태도가 매우 훌륭합니다. 이 꾸준한 시도가 영어 성장의 가장 큰 원동력입니다."},
+  {key:"b_growth",label:"이전 달 대비 성장",sent:"지난 달과 비교해 패턴 반응 속도와 표현의 정확도가 눈에 띄게 향상되었습니다."},
+  {key:"b_story",label:"스토리 내용 이해",sent:"리더 스토리의 흐름을 따라가며 내용을 파악하는 힘이 잘 형성되고 있습니다. 그림과 문장을 연결하는 능력이 성장하고 있습니다."},
+  {key:"b_enjoy",label:"영어 수업 즐기는 태도",sent:"영어 수업에 적극적으로 참여하며 즐기는 모습이 느껴집니다. 긍정적인 학습 경험이 쌓이면서 자신감도 함께 성장하고 있습니다."}
+];
+
+// ═══ 보완점 키워드 — A 과정 ═══
+const ATTITUDE_LIST_A=[
+  {key:"att_improve",label:"수업 태도 개선 필요",improve:"수업 중 집중력을 유지하는 연습이 조금 더 필요합니다. 개별적인 관심을 기울이며 참여도를 높여나갈 예정입니다."},
+  {key:"hw_ok",label:"과제 가끔 누락",improve:"과제는 대체로 잘 해오고 있으나 간헐적으로 누락되는 경우가 있었습니다. 꾸준한 과제 이행이 수업 내 반복 훈련과 연결될 때 성장 속도가 빨라집니다."},
+  {key:"hw_improve",label:"과제 이행 독려 필요",improve:"과제 이행률을 높이면 수업 내 복습 효과가 더욱 좋아질 것으로 보입니다. 가정에서의 짧은 복습 습관 형성을 함께 도와주시면 좋겠습니다."},
+  {key:"part_shy",label:"발표 소극적",improve:"발표 상황에서 다소 소극적인 모습이 관찰되었습니다. 부담 없이 말할 수 있는 소그룹 활동을 통해 자신감을 키워갈 수 있도록 꾸준히 격려하겠습니다."},
+  {key:"focus_short",label:"집중력 단기",improve:"짧은 활동에는 잘 집중하나 긴 활동에서 주의가 분산되는 경향이 있어 활동 단위를 짧게 구성하고 개별적으로 살펴보겠습니다."},
+  {key:"att_ok",label:"집중도 고르지 않음",improve:"집중도가 고르지 않은 날이 간헐적으로 있었습니다. 짧은 활동 단위로 집중력을 키워갈 수 있도록 수업 방식을 조율해 나가겠습니다."},
+  {key:"part_passive",label:"반응 기다리는 편",improve:"질문에 스스로 먼저 반응하기보다 기다리는 경향이 있습니다. 부담 없이 짧게라도 먼저 말해보는 연습을 수업 중 꾸준히 유도하겠습니다."},
+  {key:"vocab_weak",label:"어휘 복습 필요",improve:"배운 단어를 다음 수업까지 유지하는 힘이 조금 더 필요합니다. 가정에서 짧은 단어 복습 루틴을 만들어 주시면 큰 도움이 됩니다."},
+  {key:"absent",label:"결석·지각 잦음",improve:"이번 달 결석이나 지각이 몇 차례 있었습니다. 수업 연속성이 학습 흐름에 직접적인 영향을 주는 만큼, 꾸준한 출석을 부탁드립니다."},
+  {key:"loud",label:"목소리 크기 조절 필요",improve:"수업 중 목소리가 지나치게 커서 다른 친구들의 집중을 방해하는 경우가 있었습니다. 적절한 목소리 크기로 참여할 수 있도록 함께 연습해 나가겠습니다."},
+  {key:"quiet",label:"목소리가 너무 작음",improve:"수업 중 목소리가 너무 작아 반응을 확인하기 어려운 경우가 있었습니다. 자신감 있게 말할 수 있도록 격려하며, 소그룹 활동을 통해 발화 기회를 늘려가겠습니다."},
+  {key:"chatting",label:"수업 중 잡담",improve:"수업과 관련 없는 대화를 나누는 모습이 간헐적으로 관찰되었습니다. 수업 흐름에 집중할 수 있도록 자리 배치와 활동 구성을 조율해 나가겠습니다."},
+  {key:"offtopic",label:"주제 벗어난 질문",improve:"수업 흐름과 관계없는 질문을 하는 경우가 있어 진행이 끊기는 경우가 있었습니다. 호기심 자체는 긍정적으로 바라보되, 질문 타이밍을 익힐 수 있도록 안내하겠습니다."}
+];
+
+// ═══ 보완점 키워드 — B 과정 (B1 기준, 이후 레벨별 확장 예정) ═══
+const ATTITUDE_LIST_B=[
+  {key:"b_att_focus",label:"수업 집중력 개선 필요",improve:"수업 중 집중력을 유지하는 연습이 조금 더 필요합니다. 활동 단위를 짧게 구성하고 개별적으로 참여도를 높여나갈 예정입니다."},
+  {key:"b_hw_ok",label:"과제 가끔 누락",improve:"과제는 대체로 잘 해오고 있으나 간헐적으로 누락되는 경우가 있었습니다. 가정에서의 짧은 패턴 복습이 수업 효과를 크게 높여줍니다."},
+  {key:"b_hw_improve",label:"과제 이행 독려 필요",improve:"과제 이행률을 높이면 배운 패턴이 더 빠르게 자리잡힐 것으로 보입니다. 가정에서 짧게라도 배운 표현을 소리 내어 말해보는 습관을 만들어 주시면 좋겠습니다."},
+  {key:"b_passive",label:"반응 기다리는 편",improve:"질문에 스스로 먼저 반응하기보다 기다리는 경향이 있습니다. 부담 없이 짧게라도 먼저 말해보는 연습을 수업 중 꾸준히 유도하겠습니다."},
+  {key:"b_shy",label:"발표·묘사 소극적",improve:"묘사 활동이나 발표 상황에서 다소 소극적인 모습이 관찰되었습니다. 소그룹 짝 활동을 통해 부담 없이 말하는 경험을 쌓을 수 있도록 격려하겠습니다."},
+  {key:"b_vocab_weak",label:"묘사 어휘 복습 필요",improve:"배운 색깔·모양·감정 어휘를 다음 수업까지 유지하는 힘이 조금 더 필요합니다. 가정에서 그림 카드를 활용한 짧은 복습을 병행해 주시면 큰 도움이 됩니다."},
+  {key:"b_pattern_weak",label:"패턴 응용 연습 필요",improve:"배운 패턴을 새로운 상황에서 스스로 응용하는 힘을 조금 더 키워나갈 필요가 있습니다. 다양한 상황 속에서 반복 노출 활동을 이어갈 예정입니다."},
+  {key:"b_spelling_weak",label:"스펠링 완성 추가 연습",improve:"소리와 철자를 연결하는 스펠링 완성 훈련을 조금 더 이어갈 필요가 있습니다. 음가 중심의 반복 읽기 활동을 수업에서 꾸준히 진행하겠습니다."},
+  {key:"b_focus_short",label:"집중력 단기",improve:"짧은 활동에는 잘 집중하나 긴 활동에서 주의가 분산되는 경향이 있습니다. 활동 단위를 짧게 나누어 집중력을 유지할 수 있도록 수업 구성을 조율하겠습니다."},
+  {key:"b_chunk_weak",label:"문장 배열 추가 훈련 필요",improve:"단어를 올바른 어순으로 배열하는 힘을 조금 더 키워나갈 필요가 있습니다. chunk 단위 배열 활동을 반복적으로 진행하여 어순 감각을 자연스럽게 형성해 나가겠습니다."},
+  {key:"b_absent",label:"결석·지각 잦음",improve:"이번 달 결석이나 지각이 몇 차례 있었습니다. 수업 연속성이 패턴 학습에 직접적인 영향을 주는 만큼, 꾸준한 출석을 부탁드립니다."},
+  {key:"b_loud",label:"목소리 크기 조절 필요",improve:"수업 중 목소리가 지나치게 커서 다른 친구들의 집중을 방해하는 경우가 있었습니다. 적절한 목소리 크기로 참여할 수 있도록 함께 연습해 나가겠습니다."},
+  {key:"b_quiet",label:"목소리가 너무 작음",improve:"수업 중 목소리가 너무 작아 반응을 확인하기 어려운 경우가 있었습니다. 자신감 있게 말할 수 있도록 격려하며, 소그룹 활동을 통해 발화 기회를 늘려가겠습니다."},
+  {key:"b_chatting",label:"수업 중 잡담",improve:"수업과 관련 없는 대화를 나누는 모습이 간헐적으로 관찰되었습니다. 수업 흐름에 집중할 수 있도록 자리 배치와 활동 구성을 조율해 나가겠습니다."},
+  {key:"b_offtopic",label:"주제 벗어난 질문",improve:"수업 흐름과 관계없는 질문을 하는 경우가 있어 진행이 끊기는 경우가 있었습니다. 호기심 자체는 긍정적으로 바라보되, 질문 타이밍을 익힐 수 있도록 안내하겠습니다."}
+];
+
+const BANNED=["문법이 부족","독해력이 약","독해력이 부족","이해력이 낮","집중력이 부족","못합니다","부족합니다","분석력이 부족","약합니다"];
+
+// ═══ 상태 ═══
+let wrongQs=new Set(),selNext=new Set(),selAttitude=new Set(),selStrength=new Set();
+let curStep=0,domFilter="all",nameInputTimer=null;
+
+// ═══ 헬퍼 ═══
+function g(id){return document.getElementById(id);}
+function val(id){return g(id)?g(id).value||"":"";}
+function isB(){return val("sLevel").startsWith("B");}
+function getQM(){return QM_MAP[val("sLevel")]||QM_A;}
+function getDW(){const dw={Vocabulary:0,Reading:0,Listening:0,Structure:0};wrongQs.forEach(n=>{const q=getQM().find(q=>q.n===n);if(q)dw[q.dom]++;});return dw;}
+// 오답 기반 영역 점수 자동 산출 (문항당 1점 구조)
+function getAutoScores(){const dw=getDW();return{v:Math.max(0,6-(dw.Vocabulary||0)),r:Math.max(0,6-(dw.Reading||0)),l:Math.max(0,5-(dw.Listening||0)),s:Math.max(0,8-(dw.Structure||0))};}
+function getStudentKey(){const name=val("sName").trim(),school=val("sSchool").trim();const prefix=[school,name].filter(Boolean).join("_");return `history:${prefix}`;}
+
+function onNameInput(){clearTimeout(nameInputTimer);nameInputTimer=setTimeout(()=>{loadHistoryAlert();},600);}
+
+const LS={
+  get(key){try{const v=localStorage.getItem(key);return v?{value:v}:null;}catch(e){return null;}},
+  set(key,val){try{localStorage.setItem(key,val);return true;}catch(e){return false;}},
+  remove(key){try{localStorage.removeItem(key);}catch(e){}}
+};
+
+function toggleHistoryPanel(){const b=g("historyAlertBody"),ic=g("historyToggleIcon");if(!b)return;const open=b.style.display==="none";b.style.display=open?"block":"none";if(ic)ic.className="ti "+(open?"ti-chevron-up":"ti-chevron-down");}
+
+function loadHistoryAlert(){
+  const name=val("sName").trim(),alertEl=g("historyAlert");
+  if(!alertEl)return;
+  if(!name){alertEl.style.display="none";return;}
+  const res=LS.get(getStudentKey());
+  let h=null;
+  if(res){try{h=JSON.parse(res.value);}catch(e){}}
+  if(!h||h.length===0){alertEl.style.display="none";return;}
+  const recent=h.slice(0,3);
+  const head=g("historyAlertHead"),body=g("historyAlertBody");
+  const SL=isB()?STRENGTH_LIST_B:STRENGTH_LIST_A, AL=isB()?ATTITUDE_LIST_B:ATTITUDE_LIST_A;
+  const sLabel=k=>{const f=SL.find(a=>a.key===k);return f?f.label:k;};
+  const aLabel=k=>{const f=AL.find(a=>a.key===k);return f?f.label:k;};
+  head.innerHTML=`<i class="ti ti-history" style="font-size:14px;color:#185fa5;flex-shrink:0"></i><div style="flex:1"><strong>${name}</strong> 학생의 최근 ${recent.length}개월 보고서 이력이 있습니다.<span style="color:#888;margin-left:5px">${recent.map(r=>r.month).join(" · ")}</span></div><i id="historyToggleIcon" class="ti ti-chevron-down" style="font-size:15px;color:#185fa5"></i>`;
+  body.innerHTML=recent.map((r,i)=>{
+    const lvTag=r.level?`<span style="background:#dde9f6;color:#185fa5;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:5px">${r.level}</span>`:"";
+    const tch=r.teacher?`<span style="color:#aaa;font-size:10px;margin-left:5px">담임 ${r.teacher}</span>`:"";
+    const sChips=r.strength&&r.strength.length>0?r.strength.map(k=>`<span style="background:#eaf3de;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${sLabel(k)}</span>`).join(""):'<span style="color:#bbb;font-size:10px">없음</span>';
+    const aChips=r.attitude&&r.attitude.length>0?r.attitude.map(k=>`<span style="background:#faeeda;color:#854f0b;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${aLabel(k)}</span>`).join(""):'<span style="color:#bbb;font-size:10px">없음</span>';
+    return `<div style="padding-top:11px${i<recent.length-1?";border-bottom:0.5px solid #d4e3f2;padding-bottom:11px":""}"><div style="font-size:11px;font-weight:700;color:#185fa5;margin-bottom:5px">${r.month}${lvTag}${tch}</div><div style="margin-bottom:4px"><span style="font-size:10px;color:#666;font-weight:600;margin-right:4px">강점</span>${sChips}</div><div><span style="font-size:10px;color:#666;font-weight:600;margin-right:4px">보완점</span>${aChips}</div></div>`;
+  }).join("");
+  alertEl.style.display="block";
+}
+
+function onLvChange(){
+  const lv=val("sLevel"),d=LV[lv];
+  const badge=d.course==="B"?`<span style="background:#eaf3de;color:#2d7a4f;border-radius:6px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px">B 과정</span>`:`<span style="background:#e6f1fb;color:#185fa5;border-radius:6px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px">A 과정</span>`;
+  g("lvinfoTxt").innerHTML=`<strong>${lv} — ${d.book}</strong>${badge} · ${d.theme} · CEFR: ${d.cefr} · Lexile: ${d.lexile}<br>핵심 패턴: <em>${d.pattern}</em><br><span style="color:#2d7a4f;font-weight:600">${d.funcFlow}</span> — ${d.msg}`;
+  wrongQs.clear();selNext.clear();
+}
+
+function calcTotal(){const _as=getAutoScores(),t=_as.v+_as.r+_as.l+_as.s;const tn=g("totNum");if(tn)tn.textContent=t;const gr=g("totGrade");if(gr){gr.style.display="";const p=Math.round(t/25*100);gr.innerHTML=`<b>${p}%</b> ${p>=88?"우수":p>=72?"양호":p>=56?"보통":"관찰 필요"}`;}}
+
+function buildQGrid(){
+  const QM=getQM(),el=g("qgrid");el.innerHTML="";
+  QM.forEach(q=>{const b=document.createElement("div");b.className="qbtn"+(wrongQs.has(q.n)?" wrong":"");b.id="qb"+q.n;b.style.display=(domFilter==="all"||domFilter===q.dom)?"":"none";b.innerHTML=`<span class="qn">Q${q.n}</span><span class="qt">${q.code}</span><span class="qsk">${q.skill}</span>`;b.onclick=()=>{if(wrongQs.has(q.n)){wrongQs.delete(q.n);b.classList.remove("wrong");}else{wrongQs.add(q.n);b.classList.add("wrong");}updWC();calcTotal();};el.appendChild(b);});updWC();calcTotal();
+}
+function filterDom(d,el){domFilter=d;document.querySelectorAll(".qtab").forEach(t=>t.classList.remove("on"));el.classList.add("on");getQM().forEach(q=>{const b=g("qb"+q.n);if(b)b.style.display=(d==="all"||d===q.dom)?"":"none";});}
+function updWC(){g("wrongCount").textContent=`오답: ${wrongQs.size}문항${wrongQs.size>0?" ("+[...wrongQs].sort((a,b)=>a-b).map(n=>"Q"+n).join(", ")+")":""}`;}
+
+function buildStrengthChips(){const el=g("strengthChips");if(!el)return;el.innerHTML="";const STRENGTH_LIST=isB()?STRENGTH_LIST_B:STRENGTH_LIST_A;STRENGTH_LIST.forEach(item=>{const c=document.createElement("span");c.className="chip";if(selStrength.has(item.key))c.style.cssText="background:#2d7a4f;color:#fff;border-color:#2d7a4f";c.textContent=item.label;c.onclick=()=>{if(selStrength.has(item.key)){selStrength.delete(item.key);c.style.cssText="";}else{selStrength.add(item.key);c.style.cssText="background:#2d7a4f;color:#fff;border-color:#2d7a4f";}buildStrengthText();};el.appendChild(c);});}
+function buildAttitudeChips(){const el=g("attitudeChips");if(!el)return;el.innerHTML="";const ATTITUDE_LIST=isB()?ATTITUDE_LIST_B:ATTITUDE_LIST_A;ATTITUDE_LIST.forEach(item=>{const c=document.createElement("span");c.className="chip";if(selAttitude.has(item.key))c.style.cssText="background:#854f0b;color:#fff;border-color:#854f0b";c.textContent=item.label;c.onclick=()=>{if(selAttitude.has(item.key)){selAttitude.delete(item.key);c.style.cssText="";}else{selAttitude.add(item.key);c.style.cssText="background:#854f0b;color:#fff;border-color:#854f0b";}buildImproveText();};el.appendChild(c);});}
+function buildStrengthText(){const STRENGTH_LIST=isB()?STRENGTH_LIST_B:STRENGTH_LIST_A;const sents=[...selStrength].map(k=>{const f=STRENGTH_LIST.find(a=>a.key===k);return f?f.sent:"";}).filter(Boolean);const autoBox=g("strengthAutoBox");let autoText="";if(autoBox){const raw=(autoBox.innerText||autoBox.textContent||"").trim();if(raw&&!raw.startsWith("(")){autoText=raw.split(/\n|·/).map(s=>s.trim()).filter(Boolean).join(" ");}}const parts=[];if(autoText)parts.push(autoText);parts.push(...sents);const ta=g("cmtStrength");if(ta&&!ta.dataset.edited)ta.value=parts.join(" ");}
+function buildImproveText(){const ATTITUDE_LIST=isB()?ATTITUDE_LIST_B:ATTITUDE_LIST_A;const attSents=[...selAttitude].map(k=>{const f=ATTITUDE_LIST.find(a=>a.key===k);return f?f.improve:"";}).filter(Boolean);const autoBox=g("improveAutoBox");let autoText="";if(autoBox){const raw=(autoBox.innerText||autoBox.textContent||"").trim();if(raw&&raw!=="(오답이 없습니다)"&&!raw.startsWith("(")){autoText=raw.split(/\n|·/).map(s=>s.trim()).filter(Boolean).join(" ");}}const parts=[...attSents];if(autoText)parts.push(autoText);const ta=g("cmtImprove");if(ta&&!ta.dataset.edited)ta.value=parts.join(" ");}
+function buildNextCmt(){
+  const NEXT2S=isB()?NEXT2S_B:NEXT2S_A;
+  const sents=[...selNext].map(k=>NEXT2S[k]).filter(Boolean);
+  const ta=g("cmtNext");if(!ta)return;
+  if(ta.dataset.edited==="1")return;
+  ta.value=sents.join("\n");
+}
+
+function buildAnalysis(){
+  const QM=getQM(),dw=getDW();
+  const bars=g("domBars");bars.innerHTML="";
+  Object.entries(DMMAX).forEach(([d,mx])=>{const sc=mx-(dw[d]||0),pct=Math.round(sc/mx*100),cls=pct>=80?"g":pct>=60?"am":"r";bars.innerHTML+=`<div class="dombar"><div class="dbl"><span class="dbn">${d}</span><span class="dbpct">${sc}/${mx} · ${pct}%</span></div><div class="bg"><div class="bf ${cls}" style="width:${pct}%"></div></div></div>`;});
+  const codes=new Set();wrongQs.forEach(n=>{const q=QM.find(q=>q.n===n);if(q)codes.add(q.code);});
+  const sb=g("sigBox"),sr=g("sigRow");
+  if(codes.size){sb.style.display="";sr.innerHTML=[...codes].map(c=>`<div class="sigitem"><span class="code">${c}</span> ${CODELAB[c]||c}</div>`).join("");}else sb.style.display="none";
+  const tb=g("atblBody");tb.innerHTML="";
+  const lv=val("sLevel");
+  QM.forEach(q=>{
+    const w=wrongQs.has(q.n);
+    const isChunk=[22,23,24,25].includes(q.n);
+    const stag=w?(isChunk?`<span class="tag tinfo">정상 오답</span>`:(q.warn&&q.warn!=="—"?`<span class="tag twrn">확인 필요</span>`:`<span class="tag tgray">일반 오답</span>`)):`<span class="tag tok">정답</span>`;
+    const interp=w?(isChunk?`${lv} 정상 범위`:(q.warn&&q.warn!=="—"?q.warn:q.norm)):"—";
+    tb.innerHTML+=`<div class="ar"><div style="font-weight:600">Q${q.n}</div><div><span class="code">${q.code}</span></div><div style="color:#555">${q.skill}</div><div>${stag}</div><div style="color:#666;font-size:11px">${interp}</div></div>`;
+  });
+  const az=g("alertZone");az.innerHTML="";
+  if(wrongQs.size===0){az.innerHTML=`<div class="abox abox-ok"><i class="ti ti-circle-check"></i><div>전 문항 정답입니다.</div></div>`;}
+  else{
+    if(dw.Vocabulary>=4)az.innerHTML+=`<div class="abox abox-alert"><i class="ti ti-alert-triangle"></i><div>Vocabulary 오답 4개 이상 — ${isB()?"스펠링·어휘 완성도 재점검 권장":"파닉스 완성도 재점검 권장"}</div></div>`;
+    if(wrongQs.has(3)&&wrongQs.has(4))az.innerHTML+=`<div class="abox abox-alert"><i class="ti ti-alert-triangle"></i><div>Q3·Q4 ${isB()?"스펠링 Decoding":"음가 Decoding"} 모두 오답 — 수업 중 추가 관찰 필요</div></div>`;
+    if(dw.Listening>=4)az.innerHTML+=`<div class="abox abox-warn"><i class="ti ti-alert-circle"></i><div>Listening 오답 4개 이상 — 질문 반응 여부 관찰 필요</div></div>`;
+    if([22,23,24,25].every(n=>wrongQs.has(n)))az.innerHTML+=`<div class="abox abox-info"><i class="ti ti-info-circle"></i><div>문장 배열 Q22~25 전체 오답 — ${lv} 정상 범위 (chunk 형성 중)</div></div>`;
+    if(isB()){
+      const lv=val("sLevel");
+      const bAlerts={
+        B1:"Is it~? / Do you have~? 핵심 패턴 집중 점검 필요",
+        B2:"Who is~? / Do you like~? 핵심 패턴 집중 점검 필요",
+        B3:"What time~? / What do you do~? 핵심 패턴 집중 점검 필요",
+        B4:"과거 패턴 / 요일 습관 패턴 집중 점검 필요",
+        B5:"현재진행 패턴 / be going to 패턴 집중 점검 필요",
+        B6:"be going to / have to 핵심 패턴 집중 점검 필요"
+      };
+      if(wrongQs.has(18)&&wrongQs.has(19))az.innerHTML+=`<div class="abox abox-warn"><i class="ti ti-alert-circle"></i><div>${lv} 핵심 패턴 Q18·Q19 모두 오답 — ${bAlerts[lv]||"핵심 패턴 점검 필요"}</div></div>`;
+    }
+  }
+  buildAutoFb(dw);
+}
+
+// ── 영역별 우선순위 산출 (판정 등급 기반) ──
+// 확인필요(warn 오답)>일반오답>정상(오답없음/chunk만) → [!]/[~]/[+]
+function getDomainPriorities(){
+  const QM=getQM();
+  const result={Vocabulary:'strong',Reading:'strong',Listening:'strong',Structure:'strong'};
+  QM.forEach(q=>{
+    if(!wrongQs.has(q.n))return;
+    const dom=q.dom;
+    const isChunk=[22,23,24,25].includes(q.n);
+    const isWarn=q.warn&&q.warn!=="—";
+    if(isChunk)return; // 정상 오답 — 우선순위 올리지 않음
+    if(isWarn){ result[dom]='weak'; }            // 확인필요 → 최우선
+    else if(result[dom]!=='weak'){ result[dom]='mid'; } // 일반오답 → 중간
+  });
+  return result;
+}
+// 키워드 텍스트 → 측정 영역 추론 (STEP1 진단과 색 매칭용)
+function inferKwDomain(kw){
+  const t=kw.toLowerCase();
+  // 어휘
+  if(/어휘|sight word|스펠링|단어|표현 확장|색깔|모양|감정 표현|선호.*어휘|취향|수량 단위|비교 표현|감각 표현|빈도 표현/.test(kw))return "Vocabulary";
+  // 듣기
+  if(/반응 속도|yes\/no 반응|응답 속도|듣고|반응 강화|대화 반응/.test(kw))return "Listening";
+  // 읽기
+  if(/storytelling|문장 연결|그림 보고|그림-문장|chunk|읽기|sentence chunk|이야기|삽화|발화|발표|자신감/.test(kw))return "Reading";
+  // 그 외 패턴·문법·시제·구문 → Structure
+  if(/패턴|is it|is this|do you|who is|what time|what do you|where|현재진행|과거|be going to|have to|시제|문장 완성|요청|관계|직업|장소|출신|의무|계획|증상|습관/.test(kw))return "Structure";
+  return "Structure";
+}
+function buildNextPriorityBar(){
+  const el=g("nextPriorityBar");
+  if(!el)return;
+  const pri=getDomainPriorities();
+  const style={weak:{dot:'[!]',tip:'확인 필요',col:'#a32d2d',bg:'#fcebeb'},mid:{dot:'[~]',tip:'보완 중',col:'#854f0b',bg:'#faeeda'},strong:{dot:'[+]',tip:'양호',col:'#2d7a4f',bg:'#eaf3de'}};
+  const order={weak:0,mid:1,strong:2};
+  const items=Object.entries(pri).sort((a,b)=>order[a[1]]-order[b[1]]).map(([dom,p])=>{
+    const s=style[p];
+    return `<span style="display:inline-block;background:${s.bg};color:${s.col};border:0.5px solid ${s.col}33;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;margin:0 5px 5px 0;cursor:default">${s.dot} ${dom} · ${s.tip}</span>`;
+  }).join("");
+  el.innerHTML=`${items}<div style="font-size:10px;color:#94a3b8;margin-top:5px;line-height:1.6"><b style="color:#a32d2d">[!]</b> 가장 시급 (확인필요 오답) · <b style="color:#854f0b">[~]</b> 보완 중 (일반 오답) · <b style="color:#2d7a4f">[+]</b> 양호<br>→ 시급한 영역부터 아래 STEP 2 키워드를 골라 주세요.</div>`;
+}
+function buildAutoFb(dw){
+  const name=val("sName")||"학생",lv=val("sLevel"),d=LV[lv];
+  const lines=[];
+  if(isB()){
+    // B 과정 공통 피드백 (레벨별 패턴 텍스트는 lv로 분기)
+    const lv=val("sLevel");
+    lines.push((dw.Vocabulary||0)<2?"배운 사물 어휘와 표현을 보고 스스로 읽으려는 시도가 좋았습니다.":"그림과 단어를 연결해 이해하는 연습을 꾸준히 이어가고 있습니다.");
+    lines.push((dw.Listening||0)<2?"질문 패턴을 듣고 Yes/No로 반응하는 힘이 안정되고 있습니다.":"질문을 듣고 반응하는 힘을 키워가는 중입니다.");
+    const bPatErr=[...wrongQs].filter(n=>n>=18&&n<=21).length;
+    const bPatOk={B1:'"Is it yellow?" "Is this a triangle?" 같은 묘사 패턴에 반응하는 힘이 자라고 있습니다.',B2:'"Who is~?" "Do you like~?" 패턴에 자연스럽게 반응하는 힘이 자라고 있습니다.',B3:'"What time is it?" "Where is~?" 패턴으로 정보를 전달하는 힘이 자라고 있습니다.',B4:'"Where did you go~?" 과거 패턴에 반응하는 힘이 자라고 있습니다.',B5:'"What are you doing?" "be going to~" 패턴에 반응하는 힘이 자라고 있습니다.',B6:'"be going to~" "have to~" 패턴으로 자기 생각을 표현하는 힘이 자라고 있습니다.'};
+    const bPatNg={B1:"색깔·모양·감정 묘사 패턴 반응 훈련을 이어갈 예정입니다.",B2:"선호·관계·요청 패턴 반응 훈련을 이어갈 예정입니다.",B3:"시간·장소·직업 정보 전달 패턴 훈련을 이어갈 예정입니다.",B4:"과거 표현·습관 패턴 반응 훈련을 이어갈 예정입니다.",B5:"현재진행·미래 계획 패턴 훈련을 이어갈 예정입니다.",B6:"출신·계획·의무 표현 패턴 훈련을 이어갈 예정입니다."};
+    lines.push(bPatErr<2?(bPatOk[lv]||bPatOk.B1):(bPatNg[lv]||bPatNg.B1));
+    if([22,23,24,25].some(n=>wrongQs.has(n)))lines.push("배운 문장을 순서대로 배열하는 힘(sentence chunk)을 익혀가고 있습니다.");
+    const alerts=[];
+    if(dw.Vocabulary>=4)alerts.push("⚠ Vocabulary 오답 4개 이상 — 스펠링·어휘 완성도 재점검 권장");
+    if(wrongQs.has(3)&&wrongQs.has(4))alerts.push("⚠ 스펠링 Decoding(Q3·Q4) 모두 오답 — 수업 중 음가 인식 여부 추가 관찰");
+    const bAlertMsg={B1:"⚠ B1 핵심 패턴(Q18·Q19) 모두 오답 — Is it~? / Do you have~? 패턴 집중 점검",B2:"⚠ B2 핵심 패턴(Q18·Q19) 모두 오답 — Who is~? / Do you like~? 패턴 집중 점검",B3:"⚠ B3 핵심 패턴(Q18·Q19) 모두 오답 — What time~? / What do you do~? 패턴 집중 점검",B4:"⚠ B4 핵심 패턴(Q18·Q19) 모두 오답 — 과거 패턴 / 요일 습관 패턴 집중 점검",B5:"⚠ B5 핵심 패턴(Q18·Q19) 모두 오답 — 현재진행 / be going to 패턴 집중 점검",B6:"⚠ B6 핵심 패턴(Q18·Q19) 모두 오답 — be going to / have to 패턴 집중 점검"};
+    if(wrongQs.has(18)&&wrongQs.has(19))alerts.push(bAlertMsg[lv]||bAlertMsg.B1);
+    if(dw.Listening>=4)alerts.push("⚠ Listening 오답 4개 이상 — 질문 반응 여부 수업 중 관찰 필요");
+    let txt=`${name} — B1 역량 기반 자동 피드백:\n\n`+lines.map(l=>`· ${l}`).join("\n");
+    if(alerts.length)txt+="\n\n[강사 참고 — 주의 신호]\n"+alerts.join("\n");
+    g("autoFb").value=txt;
+  } else {
+    // A 과정 — v5.2 그대로
+    lines.push((dw.Vocabulary||0)<2?"배운 단어를 보고 스스로 읽으려는 시도가 좋았습니다.":"그림과 문장을 연결해 이해하는 연습을 꾸준히 이어가고 있습니다.");
+    lines.push((dw.Listening||0)<2?"질문 패턴을 듣고 반응하는 힘이 안정되고 있습니다.":"질문을 듣고 반응하는 힘을 키워가는 중입니다.");
+    const spErr=[...wrongQs].filter(n=>n>=18&&n<=21).length;
+    lines.push(spErr<2?`"${d.pattern.split("/")[0].trim()}" 패턴에 반응하는 힘을 익혀가고 있습니다.`:"단수·복수 질문 패턴 반응 훈련을 이어갈 예정입니다.");
+    if([22,23,24,25].some(n=>wrongQs.has(n)))lines.push("sentence chunk를 기억하고 활용하는 힘이 자라고 있습니다.");
+    const alerts=[];
+    if(dw.Vocabulary>=4)alerts.push("⚠ Vocabulary 오답 4개 이상 — 파닉스 완성도 재점검 권장");
+    if(wrongQs.has(3)&&wrongQs.has(4))alerts.push("⚠ 음가 Decoding(Q3·Q4) 모두 오답 — 수업 중 자음 인식 여부 추가 관찰");
+    if(dw.Listening>=4)alerts.push("⚠ Listening 오답 4개 이상 — 질문 반응 여부 수업 중 관찰 필요");
+    let txt=`${name} — 역량 기반 자동 피드백:\n\n`+lines.map(l=>`· ${l}`).join("\n");
+    if(alerts.length)txt+="\n\n[강사 참고 — 주의 신호]\n"+alerts.join("\n");
+    g("autoFb").value=txt;
+  }
+}
+
+function setupCommentTab(){
+  const dw=getDW();
+  buildStrengthChips();buildAttitudeChips();
+  g("promptQs").innerHTML=PROMPT_QS.map(q=>`· ${q}`).join("<br>");
+  // ── 강점 Layer1: 정답·잘 형성된 영역 자동 분석 ──
+  const autoStrength=[];
+  const lvS=val("sLevel");
+  if((dw.Vocabulary||0)<=1)autoStrength.push(isB()?"어휘와 스펠링을 연결해 이해하는 힘이 안정적으로 자리잡고 있습니다.":"그림과 단어를 연결해 읽어내는 힘이 안정적으로 자리잡고 있습니다.");
+  if((dw.Listening||0)<=1)autoStrength.push("질문을 듣고 바로 반응하는 청해 힘이 잘 형성되어 있습니다.");
+  if((dw.Reading||0)<=1)autoStrength.push("문장을 읽고 의미를 파악하는 리딩 힘이 꾸준히 자라고 있습니다.");
+  const patOk=[...wrongQs].filter(n=>n>=18&&n<=21).length;
+  const bCorePos={B1:"Is it~? / Do you have~? 핵심 패턴에 자연스럽게 반응합니다.",B2:"Who is~? / Do you like~? 핵심 패턴에 자연스럽게 반응합니다.",B3:"What time~? / What do you do~? 패턴으로 정보를 전달하는 힘이 자랐습니다.",B4:"과거 표현·요일 습관 패턴에 안정적으로 반응합니다.",B5:"현재진행·be going to 패턴에 자신감 있게 반응합니다.",B6:"be going to·have to 패턴으로 자기 생각을 표현합니다."};
+  if(patOk<=1)autoStrength.push(isB()?(bCorePos[lvS]||bCorePos.B1):"핵심 질문 패턴에 안정적으로 반응하는 힘이 자랐습니다.");
+  if(![22,23,24,25].some(n=>wrongQs.has(n)))autoStrength.push("배운 문장을 순서대로 배열하는 sentence chunk 힘이 잘 형성되어 있습니다.");
+  const sAutoBox=g("strengthAutoBox");
+  if(sAutoBox)sAutoBox.innerHTML=autoStrength.length>0?`<div style="background:#eaf3de;border:1px solid #90c060;border-radius:7px;padding:8px 12px;font-size:11px;color:#1f5c34">`+autoStrength.map(l=>`· ${l}`).join("<br>")+"</div>":`<span style="color:#aaa;font-size:11px">(점수 기반 강점이 자동 생성됩니다)</span>`;
+  buildStrengthText();
+  const autoImprove=[];
+  if((dw.Listening||0)>2)autoImprove.push("질문을 듣고 반응하는 힘을 더욱 키워가는 연습이 필요합니다.");
+  if((dw.Vocabulary||0)>2)autoImprove.push(isB()?"어휘와 스펠링을 연결해 이해하는 연습이 조금 더 필요한 상태입니다.":"그림과 단어를 연결해 이해하는 연습이 조금 더 필요한 상태입니다.");
+  const impLv=val("sLevel");
+  const bPatMsg={B1:"색깔·모양·감정 묘사 패턴을 구분해 반응하는 연습이 필요합니다.",B2:"선호·관계·요청 패턴을 구분해 반응하는 연습이 필요합니다.",B3:"시간·장소·직업 정보 전달 패턴 반응 연습이 필요합니다.",B4:"과거 패턴·습관 표현을 구분해 반응하는 연습이 필요합니다.",B5:"현재진행·미래 계획 패턴 반응 연습이 필요합니다.",B6:"출신·계획·의무 표현 패턴 반응 연습이 필요합니다."};
+  const bCoreMsg={B1:"Is it~? / Do you have~? 핵심 패턴 반응 훈련을 집중적으로 진행할 예정입니다.",B2:"Who is~? / Do you like~? 핵심 패턴 반응 훈련을 집중적으로 진행할 예정입니다.",B3:"What time~? / What do you do~? 핵심 패턴 훈련을 집중적으로 진행할 예정입니다.",B4:"과거 패턴 / 요일 습관 패턴 훈련을 집중적으로 진행할 예정입니다.",B5:"현재진행 / be going to 핵심 패턴 훈련을 집중적으로 진행할 예정입니다.",B6:"be going to / have to 핵심 패턴 훈련을 집중적으로 진행할 예정입니다."};
+  if([...wrongQs].filter(n=>n>=18&&n<=21).length>=3)autoImprove.push(isB()?(bPatMsg[impLv]||bPatMsg.B1):"단수·복수 질문 패턴을 구분해 반응하는 연습이 필요합니다.");
+  if(wrongQs.has(3)&&wrongQs.has(4))autoImprove.push(isB()?"스펠링 완성 훈련을 개별적으로 살펴볼 예정입니다.":"음가를 활용해 단어를 읽는 힘을 개별적으로 살펴볼 예정입니다.");
+  if(isB()&&wrongQs.has(18)&&wrongQs.has(19))autoImprove.push(bCoreMsg[impLv]||bCoreMsg.B1);
+  const autoBox=g("improveAutoBox");
+  autoBox.style.display="block";
+  autoBox.innerHTML=autoImprove.length>0?`<div style="background:#faeeda;border:1px solid #f0b040;border-radius:7px;padding:8px 12px;font-size:11px;color:#633806">`+autoImprove.map(l=>`· ${l}`).join("<br>")+"</div>":`<span style="color:#aaa;font-size:11px">(오답이 없습니다)</span>`;
+  buildImproveText();
+  const lv=val("sLevel");
+  const NEXTLIST=isB()?(NEXTLIST_B[lv]||NEXTLIST_B.B1):NEXTLIST_A;
+  const NEXT2S=isB()?NEXT2S_B:NEXT2S_A;
+  const el=g("nextChips");if(!el)return;el.innerHTML="";
+  const pri=getDomainPriorities();
+  const priOrder={weak:0,mid:1,strong:2};
+  const domColor={weak:{bd:'#e6a3a3',bg:'#fcebeb',tx:'#a32d2d'},mid:{bd:'#e8c98a',bg:'#faeeda',tx:'#854f0b'},strong:{bd:'#a9cd86',bg:'#eef6e3',tx:'#2d7a4f'}};
+  const domShort={Vocabulary:'어휘',Reading:'읽기',Listening:'듣기',Structure:'구문'};
+  // 키워드에 영역·우선순위 부여 후 시급한 영역부터 정렬
+  const enriched=NEXTLIST.map(a=>{const dom=inferKwDomain(a);const p=pri[dom]||'strong';return{kw:a,dom,p};});
+  enriched.sort((x,y)=>priOrder[x.p]-priOrder[y.p]);
+  enriched.forEach(({kw,dom,p})=>{
+    const c=document.createElement("span");
+    c.className="chip"+(selNext.has(kw)?" sel":"");
+    const col=domColor[p];
+    if(!selNext.has(kw)){c.style.borderColor=col.bd;}
+    const dot=p==='weak'?'[!]':p==='mid'?'[~]':'[+]';
+    c.innerHTML=`<span class="kw-dom" style="background:${col.bg};color:${col.tx};border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;margin-right:5px">${dot} ${domShort[dom]}</span>${kw}`;
+    c.onclick=()=>{if(selNext.has(kw)){selNext.delete(kw);c.classList.remove("sel");c.style.borderColor=col.bd;}else{selNext.add(kw);c.classList.add("sel");c.style.borderColor="";}buildNextCmt();};
+    el.appendChild(c);
+  });
+  buildNextPriorityBar();
+}
+
+function showHistoryWarnings(){
+  const hbox=g("historyBox");if(!hbox)return;
+  const res=LS.get(getStudentKey());
+  if(res){try{const history=JSON.parse(res.value);if(history&&history.length>0){hbox.style.display="block";const items=history.map((h,i)=>{const sLabels=h.strength&&h.strength.length>0?h.strength.map(k=>{const SL=isB()?STRENGTH_LIST_B:STRENGTH_LIST_A;const f=SL.find(a=>a.key===k);return f?`<span style="background:#eaf3de;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin-right:3px">${f.label}</span>`:k;}).join(""):"없음";const aLabels=h.attitude&&h.attitude.length>0?h.attitude.map(k=>{const AL=isB()?ATTITUDE_LIST_B:ATTITUDE_LIST_A;const f=AL.find(a=>a.key===k);return f?`<span style="background:#faeeda;color:#854f0b;border-radius:4px;padding:1px 6px;font-size:10px;margin-right:3px">${f.label}</span>`:k;}).join(""):"없음";return `<div style="margin-bottom:${i<history.length-1?10:0}px"><div style="font-size:10px;font-weight:700;color:#854f0b;margin-bottom:4px">${h.month}</div><div style="margin-bottom:3px"><span style="font-size:10px;color:#666;font-weight:600">강점: </span>${sLabels}</div><div><span style="font-size:10px;color:#666;font-weight:600">보완점: </span>${aLabels}</div></div>`;}).join('<hr style="border:none;border-top:0.5px solid #f0d090;margin:8px 0">');hbox.innerHTML=`<div style="font-size:11px;font-weight:700;color:#854f0b;margin-bottom:8px;display:flex;align-items:center;gap:5px"><i class="ti ti-history" style="font-size:13px"></i>이전 보고서 키워드 이력</div>${items}`;return;}}catch(e){}}
+  hbox.style.display="block";hbox.innerHTML=`<div style="font-size:12px;color:#888">저장된 이력이 없습니다.</div>`;
+}
+
+async function refineText(taId,type){
+  const ta=g(taId);if(!ta)return;
+  const raw=ta.value.trim();if(!raw){alert("먼저 키워드를 선택하거나 내용을 입력해 주세요.");return;}
+  const statusEl=g("refineStatus_"+type);
+  const btn=ta.closest("div[style*='position:relative']")?.querySelector("button");
+  if(btn){btn.disabled=true;btn.innerHTML=`<i class="ti ti-loader" style="font-size:12px;animation:spin 1s linear infinite"></i> 다듬는 중...`;}
+  if(statusEl){statusEl.style.display="block";statusEl.style.color="#888";statusEl.textContent="린쌤 톤으로 다듬고 있습니다...";}
+  const name=val("sName")||"학생",lv=val("sLevel");
+  const sectionLabel=type==="strength"?"이달의 강점":type==="improve"?"파악된 보완점":type==="next"?"다음 달 지도 방안":"역량 분석 피드백";
+  const tone=type==="strength"?"수업에서 실제로 관찰한 성장을 구체적으로 짚어주되, 과장하거나 감탄사를 남발하지 않는다. 칭찬은 사실에 근거해 절제되게":type==="improve"?"문제를 지적하되 단정 짓지 않는다. 학부모가 불안해하지 않도록 현재 상태를 있는 그대로 설명하고, 교사가 이미 방향을 잡고 있다는 인상을 준다":type==="next"?"막연한 다짐이 아닌 수업에서 실제로 할 구체적인 활동·접근 방식을 서술한다. 학원이 체계적으로 준비하고 있다는 신뢰감을 준다":"시험 점수보다 영어 성장 과정에 초점을 맞추고, 강사가 이 아이를 정확히 파악하고 있다는 인상을 준다. [강사 참고 — 주의 신호] 내용은 제거할 것";
+  const prompt=`당신은 린쌤파머스 국제어학원에서 ${name} 학생을 직접 가르치는 담임 선생님입니다. 20년 경력의 영어교육 전문가로, 아이들을 진심으로 아끼지만 기준이 명확하고 책임감 있는 지도자입니다. 이 보고서는 담임 선생님이 학부모님께 직접 쓰는 글입니다.
+
+Pre Stella ${lv} 과정 ${name} 학생의 월말보고서 "${sectionLabel}" 초안을 아래 조건에 맞게 하나의 자연스러운 단락으로 다듬어 주세요.
+
+[톤 & 태도]
+- 전문적이고 차분하다. 과장된 감탄이나 손발이 오그라드는 표현은 쓰지 않는다
+- 따뜻하되 나긋나긋하지 않다. 교사로서의 의지와 판단이 느껴지는 문장을 쓴다
+- "분명히, 반드시, 꼭, 틀림없이" 같은 확정적 단어는 사용하지 않는다
+- "정말, 너무너무, 대단히" 같은 과잉 수식어는 쓰지 않는다
+- ${tone}
+
+[화자 — 매우 중요]
+- 글쓴이는 담임 선생님 본인이다. 자기 자신을 가리킬 때는 반드시 1인칭("저", "제가")을 쓴다
+- "선생님이", "선생님도", "선생님께서", "담임 선생님이" 처럼 자신을 제3자로 지칭하는 표현은 절대 쓰지 않는다 (예: "선생님도 곁에서 돕겠습니다" → "저도 곁에서 돕겠습니다")
+- 지도 의지를 표현할 때: "제가 지도하겠습니다", "수업에서 함께 ~해 나가겠습니다", "앞으로 ~하도록 돕겠습니다" 처럼 1인칭으로
+
+[형식]
+- 현재 관찰 → 교사의 해석 → 앞으로의 방향 흐름으로
+- 2~4문장, 자연스러운 한국어 존댓말
+- 학생 이름(${name})을 한 번 자연스럽게 포함
+- 결과 단락만 출력 (설명, 제목, 부연 없이)
+
+초안:
+${raw}`;
+  try{
+    const res=await fetch("/api/refine",{method:"POST",headers:{"Content-Type":"application/json","x-site-password":(sessionStorage.getItem("sitePw")||"")},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const data=await res.json();const refined=data.content?.[0]?.text?.trim();
+    if(refined){ta.value=refined;ta.dataset.edited="1";if(statusEl){statusEl.textContent="✓ 완료. 직접 수정도 가능합니다.";statusEl.style.color="#2d7a4f";}}
+    else throw new Error("empty");
+  }catch(e){if(statusEl){statusEl.textContent="오류가 발생했습니다. 다시 시도해 주세요.";statusEl.style.color="#e24b4a";}}
+  finally{if(btn){btn.disabled=false;btn.innerHTML=`<i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로`;}}
+}
+
+function buildGrowthAnalysis(dw){
+  const lv=val("sLevel"),d=LV[lv];
+  const vW=dw.Vocabulary||0,rW=dw.Reading||0,lW=dw.Listening||0;
+  const chunkW=[22,23,24,25].filter(n=>wrongQs.has(n)).length;
+  const patW=[18,19,20,21].filter(n=>wrongQs.has(n)).length;
+
+  let vocab,story,listening,pattern;
+  if(isB()){
+    // B1 전용 성장 분석 텍스트
+    vocab=vW===0?"사물 어휘와 표현을 보고 자연스럽게 떠올리는 힘이 안정적으로 자리잡고 있습니다.":vW<=2?"단어와 그림을 연결하는 힘이 잘 형성되고 있습니다.":"어휘와 표현을 연결하는 연습이 조금 더 필요한 상태로, 수업에서 집중적으로 이어갈 예정입니다.";
+    story=rW===0?"스토리의 흐름을 따라가며 내용을 이해하는 힘이 잘 형성되어 있습니다.":rW<=2?"이야기 속 세부 정보를 파악하는 힘을 키워가고 있습니다.":"그림과 이야기를 연결해 내용을 파악하는 연습이 조금 더 필요합니다.";
+    listening=lW===0?"질문을 듣고 Yes/No로 반응하는 힘이 매우 안정적이며, 영어 귀가 잘 열려 있는 상태입니다.":lW<=2?"질문 패턴을 듣고 반응하는 힘을 키워가고 있습니다.":"질문을 듣고 반응하는 연습이 조금 더 필요하며, Listening 훈련을 이어가겠습니다.";
+    const gaPatOk={B1:'"Is it yellow?" "Is this a triangle?" 같은 묘사 패턴에 안정적으로 반응하고 있습니다.',B2:'"Who is~?" "Do you like~?" 패턴에 자연스럽게 반응하고 있습니다.',B3:'"What time is it?" "Where is~?" 패턴으로 정보를 전달하는 힘이 잘 형성되고 있습니다.',B4:'"Where did you go~?" 과거 패턴에 안정적으로 반응하고 있습니다.',B5:'"What are you doing?" "be going to~" 패턴에 안정적으로 반응하고 있습니다.',B6:'"be going to~" "have to~" 패턴으로 자기 생각을 자연스럽게 표현하고 있습니다.'};
+    const gaPatNg={B1:"색깔·모양·감정 묘사 패턴 반응 훈련을 이어가고 있습니다.",B2:"선호·관계·요청 패턴 반응 훈련을 이어가고 있습니다.",B3:"시간·장소·직업 정보 전달 패턴 훈련을 이어가고 있습니다.",B4:"과거 표현·습관 패턴 반응 훈련을 이어가고 있습니다.",B5:"현재진행·미래 계획 패턴 훈련을 이어가고 있습니다.",B6:"출신·계획·의무 표현 패턴 훈련을 이어가고 있습니다."};
+    const gaLv=val("sLevel");
+    pattern=(patW===0&&chunkW===0)?(gaPatOk[gaLv]||gaPatOk.B1):patW>=2?(gaPatNg[gaLv]||gaPatNg.B1):"배운 문장을 순서대로 연결하는 힘(sentence chunk)을 익혀가고 있습니다.";
+  } else {
+    // A 과정 — v5.2 그대로
+    vocab=vW===0?"그림을 보고 단어를 떠올리는 힘이 안정적으로 자리잡고 있습니다.":vW<=2?"단어와 그림을 연결하는 힘이 잘 형성되고 있습니다.":"그림과 단어를 연결하는 연습이 조금 더 필요한 상태로, 수업에서 집중적으로 이어갈 예정입니다.";
+    story=rW===0?"이야기의 흐름을 따라가며 내용을 이해하는 힘이 잘 형성되어 있습니다.":rW<=2?"이야기 속 세부 정보를 파악하는 힘을 키워가고 있습니다.":"그림과 이야기를 연결해 내용을 파악하는 연습이 조금 더 필요합니다.";
+    listening=lW===0?"질문을 듣고 반응하는 힘이 매우 안정적이며, 영어 귀가 잘 열려 있는 상태입니다.":lW<=2?"질문 패턴을 듣고 반응하는 힘을 키워가고 있습니다.":"질문을 듣고 반응하는 연습이 조금 더 필요하며, Listening 훈련을 이어가겠습니다.";
+    pattern=(patW===0&&chunkW===0)?`"${d.pattern.split("/")[0].trim()}" 같은 질문 패턴에 안정적으로 반응하고 있습니다.`:patW>=2?"단수·복수를 구분하는 질문 패턴에 반응하는 힘을 키워가고 있습니다.":"배운 문장을 순서대로 연결하는 힘(sentence chunk)을 익혀가고 있습니다.";
+  }
+
+  const growthLabel=isB()?`영어 성장 분석 <span style="font-size:10px;font-weight:400;color:#2d7a4f">${d.funcFlow}</span>`:"영어 성장 분석";
+  return `<div style="margin-bottom:8px"><div style="font-size:12px;font-weight:700;color:#1e3a5f;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e0dfd8">${growthLabel}</div><div style="font-size:13px;color:#2a2a2a;line-height:1.7"><div style="margin-bottom:5px"><span style="font-weight:700;color:#1e3a5f">어휘 인식</span> · ${vocab}</div><div style="margin-bottom:5px"><span style="font-weight:700;color:#1e3a5f">스토리 이해</span> · ${story}</div><div style="margin-bottom:5px"><span style="font-weight:700;color:#1e3a5f">듣고 반응하기</span> · ${listening}</div><div><span style="font-weight:700;color:#1e3a5f">패턴 &amp; 문장 구조</span> · ${pattern}</div></div></div>`;
+}
+
+function buildReport(){
+  const name=val("sName")||"(이름)",lv=val("sLevel"),d=LV[lv];
+  const school=val("sSchool")||"—",grade=val("sGrade")||"—",cls=val("sClass")||"—",teacher=val("sTeacher")||"—",month=val("sMonth")||"—";
+  const _as=getAutoScores(),v=_as.v,r=_as.r,l=_as.l,s=_as.s;
+  const tot=v+r+l+s,pct=Math.round(tot/25*100);
+  const strength=val("cmtStrength"),improve=val("cmtImprove"),extra=val("cmtExtra"),next=val("cmtNext");
+  const dw=getDW(),growthHtml=buildGrowthAnalysis(dw);
+  const sBar=(sc,mx)=>{const p=Math.round(sc/mx*100);const c=p>=80?"#63991e":p>=60?"#ef9f27":"#e24b4a";return `<div class="sdb-bar-bg"><div class="sdb-bar-fill" style="width:${p}%;background:${c}"></div></div>`;};
+  const courseBadge=d.course==="B"?`<span style="background:#eaf3de;color:#2d7a4f;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px">B 과정</span>`:`<span style="background:#e6f1fb;color:#185fa5;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px">A 과정</span>`;
+  const cefrDesc=d.course==="B"?"영어로 설명하고 묻고 답하는 힘을 키워가는 단계입니다.":"질문을 듣고 짧게 반응하기 시작하는 단계입니다.";
+  const lexileDesc=d.course==="B"?"스토리와 패턴 문장을 읽으며 영어 표현을 익혀가는 수준입니다.":"그림과 반복 문장을 읽으며 영어 문장을 익혀가는 수준입니다.";
+  g("reportOut").innerHTML=`<div class="rpt"><div class="rpt-title-bar"><div class="course">Pre Stella · Monthly Report</div><h2>${name}</h2><div class="subtitle">${month} · Pre Stella ${lv} — ${d.book}</div></div><div class="rpt-info-band"><div class="rpt-info-item"><div class="ril">학교</div><div class="riv">${school}</div></div><div class="rpt-info-item"><div class="ril">학년</div><div class="riv">${grade}</div></div><div class="rpt-info-item"><div class="ril">학원 반</div><div class="riv">${cls}</div></div><div class="rpt-info-item"><div class="ril">담임</div><div class="riv">${teacher}</div></div></div><div class="rpt-body"><div class="rpt-sec"><div class="rpt-sec-hdr"><div class="rpt-sec-num">1</div><div class="rpt-sec-title">학습 내용</div></div><div class="book-card"><div><div style="font-size:10px;font-weight:700;color:#1e3a5f;letter-spacing:1.2px;margin-bottom:6px">PRE STELLA ${lv}${courseBadge}</div><div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:4px">READER STORY</div><div class="book-title-rpt">「${d.book}」</div><div style="font-size:12px;color:#555;line-height:1.7;margin:8px 0 12px">스토리 기반 영어 노출을 통해 ${d.growth}하는 연습을 진행했습니다.</div><div style="margin-bottom:10px"><div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:5px">말이 되는 패턴</div>${d.pattern.split("/").map(p=>`<div class="pattern-item">${p.trim()}</div>`).join("")}</div><div><div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:4px">핵심 표현 영역</div><div style="font-size:12px;color:#444">${d.mainTheme}</div></div></div><div style="display:flex;flex-direction:column;gap:12px"><div style="background:#fff;border-radius:8px;padding:12px 14px;border:0.5px solid #e0dfd8"><div style="font-size:10px;font-weight:700;color:#185fa5;margin-bottom:5px">국제 영어 성장 단계</div><div style="font-size:13px;font-weight:600;color:#185fa5;margin-bottom:3px">CEFR ${d.cefr}</div><div style="font-size:12px;color:#555">${cefrDesc}</div></div><div style="background:#fff;border-radius:8px;padding:12px 14px;border:0.5px solid #e0dfd8"><div style="font-size:10px;font-weight:700;color:#2d7a4f;margin-bottom:5px">영어 리딩 성장 단계</div><div style="font-size:13px;font-weight:600;color:#2d7a4f;margin-bottom:3px">Lexile ${d.lexile}</div><div style="font-size:12px;color:#555">${lexileDesc}</div></div></div></div><div class="summary-box">${d.summary}</div></div><div class="rpt-sec"><div class="rpt-sec-hdr"><div class="rpt-sec-num">2</div><div class="rpt-sec-title">Monthly Test 결과 및 영어 성장 분석</div></div><div class="score-grid-rpt"><div class="score-domain-box"><div class="sdb-name">VOCABULARY</div><div class="sdb-score">${v}</div><div class="sdb-total">/ 6점</div>${sBar(v,6)}</div><div class="score-domain-box"><div class="sdb-name">READING</div><div class="sdb-score">${r}</div><div class="sdb-total">/ 6점</div>${sBar(r,6)}</div><div class="score-domain-box"><div class="sdb-name">LISTENING</div><div class="sdb-score">${l}</div><div class="sdb-total">/ 5점</div>${sBar(l,5)}</div><div class="score-domain-box"><div class="sdb-name">STRUCTURE</div><div class="sdb-score">${s}</div><div class="sdb-total">/ 8점</div>${sBar(s,8)}</div></div><div class="total-row"><span class="total-label">총점</span><span><span class="total-score-rpt">${tot}</span><span class="total-pct">/ 25점 · ${pct}%</span></span></div>${growthHtml}</div><div class="rpt-sec"><div class="rpt-sec-hdr"><div class="rpt-sec-num">3</div><div class="rpt-sec-title">담임선생님 코멘트</div></div>${strength?`<div class="comment-block"><div class="cb-label-rpt"><i class="ti ti-star"></i>이달의 강점</div><div class="cb-text">${strength}</div></div>`:""}${improve?`<div class="comment-block"><div class="cb-label-rpt"><i class="ti ti-adjustments"></i>파악된 보완점</div><div class="cb-text">${improve}</div></div>`:""}${extra?`<div class="comment-block"><div class="cb-label-rpt"><i class="ti ti-pencil"></i>담임 관찰 메모</div><div class="cb-text">${extra}</div></div>`:""}${next?`<div class="comment-block"><div class="cb-label-rpt"><i class="ti ti-arrow-up-right"></i>다음 지도 방안</div><div class="cb-text">${next}</div></div>`:""}</div></div><div class="rpt-footer"><div class="academy">린쌤파머스 국제어학원 ${teacher} 드림</div><div class="stamp">${month} · Pre Stella ${lv}</div></div></div>`;
+}
+
+function copyRpt(){
+  const name=val("sName")||"학생",lv=val("sLevel"),d=LV[lv];
+  const school=val("sSchool")||"—",grade=val("sGrade")||"—",cls=val("sClass")||"—",teacher=val("sTeacher")||"담임강사",month=val("sMonth")||"—";
+  const _as=getAutoScores(),v=_as.v,r=_as.r,l=_as.l,s=_as.s;
+  const tot=v+r+l+s,pct=Math.round(tot/25*100);
+  const strength=val("cmtStrength"),improve=val("cmtImprove"),extra=val("cmtExtra"),next=val("cmtNext");
+  const dw=getDW(),vW=dw.Vocabulary||0,rW=dw.Reading||0,lW=dw.Listening||0;
+  const chunkW=[22,23,24,25].filter(n=>wrongQs.has(n)).length;
+  const patW=[18,19,20,21].filter(n=>wrongQs.has(n)).length;
+  let vocab,story,listening,pattern;
+  if(isB()){
+    vocab=vW===0?"사물 어휘와 표현을 보고 자연스럽게 떠올리는 힘이 안정적으로 자리잡고 있습니다.":vW<=2?"단어와 그림을 연결하는 힘이 잘 형성되고 있습니다.":"어휘와 표현을 연결하는 연습이 조금 더 필요한 상태입니다.";
+    story=rW===0?"스토리의 흐름을 따라가며 내용을 이해하는 힘이 잘 형성되어 있습니다.":rW<=2?"이야기 속 세부 정보를 파악하는 힘을 키워가고 있습니다.":"그림과 이야기를 연결해 내용을 파악하는 연습이 조금 더 필요합니다.";
+    listening=lW===0?"질문을 듣고 Yes/No로 반응하는 힘이 매우 안정적입니다.":lW<=2?"질문 패턴을 듣고 반응하는 힘을 키워가고 있습니다.":"질문을 듣고 반응하는 연습이 조금 더 필요합니다.";
+    pattern=(patW===0&&chunkW===0)?`"Is it yellow?" "Is this a triangle?" 같은 묘사 패턴에 안정적으로 반응하고 있습니다.`:"색깔·모양·감정 묘사 패턴 반응 훈련을 이어가고 있습니다.";
+  } else {
+    vocab=vW===0?"그림을 보고 단어를 떠올리는 힘이 안정적으로 자리잡고 있습니다.":vW<=2?"단어와 그림을 연결하는 힘이 잘 형성되고 있습니다.":"그림과 단어를 연결하는 연습이 조금 더 필요한 상태입니다.";
+    story=rW===0?"이야기의 흐름을 따라가며 내용을 이해하는 힘이 잘 형성되어 있습니다.":rW<=2?"이야기 속 세부 정보를 파악하는 힘을 키워가고 있습니다.":"그림과 이야기를 연결해 내용을 파악하는 연습이 조금 더 필요합니다.";
+    listening=lW===0?"질문을 듣고 반응하는 힘이 매우 안정적이며, 영어 귀가 잘 열려 있는 상태입니다.":lW<=2?"질문 패턴을 듣고 반응하는 힘을 키워가고 있습니다.":"질문을 듣고 반응하는 연습이 조금 더 필요합니다.";
+    pattern=(patW===0&&chunkW===0)?`"${d.pattern.split("/")[0].trim()}" 같은 질문 패턴에 안정적으로 반응하고 있습니다.`:"단수·복수 질문 패턴에 반응하는 힘을 키워가고 있습니다.";
+  }
+  const lines=[`[린쌤파머스 Monthly Report]`,`${name} · Pre Stella ${lv} (${d.course} 과정) · ${month}`,`학교: ${school} · 학년: ${grade} · 반: ${cls} · 담임: ${teacher}`,``,`━━ 1. 학습 내용 ━━`,`PRE STELLA ${lv} — ${d.book}`,``];
+  if(isB())lines.push(`[ 영어 성장 단계 ]`,`${d.funcFlow} — ${d.msg}`,``);
+  lines.push(`[ READER STORY ]`,`스토리 기반 영어 노출을 통해 ${d.growth}하는 연습을 진행했습니다.`,``,`[ 말이 되는 패턴 ]`,...d.pattern.split("/").map(p=>`· ${p.trim()}`),``,`[ 핵심 표현 영역 ]`,d.mainTheme,``,`[ 국제 영어 성장 단계 ]`,`CEFR ${d.cefr}`,``,`[ 영어 리딩 성장 단계 ]`,`Lexile ${d.lexile}`,``,`[ 학습 요약 ]`,d.summary,``,`━━ 2. Monthly Test 결과 ━━`,`총점: ${tot}/25 (${pct}%)`,`Vocabulary ${v}/6 · Reading ${r}/6 · Listening ${l}/5 · Structure ${s}/8`,``,`━━ 3. 영어 성장 분석 ━━`,`어휘 인식 · ${vocab}`,`스토리 이해 · ${story}`,`듣고 반응하기 · ${listening}`,`패턴 & 문장 구조 · ${pattern}`,``,`━━ 4. 담임선생님 코멘트 ━━`);
+  if(strength)lines.push(`[이달의 강점]\n${strength}`);
+  if(improve)lines.push(`\n[파악된 보완점]\n${improve}`);
+  if(extra)lines.push(`\n[담임 관찰 메모]\n${extra}`);
+  if(next)lines.push(`\n[다음 지도 방안]\n${next}`);
+  lines.push(`\n린쌤파머스 국제어학원 ${teacher} 드림`);
+  const txt=lines.join("\n");
+  navigator.clipboard.writeText(txt).then(()=>alert("복사되었습니다!")).catch(()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.cssText="position:fixed;opacity:0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);alert("복사되었습니다!");});
+}
+
+function saveKeywordHistory(){
+  const name=val("sName").trim(),month=val("sMonth").trim();
+  if(!name||!month)return;
+  const key=getStudentKey();let history=[];
+  const res=LS.get(key);
+  if(res){try{history=JSON.parse(res.value);}catch(e){}}
+  history=history.filter(h=>h.month!==month);
+  history.unshift({month,level:val("sLevel"),teacher:val("sTeacher").trim(),strength:[...selStrength],attitude:[...selAttitude],next:[...selNext]});
+  if(history.length>3)history=history.slice(0,3);
+  LS.set(key,JSON.stringify(history));
+}
+
+function resetAll(){
+  ["sName","sSchool","sGrade","sClass","sTeacher","sMonth","autoFb","cmtStrength","cmtImprove","cmtExtra","cmtNext"].forEach(id=>{const el=g(id);if(el){el.value="";delete el.dataset.edited;}});
+  wrongQs.clear();selNext.clear();selAttitude.clear();selStrength.clear();domFilter="all";
+  const tn=g("totNum");if(tn)tn.textContent="25";const gr=g("totGrade");if(gr)gr.style.display="none";
+  const ha=g("historyAlert");if(ha)ha.style.display="none";
+  const hab=g("historyAlertBody");if(hab)hab.style.display="none";
+  const hti=g("historyToggleIcon");if(hti)hti.className="ti ti-chevron-down";
+  const hb=g("historyBox");if(hb)hb.style.display="none";
+  const ro=g("reportOut");if(ro)ro.innerHTML="";
+  const ss=g("saveStatus");if(ss)ss.style.display="none";
+  const rcb=g("resetConfirmBox");if(rcb)rcb.style.display="none";
+  onLvChange();
+  document.querySelectorAll(".sbtn").forEach(b=>{b.classList.remove("active","done");});
+  g("sb0").classList.add("active");
+  for(let i=0;i<=5;i++){const s=g("s"+i);if(s)s.classList.add("hidden");}
+  g("s0").classList.remove("hidden");curStep=0;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function saveReport(){
+  const btn=g("saveBtn"),statusEl=g("saveStatus");
+  btn.disabled=true;btn.innerHTML=`<i class="ti ti-loader" style="font-size:13px;animation:spin 1s linear infinite"></i> 저장 중...`;
+  if(statusEl)statusEl.style.display="none";
+  try{
+    saveKeywordHistory();
+    const name=val("sName").trim(),month=val("sMonth").trim();
+    const reportKey=`report:${getStudentKey()}:${(month||"").replace(/\s/g,"")}`;
+    const reportData={name,month,level:val("sLevel"),school:val("sSchool"),grade:val("sGrade"),cls:val("sClass"),teacher:val("sTeacher"),scores:getAutoScores(),wrongQs:[...wrongQs],cmtStrength:val("cmtStrength"),cmtImprove:val("cmtImprove"),cmtExtra:val("cmtExtra"),cmtNext:val("cmtNext"),savedAt:new Date().toISOString()};
+    LS.set(reportKey,JSON.stringify(reportData));
+    if(statusEl){statusEl.style.display="block";statusEl.style.color="#2d7a4f";statusEl.textContent=`✓ ${name} 학생 (${month}) 이력이 저장되었습니다.`;}
+    btn.disabled=false;btn.innerHTML=`<i class="ti ti-device-floppy"></i>이력 저장`;
+    const rcb=g("resetConfirmBox"),rcm=g("resetConfirmMsg");
+    if(rcb&&rcm){rcm.textContent=`${name} 학생 (${month}) 저장 완료. 다음 학생 작성을 위해 초기화할까요?`;rcb.style.display="flex";}
+  }catch(e){
+    btn.disabled=false;btn.innerHTML=`<i class="ti ti-device-floppy"></i>이력 저장`;
+    if(statusEl){statusEl.style.display="block";statusEl.style.color="#e24b4a";statusEl.textContent="저장 중 오류가 발생했습니다.";}
+  }
+}
+
+function go(n){
+  g("s"+curStep).classList.add("hidden");
+  document.querySelectorAll(".sbtn").forEach((b,i)=>{b.classList.remove("active");if(i<n)b.classList.add("done");else b.classList.remove("done");});
+  if(n===1)buildQGrid();
+  if(n===2)buildAnalysis();
+  if(n===3)setupCommentTab();
+  if(n===4)buildReport();
+  curStep=n;
+  g("s"+n).classList.remove("hidden");
+  g("sb"+n).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+onLvChange();
+</script>
+</body>
+</html>

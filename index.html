@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>린쌤파머스 국제어학원 — 월간 리포트 작성</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.wrap{max-width:620px;width:100%}
+.head{text-align:center;margin-bottom:28px}
+.head h1{font-size:22px;font-weight:800;color:#1a1a1a;margin-bottom:6px}
+.head p{font-size:13px;color:#888}
+.gate{max-width:360px;margin:0 auto;background:#fff;border:1px solid #e0dfd8;border-radius:16px;padding:30px 26px;text-align:center}
+.gate .lock{width:50px;height:50px;border-radius:14px;background:#f0ede6;color:#666;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px}
+.gate h2{font-size:16px;font-weight:700;margin-bottom:6px}
+.gate p{font-size:12px;color:#999;margin-bottom:18px}
+.gate input{width:100%;border:1px solid #ddd;border-radius:9px;padding:11px 13px;font-size:14px;outline:none;text-align:center;letter-spacing:1px}
+.gate input:focus{border-color:#1a1a1a}
+.gate button{width:100%;margin-top:12px;border:none;border-radius:9px;padding:11px;font-size:14px;font-weight:600;background:#1a1a1a;color:#fff;cursor:pointer}
+.gate button:hover{background:#000}
+.gate .err{font-size:12px;color:#c0392b;margin-top:10px;display:none}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{display:block;text-decoration:none;color:inherit;border-radius:16px;padding:26px 22px;border:1px solid #e0dfd8;background:#fff;transition:.18s;cursor:pointer}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.card .ic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px}
+.silver .ic{background:#fdecea;color:#c0392b}
+.pre .ic{background:#ede8f8;color:#3d1a6e}
+.card h2{font-size:17px;font-weight:700;margin-bottom:5px}
+.card .sub{font-size:12px;color:#888;line-height:1.6}
+.silver h2{color:#c0392b}
+.pre h2{color:#3d1a6e}
+.foot{text-align:center;margin-top:26px;font-size:11px;color:#aaa}
+.hidden{display:none}
+@media(max-width:520px){.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>린쌤파머스 국제어학원 광교브랜치</h1>
+    <p>월간 학습 리포트 작성 시스템 · 강사용</p>
+  </div>
+  <div id="gate" class="gate">
+    <div class="lock"><i class="ti ti-lock"></i></div>
+    <h2>강사 인증</h2>
+    <p>이용을 위해 비밀번호를 입력해 주세요.</p>
+    <input type="password" id="pw" placeholder="비밀번호" autocomplete="off" onkeydown="if(event.key==='Enter')checkPw()">
+    <button onclick="checkPw()">입장</button>
+    <div class="err" id="err">비밀번호가 올바르지 않습니다.</div>
+  </div>
+  <div id="apps" class="hidden">
+    <div class="cards">
+      <a class="card silver" href="/silver.html">
+        <div class="ic"><i class="ti ti-star-filled"></i></div>
+        <h2>Silver Stella</h2>
+        <div class="sub">SA1~SA6 · SB1~SB6<br>40문항 · 100점 기반</div>
+      </a>
+      <a class="card pre" href="/prestella.html">
+        <div class="ic"><i class="ti ti-book-2"></i></div>
+        <h2>Pre Stella</h2>
+        <div class="sub">A1~A6 · B1~B6<br>리더 스토리 · 25점 기반</div>
+      </a>
+    </div>
+  </div>
+  <div class="foot">린쌤파머스 국제어학원 · 강사 전용 내부 도구</div>
+</div>
+<script>
+if(sessionStorage.getItem('authed')==='1'){ showApps(); }
+function showApps(){
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('apps').classList.remove('hidden');
+}
+async function checkPw(){
+  const pw = document.getElementById('pw').value;
+  const err = document.getElementById('err');
+  err.style.display='none';
+  try{
+    const res = await fetch('/api/auth',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ password: pw })
+    });
+    if(res.ok){
+      sessionStorage.setItem('authed','1');
+      sessionStorage.setItem('sitePw', pw);
+      showApps();
+    } else {
+      err.textContent='비밀번호가 올바르지 않습니다.';
+      err.style.display='block';
+    }
+  }catch(e){
+    err.textContent='연결 오류. 잠시 후 다시 시도해 주세요.';
+    err.style.display='block';
+  }
+}
+</script>
+</body>
+</html>
