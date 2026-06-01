@@ -1224,7 +1224,7 @@ ${typeGuide}
 - 절대 금지 문구: '아래와 같이', '다음과 같이', '다듬어 보았습니다', '작성해 보았습니다' 등 AI 전형 표현 금지
 - 바로 본문 내용부터 시작할 것`;
   try {
-    const resp = await fetch('/api/refine', {
+    const resp = await fetch('/api/ai', {
       method:'POST',
       headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},
       body: JSON.stringify({
