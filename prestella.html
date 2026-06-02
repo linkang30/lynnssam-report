@@ -986,7 +986,7 @@ Pre Stella ${lv} 과정 ${name} 학생의 월말보고서 "${sectionLabel}" 초�
 초안:
 ${raw}`;
   try{
-    const res=await fetch("/api/ai",{method:"POST",headers:{"Content-Type":"application/json","x-site-password":(sessionStorage.getItem("sitePw")||"")},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
+    const res=await fetch("/api/ai",{method:"POST",headers:{"Content-Type":"application/json","x-site-password":(sessionStorage.getItem("sitePw")||"")},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
     if(!res.ok)throw new Error("HTTP "+res.status);
     const data=await res.json();const refined=data.content?.[0]?.text?.trim();
     if(refined){ta.value=refined;ta.dataset.edited="1";if(statusEl){statusEl.textContent="✓ 완료. 직접 수정도 가능합니다.";statusEl.style.color="#2d7a4f";}}
