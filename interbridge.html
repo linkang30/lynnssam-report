@@ -74,7 +74,7 @@ textarea{resize:vertical}
 <div class="tool-header">
   <div>
     <h1>🚀 Inter Bridge &mdash; Monthly Report</h1>
-    <p>파먹스국제어학원 광교브래치 &middot; 강사용 &middot; IB1 &middot; IB2 &middot; IB3 &middot; Final Test 45분항 발함</p>
+    <p>파머스국제어학원 광교브랜치 &middot; 강사용 &middot; IB1 &middot; IB2 &middot; IB3 &middot; Final Test 45문항 기반</p>
   </div>
   <div class="hbadge">v1.0</div>
 </div>
@@ -158,7 +158,7 @@ textarea{resize:vertical}
   <div class="card">
     <div class="ctitle"><i class="ti ti-microscope"></i>문항별 상세 분석</div>
     <div class="atbl">
-      <div class="ah"><div>문항</div><div>영역</div><div>췐정 내용</div><div>판정</div><div>분류</div></div>
+      <div class="ah"><div>문항</div><div>영역</div><div>측정 내용</div><div>판정</div><div>분류</div></div>
       <div id="atblBody"></div>
     </div>
   </div>
@@ -193,10 +193,10 @@ textarea{resize:vertical}
         <div id="strengthAnalysis" style="font-size:12px;color:#333;line-height:1.85;min-height:36px;white-space:pre-wrap"></div>
       </div>
       <div style="background:#f8fdf9;border:1px solid #d4edda;border-radius:9px;padding:12px 14px">
-        <div style="font-size:10.5px;font-weight:700;color:#1a6640;margin-bottom:8px">👀 Layer 2 &mdash; 수업 택도·관찰 (키워드 선택)</div>
+        <div style="font-size:10.5px;font-weight:700;color:#1a6640;margin-bottom:8px">👀 Layer 2 &mdash; 수업 태도·관찰 (키워드 선택)</div>
         <div class="chips" id="strengthChips" style="margin-bottom:8px"></div>
         <div style="position:relative">
-          <textarea id="cmtStrength" rows="3" placeholder="키워드를 선택하멐 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+          <textarea id="cmtStrength" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
           <button onclick="refineText('cmtStrength','strength')" style="position:absolute;bottom:8px;right:8px;background:#2d7a4f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
         </div>
         <div id="refineStatus_strength" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -212,10 +212,10 @@ textarea{resize:vertical}
         <div id="improveAnalysis" style="font-size:12px;color:#333;line-height:1.85;min-height:36px;white-space:pre-wrap"></div>
       </div>
       <div style="background:#fffdf8;border:1px solid #fce8cd;border-radius:9px;padding:12px 14px">
-        <div style="font-size:10.5px;font-weight:700;color:#854f0b;margin-bottom:8px">👀 Layer 2 &mdash; 수업 택도·관찰 (키워드 선택)</div>
+        <div style="font-size:10.5px;font-weight:700;color:#854f0b;margin-bottom:8px">👀 Layer 2 &mdash; 수업 태도·관찰 (키워드 선택)</div>
         <div class="chips" id="attitudeChips" style="margin-bottom:8px"></div>
         <div style="position:relative">
-          <textarea id="cmtImprove" rows="3" placeholder="키워드를 선택하멐 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+          <textarea id="cmtImprove" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
           <button onclick="refineText('cmtImprove','improve')" style="position:absolute;bottom:8px;right:8px;background:#854f0b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
         </div>
         <div id="refineStatus_improve" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -381,7 +381,7 @@ function generateImproveAnalysis(){const ds=computeDomScore();const box=g('impro
 
 function toggleChip(el,type){el.classList.toggle('on');const ta=g(type==='strength'?'cmtStrength':'cmtImprove');if(!ta?.dataset.edited)buildAutoText(type);}
 function toggleChipNext(el){if(el){el.classList.toggle('on');el.style.borderColor=el.classList.contains('on')?'':(el.dataset.bd||'');}const ta=g('cmtNext');if(ta&&ta.dataset.edited!=='1')buildNextCmt();}
-function buildAutoText(type){const taId=type==='strength'?'cmtStrength':'cmtImprove';const selId=type==='strength'?'strengthChips':'attitudeChips';const chips=[...document.querySelectorAll(`#${selId} .chip.on`)].map(c=>c.textContent);const ta=g(taId);if(!chips.length){ta.value='';return;}const name=val('stuName')||'\uD559\uC0DD';if(type==='strength')ta.value=chips.map(c=>`${name} \uD559\uC0DD\uC740 ${c}.`).join(' ');else ta.value=chips.map(c=>`\uC55E\uC73C\uB85C ${c} \uAFB8\uC900\uD788 \uC2E4\uCC9C\uD558\uBA74 \uB354\uC6B1 \uC131\uC7A5\uD560 \uC218 \uC788\uC5B4\uC694.`).join(' ');delete ta.dataset.edited;}
+function buildAutoText(type){const taId=type==='strength'?'cmtStrength':'cmtImprove';const selId=type==='strength'?'strengthChips':'attitudeChips';const chips=[...document.querySelectorAll(`#${selId} .chip.on`)].map(c=>c.textContent);const ta=g(taId);if(!chips.length){ta.value='';return;}const name=val('stuName')||'\uD559\uC0DD';const finish=s=>/[\uB2E4\uC694\uC8E0]$/.test(s)?s+'.':s;if(type==='strength')ta.value=chips.map(c=>finish(`${name} \uD559\uC0DD\uC740 ${c}`)).join(' ');else ta.value=chips.map(c=>finish(c)).join(' ');delete ta.dataset.edited;}
 function buildNextCmt(){const nC=g('nextChips');const ta=g('cmtNext');if(!nC||!ta)return;const chips=[...nC.querySelectorAll('.chip.on')].map(c=>{const cl=c.cloneNode(true);const b=cl.querySelector('.kw-dom');if(b)b.remove();return cl.textContent.trim();}).filter(t=>t);if(!chips.length){ta.value='';delete ta.dataset.edited;return;}ta.value=`\uB2E4\uC74C \uB2EC\uC5D0\uB294 ${chips.join(', ')} \uB4F1\uC744 \uC911\uC2EC\uC73C\uB85C \uC9C0\uB3C4\uD560 \uC608\uC815\uC785\uB2C8\uB2E4.`;delete ta.dataset.edited;}
 
 async function refineText(taId,type){const orig=g(taId).value.trim();if(!orig){alert('\uBA3C\uC800 \uB0B4\uC6A9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694.');return;}const statusId='refineStatus_'+type;if(g(statusId)){g(statusId).style.display='block';g(statusId).textContent='\u2728 AI\uAC00 \uC791\uC131 \uC911\uC785\uB2C8\uB2E4...';}const name=val('stuName')||'\uD559\uC0DD';const typeGuide={auto:'\uC804\uCCB4 \uD53C\uB4DC\uBC31 \u2014 \uC774\uBC88 \uB2EC \uD559\uC2B5 \uCD1D\uD3C9',strength:'\uC774\uB2EC\uC758 \uAC15\uC810 \u2014 \uC798\uD55C \uC810 \uCE6D\uCC2C',improve:'\uBCF4\uC644\uC810 \u2014 \uC131\uC7A5 \uBC29\uD5A5 \uACA9\uB824',next:'\uB2E4\uC74C \uB2EC \uC9C0\uB3C4 \uBC29\uC548'}[type]||'\uD53C\uB4DC\uBC31';
