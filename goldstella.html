@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Gold Stella — Monthly Report</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f4fa;color:#1a1a2e;font-size:14px;line-height:1.6}
+.app{max-width:960px;margin:0 auto;padding:16px}
+.tool-header{background:linear-gradient(135deg,#7a5c12 0%,#3d2e08 55%,#b8860b 100%);color:#fff;border-radius:14px;padding:16px 22px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(184,134,11,.35);position:relative;overflow:hidden}
+.tool-header::after{content:"";position:absolute;top:-40px;right:-20px;width:160px;height:160px;background:radial-gradient(circle,rgba(255,215,120,.4),transparent 70%);pointer-events:none}
+.tool-header h1{font-size:16px;font-weight:700;letter-spacing:.3px;position:relative}
+.tool-header p{font-size:11px;opacity:.78;margin-top:2px;position:relative}
+.hbadge{background:rgba(255,255,255,.2);border-radius:7px;padding:4px 11px;font-size:11px;font-weight:700;margin-left:auto;letter-spacing:.5px;position:relative}
+.steps{display:flex;gap:5px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+.sbtn{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1.5px solid #d8d8ea;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:#8a8ab5;display:flex;align-items:center;gap:5px;transition:.2s}
+.sbtn.active{background:#b8860b;color:#fff;border-color:#b8860b;box-shadow:0 2px 12px rgba(184,134,11,.4)}
+.sbtn.done{border-color:#3fa46a;color:#2d7a4f;background:#eaf6ee}
+.card{background:#fff;border:1px solid #e8e8f2;border-radius:13px;padding:18px 22px;margin-bottom:12px;box-shadow:0 1px 6px rgba(40,40,80,.06)}
+.ctitle{font-size:10.5px;font-weight:700;color:#8a8ab5;letter-spacing:.7px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.ctitle i{font-size:15px;color:#b8860b}
+label{display:block;font-size:11px;color:#666;margin-bottom:3px;font-weight:500}
+input[type=text],select,textarea{width:100%;border:1px solid #cfcfe6;border-radius:8px;padding:7px 10px;font-size:13px;font-family:inherit;color:#1a1a2e;background:#fff;outline:none}
+input[type=text]::placeholder,textarea::placeholder{color:#a8a8c0}
+input[type=text]:focus,select:focus,textarea:focus{border-color:#b8860b;box-shadow:0 0 0 2px rgba(184,134,11,.12)}
+textarea{resize:vertical}
+select option{background:#fff;color:#1a1a2e}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.hidden{display:none}
+.btn{border:none;border-radius:9px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:.15s}
+.bprim{background:#b8860b;color:#fff}.bprim:hover{background:#9a7009}
+.bsec{background:#fff;color:#555;border:1px solid #d8d8ea}.bsec:hover{background:#f2f2f8}
+.navrow{display:flex;justify-content:space-between;margin-top:12px;gap:8px}
+.lvinfo{background:#fbf6e8;border:1px solid #e8d9a8;border-radius:8px;padding:9px 14px;font-size:12px;color:#7a5c12;min-height:32px;display:none}
+
+/* 시험 탭 */
+.testtabs{display:flex;gap:6px;margin-bottom:14px}
+.ttab{flex:1;padding:10px 8px;border-radius:10px;border:1.5px solid #e2e2ee;background:#fafaff;cursor:pointer;text-align:center;transition:.15s;position:relative}
+.ttab.active{border-color:#b8860b;background:#fbf6e8}
+.ttab .tname{font-size:12px;font-weight:700;color:#444}
+.ttab .tmeta{font-size:9.5px;color:#9a9ab5;margin-top:2px}
+.ttab.active .tname{color:#b8860b}
+.ttab .tflag{font-size:9px;font-weight:700;border-radius:10px;padding:1px 7px;margin-top:4px;display:inline-block}
+.ttab .tflag.req{background:#fdeaea;color:#c0392b}
+.ttab .tflag.opt{background:#eef0f7;color:#888}
+.ttab .tdone{position:absolute;top:6px;right:8px;font-size:11px;color:#2d7a4f;display:none}
+.ttab.hasdata .tdone{display:block}
+
+.optbox{background:#f6f6fb;border:1px solid #e8e8f2;border-radius:10px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.optbox label{margin:0;font-size:12px;font-weight:600;color:#555;cursor:pointer;display:flex;align-items:center;gap:7px}
+.optbox input{width:auto}
+
+.q-grid{display:grid;gap:6px;margin-bottom:6px}
+.qbtn{border-radius:9px;padding:7px 4px;text-align:center;cursor:pointer;border:1.5px solid #e2e2ee;background:#fafaff;transition:.12s;user-select:none}
+.qbtn:hover{border-color:#b8860b}
+.qbtn .qn{display:block;font-size:9.5px;color:#9a9ab5;font-weight:600;margin-bottom:1px}
+.qbtn .qs{font-size:11px;font-weight:700;color:#2f855a}
+.qbtn.voc{border-color:#e6cd8a}.qbtn.voc .qn{color:#b8860b}
+.qbtn.lis{border-color:#a9cdee}.qbtn.lis .qn{color:#2b6cb0}
+.qbtn.rdg{border-color:#a9dab9}.qbtn.rdg .qn{color:#2f855a}
+.qbtn.grm{border-color:#cfb0e6}.qbtn.grm .qn{color:#7c3aed}
+.qbtn.wrong{background:#fdeaea!important;border-color:#e24b4a!important}
+.qbtn.wrong .qs{color:#c0392b}
+.qbtn.partial{background:#fdf6e3!important;border-color:#e0b94d!important}
+.qbtn.partial .qs{color:#b8860b}
+.qbtn.sub{position:relative}
+.qbtn.sub::after{content:"주관식";position:absolute;top:-6px;right:-2px;font-size:7px;background:#7c3aed;color:#fff;border-radius:6px;padding:0 4px;font-weight:700}
+.parthead{font-size:10.5px;font-weight:700;color:#666;margin:12px 0 5px;letter-spacing:.4px;display:flex;align-items:center;gap:6px}
+.parthead .pcnt{font-weight:600;color:#aaa;font-size:9.5px}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;font-size:10px}
+.legend span{border-radius:5px;padding:3px 9px;font-weight:600}
+.scorebar{display:flex;align-items:center;gap:10px;background:#fbf6e8;border:1px solid #e8d9a8;border-radius:10px;padding:10px 16px;margin-top:10px}
+.scorebar .big{font-size:26px;font-weight:900;color:#b8860b}
+.scorebar .det{font-size:11px;color:#7a5c12}
+.scorebar .gr{margin-left:auto;background:#b8860b;color:#fff;border-radius:7px;padding:3px 12px;font-size:15px;font-weight:800}
+.tiprow{font-size:11px;color:#888;margin-bottom:10px;line-height:1.7}
+.subnote{font-size:10.5px;color:#7c3aed;background:#f5eefb;border-radius:6px;padding:6px 10px;margin:6px 0 4px}
+/* 통합 분석 */
+.itot{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#b8860b,#7a5c12);color:#fff;border-radius:11px;padding:14px 20px}
+.itot .num{font-size:34px;font-weight:900;line-height:1}
+.itot .lbl{font-size:11px;opacity:.85}
+.itot .gr{margin-left:auto;background:rgba(255,255,255,.22);border-radius:7px;padding:4px 14px;font-size:17px;font-weight:800}
+.dombar{margin-bottom:11px}
+.dbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.dbn{font-weight:600;color:#444}.dbn .sm{font-size:10px;color:#b8860b;background:#fbf6e8;border-radius:4px;padding:1px 5px;margin-left:5px;font-weight:700}
+.dbpct{color:#888}
+.bg{background:#e7e7f0;border-radius:4px;height:9px;overflow:hidden}
+.bf{height:100%;border-radius:4px;transition:.5s}
+.bf-ok{background:#27ae60}.bf-mid{background:#f39c12}.bf-low{background:#e24b4a}
+.cxbadge{display:inline-flex;align-items:center;gap:10px;background:#fbf6e8;border:1px solid #e8d9a8;border-radius:10px;padding:10px 16px}
+.cxbadge .n{font-size:24px;font-weight:900;color:#b8860b}
+.cxbadge .t{font-size:11px;color:#7a5c12}
+.diag{border-left:3px solid #b8860b;background:#fbf6e8;border-radius:0 8px 8px 0;padding:9px 13px;margin-bottom:7px;font-size:12px;color:#444}
+.diag.weak{border-color:#e24b4a;background:#fdeaea}
+.diag.mid{border-color:#e0b94d;background:#fdf6e3}
+.diag.strong{border-color:#2d7a4f;background:#eaf6ee}
+.diag b{color:#1a1a2e}
+.sigbox{background:#fdeaea;border-radius:8px;padding:10px 12px;margin-top:12px}
+.sigbox .st{font-size:11px;font-weight:700;color:#c0392b;margin-bottom:6px}
+.sig-badge{display:inline-block;background:#fff;color:#c0392b;border:1px solid #f0c0bd;border-radius:10px;padding:3px 9px;font-size:11px;font-weight:700;margin:2px}
+/* 코멘트 화면 */
+.bgrn{background:#2d7a4f;color:#fff}.bgrn:hover{background:#246040}
+.refbtn{position:absolute;bottom:8px;right:8px;background:#b8860b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.refbtn.str{background:#2d7a4f}.refbtn.imp{background:#b8860b}
+.refstat{font-size:11px;color:#888;margin-top:4px;display:none}
+.histbtn{background:#fff;border:1px solid #d8d8ea;border-radius:7px;padding:6px 14px;font-size:12px;cursor:pointer;color:#555;display:inline-flex;align-items:center;gap:5px}
+.histbtn:hover{background:#f2f2f8}
+.histbox2{display:none;background:#fbf6e8;border:1px solid #e8d9a8;border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-block;padding:4px 11px;border-radius:14px;border:1px solid #d8d8ea;background:#fff;font-size:11px;color:#666;cursor:pointer;transition:.12s}
+.chip:hover{border-color:#b8860b;color:#b8860b}
+.chip.on{background:#b8860b;color:#fff;border-color:#b8860b}
+.seclbl{font-size:12px;font-weight:700;margin-bottom:10px;padding-bottom:6px;border-bottom:1.5px solid}
+.seclbl.str{color:#2d7a4f;border-color:#cde8d6}
+.seclbl.imp{color:#b8860b;border-color:#f0e2bd}
+.layerbox{border-radius:9px;padding:12px 14px;margin-bottom:10px}
+.layerbox.str1{background:#eaf6ee;border:1px solid #cde8d6}
+.layerbox.str2{background:#f1faf4;border:1px solid #d4ecdc}
+.layerbox.imp1{background:#fdf6e3;border:1px solid #f0e2bd}
+.layerbox.imp2{background:#fdfaf0;border:1px solid #f0e8d0}
+.layerhd{font-size:10.5px;font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.layerhd.str{color:#2d7a4f}.layerhd.imp{color:#b8860b}
+.layerhd2{font-size:10.5px;font-weight:700;margin-bottom:8px}
+.layerhd2.str{color:#2d7a4f}.layerhd2.imp{color:#b8860b}
+.regen{border:none;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;color:#fff}
+.regen.str{background:#2d7a4f}.regen.imp{background:#b8860b}
+.layerout{font-size:12px;color:#444;line-height:1.85;min-height:36px;white-space:pre-wrap}
+.hist-box{display:none;background:#fbf6e8;border:1px solid #e8d9a8;border-radius:8px;margin-top:12px;font-size:12px;overflow:hidden}
+.hist-head{padding:11px 14px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.hist-body{display:none;padding:0 14px 12px;border-top:1px solid #ecdfb8}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="tool-header">
+  <div>
+    <h1>🏆 Gold Stella — Monthly Report</h1>
+    <p>파머스국제어학원 광교브랜치 · 강사용 · Reading / Listening&Writing</p>
+  </div>
+  <div class="hbadge">v0.1 (1단계)</div>
+</div>
+
+<div class="steps">
+  <button id="sb0" class="sbtn active" onclick="go(0)"><i class="ti ti-user"></i>학생 정보</button>
+  <button id="sb1" class="sbtn" onclick="go(1)"><i class="ti ti-checklist"></i>시험 입력</button>
+  <button id="sb2" class="sbtn" onclick="go(2)"><i class="ti ti-chart-bar"></i>통합 분석</button>
+  <button id="sb3" class="sbtn" onclick="go(3)"><i class="ti ti-pencil"></i>코멘트</button>
+  <button id="sb4" class="sbtn" onclick="go(4)"><i class="ti ti-file-text"></i>리포트</button>
+</div>
+
+<!-- STEP 0 -->
+<div id="s0">
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-user"></i>학생 기본 정보</div>
+    <div class="row3">
+      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="김코니"></div>
+      <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 광교초"></div>
+      <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 6학년"></div>
+    </div>
+    <div class="row3">
+      <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: Lynn T"></div>
+      <div><label>보고서 월</label><input type="text" id="repMonth" placeholder="예: 2026년 6월"></div>
+      <div><label>레벨</label><select id="lvSel" onchange="onLvChange()"><option value="">-- 선택 --</option><option value="1">Gold Stella 1 (Unit 1-6)</option><option value="2">Gold Stella 2 (Unit 1-6)</option><option value="3">Gold Stella 3 (Unit 1-6)</option><option value="4">Gold Stella 4 (Unit 1-6)</option><option value="5">Gold Stella 5 (Unit 1-6)</option></select></div>
+    </div>
+    <div id="lvInfo" class="lvinfo"></div>
+    <div id="historyAlert" class="hist-box">
+      <div id="historyAlertHead" class="hist-head" onclick="toggleHistoryPanel()"></div>
+      <div id="historyAlertBody" class="hist-body"></div>
+    </div>
+  </div>
+  <div class="navrow" style="justify-content:flex-end">
+    <button class="btn bprim" onclick="go(1)">시험 입력 <i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 1 -->
+<div id="s1" class="hidden">
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-checklist"></i>시험별 오답 입력</div>
+    <div class="testtabs" id="testTabs"></div>
+    <div class="legend">
+      <span style="background:#fafaff;border:1px solid #ccc;color:#2f855a">정답 (클릭 전)</span>
+      <span style="background:#fdeaea;border:1px solid #e24b4a;color:#c0392b">오답 (1번 클릭)</span>
+      <span style="background:#fdf6e3;border:1px solid #e0b94d;color:#b8860b">세모/부분 (주관식 2번 클릭)</span>
+    </div>
+    <div class="tiprow" id="tipRow"></div>
+    <div id="testBody"></div>
+    <div class="scorebar" id="scoreBar"></div>
+  </div>
+  <div class="navrow">
+    <button class="btn bsec" onclick="go(0)"><i class="ti ti-arrow-left"></i> 이전</button>
+    <button class="btn bprim" onclick="go(2)">통합 분석 <i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 2: 통합 분석 -->
+<div id="s2" class="hidden">
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-chart-bar"></i>통합 역량 분석 <span style="font-weight:600;color:#aaa;text-transform:none;letter-spacing:0;margin-left:4px">Reading + Listening&amp;Writing 기준</span></div>
+    <div id="integTotal"></div>
+    <div id="integBars" style="margin-top:14px"></div>
+    <div id="integSig"></div>
+  </div>
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-microscope"></i>영역별 진단</div>
+    <div id="integDiag"></div>
+  </div>
+  <div class="navrow">
+    <button class="btn bsec" onclick="go(1)"><i class="ti ti-arrow-left"></i> 이전</button>
+    <button class="btn bprim" onclick="go(3)">코멘트 작성 <i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- STEP 3: 코멘트 -->
+<div id="s3" class="hidden">
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-sparkles"></i>자동 피드백 초안</div>
+    <div style="position:relative">
+      <textarea id="autoFb" rows="5" style="font-size:13px;line-height:1.9;color:#1a1a2e;background:#fbf6e8;border:1px solid #e8d9a8;border-radius:8px;padding:11px 16px;border-left:3px solid #b8860b;width:100%;padding-right:110px"></textarea>
+      <button onclick="refineText('autoFb','auto')" class="refbtn">✨ 린쌤 톤으로</button>
+    </div>
+    <div id="refineStatus_auto" class="refstat"></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-pencil"></i>이달의 강점 &amp; 보완점</div>
+    <div style="margin-bottom:12px"><button onclick="showHistory()" class="histbtn"><i class="ti ti-history"></i>지난 리포트 확인</button></div>
+    <div id="historyBox" class="histbox2"></div>
+
+    <div style="margin-bottom:18px">
+      <div class="seclbl str"><i class="ti ti-star-filled"></i> 이달의 강점</div>
+      <div class="layerbox str1">
+        <div class="layerhd str"><span>📊 Layer 1 — 역량 분석 (자동)</span><button onclick="genStrength()" class="regen str">♻ 재생성</button></div>
+        <div id="strengthAnalysis" class="layerout"></div>
+      </div>
+      <div class="layerbox str2">
+        <div class="layerhd2 str">👀 Layer 2 — 수업 태도·관찰 (키워드 선택)</div>
+        <div class="chips" id="strengthChips" style="margin-bottom:8px"></div>
+        <div style="position:relative">
+          <textarea id="cmtStrength" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+          <button onclick="refineText('cmtStrength','strength')" class="refbtn str">✨ 린쌤 톤으로</button>
+        </div>
+        <div id="refineStatus_strength" class="refstat"></div>
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid #ececf3;margin:16px 0">
+
+    <div style="margin-bottom:14px">
+      <div class="seclbl imp"><i class="ti ti-adjustments"></i> 파악된 보완점</div>
+      <div class="layerbox imp1">
+        <div class="layerhd imp"><span>📊 Layer 1 — 역량 분석 (자동)</span><button onclick="genImprove()" class="regen imp">♻ 재생성</button></div>
+        <div id="improveAnalysis" class="layerout"></div>
+      </div>
+      <div class="layerbox imp2">
+        <div class="layerhd2 imp">👀 Layer 2 — 수업 태도·관찰 (키워드 선택)</div>
+        <div class="chips" id="attitudeChips" style="margin-bottom:8px"></div>
+        <div style="position:relative">
+          <textarea id="cmtImprove" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+          <button onclick="refineText('cmtImprove','improve')" class="refbtn imp">✨ 린쌤 톤으로</button>
+        </div>
+        <div id="refineStatus_improve" class="refstat"></div>
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid #ececf3;margin:14px 0">
+    <div>
+      <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:6px">추가 관찰 메모 <span style="font-weight:400;color:#999">(선택)</span></div>
+      <textarea id="cmtExtra" rows="3" style="font-size:12px"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</div>
+    <div class="chips" id="nextChips"></div>
+    <div style="position:relative">
+      <textarea id="cmtNext" rows="3" style="font-size:12px;padding-right:110px"></textarea>
+      <button onclick="refineText('cmtNext','next')" class="refbtn">✨ 린쌤 톤으로</button>
+    </div>
+    <div id="refineStatus_next" class="refstat"></div>
+  </div>
+
+  <div class="navrow"><button class="btn bsec" onclick="go(2)"><i class="ti ti-arrow-left"></i> 이전</button><button class="btn bprim" onclick="go(4)">리포트 보기 <i class="ti ti-eye"></i></button></div>
+</div>
+
+<!-- STEP 4: 리포트 -->
+<div id="s4" class="hidden">
+  <div id="reportOut"></div>
+  <div class="navrow" style="margin-top:12px">
+    <button class="btn bsec" onclick="go(3)"><i class="ti ti-arrow-left"></i> 이전</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn bsec" onclick="copyRpt()"><i class="ti ti-copy"></i>텍스트 복사</button>
+      <button class="btn bgrn" onclick="saveReport()"><i class="ti ti-device-floppy"></i>이력 저장</button>
+    </div>
+  </div>
+  <div id="saveStatus" style="font-size:12px;color:#2d7a4f;margin-top:8px;text-align:right;display:none"></div>
+  <div id="resetConfirmBox" style="display:none;margin-top:10px;background:#eaf6ee;border:1px solid #cde8d6;border-radius:10px;padding:13px 16px">
+    <div style="font-size:12px;color:#2d7a4f;font-weight:600;margin-bottom:8px"><i class="ti ti-circle-check"></i> <span id="resetConfirmMsg"></span></div>
+    <div style="display:flex;gap:7px">
+      <button onclick="resetAll()" style="background:#2d7a4f;color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer">초기화하고 다음 학생</button>
+      <button onclick="g('resetConfirmBox').style.display='none'" style="background:#fff;color:#555;border:1px solid #ccc;border-radius:7px;padding:7px 14px;font-size:12px;cursor:pointer">이 화면 유지</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const GOLD = {"1": {"label": "Gold 1", "name": "Gold Stella 1 (Unit 1-6)", "cefr": "A1", "lexile": "450L", "grammar": "빈칸 채우기 (기초 문법)", "tests": {"RD": {"label": "Reading Test", "total": 28, "parts": [{"domain": "VOC", "type": "mc", "from": 1, "to": 9}, {"domain": "RDG", "type": "mc", "from": 10, "to": 23}, {"domain": "GRM", "type": "sub", "from": 24, "to": 28}], "answerKey": {"VOC": {"1": 4, "2": 1, "3": 3, "4": 3, "5": 3, "6": 3, "7": 3, "8": 1, "9": 4}, "RDG": {"10": 2, "11": 2, "12": 2, "13": 1, "14": 4, "15": 1, "16": 2, "17": 2, "18": 3, "19": 4, "20": 1, "21": 1, "22": 1, "23": 3}, "GRM": {"24": "SUB", "25": "SUB", "26": "SUB", "27": "SUB", "28": "SUB"}}}, "LW": {"label": "Listening & Writing Test", "total": 17, "parts": [{"domain": "VOC", "type": "mc", "from": 1, "to": 5}, {"domain": "LIS", "type": "mc", "from": 6, "to": 17}], "answerKey": {"VOC": {"1": 4, "2": 2, "3": 2, "4": 4, "5": 2}, "LIS": {"6": 2, "7": 4, "8": 4, "9": 1, "10": 3, "11": 1, "12": 2, "13": 3, "14": 1, "15": 1, "16": 2, "17": 3}}}}}, "2": {"label": "Gold 2", "name": "Gold Stella 2 (Unit 1-6)", "cefr": "A1+", "lexile": "550L", "grammar": "빈칸 채우기 · 어형 선택 (기초 문법)", "tests": {"RD": {"label": "Reading Test", "total": 24, "parts": [{"domain": "VOC", "type": "mc", "from": 1, "to": 5}, {"domain": "RDG", "type": "mc", "from": 6, "to": 19, "subjective": [16]}, {"domain": "GRM", "type": "sub", "from": 20, "to": 24}], "answerKey": {"VOC": {"1": 3, "2": 2, "3": 1, "4": 1, "5": 3}, "RDG": {"6": 2, "7": 1, "8": 3, "9": 1, "10": 2, "11": 1, "12": 3, "13": 1, "14": 4, "15": 4, "16": "10 a.m.", "17": 1, "18": 1, "19": 1}, "GRM": {"20": "SUB", "21": "SUB", "22": "SUB", "23": "SUB", "24": "SUB"}}}, "LW": {"label": "Listening & Writing Test", "total": 22, "parts": [{"domain": "VOC", "type": "mc", "from": 1, "to": 10}, {"domain": "LIS", "type": "mc", "from": 11, "to": 22}], "answerKey": {"VOC": {"1": 2, "2": 3, "3": 4, "4": 3, "5": 2, "6": 1, "7": 1, "8": 3, "9": 4, "10": 1}, "LIS": {"11": 2, "12": 4, "13": 4, "14": 1, "15": 1, "16": 1, "17": 2, "18": 1, "19": 1, "20": 1, "21": 3, "22": 4}}}}}, "3": {"label": "Gold 3", "name": "Gold Stella 3 (Unit 1-6)", "cefr": "A2", "lexile": "650L", "grammar": "Syntax tiles (문장 구조 분석)", "tests": {"RD": {"label": "Reading Test", "total": 24, "parts": [{"domain": "VOC", "type": "mc", "from": 1, "to": 5}, {"domain": "RDG", "type": "mc", "from": 6, "to": 19, "subjective": [11]}, {"domain": "GRM", "type": "sub", "from": 20, "to": 24}], "answerKey": {"VOC": {"1": 1, "2": 2, "3": 3, "4": 1, "5": 1}, "RDG": {"6": 2, "7": 1, "8": 1, "9": 4, "10": 2, "11": "Because his mother became ill.", "12": 3, "13": 1, "14": 3, "15": 4, "16": 2, "17": 4, "18": 1, "19": 2}, "GRM": {"20": "SUB", "21": "SUB", "22": "SUB", "23": "SUB", "24": "SUB"}}}, "LW": {"label": "Listening & Writing Test", "total": 21, "parts": [{"domain": "VOC", "type": "mc", "from": 1, "to": 9}, {"domain": "LIS", "type": "mc", "from": 10, "to": 21}], "answerKey": {"VOC": {"1": 4, "2": 4, "3": 2, "4": 3, "5": 2, "6": 4, "7": 3, "8": 2, "9": 3}, "LIS": {"10": 2, "11": 3, "12": 1, "13": 3, "14": 1, "15": 2, "16": 4, "17": 3, "18": 1, "19": 2, "20": 4, "21": 1}}}}}, "4": {"label": "Gold 4", "name": "Gold Stella 4 (Unit 1-6)", "cefr": "A2+", "lexile": "750L", "grammar": "Syntax tiles (문장 구조 분석)", "tests": {"RD": {"label": "Reading Test", "total": 33, "parts": [{"domain": "VOC", "type": "mc", "from": 1, "to": 14}, {"domain": "RDG", "type": "mc", "from": 15, "to": 28, "subjective": [20, 23]}, {"domain": "GRM", "type": "sub", "from": 29, "to": 33}], "answerKey": {"VOC": {"1": 1, "2": 2, "3": 4, "4": 1, "5": 4, "6": 3, "7": 3, "8": 1, "9": 2, "10": 4, "11": 4, "12": 2, "13": 2, "14": 3}, "RDG": {"15": 2, "16": 1, "17": 3, "18": 1, "19": 2, "20": "Fleas live in the fur of dogs.", "21": 1, "22": 2, "23": "would ask the older people to tell their favorite stories", "24": 3, "25": 4, "26": 2, "27": 4, "28": 3}, "GRM": {"29": "SUB", "30": "SUB", "31": "SUB", "32": "SUB", "33": "SUB"}}}, "LW": {"label": "Listening & Writing Test", "total": 12, "parts": [{"domain": "LIS", "type": "mc", "from": 1, "to": 12}], "answerKey": {"LIS": {"1": 4, "2": 3, "3": 4, "4": 3, "5": 2, "6": 2, "7": 1, "8": 2, "9": 1, "10": 3, "11": 3, "12": 4}}}}}, "5": {"label": "Gold 5", "name": "Gold Stella 5 (Unit 1-6)", "cefr": "B1", "lexile": "850L", "grammar": "Syntax tiles (문장 구조 분석)", "tests": {"RD": {"label": "Reading Test", "total": 27, "parts": [{"domain": "VOC", "type": "mc", "from": 1, "to": 8}, {"domain": "RDG", "type": "mc", "from": 9, "to": 22, "subjective": [14]}, {"domain": "GRM", "type": "sub", "from": 23, "to": 27}], "answerKey": {"VOC": {"1": 3, "2": 1, "3": 4, "4": 3, "5": 1, "6": 1, "7": 1, "8": 3}, "RDG": {"9": 3, "10": 2, "11": 1, "12": 3, "13": 1, "14": "He made the Statue of Liberty disappear.", "15": 2, "16": 4, "17": 1, "18": 2, "19": 3, "20": 4, "21": 4, "22": 1}, "GRM": {"23": "SUB", "24": "SUB", "25": "SUB", "26": "SUB", "27": "SUB"}}}, "LW": {"label": "Listening & Writing Test", "total": 18, "parts": [{"domain": "VOC", "type": "mc", "from": 1, "to": 6}, {"domain": "LIS", "type": "mc", "from": 7, "to": 18}], "answerKey": {"VOC": {"1": 2, "2": 3, "3": 1, "4": 4, "5": 3, "6": 2}, "LIS": {"7": 4, "8": 3, "9": 4, "10": 2, "11": 3, "12": 1, "13": 3, "14": 4, "15": 1, "16": 3, "17": 1, "18": 4}}}}}};
+const DOM_LABEL = {VOC:"어휘(VOC)",LIS:"듣기(LIS)",RDG:"읽기(RDG)",GRM:"문법(GRM)"};
+const DOM_CLS = {VOC:"voc",LIS:"lis",RDG:"rdg",GRM:"grm"};
+const TEST_ORDER = ["RD","LW"];
+
+const g = id => document.getElementById(id);
+const val = id => { const el=g(id); return el?el.value.trim():''; };
+
+// 상태: 시험별 문항 상태. state[test][qnum] = 'O' | 'X' | 'P'(partial)
+let state = {RD:{}, LW:{}};
+let curTest = "RD";
+
+function curLevel(){ return val('lvSel'); }
+function levelData(){ const lv=curLevel(); return lv?GOLD[lv]:null; }
+
+function onLvChange(){
+  const d=levelData(); const box=g('lvInfo');
+  if(!d){box.style.display='none';return;}
+  box.style.display='block';
+  box.innerHTML=`<b style="color:#b8860b">${d.name}</b> · ${d.grammar} · CEFR ${d.cefr} · Lexile ${d.lexile}<br><span style="font-size:11px;color:#9a7c3a">Reading(${d.tests.RD.total}) · Listening&amp;Writing(${d.tests.LW.total})</span>`;
+  resetState();
+  buildTestTabs(); buildTestBody();
+}
+
+function resetState(){ state={RD:{},LW:{}}; }
+
+function isSubjective(test,qnum){
+  const d=levelData(); if(!d)return false;
+  const parts=d.tests[test].parts;
+  for(const p of parts){
+    if(qnum>=p.from&&qnum<=p.to){
+      if(p.type==='sub')return true;                 // GRM 전체 주관식
+      if(p.subjective&&p.subjective.includes(qnum-p.from+1))return true; // RDG 내 서술형(부분 인덱스)
+    }
+  }
+  return false;
+}
+// 서술형 위치: parts의 subjective는 "해당 part 내 순번"으로 저장됨. RD RDG 9-22 중 14번 → 순번 14-9+1=6? 
+// 실제로는 절대 문항번호로 다루는 게 안전 → subjectiveAbs로 변환
+function subjectiveSet(test){
+  const d=levelData(); const s=new Set(); if(!d)return s;
+  d.tests[test].parts.forEach(p=>{
+    if(p.type==='sub'){ for(let n=p.from;n<=p.to;n++)s.add(n); }
+    if(p.subjective){ p.subjective.forEach(absN=>s.add(absN)); }
+  });
+  return s;
+}
+
+function domainOf(test,qnum){
+  const d=levelData(); if(!d)return null; const parts=d.tests[test].parts;
+  for(const p of parts){ if(qnum>=p.from&&qnum<=p.to)return p.domain; }
+  return null;
+}
+
+function buildTestTabs(){
+  const d=levelData(); if(!d)return;
+  const tabs=g('testTabs');
+  const meta={RD:{n:"Reading",flag:"req"},LW:{n:"Listening & Writing",flag:"req"}};
+  let html='';
+  TEST_ORDER.forEach(t=>{
+    const m=meta[t];
+    const has=Object.keys(state[t]).length>0;
+    html+=`<div class="ttab ${t===curTest?'active':''} ${has?'hasdata':''}" id="tab_${t}" onclick="switchTest('${t}')">
+      <i class="ti ti-check tdone"></i>
+      <div class="tname">${m.n}</div>
+      <div class="tmeta">${d.tests[t].total}문항</div>
+      <span class="tflag ${m.flag}">필수</span>
+    </div>`;
+  });
+  tabs.innerHTML=html;
+}
+
+function switchTest(t){ curTest=t; buildTestTabs(); buildTestBody(); }
+
+function buildTestBody(){
+  const d=levelData(); if(!d){g('testBody').innerHTML='<p style="color:#888">먼저 레벨을 선택하세요.</p>';g('scoreBar').innerHTML='';return;}
+  const test=d.tests[curTest];
+  const subSet=subjectiveSet(curTest);
+  let html='';
+  test.parts.forEach(p=>{
+    const cnt=p.to-p.from+1;
+    const subInPart=[...subSet].filter(n=>n>=p.from&&n<=p.to);
+    html+=`<div class="parthead">${DOM_LABEL[p.domain]} <span class="pcnt">${p.from}~${p.to} (${cnt}문항)</span></div>`;
+    if(p.type==='sub'||subInPart.length){
+      html+=`<div class="subnote">주관식 — 클릭: 정답 → 오답(X) → 세모(부분) 순으로 바뀝니다. 세모는 0.5점.</div>`;
+    }
+    html+=`<div class="q-grid" style="grid-template-columns:repeat(7,1fr)">`;
+    for(let n=p.from;n<=p.to;n++){
+      const st=state[curTest][n]||'O';
+      const sub=subSet.has(n);
+      const cls=DOM_CLS[p.domain]+(sub?' sub':'')+(st==='X'?' wrong':'')+(st==='P'?' partial':'');
+      const lbl=st==='O'?'정답':st==='X'?'오답':'세모';
+      html+=`<div class="qbtn ${cls}" id="q_${curTest}_${n}" onclick="toggleQ(${n})"><span class="qn">${n}</span><span class="qs">${lbl}</span></div>`;
+    }
+    html+='</div>';
+  });
+  g('testBody').innerHTML=html;
+  g('tipRow').innerHTML=`<b>${test.label}</b> — 객관식은 클릭하면 오답 처리(다시 클릭 시 정답 복원). 주관식은 정답→오답→세모 순환.`;
+  computeAndShowScore();
+}
+
+function toggleQ(n){
+  const sub=subjectiveSet(curTest).has(n);
+  const cur=state[curTest][n]||'O';
+  let next;
+  if(sub){ next = cur==='O'?'X':cur==='X'?'P':'O'; }   // 주관식: O→X→P→O
+  else { next = cur==='O'?'X':'O'; }                    // 객관식: O→X→O
+  if(next==='O') delete state[curTest][n]; else state[curTest][n]=next;
+  // UI 갱신
+  const el=g(`q_${curTest}_${n}`);
+  el.classList.remove('wrong','partial');
+  const qs=el.querySelector('.qs');
+  if(next==='X'){el.classList.add('wrong');qs.textContent='오답';}
+  else if(next==='P'){el.classList.add('partial');qs.textContent='세모';}
+  else qs.textContent='정답';
+  buildTestTabs();
+  computeAndShowScore();
+}
+
+// 채점: O=1, X=0, P=0.5. 시험별 raw/total, 100점 환산
+function scoreTest(test){
+  const d=levelData(); if(!d)return null;
+  const t=d.tests[test]; let raw=0;
+  for(let n=1;n<=t.total;n++){
+    const st=state[test][n]||'O';
+    raw += st==='O'?1:st==='P'?0.5:0;
+  }
+  return {raw, total:t.total, pct:Math.round(raw/t.total*1000)/10};
+}
+function gradeOf(pct){return pct>=95?'A+':pct>=90?'A':pct>=85?'B+':pct>=80?'B':pct>=75?'C+':pct>=70?'C':pct>=60?'D':'F';}
+
+function computeAndShowScore(){
+  const s=scoreTest(curTest); if(!s){g('scoreBar').innerHTML='';return;}
+  const rawDisp = Number.isInteger(s.raw)?s.raw:s.raw.toFixed(1);
+  g('scoreBar').innerHTML=`<div class="big">${s.pct}</div><div class="det">/ 100점<br>원점수 ${rawDisp}/${s.total}</div><div class="gr">${gradeOf(s.pct)}</div>`;
+}
+
+function go(step){
+  if(step>=1 && !levelData()){ alert('먼저 학생 정보에서 레벨을 선택하세요.'); step=0; }
+  const steps=['s0','s1','s2','s3','s4'];const btns=document.querySelectorAll('.sbtn');
+  steps.forEach((id,i)=>{const el=g(id);if(el)el.classList.toggle('hidden',i!==step);if(btns[i]){btns[i].classList.toggle('active',i===step);btns[i].classList.toggle('done',i<step);}});
+  if(step===1){ buildTestTabs();buildTestBody(); }
+  if(step===2){ buildIntegrated(); }
+  if(step===3){ setupCommentTab(); }
+  if(step===4){ buildReport(); }
+  window.scrollTo(0,0);
+}
+
+// ===== 2단계: 통합 분석 (RD+LW 기준) =====
+function domainOf(test,qnum){
+  const parts=levelData().tests[test].parts;
+  for(const p of parts){ if(qnum>=p.from&&qnum<=p.to)return p.domain; }
+  return null;
+}
+function qScore(st){return st==='O'?1:st==='P'?0.5:0;}
+
+// RD+LW 영역별 {got,max,partial,wrong}
+function integratedDomains(){
+  const res={VOC:{got:0,max:0,p:0,x:0},LIS:{got:0,max:0,p:0,x:0},RDG:{got:0,max:0,p:0,x:0},GRM:{got:0,max:0,p:0,x:0}};
+  if(!levelData())return res;
+  ['RD','LW'].forEach(test=>{
+    const t=levelData().tests[test];
+    for(let n=1;n<=t.total;n++){
+      const dom=domainOf(test,n); const st=state[test][n]||'O';
+      res[dom].max+=1; res[dom].got+=qScore(st);
+      if(st==='P')res[dom].p+=1; if(st==='X')res[dom].x+=1;
+    }
+  });
+  return res;
+}
+function integratedTotal(){
+  const d=integratedDomains(); let got=0,max=0;
+  for(const k in d){got+=d[k].got;max+=d[k].max;}
+  return {got,max,pct:max?Math.round(got/max*1000)/10:0};
+}
+
+function buildIntegrated(){
+  const d=levelData(); if(!d)return;
+  const tot=integratedTotal();
+  const rawDisp=Number.isInteger(tot.got)?tot.got:tot.got.toFixed(1);
+  g('integTotal').innerHTML=`<div class="itot"><div><div class="num">${tot.pct}</div></div><div class="lbl">/ 100점<br>원점수 ${rawDisp}/${tot.max}<br><span style="opacity:.7">RD + LW 통합</span></div><div class="gr">${gradeOf(tot.pct)}</div></div>`;
+  // 영역 막대
+  const dm=integratedDomains();
+  let bars='';
+  ['VOC','LIS','RDG','GRM'].forEach(dom=>{
+    const r=dm[dom]; const pct=r.max?Math.round(r.got/r.max*100):0;
+    const bf=pct>=80?'bf-ok':pct>=60?'bf-mid':'bf-low';
+    const gotDisp=Number.isInteger(r.got)?r.got:r.got.toFixed(1);
+    const pTag=r.p>0?`<span class="sm">세모 ${r.p}</span>`:'';
+    bars+=`<div class="dombar"><div class="dbl"><span class="dbn">${DOM_LABEL[dom]}${pTag}</span><span class="dbpct">${gotDisp}/${r.max} (${pct}%)</span></div><div class="bg"><div class="bf ${bf}" style="width:${pct}%"></div></div></div>`;
+  });
+  g('integBars').innerHTML=bars;
+  // 보완 집중 영역
+  const weak=['VOC','LIS','RDG','GRM'].filter(dom=>dm[dom].max&&dm[dom].got/dm[dom].max<0.6);
+  g('integSig').innerHTML = weak.length?`<div class="sigbox"><div class="st">⚠️ 보완 집중 영역</div>${weak.map(dom=>`<span class="sig-badge">${DOM_LABEL[dom]}</span>`).join('')}</div>`:'';
+  buildDiagnosis(dm);
+}
+
+// 영역별 진단 문장 (세모 신호 반영)
+function buildDiagnosis(dm){
+  const DIAG={
+    VOC:{strong:"어휘를 정확하게 파악하고 문맥에 맞게 활용하는 힘이 탄탄합니다.",mid:"어휘 이해가 안정적이며, 문맥 추론을 조금 더 키우면 좋겠습니다.",weak:"어휘 정확도를 높이는 연습이 필요합니다. 단어를 문장 속에서 반복해 익히면 효과적입니다."},
+    LIS:{strong:"듣기 내용을 명확하게 이해하고 핵심을 잘 잡아냅니다.",mid:"기본 청취는 잘 되며, 세부 정보 파악을 더 키우면 좋겠습니다.",weak:"듣기 집중력과 핵심 정보 추출을 집중 훈련하면 좋겠습니다."},
+    RDG:{strong:"지문을 빠르고 정확하게 파악하는 독해력이 우수합니다.",mid:"독해 흐름 파악이 안정적이며, 심화 지문 정확도를 높여가면 좋겠습니다.",weak:"지문 내용 일치 판단과 세부 정보 파악을 집중 연습하면 좋겠습니다."},
+    GRM:{strong:"문장 구조(Syntax)를 정확하게 분석하고 적용하는 힘이 탄탄합니다.",mid:"문장 구조 이해가 자리잡고 있으며, 표현 정확도를 더 높이면 좋겠습니다.",weak:"문장 구조 분석과 영작 정확도를 함께 키워가면 좋겠습니다."}
+  };
+  let html='';
+  ['VOC','LIS','RDG','GRM'].forEach(dom=>{
+    const r=dm[dom]; if(!r.max)return;
+    const pct=r.got/r.max;
+    const lvl=pct>=0.8?'strong':pct>=0.6?'mid':'weak';
+    let extra='';
+    // 세모 신호: 주관식 영역(GRM/RDG)에서 세모가 있으면 "거의 맞음" 짚기
+    if(r.p>0&&(dom==='GRM'||dom==='RDG')) extra=` <b>(부분 정답 ${r.p}문항 — 개념은 이해하고 있으나 정밀도를 다듬으면 완성도가 올라갑니다.)</b>`;
+    html+=`<div class="diag ${lvl}">▸ <b>${DOM_LABEL[dom]}</b> ${Math.round(pct*100)}% — ${DIAG[dom][lvl]}${extra}</div>`;
+  });
+  g('integDiag').innerHTML=html;
+}
+
+// ===== 2단계: 리포트 =====
+function buildReport(){
+  const d=levelData(); if(!d){g('reportOut').innerHTML='<div class="card">레벨을 선택해주세요.</div>';return;}
+  const name=val('stuName')||'이름 없음';const school=val('stuSchool')||'-';const grade=val('stuGrade')||'-';const teacher=val('teacher')||'선생님';const month=val('repMonth')||'-';
+  const tot=integratedTotal();const dm=integratedDomains();
+  const rawDisp=Number.isInteger(tot.got)?tot.got:tot.got.toFixed(1);
+  const SYN_TAG={RDG:'독해',GRM:'구문·영작'};
+  const domBars=['VOC','LIS','RDG','GRM'].map(dom=>{const r=dm[dom];if(!r.max)return'';const p=Math.round(r.got/r.max*100);const col=p>=80?'#27ae60':p>=60?'#f39c12':'#e24b4a';const gd=Number.isInteger(r.got)?r.got:r.got.toFixed(1);return `<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="font-weight:600;color:#444">${DOM_LABEL[dom]}</span><span style="color:#888">${gd}/${r.max} (${p}%)</span></div><div style="background:#e7e7f0;border-radius:4px;height:7px"><div style="width:${p}%;height:100%;background:${col};border-radius:4px"></div></div></div>`;}).join('');
+  let growth='';if(tot.pct>=90)growth='이번 달 전반적으로 매우 우수한 성취를 보였습니다. 꾸준한 노력이 빛을 발하고 있어요!';else if(tot.pct>=80)growth='목표 수준 이상의 성취를 달성하였습니다. 안정적으로 성장하는 모습이 인상적입니다.';else if(tot.pct>=70)growth='기본기가 잘 갖춰지고 있으며, 몇몇 영역에서 더 발전할 가능성이 보입니다.';else growth='기초를 다지는 데 더 집중이 필요한 시점입니다. 저와 함께 차근차근 실력을 쌓아가요!';
+  const gramHtml=d.tests.RD.parts.length?`<div style="font-size:12px;color:#555;line-height:1.7">이번 과정은 <b style="color:#b8860b">${d.grammar}</b>를 중심으로 Reading·Listening&amp;Writing을 통합 학습했습니다.</div>`:'';
+  const strengthA=g('strengthAnalysis')?.textContent?.trim()||'';
+  const improveA=g('improveAnalysis')?.textContent?.trim()||'';
+  const strengthTxt=g('cmtStrength')?.value?.trim()||'';
+  const improveTxt=g('cmtImprove')?.value?.trim()||'';
+  const extraTxt=g('cmtExtra')?.value?.trim()||'';
+  const nextTxt=g('cmtNext')?.value?.trim()||'';
+  const autoFbTxt=g('autoFb')?.value?.trim()||'';
+  const html=`<div style="background:#fff;border:1px solid #e8e8f2;border-radius:16px;padding:28px;max-width:820px;margin:0 auto">
+    <div style="background:linear-gradient(135deg,#7a5c12,#b8860b);color:#fff;border-radius:12px;padding:20px 24px;margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div style="font-size:10px;opacity:.75;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">파머스국제어학원 광교브랜치</div><div style="font-size:20px;font-weight:800">${d.name} — Monthly Report</div><div style="font-size:11.5px;opacity:.82;margin-top:4px">${month}</div></div>
+        <div style="text-align:right"><div style="font-size:38px;font-weight:900;letter-spacing:-1px">${tot.pct}</div><div style="font-size:10px;opacity:.78">/ 100점 (${rawDisp}/${tot.max})<br>RD+LW 통합</div><div style="background:rgba(255,255,255,.22);border-radius:6px;padding:2px 11px;font-size:14px;font-weight:800;margin-top:4px">${gradeOf(tot.pct)}</div></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+      <div style="background:#fbf6e8;border-radius:10px;padding:12px 14px;border-left:3px solid #b8860b"><div style="font-size:10px;color:#999;font-weight:600;margin-bottom:3px">학생</div><div style="font-size:16px;font-weight:700;color:#b8860b">${name}</div></div>
+      <div style="background:#f6f6fb;border-radius:10px;padding:12px 14px"><div style="font-size:10px;color:#999;font-weight:600;margin-bottom:3px">학교 · 학년</div><div style="font-size:13px;font-weight:600;color:#444">${school} ${grade}</div></div>
+      <div style="background:#f6f6fb;border-radius:10px;padding:12px 14px"><div style="font-size:10px;color:#999;font-weight:600;margin-bottom:3px">레벨 · 담당</div><div style="font-size:13px;font-weight:600;color:#444">${d.label} · ${teacher}</div></div>
+    </div>
+    <div style="background:#fbf6e8;border-radius:10px;padding:16px 18px;margin-bottom:16px;border:1px solid #e8d9a8">
+      <div style="font-size:10px;font-weight:700;color:#b8860b;letter-spacing:1.2px;margin-bottom:6px">${d.label}</div>
+      <div style="font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:8px">${d.name}</div>${gramHtml}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+      <div style="background:#fff;border:1px solid #e8e8f2;border-radius:10px;padding:14px 16px"><div style="font-size:11px;font-weight:700;color:#444;margin-bottom:10px">▪ 영역별 점수 (RD+LW 통합 · ${tot.max}문항)</div><div id="rpt-score-text" style="display:none;white-space:pre">${['VOC','LIS','RDG','GRM'].map(dom=>{const r=dm[dom];const p=r.max?Math.round(r.got/r.max*100):0;const gd=Number.isInteger(r.got)?r.got:r.got.toFixed(1);return `${DOM_LABEL[dom]}  ${gd}/${r.max} (${p}%)`;}).join('\n')}</div>${domBars}</div>
+      <div style="background:#fff;border:1px solid #e8e8f2;border-radius:10px;padding:14px 16px"><div style="font-size:11px;font-weight:700;color:#444;margin-bottom:10px">▪ 성장 분석</div><p id="rpt-growth" style="font-size:12px;line-height:1.85;color:#444">${growth}</p>${autoFbTxt?`<div style="margin-top:10px;padding:10px;background:#fbf6e8;border-radius:8px;font-size:11px;line-height:1.85;color:#444;border-left:3px solid #b8860b">${autoFbTxt.replace(/\n/g,'<br>')}</div>`:''}</div>
+    </div>
+    ${(strengthA||strengthTxt||improveA||improveTxt)?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="background:#eaf6ee;border-radius:10px;padding:14px 16px;border-left:3px solid #2d7a4f"><div style="font-size:11px;font-weight:700;color:#2d7a4f;margin-bottom:8px">이달의 강점</div>${strengthA?`<div style="font-size:11px;color:#1a5c38;background:#fff;border-radius:7px;padding:9px 12px;margin-bottom:8px;line-height:1.85;white-space:pre-wrap">${strengthA}</div>`:''}${strengthTxt?`<div style="font-size:12px;line-height:1.85;color:#333">${strengthTxt.replace(/\n/g,'<br>')}</div>`:''}</div>
+      <div style="background:#fdf6e3;border-radius:10px;padding:14px 16px;border-left:3px solid #b8860b"><div style="font-size:11px;font-weight:700;color:#854f0b;margin-bottom:8px">파악된 보완점</div>${improveA?`<div style="font-size:11px;color:#7a4a00;background:#fff;border-radius:7px;padding:9px 12px;margin-bottom:8px;line-height:1.85;white-space:pre-wrap">${improveA}</div>`:''}${improveTxt?`<div style="font-size:12px;line-height:1.85;color:#333">${improveTxt.replace(/\n/g,'<br>')}</div>`:''}</div>
+    </div>`:''}
+    ${extraTxt?`<div style="background:#f6f6fb;border-radius:10px;padding:12px 16px;margin-bottom:12px"><div style="font-size:11px;font-weight:600;color:#666;margin-bottom:4px">추가 관찰 메모</div><div style="font-size:12px;line-height:1.85;color:#444">${extraTxt.replace(/\n/g,'<br>')}</div></div>`:''}
+    ${nextTxt?`<div style="background:#fbf6e8;border-radius:10px;padding:12px 16px;margin-bottom:16px;border-left:3px solid #b8860b"><div style="font-size:11px;font-weight:700;color:#b8860b;margin-bottom:4px">▶ 다음 달 지도 방안</div><div style="font-size:12px;line-height:1.85;color:#444">${nextTxt.replace(/\n/g,'<br>')}</div></div>`:''}
+    <div style="border-top:1px solid #ececf3;padding-top:12px;text-align:center;font-size:10px;color:#bbb">파머스국제어학원 광교브랜치 · Gold Stella Program · ${teacher} 담당</div>
+  </div>`;
+  g('reportOut').innerHTML=html;
+}
+
+// ===== 3단계: 코멘트 / AI / 이력 =====
+const KW_STRENGTH=["수업 집중력이 높아요","먼저 발표하려는 의지가 있어요","모르는 것을 바로 질문해요","선생님 설명을 끝까지 잘 들어요","숙제를 성실하게 완성해요","노트 정리가 꼼꼼해요","자기주도 학습이 잘 되어요","영어에 자신감과 긍정적 태도가 좋아요","실수를 두려워하지 않고 말하려 해요","짝 활동에 적극적으로 참여해요","끝까지 해내려는 끈기가 있어요","어휘를 빠르게 익혀요"];
+const KW_IMPROVE=["수업 중 집중 시간을 늘려가면 좋겠어요","발표 기회에 더 적극적으로 참여하면 좋겠어요","모르는 부분을 바로 질문하는 용기를 키워봐요","숙제를 제때 완성하는 습관을 함께 만들어가요","수업 후 복습 습관을 들이면 좋겠어요","교재 예습을 조금씩 해오면 이해도가 높아져요","어휘를 조금이라도 더 익히면 좋겠어요","긴 독해 지문에 더 자신감을 가지도록 독려할게요","문장 표현 정확도를 더 높여가면 좋겠어요","문법 규칙을 정확히 적용하는 연습을 함께 해요","꾸준한 참여로 학습 효과를 더 높여가요","받아쓰기로 듣기 정확도를 높여가요"];
+
+function LS(action,key,data){const PFX='gs_';if(action==='get')return JSON.parse(localStorage.getItem(PFX+key)||'null');if(action==='set')localStorage.setItem(PFX+key,JSON.stringify(data));}
+function getStudentKey(){const n=val('stuName').replace(/\s/g,'');const s=val('stuSchool').replace(/\s/g,'');return n?`${s}_${n}`:null;}
+
+function setupCommentTab(){
+  const sC=g('strengthChips');if(sC)sC.innerHTML=KW_STRENGTH.map(k=>`<span class="chip" onclick="toggleChip(this,'strength')">${k}</span>`).join('');
+  const aC=g('attitudeChips');if(aC)aC.innerHTML=KW_IMPROVE.map(k=>`<span class="chip" onclick="toggleChip(this,'improve')">${k}</span>`).join('');
+  buildNextChips();
+  setTimeout(()=>{buildAutoFeedback();genStrength();genImprove();},0);
+}
+
+function buildAutoFeedback(){
+  const d=levelData();const name=val('stuName')||'학생';const dm=integratedDomains();const tot=integratedTotal();
+  const rates={};['VOC','LIS','RDG','GRM'].forEach(dom=>rates[dom]=dm[dom].max?Math.round(dm[dom].got/dm[dom].max*100):0);
+  const strong=['VOC','LIS','RDG','GRM'].filter(x=>rates[x]>=80);
+  const weak=['VOC','LIS','RDG','GRM'].filter(x=>rates[x]<60);
+  let fb='';
+  fb+=`${name} 학생은 이번 달 ${d.name} 과정을 학습하였습니다. Reading과 Listening&Writing 통합 점수는 100점 만점 기준 ${tot.pct}점입니다.\n\n`;
+  if(strong.length)fb+=`[강점]\n`+strong.map(x=>`${DOM_LABEL[x]} (${rates[x]}%)`).join(', ')+` 영역에서 우수한 성취를 보였습니다.\n`;
+  if(weak.length)fb+=`[보완]\n`+weak.map(x=>`${DOM_LABEL[x]} (${rates[x]}%)`).join(', ')+` 영역은 추가 연습으로 더욱 발전할 수 있습니다.\n`;
+  const pSum=dm.GRM.p+dm.RDG.p;
+  if(pSum>0)fb+=`\n특히 문법·서술형에서 부분 정답이 ${pSum}문항 있었습니다. 개념은 이해하고 있으니 표현의 정밀도를 다듬으면 완성도가 한층 올라갈 거예요.\n`;
+  fb+=`\n다음 달에도 함께 꾸준히 성장해 나가요!`;
+  if(g('autoFb'))g('autoFb').value=fb;
+}
+
+function genStrength(){
+  const dm=integratedDomains();const box=g('strengthAnalysis');if(!box)return;
+  const rates={};['VOC','LIS','RDG','GRM'].forEach(d=>rates[d]=dm[d].max?Math.round(dm[d].got/dm[d].max*100):0);
+  const strong=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]>=80);
+  const mid=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]>=60&&rates[d]<80);
+  if(!strong.length&&!mid.length){box.textContent='(정답률 80% 이상 영역이 없습니다. 입력을 확인해주세요.)';return;}
+  const SD={VOC:"어휘를 정확히 파악하고 활용하는",LIS:"듣기 내용을 명확히 이해하는",RDG:"지문을 빠르고 정확히 파악하는",GRM:"문장 구조를 정확히 분석하는"};
+  let t='';
+  strong.forEach(d=>t+=`• ${DOM_LABEL[d]} (${rates[d]}%): ${SD[d]} 역량이 우수합니다.\n`);
+  mid.forEach(d=>t+=`• ${DOM_LABEL[d]} (${rates[d]}%): ${SD[d]} 힘이 안정적으로 자리잡고 있습니다.\n`);
+  box.textContent=t.trim();
+}
+function genImprove(){
+  const dm=integratedDomains();const box=g('improveAnalysis');if(!box)return;
+  const rates={};['VOC','LIS','RDG','GRM'].forEach(d=>rates[d]=dm[d].max?Math.round(dm[d].got/dm[d].max*100):0);
+  const weak=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]<60);
+  const mid=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]>=60&&rates[d]<80);
+  if(!weak.length&&!mid.length){box.textContent='(모든 영역이 80% 이상입니다. 탁월한 성취입니다!)';return;}
+  const WD={VOC:"어휘 정확도를 높이는 반복 학습이 도움이 됩니다",LIS:"듣기 집중력과 세부 정보 파악을 함께 키우면 좋겠습니다",RDG:"지문 일치 판단과 세부 정보 파악을 집중 연습하면 좋겠습니다",GRM:"문장 구조 분석과 영작 정확도를 함께 다듬으면 좋겠습니다"};
+  let t='';
+  weak.forEach(d=>t+=`• ${DOM_LABEL[d]} (${rates[d]}%): ${WD[d]}.\n`);
+  mid.forEach(d=>t+=`• ${DOM_LABEL[d]} (${rates[d]}%): 기본기는 갖춰져 있으며, 정확도를 조금 더 높이면 좋겠습니다.\n`);
+  const pSum=dm.GRM.p+dm.RDG.p;
+  if(pSum>0)t+=`• 문법·서술형 부분 정답 ${pSum}문항: 개념 이해는 충분하니 철자·형태 등 표현 정밀도를 다듬으면 완성됩니다.\n`;
+  box.textContent=t.trim();
+}
+
+function toggleChip(el,type){el.classList.toggle('on');const ta=g(type==='strength'?'cmtStrength':'cmtImprove');if(!ta?.dataset.edited)buildChipText(type);}
+function buildChipText(type){
+  const selId=type==='strength'?'strengthChips':'attitudeChips';const taId=type==='strength'?'cmtStrength':'cmtImprove';
+  const chips=[...document.querySelectorAll(`#${selId} .chip.on`)].map(c=>c.textContent);const ta=g(taId);
+  if(!chips.length){ta.value='';return;}
+  const name=val('stuName')||'학생';
+  if(type==='strength')ta.value=chips.map(c=>`${name} 학생은 ${c}.`).join(' ');
+  else ta.value=chips.map(c=>`앞으로 ${c} 함께 지도하겠습니다.`).join(' ');
+  delete ta.dataset.edited;
+}
+
+function buildNextChips(){
+  const nC=g('nextChips');if(!nC)return;const dm=integratedDomains();
+  const rates={};['VOC','LIS','RDG','GRM'].forEach(d=>rates[d]=dm[d].max?Math.round(dm[d].got/dm[d].max*100):0);
+  const NEXT={VOC:["어휘 반복 필사 확장","문맥 속 어휘 추론 연습"],LIS:["받아쓰기 집중 훈련","대화 듣고 핵심 파악"],RDG:["지문 참거짓 판단 연습","주제·세부 파악 훈련"],GRM:["문장 구조(Syntax) 분석 반복","영작 문장 쓰기 연습"]};
+  const sorted=['VOC','LIS','RDG','GRM'].sort((a,b)=>rates[a]-rates[b]);
+  let items=[];sorted.forEach(d=>{(NEXT[d]||[]).forEach(kw=>items.push({kw,dom:d,low:rates[d]<60}))});
+  nC.innerHTML=items.map((it,i)=>`<span class="chip" data-i="${i}" onclick="toggleChipNext(this)">${it.low?'⚠ ':''}${it.kw}</span>`).join('');
+  let auto=0;items.forEach((it,i)=>{if(auto<2&&it.low){const c=nC.querySelector(`[data-i="${i}"]`);if(c){c.classList.add('on');auto++;}}});
+  buildNextText();
+}
+function toggleChipNext(el){el.classList.toggle('on');const ta=g('cmtNext');if(ta&&ta.dataset.edited!=='1')buildNextText();}
+function buildNextText(){const nC=g('nextChips');const ta=g('cmtNext');if(!nC||!ta)return;const chips=[...nC.querySelectorAll('.chip.on')].map(c=>c.textContent.replace('⚠ ',''));if(!chips.length){ta.value='';delete ta.dataset.edited;return;}ta.value=`다음 달에는 ${chips.join(', ')} 등을 중심으로 지도할 예정입니다.`;delete ta.dataset.edited;}
+
+async function refineText(taId,type){
+  const orig=g(taId).value.trim();if(!orig){alert('먼저 내용을 입력해주세요.');return;}
+  const statusId='refineStatus_'+type;if(g(statusId)){g(statusId).style.display='block';g(statusId).textContent='✨ AI가 작성 중입니다...';}
+  const name=val('stuName')||'학생';
+  const typeGuide={auto:'전체 피드백 — 이번 달 학습 총평',strength:'이달의 강점 — 잘한 점 칭찬',improve:'보완점 — 성장 방향 격려',next:'다음 달 지도 방안'}[type]||'피드백';
+  const systemPrompt=`당신은 파머스국제어학원 광교브랜치에서 ${name} 학생을 직접 가르치는 담임 선생님입니다. 20년 경력의 영어 교육 전문가입니다. 이 리포트는 담임 선생님이 학부모님께 직접 쓰는 글입니다.
+아래 내용을 학부모에게 보내는 월간 리포트 문장으로 자연스럽게 다듬어 주세요.
+[이 섹션의 목적] ${typeGuide}
+[작성 규칙]
+- 학생 이름(${name})을 호칭할 때: "이름 학생이" 또는 "이름이" 형태로 자연스럽게
+- 문체: 담임 선생님이 직접 쓴 듯한 따뜻하고 구체적인 어투. AI 느낌 금지
+- 화자: 글쓴이는 담임 선생님 본인. 자신을 가리킬 때 1인칭("저","제가")을 쓴다
+- 분량: 3~4문장. 간결하게
+- 절대 금지 표현: "부족", "미흡", "못하다", "아쉽다"
+- 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 식으로 긍정적으로
+- 한국어로만 작성, 이모지 사용 금지
+- 바로 본문 내용부터 시작할 것`;
+  try{
+    const resp=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:orig}]})});
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const data=await resp.json();const out=data.content?.find(c=>c.type==='text')?.text||orig;
+    g(taId).value=out;g(taId).dataset.edited='1';
+    if(g(statusId)){g(statusId).textContent='완료!';setTimeout(()=>{g(statusId).style.display='none';},2000);}
+  }catch(e){if(g(statusId))g(statusId).textContent='오류 발생. 다시 시도해주세요.';}
+}
+
+function onNameInput(){const k=getStudentKey();if(k&&LS('get',k+'_kw'))showHistoryAlert();else{const b=g('historyAlert');if(b)b.style.display='none';}}
+function toggleHistoryPanel(){const b=g('historyAlertBody'),ic=g('histToggleIcon');if(!b)return;const open=b.style.display==='none'||!b.style.display;b.style.display=open?'block':'none';if(ic)ic.className='ti '+(open?'ti-chevron-up':'ti-chevron-down');}
+function showHistoryAlert(){const k=getStudentKey();if(!k)return;const data=LS('get',k+'_kw');const box=g('historyAlert'),head=g('historyAlertHead'),body=g('historyAlertBody');if(!box||!data){if(box)box.style.display='none';return;}const months=Object.keys(data).sort().reverse().slice(0,3);if(!months.length){box.style.display='none';return;}const name=val('stuName')||'학생';head.innerHTML=`<i class="ti ti-history" style="font-size:14px;color:#b8860b"></i><div style="flex:1"><strong>${name}</strong> 학생의 최근 ${months.length}개월 이력이 있습니다. <span style="color:#9a7009;margin-left:5px">${months.join(' · ')}</span></div><i id="histToggleIcon" class="ti ti-chevron-down" style="color:#b8860b"></i>`;body.innerHTML=months.map(m=>{const r=data[m]||{};const sC=(r.strength&&r.strength.length)?r.strength.map(x=>`<span style="background:#eaf6ee;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#bbb;font-size:10px">없음</span>';const aC=(r.improve&&r.improve.length)?r.improve.map(x=>`<span style="background:#fdf6e3;color:#b8860b;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#bbb;font-size:10px">없음</span>';return `<div style="padding-top:11px"><div style="font-size:11px;font-weight:700;color:#9a7009;margin-bottom:5px">${m}</div><div style="margin-bottom:4px"><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">강점</span>${sC}</div><div><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">보완점</span>${aC}</div></div>`;}).join('');box.style.display='block';}
+function showHistory(){const k=getStudentKey();const box=g('historyBox');if(!box)return;if(!k){box.innerHTML='<div style="font-size:12px;color:#888">학생 이름과 학교를 먼저 입력해주세요.</div>';box.style.display='block';return;}const data=LS('get',k+'_kw');if(!data){box.innerHTML='<div style="font-size:12px;color:#888">이전 리포트 기록이 없습니다.</div>';box.style.display='block';return;}const months=Object.keys(data).sort().reverse().slice(0,3);box.style.display='block';box.innerHTML=`<div style="font-size:11px;font-weight:700;color:#b8860b;margin-bottom:8px"><i class="ti ti-history"></i> 최근 ${months.length}개월 키워드 이력</div>`+months.map(m=>{const r=data[m]||{};const lvTag=r.level?` <span style="color:#b8860b;font-weight:700">[Gold ${r.level}]</span>`:'';return `<div style="font-size:11px;margin-bottom:5px;padding:6px 9px;background:#fff;border-radius:6px"><b style="color:#b8860b">${m}</b>${lvTag} — 강점: ${(r.strength||[]).join(', ')||'-'} / 보완: ${(r.improve||[]).join(', ')||'-'}</div>`;}).join('');}
+
+function saveReport(){const k=getStudentKey();if(!k){if(g('saveStatus')){g('saveStatus').style.display='block';g('saveStatus').style.color='#e24b4a';g('saveStatus').textContent='학생 이름과 학교를 먼저 입력해주세요.';}return;}const month=val('repMonth')||new Date().toISOString().slice(0,7);const strengths=[...document.querySelectorAll('#strengthChips .chip.on')].map(c=>c.textContent);const improves=[...document.querySelectorAll('#attitudeChips .chip.on')].map(c=>c.textContent);let prev=LS('get',k+'_kw')||{};prev[month]={strength:strengths,improve:improves,level:val('lvSel'),teacher:val('teacher')};const keep=Object.keys(prev).sort().reverse().slice(0,3);const trimmed={};keep.forEach(m=>trimmed[m]=prev[m]);LS('set',k+'_kw',trimmed);if(g('saveStatus')){g('saveStatus').style.display='block';g('saveStatus').style.color='#2d7a4f';g('saveStatus').textContent='리포트가 이력에 저장되었습니다. (최근 3개월 보관)';}const rb=g('resetConfirmBox'),rm=g('resetConfirmMsg');if(rb&&rm){rm.textContent=`${val('stuName')} 학생 리포트가 저장되었습니다. 다음 학생을 작성하시겠어요?`;rb.style.display='block';}}
+
+function resetAll(){state={RD:{},LW:{}};curTest='RD';['strengthAnalysis','improveAnalysis'].forEach(id=>{if(g(id))g(id).textContent='';});['stuName','stuSchool','stuGrade','teacher','repMonth','autoFb','cmtStrength','cmtImprove','cmtExtra','cmtNext'].forEach(id=>{const el=g(id);if(el){el.value='';if(el.dataset)delete el.dataset.edited;}});if(g('lvSel'))g('lvSel').value='';if(g('lvInfo')){g('lvInfo').innerHTML='';g('lvInfo').style.display='none';}['historyAlert','historyBox','resetConfirmBox','saveStatus'].forEach(id=>{if(g(id))g(id).style.display='none';});if(g('reportOut'))g('reportOut').innerHTML='';go(0);}
+
+function copyRpt(){
+  const el=g('reportOut'); if(!el||!el.innerText.trim()){alert('먼저 리포트를 생성해주세요.');return;}
+  const d=levelData();const nm=val('stuName')||'';const sc=[val('stuSchool'),val('stuGrade')].filter(t=>t).join(' ');
+  const tot=integratedTotal();const dm=integratedDomains();
+  const parts=[];
+  const sl=[nm,sc,d?d.label+' '+d.name:''].filter(t=>t).join(' | ');if(sl)parts.push(sl);
+  const rawDisp=Number.isInteger(tot.got)?tot.got:tot.got.toFixed(1);
+  parts.push(`[통합 점수 RD+LW] ${tot.pct}점 (${rawDisp}/${tot.max}) · 등급 ${gradeOf(tot.pct)}`);
+  const st=g('rpt-score-text');if(st)parts.push('▪ 영역별 점수\n'+st.innerText.trim());
+  const gr=g('rpt-growth');if(gr)parts.push('▪ 성장 분석\n'+gr.innerText.trim());
+  const sA=g('strengthAnalysis')?.textContent?.trim()||'';const sT=g('cmtStrength')?.value?.trim()||'';
+  const iA=g('improveAnalysis')?.textContent?.trim()||'';const iT=g('cmtImprove')?.value?.trim()||'';
+  const sB=['이달의 강점',sA,sT].filter(t=>t).join('\n');const iB=['파악된 보완점',iA,iT].filter(t=>t).join('\n');
+  const fp=[sB,iB].filter(t=>t).join('\n\n');if(fp.trim())parts.push(fp.trim());
+  const ex=g('cmtExtra')?.value?.trim();if(ex)parts.push('추가 관찰 메모\n'+ex);
+  const nx=g('cmtNext')?.value?.trim();if(nx)parts.push('▶ 다음 달 지도 방안\n'+nx);
+  const tc=val('teacher')||'선생님';
+  const text=parts.join('\n\n──────────\n\n')+'\n\n파머스국제어학원 광교브랜치 '+tc+' 드림';
+  if(navigator.clipboard?.writeText){navigator.clipboard.writeText(text).then(showCopyToast).catch(()=>fallbackCopy(text));return;}
+  fallbackCopy(text);
+}
+function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;top:-9999px';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');showCopyToast();}catch(e){alert('복사 실패. 직접 선택해 복사해주세요.');}document.body.removeChild(ta);}
+function showCopyToast(){const b=document.querySelector('[onclick="copyRpt()"]');if(b){const o=b.innerHTML;b.innerHTML='<i class="ti ti-check"></i> 복사 완료!';setTimeout(()=>{b.innerHTML=o;},2000);}}
+
+document.addEventListener('DOMContentLoaded',()=>{ g('stuName')?.addEventListener('input',onNameInput);g('stuSchool')?.addEventListener('input',onNameInput); go(0); });
+</script>
+</body>
+</html>
