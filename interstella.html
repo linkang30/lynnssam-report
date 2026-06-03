@@ -93,12 +93,12 @@ select option{background:#fff;color:#1a1a2e}
   <div class="card">
     <div class="ctitle"><i class="ti ti-user"></i>학생 기본 정보</div>
     <div class="row3">
-      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="홍길동" oninput="onNameInput()"></div>
+      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="예: 강코니" oninput="onNameInput()"></div>
       <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 광교초" oninput="onNameInput()"></div>
-      <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 초6"></div>
+      <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 초4"></div>
     </div>
     <div class="row3">
-      <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: 린쌤"></div>
+      <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: Lynn T."></div>
       <div><label>보고서 월</label><input type="text" id="repMonth" placeholder="예: 2026년 6월"></div>
     </div>
     <div style="margin-bottom:10px">
@@ -381,7 +381,7 @@ function generateImproveAnalysis(){const ds=computeDomScore();const box=g('impro
 
 function toggleChip(el,type){el.classList.toggle('on');const ta=g(type==='strength'?'cmtStrength':'cmtImprove');if(!ta?.dataset.edited)buildAutoText(type);}
 function toggleChipNext(el){if(el){el.classList.toggle('on');el.style.borderColor=el.classList.contains('on')?'':(el.dataset.bd||'');}const ta=g('cmtNext');if(ta&&ta.dataset.edited!=='1')buildNextCmt();}
-function buildAutoText(type){const taId=type==='strength'?'cmtStrength':'cmtImprove';const selId=type==='strength'?'strengthChips':'attitudeChips';const chips=[...document.querySelectorAll(`#${selId} .chip.on`)].map(c=>c.textContent);const ta=g(taId);if(!chips.length){ta.value='';return;}const name=val('stuName')||'학생';if(type==='strength')ta.value=chips.map(c=>`${name} 학생은 ${c}.`).join(' ');else ta.value=chips.map(c=>`앞으로 ${c} 꾸준히 실천하면 더욱 성장할 수 있어요.`).join(' ');delete ta.dataset.edited;}
+function buildAutoText(type){const taId=type==='strength'?'cmtStrength':'cmtImprove';const selId=type==='strength'?'strengthChips':'attitudeChips';const chips=[...document.querySelectorAll(`#${selId} .chip.on`)].map(c=>c.textContent);const ta=g(taId);if(!chips.length){ta.value='';return;}const name=val('stuName')||'학생';const finish=s=>/[다요죠]$/.test(s)?s+'.':s;if(type==='strength')ta.value=chips.map(c=>finish(`${name} 학생은 ${c}`)).join(' ');else ta.value=chips.map(c=>finish(c)).join(' ');delete ta.dataset.edited;}
 function buildNextCmt(){const nC=g('nextChips');const ta=g('cmtNext');if(!nC||!ta)return;const chips=[...nC.querySelectorAll('.chip.on')].map(c=>{const cl=c.cloneNode(true);const b=cl.querySelector('.kw-dom');if(b)b.remove();return cl.textContent.trim();}).filter(t=>t);if(!chips.length){ta.value='';delete ta.dataset.edited;return;}ta.value=`다음 달에는 ${chips.join(', ')} 등을 중심으로 지도할 예정입니다.`;delete ta.dataset.edited;}
 
 async function refineText(taId,type){const orig=g(taId).value.trim();if(!orig){alert('먼저 내용을 입력해주세요.');return;}const statusId='refineStatus_'+type;if(g(statusId)){g(statusId).style.display='block';g(statusId).textContent='✨ AI가 작성 중입니다...';}const name=val('stuName')||'학생';const typeGuide={auto:'전체 피드백 — 이번 달 학습 총평',strength:'이달의 강점 — 잘한 점 칭찬',improve:'보완점 — 성장 방향 격려',next:'다음 달 지도 방안'}[type]||'피드백';
