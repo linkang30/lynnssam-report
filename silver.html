@@ -140,9 +140,9 @@ textarea{resize:vertical}
       <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 3학년"></div>
     </div>
     <div class="row3">
+      <div><label>학원 반</label><input type="text" id="sClass" placeholder="예: 월수금 3:00"></div>
       <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: Lynn T."></div>
       <div><label>보고서 월</label><input type="text" id="repMonth" placeholder="예: 2026년 6월"></div>
-
     </div>
     <div style="margin-bottom:10px">
       <label>과정 선택</label>
@@ -1254,6 +1254,7 @@ function buildReport(domScore){
   const school = val('stuSchool')||'-';
   const grade = val('stuGrade')||'-';
   const teacher = val('teacher')||'선생님';
+  const sClass = val('sClass')||'-';
   const month = val('repMonth')||'-';
   let tot = 0;
   for(let i=1;i<=40;i++) tot += parseFloat(g('q'+i)?.value)||0;
@@ -1335,6 +1336,7 @@ function buildReport(domScore){
         <div style="font-size:13px;font-weight:600;color:#444">${lv} · ${teacher}</div>
       </div>
     </div>
+    ${sClass&&sClass!=='-'?`<div style="background:#fdf2f2;border-radius:10px;padding:9px 14px;margin-bottom:16px;border-left:3px solid #c0392b;font-size:12px;color:#555"><span style="color:#999;font-weight:600;margin-right:6px">학원 반</span><span style="font-weight:600;color:#444">${sClass}</span></div>`:''}
     <div id="rpt-textbook" style="background:#fdf2f2;border-radius:10px;padding:16px 18px;margin-bottom:16px;border:0.5px solid #f0c0b8">
       <div style="font-size:10px;font-weight:700;color:#c0392b;letter-spacing:1.2px;margin-bottom:6px">SILVER STELLA ${lv}<span style="background:${lv.startsWith('SB')?'#fdecea':'#fef3e2'};color:${lv.startsWith('SB')?'#c0392b':'#b9770e'};border-radius:5px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px">${lv.startsWith('SB')?'B 과정':'A 과정'}</span></div>
       <div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:4px">THIS MONTH'S UNIT</div>
@@ -1398,8 +1400,9 @@ function copyRpt(){
   const parts = [];
   const stuName2 = val('stuName') || '';
   const stuSchool2 = [val('stuSchool'), val('stuGrade')].filter(t=>t).join(' ');
+  const stuClass2 = val('sClass');
   const stuLv = val('lvSel') ? (LV[val('lvSel')]?.label + ' ' + LV[val('lvSel')]?.name) : '';
-  const studentLine = [stuName2, stuSchool2, stuLv].filter(t=>t).join(' | ');
+  const studentLine = [stuName2, stuSchool2, stuClass2, stuLv].filter(t=>t).join(' | ');
   if(studentLine) parts.push(studentLine);
   const lv2 = val('lvSel');
   const d2 = LV[lv2];
@@ -1475,7 +1478,7 @@ function saveReport(){
   LS('set', k+'_kw', trimmed);
   const hist = LS('get', k+'_hist')||[];
   let tot = 0; for(let i=1;i<=40;i++) tot += parseFloat(g('q'+i)?.value)||0;
-  hist.push({name:val('stuName'),lv:val('lvSel'),school:val('stuSchool'),grade:val('stuGrade'),teacher:val('teacher'),month,score:Math.round(tot*10)/10,date:new Date().toISOString()});
+  hist.push({name:val('stuName'),lv:val('lvSel'),school:val('stuSchool'),grade:val('stuGrade'),cls:val('sClass'),teacher:val('teacher'),month,score:Math.round(tot*10)/10,date:new Date().toISOString()});
   LS('set', k+'_hist', hist);
   if(g('saveBtn')) g('saveBtn').textContent = '저장 완료';
   if(g('saveStatus')){ g('saveStatus').style.display='block'; g('saveStatus').style.color='#2d7a4f'; g('saveStatus').textContent='리포트가 이력에 저장되었습니다. (최근 3개월 보관)'; }
@@ -1487,7 +1490,7 @@ function resetAll(){
   wrongSet.clear();
   const saBox = g('strengthAnalysis'); if(saBox) saBox.textContent='';
   const iaBox = g('improveAnalysis'); if(iaBox) iaBox.textContent='';
-  ['stuName','stuSchool','stuGrade','teacher','repMonth','autoFb','cmtStrength','cmtImprove','cmtExtra','cmtNext'].forEach(id=>{
+  ['stuName','stuSchool','stuGrade','sClass','teacher','repMonth','autoFb','cmtStrength','cmtImprove','cmtExtra','cmtNext'].forEach(id=>{
     const el=g(id); if(el){ el.value=''; delete el.dataset?.edited; }
   });
   for(let i=1;i<=40;i++){ const el=g('q'+i); if(el) el.value='2.5'; }
