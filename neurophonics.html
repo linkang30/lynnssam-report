@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a1a;font-size:14px;line-height:1.6}
@@ -110,6 +112,10 @@ textarea{resize:vertical}
 .rpt-score-big .b{margin-left:auto;font-size:11px;background:rgba(255,255,255,.18);border-radius:6px;padding:4px 11px;font-weight:700}
 .rpt-txt{font-size:12.5px;color:#444;line-height:1.85;background:#f7f9fc;border-radius:9px;padding:12px 15px;white-space:pre-wrap}
 .rpt-foot{text-align:center;font-size:11.5px;color:#888;margin-top:18px;padding-top:14px;border-top:1px solid #eee}
+.hist-box{display:none;background:#fff8f0;border:1px solid #f0b040;border-radius:8px;padding:0;margin-top:12px;font-size:12px;overflow:hidden}
+.hist-head{padding:11px 14px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.hist-body{display:none;padding:0 14px 12px;border-top:0.5px solid #f0d090}
+.bgrn{background:#2d7a4f;color:#fff}.bgrn:hover{background:#246040}
 </style>
 </head>
 <body>
@@ -120,7 +126,7 @@ textarea{resize:vertical}
     <h1 id="hdrTitle"><i class="ti ti-abc"></i> Neuro Phonics — Monthly Report</h1>
     <p id="hdrSub">파머스국제어학원 광교브랜치 · 강사용 · Sound Doctor · Tooth Phonics</p>
   </div>
-  <div class="hbadge">v1.0 (완성)</div>
+  <div class="hbadge">v1.1</div>
 </div>
 
 <div class="steps">
@@ -136,8 +142,8 @@ textarea{resize:vertical}
   <div class="card">
     <div class="ctitle"><i class="ti ti-user"></i>학생 기본 정보</div>
     <div class="row3">
-      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="예: 강코니"></div>
-      <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 광교초"></div>
+      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="예: 강코니" oninput="onNameInput()"></div>
+      <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 광교초" oninput="onNameInput()"></div>
       <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 7세"></div>
     </div>
     <div class="row3">
@@ -168,6 +174,10 @@ textarea{resize:vertical}
       </select>
     </div>
     <div id="lvInfo" style="background:#eef5fc;border:1px solid #c5dbef;border-radius:8px;padding:9px 14px;font-size:12px;color:#456;min-height:32px;display:none"></div>
+    <div id="historyAlert" class="hist-box">
+      <div id="historyAlertHead" class="hist-head" onclick="toggleHistoryPanel()"></div>
+      <div id="historyAlertBody" class="hist-body"></div>
+    </div>
   </div>
   <div class="navrow" style="justify-content:flex-end">
     <button class="btn bprim" onclick="go(1)">시험 오답 선택 <i class="ti ti-arrow-right"></i></button>
@@ -292,6 +302,8 @@ textarea{resize:vertical}
 <div id="s3" class="hidden">
   <div class="card">
     <div class="ctitle"><i class="ti ti-mood-smile"></i>이달의 강점</div>
+    <div style="margin-bottom:12px"><button onclick="showHistory()" style="background:#f8f7f4;border:1px solid #d0d0cc;border-radius:7px;padding:6px 14px;font-size:12px;cursor:pointer;color:#666;display:inline-flex;align-items:center;gap:5px"><i class="ti ti-history" style="font-size:13px"></i>지난 리포트 확인</button></div>
+    <div id="historyBox" style="display:none;background:#fff8f0;border:1px solid #f0b040;border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:12px"></div>
     <div style="background:#f0faf4;border:1px solid #b8e0c8;border-radius:9px;padding:12px 14px;margin-bottom:12px">
       <div style="font-size:10.5px;font-weight:700;color:#1a6640;margin-bottom:6px"><span>📊 Layer 1 — 음가 분석 (자동)</span></div>
       <div id="strengthAnalysis" style="font-size:12px;color:#333;line-height:1.85;min-height:30px;white-space:pre-wrap"></div>
@@ -320,6 +332,21 @@ textarea{resize:vertical}
     <div id="refineStatus_improve" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
   </div>
 
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</div>
+    <div style="background:#eef5fc;border:1px solid #c5dbef;border-radius:9px;padding:11px 13px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:#1565c0;margin-bottom:7px;display:flex;align-items:center;gap:5px"><i class="ti ti-stethoscope" style="font-size:13px"></i>음가 우선순위 진단 <span style="font-weight:500;color:#9bb0c4">— 분석 기반 자동 (참고용)</span></div>
+      <div id="nextPriorityBar"></div>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:#5a7188;margin-bottom:7px">👀 지도 키워드 선택 <span style="font-weight:400;color:#aaa">— 약한 음가는 자동 선택됩니다</span></div>
+    <div class="chips" id="nextChips"></div>
+    <div style="position:relative">
+      <textarea id="cmtNext" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-bottom:34px"></textarea>
+      <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#1565c0;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+    </div>
+    <div id="refineStatus_next" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
+  </div>
+
   <div class="navrow">
     <button class="btn bsec" onclick="go(2)"><i class="ti ti-arrow-left"></i> 분석</button>
     <button class="btn bprim" onclick="go(4)">리포트 <i class="ti ti-arrow-right"></i></button>
@@ -331,7 +358,22 @@ textarea{resize:vertical}
   </div>
   <div class="navrow">
     <button class="btn bsec" onclick="go(3)"><i class="ti ti-arrow-left"></i> 코멘트</button>
-    <button class="btn bsec" onclick="copyReport()"><i class="ti ti-copy"></i>텍스트 복사</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn bsec" onclick="copyReport()"><i class="ti ti-copy"></i>텍스트 복사</button>
+      <button class="btn bgrn" id="saveBtn" onclick="saveReport()"><i class="ti ti-device-floppy"></i>이력 저장</button>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+    <button class="btn bsec" onclick="downloadImage()" style="background:#eef5fc;border-color:#c5dbef;color:#1565c0"><i class="ti ti-photo-down"></i>이미지 저장 · 카톡 전송용</button>
+    <button class="btn bsec" onclick="downloadPDF()" style="background:#fef0f0;border-color:#f0cccc;color:#c0392b"><i class="ti ti-file-type-pdf"></i>PDF 저장 · 인쇄 보관용</button>
+  </div>
+  <div id="saveStatus" style="font-size:12px;color:#2d7a4f;margin-top:8px;text-align:right;display:none"></div>
+  <div id="resetConfirmBox" style="display:none;margin-top:10px;background:#eaf3de;border:1px solid #90c060;border-radius:10px;padding:13px 16px">
+    <div style="font-size:12px;color:#2d7a4f;font-weight:600;margin-bottom:8px"><i class="ti ti-circle-check" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i><span id="resetConfirmMsg"></span></div>
+    <div style="display:flex;gap:7px">
+      <button onclick="resetAll()" style="background:#2d7a4f;color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer">초기화하고 다음 학생 작성</button>
+      <button onclick="g('resetConfirmBox').style.display='none'" style="background:#fff;color:#555;border:1px solid #ccc;border-radius:7px;padding:7px 14px;font-size:12px;cursor:pointer">이 화면 유지</button>
+    </div>
   </div>
 </div>
 
@@ -372,6 +414,77 @@ let writeState={};   // 인덱스 -> 'ok'|'half'|'wrong'
 let spkSoundState={};// 인덱스 -> true(맞음) 기본 / false(틀림)
 let spkWordState={};
 let bonusOn=false;
+
+/* ===== 이력 저장 (silver 방식 · prefix np_ · 음가 포함) ===== */
+function LS(action,key,data){
+  const PFX='np_';
+  if(action==='get')return JSON.parse(localStorage.getItem(PFX+key)||'null');
+  if(action==='set')localStorage.setItem(PFX+key,JSON.stringify(data));
+}
+function getStudentKey(){
+  const n=val('stuName').replace(/\s/g,'');
+  const s=val('stuSchool').replace(/\s/g,'');
+  return n?`${s}_${n}`:null;
+}
+function onNameInput(){
+  const k=getStudentKey();
+  if(k&&LS('get',k+'_kw'))showHistoryAlert();
+  else{const box=g('historyAlert');if(box)box.style.display='none';}
+}
+function toggleHistoryPanel(){
+  const b=g('historyAlertBody'),ic=g('histToggleIcon');
+  if(!b)return;
+  const open=b.style.display==='none'||!b.style.display;
+  b.style.display=open?'block':'none';
+  if(ic)ic.className='ti '+(open?'ti-chevron-up':'ti-chevron-down');
+}
+function showHistoryAlert(){
+  const k=getStudentKey(); if(!k)return;
+  const data=LS('get',k+'_kw');
+  const box=g('historyAlert'),head=g('historyAlertHead'),body=g('historyAlertBody');
+  if(!box||!head||!body)return;
+  if(!data){box.style.display='none';return;}
+  const months=Object.keys(data).sort().reverse().slice(0,3);
+  if(months.length===0){box.style.display='none';return;}
+  const name=val('stuName')||'학생';
+  head.innerHTML=`<i class="ti ti-history" style="font-size:14px;color:#854f0b;flex-shrink:0"></i>`+
+    `<div style="flex:1"><strong>${name}</strong> 학생의 최근 ${months.length}개월 이력이 있습니다.`+
+    `<span style="color:#aa8030;margin-left:5px">${months.join(' · ')}</span></div>`+
+    `<i id="histToggleIcon" class="ti ti-chevron-down" style="font-size:15px;color:#854f0b"></i>`;
+  body.innerHTML=months.map((m,i)=>{
+    const r=data[m]||{};
+    const lvTag=r.level?`<span style="background:#e8f2fb;color:#1565c0;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:5px">${r.level}</span>`:'';
+    const scoreTag=(r.score!=null)?`<span style="color:#1565c0;font-size:10px;font-weight:700;margin-left:5px">${r.score}점</span>`:'';
+    const ph=r.phon?Object.keys(r.phon).map(kk=>`<span style="background:#eef5fc;color:#0d4f9e;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${kk} ${r.phon[kk]}%</span>`).join(''):'';
+    const sC=(r.strength&&r.strength.length)?r.strength.map(x=>`<span style="background:#eaf3de;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#bbb;font-size:10px">없음</span>';
+    const aC=(r.improve&&r.improve.length)?r.improve.map(x=>`<span style="background:#faeeda;color:#854f0b;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#bbb;font-size:10px">없음</span>';
+    return `<div style="padding-top:11px${i<months.length-1?';border-bottom:0.5px solid #f0d090;padding-bottom:11px':''}">`+
+      `<div style="font-size:11px;font-weight:700;color:#1565c0;margin-bottom:5px">${m}${lvTag}${scoreTag}</div>`+
+      (ph?`<div style="margin-bottom:4px"><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">음가</span>${ph}</div>`:'')+
+      `<div style="margin-bottom:4px"><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">강점</span>${sC}</div>`+
+      `<div><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">보완점</span>${aC}</div></div>`;
+  }).join('');
+  box.style.display='block';
+}
+function showHistory(){
+  const k=getStudentKey();
+  const box=g('historyBox');
+  if(!box)return;
+  if(!k){box.innerHTML='<div style="font-size:12px;color:#888">학생 이름과 학교를 먼저 입력해주세요.</div>';box.style.display='block';return;}
+  const data=LS('get',k+'_kw');
+  if(!data){box.innerHTML='<div style="font-size:12px;color:#888">이전 리포트 기록이 없습니다.</div>';box.style.display='block';return;}
+  const months=Object.keys(data).sort().reverse().slice(0,3);
+  box.style.display='block';
+  box.innerHTML=`<div style="font-size:11px;font-weight:700;color:#854f0b;margin-bottom:8px"><i class="ti ti-history"></i> 최근 ${months.length}개월 이력</div>`+
+    months.map(m=>{
+      const r=data[m]||{};
+      const lvTag=r.level?` <span style="color:#1565c0;font-weight:700">[${r.level}]</span>`:'';
+      const sc=(r.score!=null)?` <span style="color:#1565c0">${r.score}점</span>`:'';
+      const ph=r.phon?' / 음가: '+Object.keys(r.phon).map(kk=>`${kk} ${r.phon[kk]}%`).join(', '):'';
+      return `<div style="font-size:11px;margin-bottom:5px;padding:6px 9px;background:#fff;border-radius:6px">`+
+      `<b style="color:#1565c0">${m}</b>${lvTag}${sc}${ph}<br>강점: ${(r.strength||[]).join(', ')||'-'} / 보완: ${(r.improve||[]).join(', ')||'-'}</div>`;
+    }).join('');
+}
 
 function onLvChange(){
   curLv=val('lvSel');
@@ -644,6 +757,82 @@ function buildAutoFeedback(){
   g('improveAnalysis').textContent=iTxt;
 }
 
+/* ===== 다음 달 지도 방안 ===== */
+const NEXT_KW={
+  'a':["단모음 a 단어(bag, pan, tap) 집중 반복","a 소리 입모양 연습","a 단어 카드 읽기"],
+  'e':["단모음 e 단어(beg, pen, ten) 집중 반복","e와 i 소리 구별 연습","e 단어 카드 읽기"],
+  'i':["단모음 i 단어(big, pin, lid) 집중 반복","i 소리 입모양 연습","i 단어 카드 읽기"],
+  '자음':["자음 소리 집중 반복","헷갈리는 자음 짝 구별(b/d, p/g)","자음+모음 블렌딩 연습"],
+  '모음':["모음 소리 집중 반복","단모음 5개 소리 구별","모음 듣고 고르기"]
+};
+const NEXT_GENERAL=["매일 소리 내어 읽기 습관","배운 단어 집에서 복습","CVC 단어 블렌딩 꾸준히 연습","새 소리 들으며 따라 말하기"];
+
+function buildNextPlan(){
+  const d=LV[curLv]; if(!d)return;
+  const ps=phonemeStats();
+  const rows=[
+    {key:'a',n:'단모음 a',ok:ps.vowel.a.ok,tot:ps.vowel.a.tot},
+    {key:'e',n:'단모음 e',ok:ps.vowel.e.ok,tot:ps.vowel.e.tot},
+    {key:'i',n:'단모음 i',ok:ps.vowel.i.ok,tot:ps.vowel.i.tot},
+    {key:'자음',n:'자음 음가',ok:ps.snd.C.ok,tot:ps.snd.C.tot},
+    {key:'모음',n:'모음 음가',ok:ps.snd.V.ok,tot:ps.snd.V.tot}
+  ];
+  rows.forEach(r=>{r.p=pct(r.ok,r.tot);r.prio=r.p<70?'weak':r.p<90?'mid':'good';});
+  // 우선순위 진단 바 (약한 것부터)
+  const order={weak:0,mid:1,good:2};
+  const sorted=[...rows].sort((a,b)=>order[a.prio]-order[b.prio]);
+  const sty={weak:{dot:'!',col:'#a32d2d',bg:'#fcebeb',tip:'보강 우선'},mid:{dot:'~',col:'#a8730a',bg:'#fff4e0',tip:'성장 중'},good:{dot:'+',col:'#1a7a40',bg:'#eaf6ee',tip:'강점'}};
+  let pb=sorted.map(r=>{const s=sty[r.prio];return `<span style="display:inline-block;background:${s.bg};color:${s.col};border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;margin:0 5px 5px 0">[${s.dot}] ${r.n} ${r.p}% · ${s.tip}</span>`;}).join('');
+  pb+=`<div style="font-size:10px;color:#9bb0c4;margin-top:4px;line-height:1.6">[!] 70% 미만 보강 우선 · [~] 70~89% 성장 중 · [+] 90% 이상 강점 → 약한 음가 키워드가 아래에서 자동 선택됩니다.</div>`;
+  g('nextPriorityBar').innerHTML=pb;
+  // 키워드 칩 (약한 음가 먼저, 그다음 보통, 마지막에 공통)
+  const result=[];
+  sorted.forEach(r=>{(NEXT_KW[r.key]||[]).forEach(kw=>result.push({kw,prio:r.prio}));});
+  NEXT_GENERAL.forEach(kw=>result.push({kw,prio:'general'}));
+  const chipSty={weak:'#e6a3a3',mid:'#e8c98a',good:'#a9cd86',general:'#d0cfc8'};
+  g('nextChips').innerHTML=result.map((r,i)=>`<span class="chip" data-i="${i}" onclick="toggleNextChip(${i})" style="border-color:${chipSty[r.prio]}">${r.kw}</span>`).join('');
+  // 약한 음가 키워드 자동 선택 (최대 3개)
+  let auto=0;
+  result.forEach((r,i)=>{
+    if(auto>=3||r.prio!=='weak')return;
+    const chip=g('nextChips').querySelector(`[data-i="${i}"]`);
+    if(chip){chip.classList.add('on');auto++;}
+  });
+  buildNextText();
+}
+
+function toggleNextChip(i){
+  const chip=g('nextChips').querySelector(`[data-i="${i}"]`);
+  if(chip)chip.classList.toggle('on');
+  buildNextText();
+}
+
+function buildNextText(){
+  const ta=g('cmtNext'); if(!ta)return;
+  if(ta.dataset.edited==='1')return;
+  const sel=[...g('nextChips').querySelectorAll('.chip.on')].map(c=>c.textContent);
+  const ps=phonemeStats();
+  const weakNames=[];
+  if(ps){
+    if(pct(ps.vowel.a.ok,ps.vowel.a.tot)<70)weakNames.push('단모음 a');
+    if(pct(ps.vowel.e.ok,ps.vowel.e.tot)<70)weakNames.push('단모음 e');
+    if(pct(ps.vowel.i.ok,ps.vowel.i.tot)<70)weakNames.push('단모음 i');
+    if(pct(ps.snd.C.ok,ps.snd.C.tot)<70)weakNames.push('자음');
+    if(pct(ps.snd.V.ok,ps.snd.V.tot)<70)weakNames.push('모음');
+  }
+  let txt='';
+  if(weakNames.length){
+    txt=`다음 달에는 ${weakNames.join(', ')} 소리를 누적 반복하며 더 단단히 다지고, 새로 배우는 소리에서도 단자음과 단모음을 결합해 읽는 원리를 이어서 연습하겠습니다.`;
+  }else{
+    txt=`다음 달에는 지금까지 익힌 소리를 누적 반복하면서, 단자음과 단모음을 결합해 읽는 원리를 새로운 음가로 확장해 나가겠습니다.`;
+  }
+  if(sel.length){
+    txt+=` 특히 ${sel.join(', ')}을(를) 중심으로 지도할 예정입니다.`;
+  }
+  ta.value=txt;
+  delete ta.dataset.edited;
+}
+
 function buildReport(){
   const d=LV[curLv];
   const out=g('reportOut');
@@ -679,6 +868,7 @@ function buildReport(){
   const iAuto=g('improveAnalysis').textContent;
   const sBlock=[sAuto,val('cmtStrength')].filter(t=>t&&t.trim()).join('\n');
   const iBlock=[iAuto,val('cmtImprove')].filter(t=>t&&t.trim()).join('\n');
+  const nBlock=val('cmtNext');
   out.innerHTML=`
     <div class="rpt-hd"><h2>${d.label} Monthly Report</h2><div class="sub">${month} · 파머스국제어학원 광교브랜치</div></div>
     <div class="rpt-stu">
@@ -691,6 +881,7 @@ function buildReport(){
     <div class="rpt-sec"><h3><i class="ti ti-volume"></i>음가 세부 분석 (Speaking 기반)</h3>${phonRows}</div>
     <div class="rpt-sec"><h3><i class="ti ti-mood-smile"></i>이달의 강점</h3><div class="rpt-txt">${sBlock||'-'}</div></div>
     <div class="rpt-sec"><h3><i class="ti ti-bulb"></i>더 키워가요</h3><div class="rpt-txt">${iBlock||'-'}</div></div>
+    ${nBlock?`<div class="rpt-sec"><h3><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</h3><div class="rpt-txt">${nBlock}</div></div>`:''}
     <div class="rpt-foot">파머스국제어학원 광교브랜치 · Sound Doctor Program · ${teacher} 드림</div>
   `;
 }
@@ -708,13 +899,14 @@ function copyReport(){
   const iAuto=g('improveAnalysis').textContent;
   const sBlock=['[이달의 강점]',sAuto,val('cmtStrength')].filter(t=>t&&t.trim()).join('\n');
   const iBlock=['[더 키워가요]',iAuto,val('cmtImprove')].filter(t=>t&&t.trim()).join('\n');
+  const nBlock=val('cmtNext')?['[다음 달 지도 방안]',val('cmtNext')].join('\n'):'';
   const teacher=val('teacher')||'선생님';
   const parts=[
     `${d.label} Monthly Report`,
     stu,
     `종합 점수: ${total} / 100점`+(bonusOn?` (보너스 +${bonusPts})`:''),
     `영역별 · Voca ${sc.voca}/12 · Listening ${sc.list}/14 · Writing ${sc.write}/24 · Speaking ${sc.spk}/60`,
-    sBlock, iBlock,
+    sBlock, iBlock, nBlock,
     `파머스국제어학원 광교브랜치 ${teacher} 드림`
   ].filter(t=>t&&t.trim());
   const text=parts.join('\n\n');
@@ -723,13 +915,123 @@ function copyReport(){
   }
 }
 
+function fileBaseName(){
+  const d=LV[curLv];
+  const name=val('stuName')||'학생';
+  const lvName=d?d.label:'리포트';
+  const month=val('repMonth')||'';
+  return [name,lvName,month].filter(t=>t).join('_');
+}
+
+function downloadImage(){
+  const el=g('reportOut');
+  if(!el||!el.innerHTML.trim()){alert('먼저 리포트를 생성해주세요.');return;}
+  if(typeof html2canvas==='undefined'){alert('이미지 라이브러리를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');return;}
+  html2canvas(el,{scale:2,backgroundColor:'#ffffff',useCORS:true}).then(canvas=>{
+    const link=document.createElement('a');
+    link.download=fileBaseName()+'.png';
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+  }).catch(()=>alert('이미지 저장 중 오류가 발생했습니다.'));
+}
+
+function downloadPDF(){
+  const el=g('reportOut');
+  if(!el||!el.innerHTML.trim()){alert('먼저 리포트를 생성해주세요.');return;}
+  if(typeof html2canvas==='undefined'||!window.jspdf){alert('PDF 라이브러리를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');return;}
+  html2canvas(el,{scale:2,backgroundColor:'#ffffff',useCORS:true}).then(canvas=>{
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF('p','mm','a4');
+    const pageW=210, pageH=297;
+    const imgW=pageW;
+    const imgH=canvas.height*imgW/canvas.width;
+    let left=imgH;
+    let pos=0;
+    const imgData=canvas.toDataURL('image/png');
+    pdf.addImage(imgData,'PNG',0,pos,imgW,imgH);
+    left-=pageH;
+    while(left>0){
+      pos-=pageH;
+      pdf.addPage();
+      pdf.addImage(imgData,'PNG',0,pos,imgW,imgH);
+      left-=pageH;
+    }
+    pdf.save(fileBaseName()+'.pdf');
+  }).catch(()=>alert('PDF 저장 중 오류가 발생했습니다.'));
+}
+
+function saveReport(){
+  const k=getStudentKey();
+  if(!k){if(g('saveStatus')){g('saveStatus').style.display='block';g('saveStatus').style.color='#e24b4a';g('saveStatus').textContent='학생 이름과 학교를 먼저 입력해주세요.';}return;}
+  if(!curLv){if(g('saveStatus')){g('saveStatus').style.display='block';g('saveStatus').style.color='#e24b4a';g('saveStatus').textContent='과정을 먼저 선택해주세요.';}return;}
+  const month=val('repMonth')||new Date().toISOString().slice(0,7);
+  const strengths=[...document.querySelectorAll('#strengthChips .chip.on')].map(c=>c.textContent);
+  const improves=[...document.querySelectorAll('#improveChips .chip.on')].map(c=>c.textContent);
+  const sc=computeScores();
+  const base=sc.voca+sc.list+sc.write+sc.spk;
+  let bonusPts=0;
+  if(bonusOn){const bc=Math.min(48,Math.max(0,parseInt(g('cBonus').value)||0));bonusPts=Math.floor(bc/6);}
+  let total=(base+bonusPts)*100/110; if(total>100)total=100; total=Math.round(total*10)/10;
+  const ps=phonemeStats();
+  const phon={
+    'a':pct(ps.vowel.a.ok,ps.vowel.a.tot),
+    'e':pct(ps.vowel.e.ok,ps.vowel.e.tot),
+    'i':pct(ps.vowel.i.ok,ps.vowel.i.tot),
+    '자음':pct(ps.snd.C.ok,ps.snd.C.tot),
+    '모음':pct(ps.snd.V.ok,ps.snd.V.tot)
+  };
+  let prev=LS('get',k+'_kw')||{};
+  prev[month]={strength:strengths,improve:improves,level:val('lvSel'),teacher:val('teacher'),score:total,phon:phon};
+  const keepMonths=Object.keys(prev).sort().reverse().slice(0,3);
+  const trimmed={};
+  keepMonths.forEach(mm=>{trimmed[mm]=prev[mm];});
+  LS('set',k+'_kw',trimmed);
+  const hist=LS('get',k+'_hist')||[];
+  hist.push({name:val('stuName'),lv:val('lvSel'),school:val('stuSchool'),grade:val('stuGrade'),cls:val('sClass'),teacher:val('teacher'),month,score:total,phon:phon,date:new Date().toISOString()});
+  LS('set',k+'_hist',hist);
+  if(g('saveBtn'))g('saveBtn').textContent='저장 완료';
+  if(g('saveStatus')){g('saveStatus').style.display='block';g('saveStatus').style.color='#2d7a4f';g('saveStatus').textContent='리포트가 이력에 저장되었습니다. (최근 3개월 보관)';}
+  const rb=g('resetConfirmBox'),rm=g('resetConfirmMsg');
+  if(rb&&rm){rm.textContent=`${val('stuName')} 학생 리포트가 저장되었습니다. 다음 학생을 작성하시겠어요?`;rb.style.display='block';}
+}
+
+function resetAll(){
+  writeState={};spkSoundState={};spkWordState={};bonusOn=false;curLv="";
+  ['stuName','stuSchool','stuGrade','sClass','teacher','repMonth','cmtStrength','cmtImprove','cmtNext'].forEach(id=>{
+    const el=g(id); if(el){el.value='';delete el.dataset.edited;}
+  });
+  ['cVoca','cList','cConv'].forEach((id,idx)=>{const el=g(id);if(el)el.value=[12,14,10][idx];});
+  if(g('cBonus'))g('cBonus').value=0;
+  if(g('lvSel'))g('lvSel').value='';
+  if(g('lvInfo')){g('lvInfo').innerHTML='';g('lvInfo').style.display='none';}
+  if(g('bonusToggle'))g('bonusToggle').classList.remove('on');
+  if(g('bonusBody'))g('bonusBody').classList.add('hidden');
+  if(g('liveBonus'))g('liveBonus').style.display='none';
+  if(g('historyAlert'))g('historyAlert').style.display='none';
+  if(g('historyBox'))g('historyBox').style.display='none';
+  if(g('strengthAnalysis'))g('strengthAnalysis').textContent='';
+  if(g('improveAnalysis'))g('improveAnalysis').textContent='';
+  if(g('strengthChips')){g('strengthChips').innerHTML='';delete g('strengthChips').dataset.built;}
+  if(g('improveChips'))g('improveChips').innerHTML='';
+  if(g('nextChips'))g('nextChips').innerHTML='';
+  if(g('nextPriorityBar'))g('nextPriorityBar').innerHTML='';
+  if(g('reportOut'))g('reportOut').innerHTML='';
+  if(g('resetConfirmBox'))g('resetConfirmBox').style.display='none';
+  if(g('saveBtn'))g('saveBtn').innerHTML='<i class="ti ti-device-floppy"></i>이력 저장';
+  if(g('saveStatus'))g('saveStatus').style.display='none';
+  const hdrT=g('hdrTitle'),hdrS=g('hdrSub');
+  if(hdrT)hdrT.innerHTML='<i class="ti ti-abc"></i> Neuro Phonics — Monthly Report';
+  if(hdrS)hdrS.textContent='파머스국제어학원 광교브랜치 · 강사용 · Sound Doctor · Tooth Phonics';
+  go(0);
+}
+
 async function refineText(taId,type){
   const orig=g(taId).value.trim();
   if(!orig){alert('먼저 내용을 입력해주세요.');return;}
   const statusId='refineStatus_'+type;
   if(g(statusId)){g(statusId).style.display='block';g(statusId).textContent='\u2728 AI가 작성 중입니다...';}
   const name=val('stuName')||'우리 친구';
-  const typeGuide={strength:'이달의 강점 \u2014 발음과 소리 학습에서 잘한 점을 따뜻하게 칭찬',improve:'더 키워가요 \u2014 앞으로 발음과 읽기에서 성장할 방향을 다정하게 격려'}[type]||'피드백';
+  const typeGuide={strength:'이달의 강점 \u2014 발음과 소리 학습에서 잘한 점을 따뜻하게 칭찬',improve:'더 키워가요 \u2014 앞으로 발음과 읽기에서 성장할 방향을 다정하게 격려',next:'다음 달 지도 방안 \u2014 이번 달 약한 음가를 누적 반복하고 단자음·단모음 결합 원리를 이어간다는 계획을 따뜻하게 안내'}[type]||'피드백';
   const systemPrompt=`당신은 파머스국제어학원 광교브랜치에서 ${name} 학생을 직접 가르치는 파닉스 담임 선생님입니다. 사운드닥터(Sound Doctor)는 알파벳 음가와 발음, 소리 내어 읽기를 배우는 과정이고, 학생들은 유아\uB098 초등 저학년의 어린 친구들입니다. 이 리포트는 담임 선생님이 학부모님께 직접 쓰는 글입니다.
 아래 내용을 학부모에게 보내는 월간 리포트 문장으로 자연스럽게 다듬어 주세요.
 [이 섹션의 목적] ${typeGuide}
@@ -762,7 +1064,7 @@ function go(step){
   });
   if(step===1&&curLv){recalc();}
   if(step===2){buildAnalysis();}
-  if(step===3){setTimeout(buildAutoFeedback,0);}
+  if(step===3){setTimeout(()=>{buildAutoFeedback();buildNextPlan();},0);}
   if(step===4){setTimeout(()=>{buildAutoFeedback();buildReport();},0);}
   window.scrollTo(0,0);
 }
