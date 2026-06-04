@@ -877,10 +877,14 @@ function buildReport(){
       <div class="cell"><div class="lab">담임</div><div class="v">${teacher}</div></div>
     </div>
     <div class="rpt-score-big"><div><div class="n">${total}</div><div class="l">종합 점수 (100점 만점)</div></div>${bonusOn?`<div class="b">보너스 +${bonusPts}</div>`:''}</div>
-    <div class="rpt-sec"><h3><i class="ti ti-chart-bar"></i>영역별 점수</h3>${areaRows}</div>
-    <div class="rpt-sec"><h3><i class="ti ti-volume"></i>음가 세부 분석 (Speaking 기반)</h3>${phonRows}</div>
-    <div class="rpt-sec"><h3><i class="ti ti-mood-smile"></i>이달의 강점</h3><div class="rpt-txt">${sBlock||'-'}</div></div>
-    <div class="rpt-sec"><h3><i class="ti ti-bulb"></i>더 키워가요</h3><div class="rpt-txt">${iBlock||'-'}</div></div>
+    <div class="rpt-sec" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div><h3><i class="ti ti-chart-bar"></i>영역별 점수</h3>${areaRows}</div>
+      <div><h3><i class="ti ti-volume"></i>음가 세부 분석</h3>${phonRows}</div>
+    </div>
+    <div class="rpt-sec" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div><h3><i class="ti ti-mood-smile"></i>이달의 강점</h3><div class="rpt-txt">${sBlock||'-'}</div></div>
+      <div><h3><i class="ti ti-bulb"></i>더 키워가요</h3><div class="rpt-txt">${iBlock||'-'}</div></div>
+    </div>
     ${nBlock?`<div class="rpt-sec"><h3><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</h3><div class="rpt-txt">${nBlock}</div></div>`:''}
     <div class="rpt-foot">파머스국제어학원 광교브랜치 · Sound Doctor Program · ${teacher} 드림</div>
   `;
@@ -923,6 +927,18 @@ function fileBaseName(){
   return [name,lvName,month].filter(t=>t).join('_');
 }
 
+function captureReport(){
+  const el=g('reportOut');
+  if(!el||!el.innerHTML.trim())return null;
+  const wrap=document.createElement('div');
+  wrap.style.cssText='position:fixed;left:-9999px;top:0;width:880px;background:#ffffff';
+  const clone=el.cloneNode(true);
+  clone.style.padding='30px';
+  wrap.appendChild(clone);
+  document.body.appendChild(wrap);
+  return wrap;
+}
+
 function downloadImage(){
   const el=g('reportOut');
   if(!el||!el.innerHTML.trim()){alert('먼저 리포트를 생성해주세요.');return;}
@@ -939,25 +955,27 @@ function downloadPDF(){
   const el=g('reportOut');
   if(!el||!el.innerHTML.trim()){alert('먼저 리포트를 생성해주세요.');return;}
   if(typeof html2canvas==='undefined'||!window.jspdf){alert('PDF 라이브러리를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');return;}
-  html2canvas(el,{scale:2,backgroundColor:'#ffffff',useCORS:true}).then(canvas=>{
+  const wrap=captureReport();
+  html2canvas(wrap,{scale:2,backgroundColor:'#ffffff',useCORS:true}).then(canvas=>{
+    if(wrap.parentNode)document.body.removeChild(wrap);
     const {jsPDF}=window.jspdf;
     const pdf=new jsPDF('p','mm','a4');
     const pageW=210, pageH=297;
-    const imgW=pageW;
-    const imgH=canvas.height*imgW/canvas.width;
-    let left=imgH;
-    let pos=0;
-    const imgData=canvas.toDataURL('image/png');
-    pdf.addImage(imgData,'PNG',0,pos,imgW,imgH);
-    left-=pageH;
-    while(left>0){
-      pos-=pageH;
-      pdf.addPage();
-      pdf.addImage(imgData,'PNG',0,pos,imgW,imgH);
-      left-=pageH;
+    const margin=8;                       // 페이지 가장자리 여백(mm)
+    const availW=pageW-margin*2;
+    const availH=pageH-margin*2;
+    // 캔버스 비율 유지하며 A4 한 장(여백 안)에 들어가도록 축소
+    let imgW=availW;
+    let imgH=canvas.height*imgW/canvas.width;
+    if(imgH>availH){                      // 세로가 넘치면 높이 기준으로 맞춤
+      imgH=availH;
+      imgW=canvas.width*imgH/canvas.height;
     }
+    const x=(pageW-imgW)/2;               // 가운데 정렬
+    const y=margin;
+    pdf.addImage(canvas.toDataURL('image/png'),'PNG',x,y,imgW,imgH);
     pdf.save(fileBaseName()+'.pdf');
-  }).catch(()=>alert('PDF 저장 중 오류가 발생했습니다.'));
+  }).catch(()=>{if(wrap.parentNode)document.body.removeChild(wrap);alert('PDF 저장 중 오류가 발생했습니다.');});
 }
 
 function saveReport(){
