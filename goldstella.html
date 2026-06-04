@@ -145,7 +145,7 @@ select option{background:#fff;color:#1a1a2e}
 
 <div class="steps">
   <button id="sb0" class="sbtn active" onclick="go(0)"><i class="ti ti-user"></i>학생 정보</button>
-  <button id="sb1" class="sbtn" onclick="go(1)"><i class="ti ti-checklist"></i>시험 입력</button>
+  <button id="sb1" class="sbtn" onclick="go(1)"><i class="ti ti-target"></i>시험 오답 선택</button>
   <button id="sb2" class="sbtn" onclick="go(2)"><i class="ti ti-chart-bar"></i>통합 분석</button>
   <button id="sb3" class="sbtn" onclick="go(3)"><i class="ti ti-pencil"></i>코멘트</button>
   <button id="sb4" class="sbtn" onclick="go(4)"><i class="ti ti-file-text"></i>리포트</button>
@@ -172,14 +172,14 @@ select option{background:#fff;color:#1a1a2e}
     </div>
   </div>
   <div class="navrow" style="justify-content:flex-end">
-    <button class="btn bprim" onclick="go(1)">시험 입력 <i class="ti ti-arrow-right"></i></button>
+    <button class="btn bprim" onclick="go(1)">시험 오답 선택 <i class="ti ti-arrow-right"></i></button>
   </div>
 </div>
 
 <!-- STEP 1 -->
 <div id="s1" class="hidden">
   <div class="card">
-    <div class="ctitle"><i class="ti ti-checklist"></i>시험별 오답 입력</div>
+    <div class="ctitle"><i class="ti ti-checklist"></i>시험별 오답 선택</div>
     <div class="testtabs" id="testTabs"></div>
     <div class="legend">
       <span style="background:#fafaff;border:1px solid #ccc;color:#2f855a">정답 (클릭 전)</span>
