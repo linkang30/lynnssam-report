@@ -124,7 +124,7 @@ textarea{resize:vertical}
 
 <div class="steps">
   <button id="sb0" class="sbtn active" onclick="go(0)"><i class="ti ti-user"></i>학생 정보</button>
-  <button id="sb1" class="sbtn" onclick="go(1)"><i class="ti ti-target"></i>오답 선택</button>
+  <button id="sb1" class="sbtn" onclick="go(1)"><i class="ti ti-target"></i>시험 오답 선택</button>
   <button id="sb2" class="sbtn" onclick="go(2)"><i class="ti ti-chart-bar"></i>역량 분석</button>
   <button id="sb3" class="sbtn" onclick="go(3)"><i class="ti ti-pencil"></i>코멘트</button>
   <button id="sb4" class="sbtn" onclick="go(4)"><i class="ti ti-file-text"></i>리포트</button>
@@ -135,12 +135,12 @@ textarea{resize:vertical}
   <div class="card">
     <div class="ctitle"><i class="ti ti-user"></i>학생 기본 정보</div>
     <div class="row3">
-      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="홍길동" oninput="onNameInput()"></div>
-      <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 광교초등학교" oninput="onNameInput()"></div>
+      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="예: 강코니" oninput="onNameInput()"></div>
+      <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 광교초" oninput="onNameInput()"></div>
       <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 3학년"></div>
     </div>
     <div class="row3">
-      <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: 김선생님"></div>
+      <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: Lynn T."></div>
       <div><label>보고서 월</label><input type="text" id="repMonth" placeholder="예: 2026년 6월"></div>
 
     </div>
@@ -249,9 +249,8 @@ textarea{resize:vertical}
       </div>
 
       <div style="background:#f0faf4;border:1px solid #b8e0c8;border-radius:9px;padding:12px 14px;margin-bottom:10px">
-        <div style="font-size:10.5px;font-weight:700;color:#1a6640;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:10.5px;font-weight:700;color:#1a6640;margin-bottom:6px">
           <span>📊 Layer 1 — 영어 역량 분석 <span style="font-weight:400;color:#666">(오답 기반 자동 생성)</span></span>
-          <button onclick="generateStrengthAnalysis()" style="background:#2d7a4f;color:#fff;border:none;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:3px"><i class="ti ti-refresh" style="font-size:11px"></i>재생성</button>
         </div>
         <div id="strengthAnalysis" style="font-size:12px;color:#333;line-height:1.85;min-height:40px;white-space:pre-wrap"></div>
       </div>
@@ -278,9 +277,8 @@ textarea{resize:vertical}
       </div>
 
       <div style="background:#fffbf0;border:1px solid #fce8cd;border-radius:9px;padding:12px 14px;margin-bottom:10px">
-        <div style="font-size:10.5px;font-weight:700;color:#854f0b;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:10.5px;font-weight:700;color:#854f0b;margin-bottom:6px">
           <span>📊 Layer 1 — 영어 역량 분석 <span style="font-weight:400;color:#666">(오답 기반 자동 생성)</span></span>
-          <button onclick="generateImproveAnalysis()" style="background:#854f0b;color:#fff;border:none;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:3px"><i class="ti ti-refresh" style="font-size:11px"></i>재생성</button>
         </div>
         <div id="improveAnalysis" style="font-size:12px;color:#333;line-height:1.85;min-height:40px;white-space:pre-wrap"></div>
       </div>
@@ -1167,10 +1165,13 @@ function buildAutoText(type){
   const ta = g(taId);
   if(!chips.length){ ta.value=''; return; }
   const name = val('stuName')||'학생';
+  // 키워드가 '~요/~어요'로 끝나는 완결 문장이므로 조사 템플릿 없이 그대로 이어붙인다.
+  // 종결어미로 끝나면 마침표를, 그 외(명사구 등)는 마침표 없이 둔다.
+  const finish = s => /[다요죠]$/.test(s) ? s + '.' : s;
   if(type==='strength'){
-    ta.value = chips.map(c=>`${name} 학생은 ${c}.`).join(' ');
+    ta.value = chips.map(c=>finish(`${name} 학생은 ${c}`)).join(' ');
   } else {
-    ta.value = chips.map(c=>`앞으로 ${c}을/를 꾸준히 실천하면 더욱 성장할 수 있어요.`).join(' ');
+    ta.value = chips.map(c=>finish(c)).join(' ');
   }
   delete ta.dataset.edited;
 }
@@ -1214,7 +1215,7 @@ ${typeGuide}
 - 문체: 담임 선생님이 직접 쓴 듯한 따뜻하고 구체적인 어투. AI 느낌 나는 표현 금지
 - 화자(매우 중요): 글쓴이는 담임 선생님 본인이다. 자신을 가리킬 때는 반드시 1인칭("저", "제가")을 쓴다. "선생님이", "선생님도", "선생님께서", "담임 선생님이"처럼 자신을 제3자로 지칭하지 않는다 (예: "선생님도 함께 독려하겠습니다" → "저도 함께 독려하겠습니다")
 - 지도 의지 표현: "제가 지도하겠습니다", "수업에서 함께 ~해 나가겠습니다", "앞으로 ~하도록 돕겠습니다" 처럼 1인칭으로
-- 문장 시작: "${name}이/가" 또는 "${name} 학생은" 등으로 자연스럽게 시작
+- 문장 시작: "${name} 학생은" 또는 이름 뒤에 받침에 맞는 조사(이/가)를 붙여 자연스럽게 시작
 - 분량: 3~4문장. 간결하고 핵심만
 - 절대 금지 표현: "부족", "미흡", "떨어지다", "못하다", "아쉽다", "개선이 필요하다"
 - 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 또는 "~을 함께 연습해 나갈 예정입니다" 식으로
