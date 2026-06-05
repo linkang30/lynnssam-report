@@ -10,48 +10,48 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a1a;font-size:14px;line-height:1.6}
 .app{max-width:960px;margin:0 auto;padding:16px}
-.tool-header{background:linear-gradient(135deg,#1a8fd1 0%,#0a5fa0 60%,#1565c0 100%);color:#fff;border-radius:14px;padding:16px 22px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(21,101,192,.3);position:relative;overflow:hidden}
-.tool-header::after{content:"";position:absolute;top:-40px;right:-20px;width:160px;height:160px;background:radial-gradient(circle,rgba(140,200,255,.35),transparent 70%);pointer-events:none}
+.tool-header{background:linear-gradient(135deg,#5fcdbf 0%,#1a8576 60%,#2ba89a 100%);color:#fff;border-radius:14px;padding:16px 22px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(21,101,192,.3);position:relative;overflow:hidden}
+.tool-header::after{content:"";position:absolute;top:-40px;right:-20px;width:160px;height:160px;background:radial-gradient(circle,rgba(150,235,215,.40),transparent 70%);pointer-events:none}
 .tool-header h1{font-size:16px;font-weight:700;letter-spacing:.3px;position:relative}
 .tool-header p{font-size:11px;opacity:.78;margin-top:2px;position:relative}
 .hbadge{background:rgba(255,255,255,.2);border-radius:7px;padding:4px 11px;font-size:11px;font-weight:700;margin-left:auto;letter-spacing:.5px;position:relative}
 .steps{display:flex;gap:5px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
 .sbtn{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1.5px solid #d8d6cf;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:#888;display:flex;align-items:center;gap:5px;transition:.2s}
-.sbtn.active{background:#1565c0;color:#fff;border-color:#1565c0;box-shadow:0 2px 8px rgba(21,101,192,.35)}
+.sbtn.active{background:#2ba89a;color:#fff;border-color:#2ba89a;box-shadow:0 2px 8px rgba(21,101,192,.35)}
 .sbtn.done{border-color:#2d7a4f;color:#2d7a4f;background:#eaf3de}
 .card{background:#fff;border:0.5px solid #e4e2db;border-radius:13px;padding:18px 22px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .ctitle{font-size:10.5px;font-weight:700;color:#aaa;letter-spacing:.7px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
-.ctitle i{font-size:15px;color:#1565c0}
+.ctitle i{font-size:15px;color:#2ba89a}
 label{display:block;font-size:11px;color:#666;margin-bottom:3px;font-weight:500}
 input[type=text],input[type=number],select,textarea{width:100%;border:1px solid #ddd;border-radius:8px;padding:7px 10px;font-size:13px;font-family:inherit;color:#1a1a1a;background:#fff;outline:none}
-input:focus,select:focus,textarea:focus{border-color:#1565c0}
+input:focus,select:focus,textarea:focus{border-color:#2ba89a}
 textarea{resize:vertical}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
 .hidden{display:none}
 .navrow{display:flex;justify-content:space-between;margin-top:12px;gap:8px}
 .btn{border:none;border-radius:9px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:.15s}
-.bprim{background:#1565c0;color:#fff}.bprim:hover{background:#0d4f9e}
+.bprim{background:#2ba89a;color:#fff}.bprim:hover{background:#0f7565}
 .bsec{background:#fff;color:#555;border:1px solid #d0cfc8}.bsec:hover{background:#f5f4f0}
 /* 영역 섹션 */
 .area-sec{margin-bottom:18px}
-.area-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:9px 13px;border-radius:9px;background:#e8f2fb;border-left:4px solid #1565c0}
-.area-name{font-size:13px;font-weight:700;color:#0d4f9e}
-.area-sub{font-size:10.5px;color:#7a93ad;margin-top:1px}
-.area-score{margin-left:auto;font-size:11px;font-weight:700;color:#1565c0;background:#fff;border-radius:6px;padding:3px 10px}
+.area-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:9px 13px;border-radius:9px;background:#e1f3ef;border-left:4px solid #2ba89a}
+.area-name{font-size:13px;font-weight:700;color:#0f7565}
+.area-sub{font-size:10.5px;color:#7aa79d;margin-top:1px}
+.area-score{margin-left:auto;font-size:11px;font-weight:700;color:#2ba89a;background:#fff;border-radius:6px;padding:3px 10px}
 /* 개수입력 영역 */
-.count-row{display:flex;align-items:center;gap:10px;background:#f8fafd;border:1px solid #e2ebf3;border-radius:9px;padding:10px 14px}
+.count-row{display:flex;align-items:center;gap:10px;background:#f4faf8;border:1px solid #dbede9;border-radius:9px;padding:10px 14px}
 .count-row .cl{font-size:12px;color:#555;flex:1}
-.count-row input{width:70px;text-align:center;font-size:16px;font-weight:800;color:#1565c0;padding:5px 0}
+.count-row input{width:70px;text-align:center;font-size:16px;font-weight:800;color:#2ba89a;padding:5px 0}
 .count-row .ct{font-size:11px;color:#aaa;white-space:nowrap}
 /* 그리드 */
 .qgrid{display:grid;gap:6px}
 .qgrid.c6{grid-template-columns:repeat(6,1fr)}
 .qgrid.c7{grid-template-columns:repeat(7,1fr)}
 .qgrid.c9{grid-template-columns:repeat(9,1fr)}
-.qcell{border:1.5px solid #d8e2ec;background:#f8fafd;border-radius:8px;padding:8px 2px;text-align:center;cursor:pointer;transition:.12s;user-select:none}
-.qcell:hover{border-color:#1565c0}
-.qcell .qw{display:block;font-size:13px;font-weight:700;color:#33475b}
-.qcell .qv{display:block;font-size:8.5px;color:#9bb0c4;margin-top:2px;letter-spacing:.3px}
+.qcell{border:1.5px solid #cfe6e0;background:#f4faf8;border-radius:8px;padding:8px 2px;text-align:center;cursor:pointer;transition:.12s;user-select:none}
+.qcell:hover{border-color:#2ba89a}
+.qcell .qw{display:block;font-size:13px;font-weight:700;color:#2f5249}
+.qcell .qv{display:block;font-size:8.5px;color:#8fb6ad;margin-top:2px;letter-spacing:.3px}
 .qcell.ok{background:#eaf6ee;border-color:#2d9b5f}
 .qcell.ok .qw{color:#1a7a40}
 .qcell.half{background:#fff6e0;border-color:#e6a417}
@@ -59,7 +59,7 @@ textarea{resize:vertical}
 .qcell.wrong{background:#fcebeb;border-color:#e24b4a}
 .qcell.wrong .qw{color:#a32d2d}
 .qcell .qmk{display:block;font-size:9px;font-weight:700;margin-top:1px}
-.subhead{font-size:11px;font-weight:700;color:#5a7188;margin:10px 0 6px}
+.subhead{font-size:11px;font-weight:700;color:#5a8077;margin:10px 0 6px}
 .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10.5px;color:#888;margin-bottom:8px}
 .legend span{display:flex;align-items:center;gap:4px}
 .ldot{width:11px;height:11px;border-radius:3px;display:inline-block}
@@ -73,7 +73,7 @@ textarea{resize:vertical}
 .toggle .knob{position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.2s}
 .toggle.on .knob{left:21px}
 .bonus-body{margin-top:12px}
-.total-strip{background:linear-gradient(135deg,#1565c0,#0a5fa0);color:#fff;border-radius:11px;padding:13px 20px;display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.total-strip{background:linear-gradient(135deg,#2ba89a,#1a8576);color:#fff;border-radius:11px;padding:13px 20px;display:flex;align-items:center;gap:14px;margin-bottom:12px}
 .total-strip .tnum{font-size:30px;font-weight:900;letter-spacing:-1px}
 .total-strip .tlab{font-size:11px;opacity:.8}
 .total-strip .tbonus{margin-left:auto;font-size:11px;background:rgba(255,255,255,.18);border-radius:6px;padding:4px 11px;font-weight:700}
@@ -81,7 +81,7 @@ textarea{resize:vertical}
 .bar-row{margin-bottom:12px}
 .bar-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
 .bar-name{font-weight:700;color:#444}
-.bar-name .sub{font-weight:400;color:#9bb0c4;font-size:10.5px;margin-left:5px}
+.bar-name .sub{font-weight:400;color:#8fb6ad;font-size:10.5px;margin-left:5px}
 .bar-pct{font-weight:700}
 .bar-track{background:#eceef2;border-radius:5px;height:9px;overflow:hidden}
 .bar-fill{height:100%;border-radius:5px;transition:.5s}
@@ -94,23 +94,23 @@ textarea{resize:vertical}
 .note-good{background:#eef7f0;border:1px solid #c8e6d0;color:#2d5a3d}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .chip{display:inline-block;padding:5px 12px;border-radius:14px;border:1px solid #ddd;background:#f8f7f4;font-size:11.5px;color:#666;cursor:pointer;transition:.15s}
-.chip:hover{border-color:#1565c0;color:#1565c0}
-.chip.on{background:#1565c0;color:#fff;border-color:#1565c0}
+.chip:hover{border-color:#2ba89a;color:#2ba89a}
+.chip.on{background:#2ba89a;color:#fff;border-color:#2ba89a}
 /* 리포트 */
-.rpt-hd{background:linear-gradient(135deg,#1565c0,#0a5fa0);color:#fff;border-radius:12px;padding:18px 22px;margin-bottom:16px}
+.rpt-hd{background:linear-gradient(135deg,#2ba89a,#1a8576);color:#fff;border-radius:12px;padding:18px 22px;margin-bottom:16px}
 .rpt-hd h2{font-size:18px;font-weight:800;margin-bottom:3px}
 .rpt-hd .sub{font-size:11.5px;opacity:.85}
 .rpt-stu{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:16px}
-.rpt-stu .cell{background:#f7f9fc;border-radius:9px;padding:9px 13px}
-.rpt-stu .lab{font-size:10px;color:#9bb0c4;font-weight:700;margin-bottom:2px}
-.rpt-stu .v{font-size:13px;font-weight:700;color:#33475b}
+.rpt-stu .cell{background:#f4faf8;border-radius:9px;padding:9px 13px}
+.rpt-stu .lab{font-size:10px;color:#8fb6ad;font-weight:700;margin-bottom:2px}
+.rpt-stu .v{font-size:13px;font-weight:700;color:#2f5249}
 .rpt-sec{margin-bottom:16px}
-.rpt-sec h3{font-size:11px;font-weight:800;color:#1565c0;letter-spacing:.5px;margin-bottom:9px;display:flex;align-items:center;gap:6px}
-.rpt-score-big{background:linear-gradient(135deg,#1565c0,#0a5fa0);color:#fff;border-radius:11px;padding:14px 20px;display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.rpt-sec h3{font-size:11px;font-weight:800;color:#2ba89a;letter-spacing:.5px;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.rpt-score-big{background:linear-gradient(135deg,#2ba89a,#1a8576);color:#fff;border-radius:11px;padding:14px 20px;display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .rpt-score-big .n{font-size:32px;font-weight:900}
 .rpt-score-big .l{font-size:11px;opacity:.82}
 .rpt-score-big .b{margin-left:auto;font-size:11px;background:rgba(255,255,255,.18);border-radius:6px;padding:4px 11px;font-weight:700}
-.rpt-txt{font-size:12.5px;color:#444;line-height:1.85;background:#f7f9fc;border-radius:9px;padding:12px 15px;white-space:pre-wrap}
+.rpt-txt{font-size:12.5px;color:#444;line-height:1.85;background:#f4faf8;border-radius:9px;padding:12px 15px;white-space:pre-wrap}
 .rpt-foot{text-align:center;font-size:11.5px;color:#888;margin-top:18px;padding-top:14px;border-top:1px solid #eee}
 .hist-box{display:none;background:#fff8f0;border:1px solid #f0b040;border-radius:8px;padding:0;margin-top:12px;font-size:12px;overflow:hidden}
 .hist-head{padding:11px 14px;cursor:pointer;display:flex;align-items:center;gap:7px}
@@ -126,7 +126,7 @@ textarea{resize:vertical}
     <h1 id="hdrTitle"><i class="ti ti-abc"></i> Neuro Phonics — Monthly Report</h1>
     <p id="hdrSub">파머스국제어학원 광교브랜치 · 강사용 · Sound Doctor · Tooth Phonics</p>
   </div>
-  <div class="hbadge">v1.1</div>
+  <div class="hbadge">v1.2</div>
 </div>
 
 <div class="steps">
@@ -164,7 +164,7 @@ textarea{resize:vertical}
           <option value="SD6">Sound Doctor 6 — Double Vowel</option>
         </optgroup>
         <optgroup label="── Tooth Phonics 라인 ──">
-          <option value="" disabled>Tooth Phonics 1 — 준비 중</option>
+          <option value="TP1">Tooth Phonics 1 — Single-Letter Sounds (A~Z + 단모음)</option>
           <option value="" disabled>Tooth Phonics 2 — 준비 중</option>
           <option value="" disabled>Tooth Phonics 3 — 준비 중</option>
           <option value="" disabled>Tooth Phonics 4 — 준비 중</option>
@@ -173,7 +173,7 @@ textarea{resize:vertical}
         </optgroup>
       </select>
     </div>
-    <div id="lvInfo" style="background:#eef5fc;border:1px solid #c5dbef;border-radius:8px;padding:9px 14px;font-size:12px;color:#456;min-height:32px;display:none"></div>
+    <div id="lvInfo" style="background:#e3f4f0;border:1px solid #b6e0d7;border-radius:8px;padding:9px 14px;font-size:12px;color:#456;min-height:32px;display:none"></div>
     <div id="historyAlert" class="hist-box">
       <div id="historyAlertHead" class="hist-head" onclick="toggleHistoryPanel()"></div>
       <div id="historyAlertBody" class="hist-body"></div>
@@ -199,7 +199,7 @@ textarea{resize:vertical}
     <div id="gradeAreas"></div>
 
     <!-- BONUS -->
-    <div class="bonus-card">
+    <div class="bonus-card" id="bonusCard">
       <div class="bonus-top" onclick="toggleBonus()">
         <i class="ti ti-gift" style="font-size:18px;color:#e6a417"></i>
         <div><div class="bt-title">보너스 점수 (선택)</div><div class="bt-sub"><span id="lblBonusTotal">48</span>개 중 <span id="lblBonusPer">6</span>개당 1점 가산 · 최대 <span id="lblBonusMax">8</span>점 · 최종 100점 한도</div></div>
@@ -227,7 +227,7 @@ textarea{resize:vertical}
     <div class="ctitle"><i class="ti ti-chart-bar"></i>영역별 점수</div>
     <div id="areaBars"></div>
   </div>
-  <div class="card">
+  <div class="card" id="phonCard">
     <div class="ctitle" id="phonTitleScreen"><i class="ti ti-volume"></i>음가 세부 분석 <span style="color:#bbb;font-weight:500;text-transform:none;letter-spacing:0">· Speaking 기반 (70% 미만 보강 필요)</span></div>
     <p id="phonDescScreen" style="font-size:11.5px;color:#888;margin:-6px 0 12px">암기로 우회할 수 없는 Speaking 데이터만 사용해, 실제 소리 인식·읽기 능력을 분석합니다.</p>
     <div id="phonBars"></div>
@@ -243,11 +243,11 @@ textarea{resize:vertical}
     <div class="ctitle"><i class="ti ti-mood-smile"></i>이달의 강점</div>
     <div style="margin-bottom:12px"><button onclick="showHistory()" style="background:#f8f7f4;border:1px solid #d0d0cc;border-radius:7px;padding:6px 14px;font-size:12px;cursor:pointer;color:#666;display:inline-flex;align-items:center;gap:5px"><i class="ti ti-history" style="font-size:13px"></i>지난 리포트 확인</button></div>
     <div id="historyBox" style="display:none;background:#fff8f0;border:1px solid #f0b040;border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:12px"></div>
-    <div style="background:#f0faf4;border:1px solid #b8e0c8;border-radius:9px;padding:12px 14px;margin-bottom:12px">
+    <div id="strengthLayer1" style="background:#f0faf4;border:1px solid #b8e0c8;border-radius:9px;padding:12px 14px;margin-bottom:12px">
       <div style="font-size:10.5px;font-weight:700;color:#1a6640;margin-bottom:6px"><span>📊 Layer 1 — 음가 분석 (자동)</span></div>
       <div id="strengthAnalysis" style="font-size:12px;color:#333;line-height:1.85;min-height:30px;white-space:pre-wrap"></div>
     </div>
-    <div style="font-size:11px;font-weight:700;color:#5a7188;margin-bottom:7px">👀 Layer 2 — 수업 관찰 (키워드 선택)</div>
+    <div style="font-size:11px;font-weight:700;color:#5a8077;margin-bottom:7px">👀 Layer 2 — 수업 관찰 (키워드 선택)</div>
     <div class="chips" id="strengthChips"></div>
     <div style="position:relative">
       <textarea id="cmtStrength" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-bottom:34px"></textarea>
@@ -258,11 +258,11 @@ textarea{resize:vertical}
 
   <div class="card">
     <div class="ctitle"><i class="ti ti-bulb"></i>더 키워가요</div>
-    <div style="background:#fff8ee;border:1px solid #f0d8a8;border-radius:9px;padding:12px 14px;margin-bottom:12px">
+    <div id="improveLayer1" style="background:#fff8ee;border:1px solid #f0d8a8;border-radius:9px;padding:12px 14px;margin-bottom:12px">
       <div style="font-size:10.5px;font-weight:700;color:#a8730a;margin-bottom:6px"><span>📊 Layer 1 — 음가 분석 (자동)</span></div>
       <div id="improveAnalysis" style="font-size:12px;color:#333;line-height:1.85;min-height:30px;white-space:pre-wrap"></div>
     </div>
-    <div style="font-size:11px;font-weight:700;color:#5a7188;margin-bottom:7px">👀 Layer 2 — 수업 관찰 (키워드 선택)</div>
+    <div style="font-size:11px;font-weight:700;color:#5a8077;margin-bottom:7px">👀 Layer 2 — 수업 관찰 (키워드 선택)</div>
     <div class="chips" id="improveChips"></div>
     <div style="position:relative">
       <textarea id="cmtImprove" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-bottom:34px"></textarea>
@@ -273,15 +273,15 @@ textarea{resize:vertical}
 
   <div class="card">
     <div class="ctitle"><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</div>
-    <div style="background:#eef5fc;border:1px solid #c5dbef;border-radius:9px;padding:11px 13px;margin-bottom:12px">
-      <div style="font-size:10px;font-weight:700;color:#1565c0;margin-bottom:7px;display:flex;align-items:center;gap:5px"><i class="ti ti-stethoscope" style="font-size:13px"></i>음가 우선순위 진단 <span style="font-weight:500;color:#9bb0c4">— 분석 기반 자동 (참고용)</span></div>
+    <div id="nextPriorityBlock" style="background:#e3f4f0;border:1px solid #b6e0d7;border-radius:9px;padding:11px 13px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:#2ba89a;margin-bottom:7px;display:flex;align-items:center;gap:5px"><i class="ti ti-stethoscope" style="font-size:13px"></i>음가 우선순위 진단 <span style="font-weight:500;color:#8fb6ad">— 분석 기반 자동 (참고용)</span></div>
       <div id="nextPriorityBar"></div>
     </div>
-    <div style="font-size:11px;font-weight:700;color:#5a7188;margin-bottom:7px">👀 지도 키워드 선택 <span style="font-weight:400;color:#aaa">— 약한 음가는 자동 선택됩니다</span></div>
+    <div style="font-size:11px;font-weight:700;color:#5a8077;margin-bottom:7px">👀 지도 키워드 선택 <span style="font-weight:400;color:#aaa">— 약한 음가는 자동 선택됩니다</span></div>
     <div class="chips" id="nextChips"></div>
     <div style="position:relative">
       <textarea id="cmtNext" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-bottom:34px"></textarea>
-      <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#1565c0;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+      <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#2ba89a;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
     </div>
     <div id="refineStatus_next" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
   </div>
@@ -303,7 +303,7 @@ textarea{resize:vertical}
     </div>
   </div>
   <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
-    <button class="btn bsec" onclick="downloadImage()" style="background:#eef5fc;border-color:#c5dbef;color:#1565c0"><i class="ti ti-photo-down"></i>이미지 저장 · 카톡 전송용</button>
+    <button class="btn bsec" onclick="downloadImage()" style="background:#e3f4f0;border-color:#b6e0d7;color:#2ba89a"><i class="ti ti-photo-down"></i>이미지 저장 · 카톡 전송용</button>
     <button class="btn bsec" onclick="downloadPDF()" style="background:#fef0f0;border-color:#f0cccc;color:#c0392b"><i class="ti ti-file-type-pdf"></i>PDF 저장 · 인쇄 보관용</button>
   </div>
   <div id="saveStatus" style="font-size:12px;color:#2d7a4f;margin-top:8px;text-align:right;display:none"></div>
@@ -327,6 +327,7 @@ const LV={
     label:"Sound Doctor 1", name:"Letter Sound (Consonants + Vowels)",
     focus:"자음 B/T/P/G/N/S/J/K/L/V/D + 단모음 A/E/I",
     units:["Consonant B/T","Consonant P/G/N","Vowel A/E","Review B·T·P·G·N+A·E","Consonant S/J/K","Consonant L/V/D","Vowel I","Review S·J·K·L·V·D+I"],
+    summary:"알파벳 자음(B·T·P·G·N·S·J·K·L·V·D)과 단모음 A·E·I의 소리를 익히고, 글자를 보고 정확한 소리로 읽고 말하는 연습을 했습니다.",
     spkSound:[
       {w:"A",t:"V"},{w:"S",t:"C"},{w:"V",t:"C"},{w:"I",t:"V"},{w:"B",t:"C"},{w:"L",t:"C"},{w:"N",t:"C"},
       {w:"G",t:"C"},{w:"P",t:"C"},{w:"E",t:"V"},{w:"J",t:"C"},{w:"D",t:"C"},{w:"T",t:"C"},{w:"K",t:"C"},
@@ -362,6 +363,7 @@ const LV={
     label:"Sound Doctor 2", name:"Letter Sound (Consonants + Vowels o/u)",
     focus:"자음 M/H/F/R/C/X/Q/W/Y/Z + 모음 O/U + soft C·G, ending Y",
     units:["Consonant M/H/F/R","Consonant C/X/Q","Vowel O","Consonant W/Y/Z","Vowel U","soft C / soft G / ending Y","Review","Review"],
+    summary:"나머지 알파벳 자음(M·H·F·R·C·X·Q·W·Y·Z)과 단모음 O·U의 소리를 익히고, soft C·G와 단어 끝 Y 소리까지 확장해 읽고 말하는 연습을 했습니다.",
     maxRaw:102,
     spkSound:[
       {w:"Z",t:"C"},{w:"C",t:"C"},{w:"F",t:"C"},{w:"R",t:"C"},{w:"H",t:"C"},{w:"O",t:"V"},{w:"U",t:"V"},
@@ -395,6 +397,7 @@ const LV={
     label:"Sound Doctor 3", name:"Long Vowel + Magic E",
     focus:"장모음 a/i/e/o/u (Magic E) + 단모음 vs 장모음 구별",
     units:["Magic E a_e","Magic E i_e","Magic E o_e","Magic E u_e","장모음 ee/ea","단모음 vs 장모음 구별","Review","Review"],
+    summary:"장모음 A·I·E·O·U(Magic E)와 ea·ee 철자의 소리를 익히고, 단모음과 장모음의 차이를 듣고 구별하며 읽는 연습을 했습니다. 마지막 단계에서는 문장을 자연스럽게 읽는 연습까지 다뤘습니다. (예: cap↔cape, kit↔kite)",
     maxRaw:104,
     spkSound:[],
     spkWord:[
@@ -433,6 +436,7 @@ const LV={
     label:"Sound Doctor 4", name:"Double Consonants I",
     focus:"이중자음 digraph(sh/ch/th/wh/ph) + blend(sl·sp·st / pl·fl·bl / pr·fr·br)",
     units:["sh, ch","ck, th(voiceless)","wh, th(voiced), ph","Review/Sentence","pl, pr, sl","fl, fr","br, bl","Review/Sentence"],
+    summary:"두 글자가 한 소리를 내는 이중자음(sh·ch·th·wh·ph)과 자음이 이어지는 소리(pl·pr·sl·fl·fr·br·bl)를 익히고, 문장 단위로 읽는 연습을 했습니다.",
     maxRaw:74,
     spkSound:[],
     spkWord:[
@@ -466,6 +470,7 @@ const LV={
     label:"Sound Doctor 5", name:"Double Consonants II",
     focus:"이중자음 blend(cl·gl / cr·gr·dr·tr / st·sp·sk·sn·sm·sw) + ending(-ng·-nk·-mb·-kn)",
     units:["cl, cr","gl, gr","dr, tr","Review/Sentence","st, sp, sk","sn, sm, sw","-ng, -nk, -mb, -kn","Review/Sentence"],
+    summary:"다양한 이중자음(cl·gl·cr·gr·dr·tr·st·sp·sk·sn·sm·sw)과 단어 끝 소리(-ng·-nk·-mb·-kn)를 익히고, 문장 단위로 읽는 연습을 했습니다.",
     maxRaw:74,
     spkSound:[],
     spkWord:[
@@ -499,6 +504,7 @@ const LV={
     label:"Sound Doctor 6", name:"Double Vowel",
     focus:"이중모음 + 문장 단위 읽기(높낮이·끊어읽기) + 미니 신택스(1·2·3형식 기본 구조)",
     units:["ay, igh, oa, ue / ai, ie, ow, ui","Review/Sentence","oy, ir, ou / oo(long), au","oi, ur, ow / oo(short), aw","er, or, ar / ew","Review/Sentence","Special Lesson: 음절·강세·슈와","Special Lesson"],
+    summary:"이중모음(ay·igh·oa·ai·ow·oi·ou·oo·er·or·ar 등)을 익히고, 문장의 높낮이와 끊어 읽기, 기본 문장 구조까지 연습했습니다.",
     maxRaw:55,
     analysisMode:"sentence",
     spkSound:[],
@@ -520,6 +526,25 @@ const LV={
     ],
     vowels:[],
     bonus:{total:15,per:3}
+  },
+  "TP1":{
+    line:"Tooth Phonics",
+    label:"Tooth Phonics 1", name:"Single-Letter Sounds",
+    focus:"알파벳 A~Z 음가 + 단모음 A·E·I·O·U 음가조합 (라임·패턴 리딩 기초)",
+    units:["Unit1 ABCDE","Unit2 FGHIJ","Unit3 KLMNO","Unit4 PQRST","Unit5 UVWXYZ","Unit6 단모음 Aa Ee","Unit7 단모음 Oo Uu","Unit8 단모음 결합"],
+    summary:"알파벳 A~Z의 음가와 단모음 A·E·I·O·U의 소리 조합을 익히고, 라임과 패턴을 활용해 단어를 빠르게 읽어내는 기초를 다졌습니다.",
+    maxRaw:45,
+    analysisMode:"area",
+    spkSound:[],
+    spkWord:[],
+    writeMatch:[],
+    areas:[
+      {id:"phon",name:"Phonics",type:"count",max:11,sub:"첫소리 다른 것 2 + 첫소리 찾기 2 + 첫글자 찾기 3 + 첫글자 쓰기 4"},
+      {id:"voca",name:"Vocab",type:"count",max:8,sub:"그림 보고 알맞은 단어 찾기 8"},
+      {id:"rd",name:"R/D (Reading)",type:"count",max:6,sub:"문장 찾기 1 + 그림 찾기 5"},
+      {id:"ls",name:"L/s (Listening)",type:"count",max:20,sub:"소리 찾기 8 + 듣고 쓰기 8 + 듣고 고르기 4"}
+    ],
+    vowels:[]
   }
 };
 
@@ -568,13 +593,13 @@ function showHistoryAlert(){
     `<i id="histToggleIcon" class="ti ti-chevron-down" style="font-size:15px;color:#854f0b"></i>`;
   body.innerHTML=months.map((m,i)=>{
     const r=data[m]||{};
-    const lvTag=r.level?`<span style="background:#e8f2fb;color:#1565c0;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:5px">${r.level}</span>`:'';
-    const scoreTag=(r.score!=null)?`<span style="color:#1565c0;font-size:10px;font-weight:700;margin-left:5px">${r.score}점</span>`:'';
-    const ph=r.phon?Object.keys(r.phon).map(kk=>`<span style="background:#eef5fc;color:#0d4f9e;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${kk} ${r.phon[kk]}%</span>`).join(''):'';
+    const lvTag=r.level?`<span style="background:#e1f3ef;color:#2ba89a;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:5px">${r.level}</span>`:'';
+    const scoreTag=(r.score!=null)?`<span style="color:#2ba89a;font-size:10px;font-weight:700;margin-left:5px">${r.score}점</span>`:'';
+    const ph=r.phon?Object.keys(r.phon).map(kk=>`<span style="background:#e3f4f0;color:#0f7565;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${kk} ${r.phon[kk]}%</span>`).join(''):'';
     const sC=(r.strength&&r.strength.length)?r.strength.map(x=>`<span style="background:#eaf3de;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#bbb;font-size:10px">없음</span>';
     const aC=(r.improve&&r.improve.length)?r.improve.map(x=>`<span style="background:#faeeda;color:#854f0b;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#bbb;font-size:10px">없음</span>';
     return `<div style="padding-top:11px${i<months.length-1?';border-bottom:0.5px solid #f0d090;padding-bottom:11px':''}">`+
-      `<div style="font-size:11px;font-weight:700;color:#1565c0;margin-bottom:5px">${m}${lvTag}${scoreTag}</div>`+
+      `<div style="font-size:11px;font-weight:700;color:#2ba89a;margin-bottom:5px">${m}${lvTag}${scoreTag}</div>`+
       (ph?`<div style="margin-bottom:4px"><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">음가</span>${ph}</div>`:'')+
       `<div style="margin-bottom:4px"><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">강점</span>${sC}</div>`+
       `<div><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">보완점</span>${aC}</div></div>`;
@@ -593,11 +618,11 @@ function showHistory(){
   box.innerHTML=`<div style="font-size:11px;font-weight:700;color:#854f0b;margin-bottom:8px"><i class="ti ti-history"></i> 최근 ${months.length}개월 이력</div>`+
     months.map(m=>{
       const r=data[m]||{};
-      const lvTag=r.level?` <span style="color:#1565c0;font-weight:700">[${r.level}]</span>`:'';
-      const sc=(r.score!=null)?` <span style="color:#1565c0">${r.score}점</span>`:'';
+      const lvTag=r.level?` <span style="color:#2ba89a;font-weight:700">[${r.level}]</span>`:'';
+      const sc=(r.score!=null)?` <span style="color:#2ba89a">${r.score}점</span>`:'';
       const ph=r.phon?' / 음가: '+Object.keys(r.phon).map(kk=>`${kk} ${r.phon[kk]}%`).join(', '):'';
       return `<div style="font-size:11px;margin-bottom:5px;padding:6px 9px;background:#fff;border-radius:6px">`+
-      `<b style="color:#1565c0">${m}</b>${lvTag}${sc}${ph}<br>강점: ${(r.strength||[]).join(', ')||'-'} / 보완: ${(r.improve||[]).join(', ')||'-'}</div>`;
+      `<b style="color:#2ba89a">${m}</b>${lvTag}${sc}${ph}<br>강점: ${(r.strength||[]).join(', ')||'-'} / 보완: ${(r.improve||[]).join(', ')||'-'}</div>`;
     }).join('');
 }
 
@@ -613,9 +638,13 @@ function onLvChange(){
     return;
   }
   info.style.display='block';
-  info.innerHTML=`<b>${d.label} — ${d.name}</b><br>학습 음가: ${d.focus}`;
+  const focusLabel=(d.analysisMode==='area')?'학습 내용':'학습 음가';
+  info.innerHTML=`<b>${d.label} — ${d.name}</b><br>${focusLabel}: ${d.focus}`;
   if(hdrT)hdrT.innerHTML=`<i class="ti ti-abc"></i> ${d.line} — Monthly Report`;
   if(hdrS)hdrS.textContent=`파머스국제어학원 광교브랜치 · 강사용 · ${d.label} · Monthly Test`;
+  const noBonus=!d.bonus;
+  if(g('bonusCard'))g('bonusCard').style.display=noBonus?'none':'';
+  if(noBonus&&bonusOn){bonusOn=false;if(g('bonusToggle'))g('bonusToggle').classList.remove('on');if(g('bonusBody'))g('bonusBody').classList.add('hidden');if(g('liveBonus'))g('liveBonus').style.display='none';}
   updateScoreLabels();
   buildGradeAreas();
   recalc();
@@ -786,6 +815,7 @@ function phonemeStats(){
 // 반환: [{key,n,sub,ok,tot,kw}] — kw는 다음달방안 키워드(있으면)
 function analysisRows(){
   const d=LV[curLv]; if(!d)return [];
+  if(d.analysisMode==='area')return [];
   if(d.analysisMode==='sentence'){
     // 문장능력 막대: sentenceBars의 ids(영역 id)별 개수 합산
     return (d.sentenceBars||[]).map(b=>{
@@ -825,6 +855,9 @@ function buildAnalysis(){
     ah+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${a.name}</span><span class="bar-pct" style="color:${barColor(p)}">${ok%1?ok.toFixed(1):ok} / ${tot}점 · ${p}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;
   });
   g('areaBars').innerHTML=ah;
+  const isArea=d.analysisMode==='area';
+  if(g('phonCard'))g('phonCard').style.display=isArea?'none':'';
+  if(isArea){g('phonBars').innerHTML='';g('phonSummary').innerHTML='';return;}
   const isSent=d.analysisMode==='sentence';
   if(g('phonTitleScreen')){
     g('phonTitleScreen').innerHTML = isSent
@@ -861,15 +894,15 @@ function buildAnalysis(){
 }
 
 const STRENGTH_KW=[
-  "입과 혀 모양을 잘 따라해요","큰 소리로 자신 있게 읽어요","새로운 소리를 빨리 익혀요",
-  "반복 연습을 즐겁게 해요","발음이 또렷해요","목소리에 자신감이 느껴져요",
-  "새로운 단어도 잘 읽어내요","배운 소리를 오래 기억해요","집중해서 끝까지 참여해요","틀려도 다시 시도해요"
+  "수업을 즐겁게 참여해요","큰 소리로 자신 있게 읽어요","새로운 활동에 적극적이에요",
+  "차분하게 앉아서 집중해요","끝까지 포기하지 않아요","궁금한 걸 적극적으로 물어봐요",
+  "칭찬받으면 더 열심히 해요","자기 차례를 잘 기다려요","친구들과 잘 어울려요","글씨를 또박또박 정성껏 써요"
 ];
 const IMPROVE_KW=[
-  "입과 혀 모양을 더 정확히 따라하면 좋겠어요","소리를 더 크고 또렷하게 내보면 좋겠어요",
-  "비슷한 소리를 구별하는 연습이 필요해요","새로운 소리에 익숙해질 시간이 더 필요해요",
-  "반복 연습으로 자신감을 키우면 좋겠어요","단어를 천천히 또박또박 읽는 연습이 도움이 돼요",
-  "틀리는 것을 두려워하지 않으면 좋겠어요"
+  "활동에 더 오래 집중하는 연습 중이에요","호기심이 많아, 수업 흐름에 맞춰 질문하는 연습을 해요",
+  "잘하고 싶은 마음이 커서, 어려울 때 마음 다스리기를 배워가요","틀릴까 봐 망설일 때가 있어, 편하게 도전하도록 격려하고 있어요",
+  "자기 차례를 기다리는 연습을 하고 있어요","아직 손에 힘이 자라는 중이라, 쓰기에 시간이 조금 더 걸려요",
+  "글씨 쓰기가 차근차근 익숙해지고 있어요","자신의 속도로 천천히 나아가고 있어요","친구와 함께하는 활동에 익숙해지는 중이에요"
 ];
 
 function buildChips(){
@@ -907,10 +940,82 @@ function buildCommentText(kind){
   delete ta.dataset.edited;
 }
 
+/* ===== area 모드(TP) 영역 프로파일 자동 분석 ===== */
+// 각 영역 id가 측정하는 능력 — 강점/보완 문구에 사용
+const AREA_META={
+  phon:{lab:"파닉스",strong:"소리와 글자를 연결하는 힘",weak:"소리와 글자를 연결하는 기초",tip:"첫소리를 듣고 알맞은 글자를 짚어보는 연습"},
+  voca:{lab:"단어",strong:"단어를 통째로 읽어내는 힘",weak:"단어를 통째로 읽어내는 힘",tip:"라임이 같은 단어를 묶어 반복해 읽는 연습"},
+  rd:{lab:"읽기",strong:"문장을 읽고 이해하는 힘",weak:"문장을 읽고 이해하는 단계",tip:"짧은 문장을 그림과 연결하며 천천히 읽는 연습"},
+  ls:{lab:"듣기",strong:"소리를 귀로 구별하는 힘",weak:"소리를 귀로 구별하는 힘",tip:"비슷한 소리를 듣고 구별하는 연습"}
+};
+function areaProfile(d){
+  const sc=computeScores();
+  const rows=(d.areas||[]).map(a=>{
+    const tot=areaMaxOf(d,a);
+    const ok=sc.byId[a.id]||0;
+    const meta=AREA_META[a.id]||{lab:a.name,strong:a.name,weak:a.name,tip:"꾸준한 반복 연습"};
+    return {id:a.id,name:meta.lab,p:pct(ok,tot),meta:meta};
+  });
+  const name=val('stuName')||'우리 친구';
+  const subj=withTopic(name);
+  // 강점: 70% 이상 영역(높은 순). 보완: 70% 미만 영역(낮은 순)
+  const good=rows.filter(r=>r.p>=70).sort((a,b)=>b.p-a.p);
+  const weak=rows.filter(r=>r.p<70).sort((a,b)=>a.p-b.p);
+  const maxP=Math.max(...rows.map(r=>r.p));
+  const minP=Math.min(...rows.map(r=>r.p));
+  const gap=maxP-minP;
+  // --- 강점 문구 ---
+  let sTxt='';
+  if(good.length){
+    const top=good[0];
+    sTxt=`${subj} ${top.meta.strong}(${top.name} ${top.p}%)이 특히 안정적이에요.`;
+    if(good.length>1){
+      sTxt+=` ${good.slice(1).map(r=>`${r.meta.strong}(${r.name} ${r.p}%)`).join(', ')}도 잘 자리잡고 있어요.`;
+    }
+    if(gap>=15&&weak.length){
+      sTxt+=` 잘하는 영역과 더 키울 영역의 차이가 보이는 만큼, 강점을 발판 삼아 약한 부분을 끌어올리면 좋겠어요.`;
+    }
+  }else{
+    sTxt=`${subj} 이번 달도 새로운 소리와 단어에 꾸준히 도전하며 차근차근 익혀가고 있어요.`;
+  }
+  // --- 보완 문구 ---
+  let iTxt='';
+  if(weak.length){
+    const low=weak[0];
+    iTxt=`${low.meta.weak}(${low.name} ${low.p}%)은 아직 익숙해지는 중이에요. ${low.meta.tip}이 도움이 될 거예요.`;
+    if(weak.length>1){
+      iTxt+=` ${weak.slice(1).map(r=>`${r.meta.weak}(${r.name} ${r.p}%)`).join(', ')}도 함께 다지면 좋겠어요.`;
+    }
+  }else if(gap>=15){
+    const low=rows.slice().sort((a,b)=>a.p-b.p)[0];
+    iTxt=`전반적으로 모든 영역이 안정적이에요. 그중 ${low.meta.weak}(${low.name} ${low.p}%)을 조금 더 다지면 균형이 한층 좋아질 거예요.`;
+  }else{
+    iTxt=`네 영역이 고르게 안정적이에요. 지금처럼 꾸준히 읽고 들으면 더 단단해질 거예요.`;
+  }
+  return {strength:sTxt,improve:iTxt};
+}
+
 function buildAutoFeedback(){
   buildChips();
   const d=LV[curLv]; if(!d)return;
   const name=val('stuName')||'우리 친구';
+  const isArea=d.analysisMode==='area';
+  if(g('strengthLayer1'))g('strengthLayer1').style.display='';
+  if(g('improveLayer1'))g('improveLayer1').style.display='';
+  if(isArea){
+    // Layer 1 라벨을 영역 분석으로 교체
+    const sL=g('strengthLayer1'),iL=g('improveLayer1');
+    if(sL&&sL.firstElementChild)sL.firstElementChild.innerHTML='<span>📊 Layer 1 — 영역 분석 (자동)</span>';
+    if(iL&&iL.firstElementChild)iL.firstElementChild.innerHTML='<span>📊 Layer 1 — 영역 분석 (자동)</span>';
+    const prof=areaProfile(d);
+    g('strengthAnalysis').textContent=prof.strength;
+    g('improveAnalysis').textContent=prof.improve;
+    return;
+  }
+  // 비-area 모드: 음가 Layer1 라벨 복원
+  const sL=g('strengthLayer1'),iL=g('improveLayer1');
+  if(sL&&sL.firstElementChild)sL.firstElementChild.innerHTML='<span>📊 Layer 1 — 음가 분석 (자동)</span>';
+  if(iL&&iL.firstElementChild)iL.firstElementChild.innerHTML='<span>📊 Layer 1 — 음가 분석 (자동)</span>';
   const isSent=d.analysisMode==='sentence';
   const rows=analysisRows().map(r=>({n:r.n,ok:r.ok,tot:r.tot,ex:r.sub}));
   const good=rows.filter(r=>pct(r.ok,r.tot)>=90);
@@ -949,6 +1054,8 @@ const NEXT_GENERAL=["매일 소리 내어 읽기 습관","배운 단어 집에�
 function buildNextPlan(){
   const d=LV[curLv]; if(!d)return;
   const isSent=d.analysisMode==='sentence';
+  const isArea=d.analysisMode==='area';
+  if(g('nextPriorityBlock'))g('nextPriorityBlock').style.display=isArea?'none':'';
   const rows=analysisRows(); // {key,n,sub,ok,tot,kw}
   rows.forEach(r=>{r.p=pct(r.ok,r.tot);r.prio=r.p<70?'weak':r.p<90?'mid':'good';});
   const order={weak:0,mid:1,good:2};
@@ -956,13 +1063,15 @@ function buildNextPlan(){
   const sty={weak:{dot:'!',col:'#a32d2d',bg:'#fcebeb',tip:'보강 우선'},mid:{dot:'~',col:'#a8730a',bg:'#fff4e0',tip:'성장 중'},good:{dot:'+',col:'#1a7a40',bg:'#eaf6ee',tip:'강점'}};
   let pb=sorted.map(r=>{const s=sty[r.prio];return `<span style="display:inline-block;background:${s.bg};color:${s.col};border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;margin:0 5px 5px 0">[${s.dot}] ${r.n} ${r.p}% · ${s.tip}</span>`;}).join('');
   const noun=isSent?'문장 읽기 능력':'음가';
-  pb+=`<div style="font-size:10px;color:#9bb0c4;margin-top:4px;line-height:1.6">[!] 70% 미만 보강 우선 · [~] 70~89% 성장 중 · [+] 90% 이상 강점 → 약한 ${noun} 키워드가 아래에서 자동 선택됩니다.</div>`;
-  g('nextPriorityBar').innerHTML=pb;
+  pb+=`<div style="font-size:10px;color:#8fb6ad;margin-top:4px;line-height:1.6">[!] 70% 미만 보강 우선 · [~] 70~89% 성장 중 · [+] 90% 이상 강점 → 약한 ${noun} 키워드가 아래에서 자동 선택됩니다.</div>`;
+  if(g('nextPriorityBar'))g('nextPriorityBar').innerHTML=isArea?'':pb;
   const result=[];
   // 각 행의 kw가 있으면 사용, 없으면 NEXT_KW(자음/모음) fallback
   sorted.forEach(r=>{(r.kw||NEXT_KW[r.key]||[]).forEach(kw=>result.push({kw,prio:r.prio}));});
-  // 공통 키워드: SD6은 문장 단위 맥락, 그 외는 음가 맥락
-  const generalKw=isSent
+  // 공통 키워드: area(TP)=라임·패턴 / sentence(SD6)=문장 단위 / 그 외=음가
+  const generalKw=isArea
+    ? ["라임·패턴으로 단어를 빠르게 읽어내기","아는 통글자를 점점 늘려가기","비슷한 라임 단어를 묶어 읽는 연습","매일 짧은 문장을 리듬감 있게 읽기"]
+    : isSent
     ? ["매일 한 문장씩 소리 내어 읽기","문장을 의미 덩어리로 끊어 읽는 습관","1·2·3형식 기본 문장 구조 익히기","단어가 아닌 문장 단위로 읽고 이해하는 연습"]
     : NEXT_GENERAL;
   generalKw.forEach(kw=>result.push({kw,prio:'general'}));
@@ -988,11 +1097,14 @@ function buildNextText(){
   if(ta.dataset.edited==='1')return;
   const d=LV[curLv];
   const isSent=d&&d.analysisMode==='sentence';
+  const isArea=d&&d.analysisMode==='area';
   const sel=[...g('nextChips').querySelectorAll('.chip.on')].map(c=>c.textContent);
   const rows=analysisRows();
   const weakNames=rows.filter(r=>pct(r.ok,r.tot)<70).map(r=>r.n);
   let txt='';
-  if(isSent){
+  if(isArea){
+    txt=`다음 달에는 라임과 패턴을 활용해 단어를 빠르게 읽어내는 힘을 키우고, 아는 통글자를 점점 늘려가겠습니다. 음가를 단단히 다진 뒤 비슷한 소리의 단어를 묶어 읽으며, 짧은 문장도 리듬감 있게 읽어내도록 이어가겠습니다.`;
+  }else if(isSent){
     if(weakNames.length){
       txt=`다음 달에는 ${weakNames.join(', ')}을(를) 누적 복습하며 문장을 더 자연스럽게 읽도록 다지고, 의미 덩어리로 끊어 읽기와 1·2·3형식 기본 문장 구조 이해를 이어가겠습니다. 단어가 아니라 문장 단위로 읽고 받아들이는 힘을 키워, 다음 단계 문장 중심 학습으로 자연스럽게 넘어갈 수 있도록 준비하겠습니다.`;
     }else{
@@ -1041,6 +1153,16 @@ function buildReport(){
   const sBlock=[sAuto,val('cmtStrength')].filter(t=>t&&t.trim()).join('\n');
   const iBlock=[iAuto,val('cmtImprove')].filter(t=>t&&t.trim()).join('\n');
   const nBlock=val('cmtNext');
+  const isArea=d.analysisMode==='area';
+  const unitsHtml=(d.summary)
+    ? `<div class="rpt-sec"><h3><i class="ti ti-book"></i>이번 단계 학습 내용</h3><div class="rpt-txt">${d.summary}</div></div>`
+    : '';
+  const analysisSection=isArea
+    ? `<div class="rpt-sec"><h3><i class="ti ti-chart-bar"></i>영역별 점수</h3>${areaRows}</div>`
+    : `<div class="rpt-sec" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div><h3><i class="ti ti-chart-bar"></i>영역별 점수</h3>${areaRows}</div>
+      <div><h3><i class="ti ti-volume"></i>${phonTitle}</h3>${phonRows}</div>
+    </div>`;
   out.innerHTML=`
     <div class="rpt-hd"><h2>${d.label} Monthly Report</h2><div class="sub">${month} · 파머스국제어학원 광교브랜치</div></div>
     <div class="rpt-stu">
@@ -1049,16 +1171,14 @@ function buildReport(){
       <div class="cell"><div class="lab">담임</div><div class="v">${teacher}</div></div>
     </div>
     <div class="rpt-score-big"><div><div class="n">${total}</div><div class="l">종합 점수 (100점 만점)</div></div>${bonusOn?`<div class="b">보너스 +${bonusPts}</div>`:''}</div>
-    <div class="rpt-sec" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
-      <div><h3><i class="ti ti-chart-bar"></i>영역별 점수</h3>${areaRows}</div>
-      <div><h3><i class="ti ti-volume"></i>${phonTitle}</h3>${phonRows}</div>
-    </div>
+    ${unitsHtml}
+    ${analysisSection}
     <div class="rpt-sec" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
       <div><h3><i class="ti ti-mood-smile"></i>이달의 강점</h3><div class="rpt-txt">${sBlock||'-'}</div></div>
       <div><h3><i class="ti ti-bulb"></i>더 키워가요</h3><div class="rpt-txt">${iBlock||'-'}</div></div>
     </div>
     ${nBlock?`<div class="rpt-sec"><h3><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</h3><div class="rpt-txt">${nBlock}</div></div>`:''}
-    <div class="rpt-foot">파머스국제어학원 광교브랜치 · Sound Doctor Program · ${teacher} 드림</div>
+    <div class="rpt-foot">파머스국제어학원 광교브랜치 · ${d.line} Program · ${teacher} 드림</div>
   `;
 }
 
@@ -1076,11 +1196,13 @@ function copyReport(){
   const sBlock=['[이달의 강점]',sAuto,val('cmtStrength')].filter(t=>t&&t.trim()).join('\n');
   const iBlock=['[더 키워가요]',iAuto,val('cmtImprove')].filter(t=>t&&t.trim()).join('\n');
   const nBlock=val('cmtNext')?['[다음 달 지도 방안]',val('cmtNext')].join('\n'):'';
+  const uBlock=d.summary?['[이번 단계 학습 내용]',d.summary].join('\n'):'';
   const teacher=val('teacher')||'선생님';
   const parts=[
     `${d.label} Monthly Report`,
     stu,
     `종합 점수: ${total} / 100점`+(bonusOn?` (보너스 +${bonusPts})`:''),
+    uBlock,
     '영역별 · '+(LV[curLv].areas||[]).map(a=>`${a.name.replace(/^PART \d+ · /,'')} ${sc.byId[a.id]||0}/${areaMaxOf(LV[curLv],a)}`).join(' · '),
     sBlock, iBlock, nBlock,
     `파머스국제어학원 광교브랜치 ${teacher} 드림`
