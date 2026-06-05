@@ -165,8 +165,8 @@ textarea{resize:vertical}
         </optgroup>
         <optgroup label="── Tooth Phonics 라인 ──">
           <option value="TP1">Tooth Phonics 1 — Single-Letter Sounds (A~Z + 단모음)</option>
-          <option value="" disabled>Tooth Phonics 2 — 준비 중</option>
-          <option value="" disabled>Tooth Phonics 3 — 준비 중</option>
+          <option value="TP2">Tooth Phonics 2 — Vowel Sounds (단모음 라임 + 장모음 Magic e)</option>
+          <option value="TP3">Tooth Phonics 3 — Double Consonants I (l/r blends + ch·sh)</option>
           <option value="" disabled>Tooth Phonics 4 — 준비 중</option>
           <option value="" disabled>Tooth Phonics 5 — 준비 중</option>
           <option value="" disabled>Tooth Phonics 6 — 준비 중</option>
@@ -532,7 +532,7 @@ const LV={
     label:"Tooth Phonics 1", name:"Single-Letter Sounds",
     focus:"알파벳 A~Z 음가 + 단모음 A·E·I·O·U 음가조합 (라임·패턴 리딩 기초)",
     units:["Unit1 ABCDE","Unit2 FGHIJ","Unit3 KLMNO","Unit4 PQRST","Unit5 UVWXYZ","Unit6 단모음 Aa Ee","Unit7 단모음 Oo Uu","Unit8 단모음 결합"],
-    summary:"알파벳 A~Z의 음가와 단모음 A·E·I·O·U의 소리 조합을 익히고, 라임과 패턴을 활용해 단어를 빠르게 읽어내는 기초를 다졌습니다.",
+    summary:"알파벳 A~Z의 음가와 단모음 A·E·I·O·U의 소리 조합을 익히고, 라임과 패턴을 활용해 단어를 빠르게 읽어내는 기초를 다졌습니다. 또한 페어리 스토리 리더스 'Zoo animals / My pet'을 읽으며, 배운 음가를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
     maxRaw:45,
     analysisMode:"area",
     spkSound:[],
@@ -542,6 +542,44 @@ const LV={
       {id:"phon",name:"Phonics",type:"count",max:11,sub:"첫소리 다른 것 2 + 첫소리 찾기 2 + 첫글자 찾기 3 + 첫글자 쓰기 4"},
       {id:"voca",name:"Vocab",type:"count",max:8,sub:"그림 보고 알맞은 단어 찾기 8"},
       {id:"rd",name:"R/D (Reading)",type:"count",max:6,sub:"문장 찾기 1 + 그림 찾기 5"},
+      {id:"ls",name:"L/s (Listening)",type:"count",max:20,sub:"소리 찾기 8 + 듣고 쓰기 8 + 듣고 고르기 4"}
+    ],
+    vowels:[]
+  },
+  "TP2":{
+    line:"Tooth Phonics",
+    label:"Tooth Phonics 2", name:"Vowel Sounds (Short / Long)",
+    focus:"단모음 라임(an·am·at·op·ot·og·in·ig·it·en·et·ed 등) + 장모음 A·I·O·U (Magic e)",
+    units:["Unit1 단모음 an·am·at·op·ot·og","Unit2 단모음 in·ig·it·en·et·ed","Unit3 단모음 ox·ot·og·um·un·ud","Unit4 Review & Test (단모음)","Unit5 장모음 Aa","Unit6 장모음 Ii","Unit7 장모음 Oo","Unit8 장모음 Uu"],
+    summary:"단모음 라임(an·am·at·op·ot·og·in·ig·it·en·et·ed 등)으로 단어를 빠르게 읽는 연습을 한 뒤, 장모음 A·I·O·U(Magic e)를 배워 단모음과 장모음의 소리 차이를 비교하며 익혔습니다. 또한 페어리 스토리 리더스 'In the woods / Playground'를 읽으며, 배운 음가를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
+    maxRaw:45,
+    analysisMode:"area",
+    spkSound:[],
+    spkWord:[],
+    writeMatch:[],
+    areas:[
+      {id:"phon",name:"Phonics",type:"count",max:11,sub:"가운데 모음 다른 것 2 + 모음소리 찾기 2 + 글자 찾기 3 + 글자 넣기 4"},
+      {id:"voca",name:"Vocab",type:"count",max:8,sub:"그림 보고 알맞은 단어 찾기 8 (단모음·장모음 구별)"},
+      {id:"rd",name:"R/D (Reading)",type:"count",max:6,sub:"문장 찾기 1 + 그림 찾기 5"},
+      {id:"ls",name:"L/s (Listening)",type:"count",max:20,sub:"소리 찾기 8 + 듣고 쓰기 8 + 듣고 고르기 4"}
+    ],
+    vowels:[]
+  },
+  "TP3":{
+    line:"Tooth Phonics",
+    label:"Tooth Phonics 3", name:"Double Consonants I",
+    focus:"이중자음 blends(gl·gr·pl·pr·bl·br·cl·cr·fl·fr·dr·tr) + digraph(ch·sh) + 장모음 Magic e 복습",
+    units:["Unit1 Review&Test (Magic e a-e·i-e·o-e·u-e)","Unit2 gl·gr","Unit3 pl·pr","Unit4 bl·br","Unit5 cl·cr","Unit6 fl·fr·dr·tr","Unit7 Review&Test (l&r blends)","Unit8 ch·sh"],
+    summary:"장모음 Magic e(a-e·i-e·o-e·u-e)를 복습한 뒤, 자음이 이어지는 l·r 블렌드(gl·gr·pl·pr·bl·br·cl·cr·fl·fr·dr·tr)와 두 글자가 한 소리를 내는 ch·sh를 익혔습니다. 또한 페어리 스토리 리더스 'Painting / Days of the week'를 읽으며, 배운 소리를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
+    maxRaw:45,
+    analysisMode:"area",
+    spkSound:[],
+    spkWord:[],
+    writeMatch:[],
+    areas:[
+      {id:"phon",name:"Phonics",type:"count",max:11,sub:"빈칸 소리 다른 것 2 + 소리 찾기 2 + 글자 찾기 3 + 글자 넣기 4"},
+      {id:"voca",name:"Vocab",type:"count",max:8,sub:"그림 보고 알맞은 단어 찾기 8 (이중자음)"},
+      {id:"rd",name:"R/D (Reading)",type:"count",max:6,sub:"문장 찾기 3 + 그림 찾기 3"},
       {id:"ls",name:"L/s (Listening)",type:"count",max:20,sub:"소리 찾기 8 + 듣고 쓰기 8 + 듣고 고르기 4"}
     ],
     vowels:[]
