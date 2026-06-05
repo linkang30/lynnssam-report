@@ -167,7 +167,7 @@ textarea{resize:vertical}
           <option value="TP1">Tooth Phonics 1 — Single-Letter Sounds (A~Z + 단모음)</option>
           <option value="TP2">Tooth Phonics 2 — Vowel Sounds (단모음 라임 + 장모음 Magic e)</option>
           <option value="TP3">Tooth Phonics 3 — Double Consonants I (l/r blends + ch·sh)</option>
-          <option value="" disabled>Tooth Phonics 4 — 준비 중</option>
+          <option value="TP4">Tooth Phonics 4 — Double Consonants II (digraph + blends)</option>
           <option value="" disabled>Tooth Phonics 5 — 준비 중</option>
           <option value="" disabled>Tooth Phonics 6 — 준비 중</option>
         </optgroup>
@@ -571,6 +571,25 @@ const LV={
     focus:"이중자음 blends(gl·gr·pl·pr·bl·br·cl·cr·fl·fr·dr·tr) + digraph(ch·sh) + 장모음 Magic e 복습",
     units:["Unit1 Review&Test (Magic e a-e·i-e·o-e·u-e)","Unit2 gl·gr","Unit3 pl·pr","Unit4 bl·br","Unit5 cl·cr","Unit6 fl·fr·dr·tr","Unit7 Review&Test (l&r blends)","Unit8 ch·sh"],
     summary:"장모음 Magic e(a-e·i-e·o-e·u-e)를 복습한 뒤, 자음이 이어지는 l·r 블렌드(gl·gr·pl·pr·bl·br·cl·cr·fl·fr·dr·tr)와 두 글자가 한 소리를 내는 ch·sh를 익혔습니다. 또한 페어리 스토리 리더스 'Painting / Days of the week'를 읽으며, 배운 소리를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
+    maxRaw:45,
+    analysisMode:"area",
+    spkSound:[],
+    spkWord:[],
+    writeMatch:[],
+    areas:[
+      {id:"phon",name:"Phonics",type:"count",max:11,sub:"빈칸 소리 다른 것 2 + 소리 찾기 2 + 글자 찾기 3 + 글자 넣기 4"},
+      {id:"voca",name:"Vocab",type:"count",max:8,sub:"그림 보고 알맞은 단어 찾기 8 (이중자음)"},
+      {id:"rd",name:"R/D (Reading)",type:"count",max:6,sub:"문장 찾기 3 + 그림 찾기 3"},
+      {id:"ls",name:"L/s (Listening)",type:"count",max:20,sub:"소리 찾기 8 + 듣고 쓰기 8 + 듣고 고르기 4"}
+    ],
+    vowels:[]
+  },
+  "TP4":{
+    line:"Tooth Phonics",
+    label:"Tooth Phonics 4", name:"Double Consonants II",
+    focus:"이중자음 digraph(wh·ph·ck·ng·voiced th·unvoiced th) + blends(sk·sp·st·sw·sn·sm·nt·nk·nd)",
+    units:["Unit1 wh·ph","Unit2 ck·ng","Unit3 voiced th·unvoiced th","Unit4 Review&Test (ch·sh·wh·ph·ck·ng·th)","Unit5 sk·sp·sw","Unit6 st·sn·sm","Unit7 nt·nk·nd","Unit8 Review&Test (sk·sp·st·sw·sn·sm·nt·nk·nd)"],
+    summary:"두 글자가 한 소리를 내는 이중자음(wh·ph·ck·ng·voiced th·unvoiced th)과 자음이 이어지는 다양한 블렌드(sk·sp·st·sw·sn·sm·nt·nk·nd)를 익혔습니다. 또한 페어리 스토리 리더스 'My house / Outdoor activities'를 읽으며, 배운 소리를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
     maxRaw:45,
     analysisMode:"area",
     spkSound:[],
