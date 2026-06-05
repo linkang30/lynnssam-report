@@ -158,7 +158,7 @@ textarea{resize:vertical}
         <optgroup label="── Sound Doctor 라인 ──">
           <option value="SD1">Sound Doctor 1 — Letter Sound (Consonants + Vowels)</option>
           <option value="SD2">Sound Doctor 2 — Letter Sound (Consonants + Vowels o/u)</option>
-          <option value="" disabled>Sound Doctor 3 — 준비 중</option>
+          <option value="SD3">Sound Doctor 3 — Long Vowel + Magic E</option>
           <option value="" disabled>Sound Doctor 4 — 준비 중</option>
           <option value="" disabled>Sound Doctor 5 — 준비 중</option>
           <option value="" disabled>Sound Doctor 6 — 준비 중</option>
@@ -195,69 +195,8 @@ textarea{resize:vertical}
       <div class="tbonus" id="liveBonus" style="display:none">보너스 +0</div>
     </div>
 
-    <!-- Voca: 개수입력 -->
-    <div class="area-sec">
-      <div class="area-head">
-        <div><div class="area-name">PART 3 · Voca</div><div class="area-sub">단어-그림 매칭 6 + 그림 보고 쓰기 6 · 음가 분석 미반영</div></div>
-        <div class="area-score"><span id="scVoca">12</span> / 12점</div>
-      </div>
-      <div class="count-row">
-        <span class="cl">맞은 개수</span>
-        <input type="number" id="cVoca" min="0" max="12" value="12" oninput="recalc()">
-        <span class="ct">/ 총 12개 (1개 1점)</span>
-      </div>
-    </div>
-
-    <!-- Listening: 개수입력 -->
-    <div class="area-sec">
-      <div class="area-head">
-        <div><div class="area-name">PART 1 · Listening</div><div class="area-sub">소리 듣고 찾기 8 + 듣고 쓰기 6 · 음가 분석 미반영</div></div>
-        <div class="area-score"><span id="scList">14</span> / 14점</div>
-      </div>
-      <div class="count-row">
-        <span class="cl">맞은 개수</span>
-        <input type="number" id="cList" min="0" max="14" value="14" oninput="recalc()">
-        <span class="ct">/ 총 14개 (1개 1점)</span>
-      </div>
-    </div>
-
-    <!-- Writing: 매칭 3단계 그리드 + 변환 개수입력 -->
-    <div class="area-sec">
-      <div class="area-head">
-        <div><div class="area-name">PART 2 · Writing</div><div class="area-sub"><span id="lblWMatchN">14</span> 대소문자 매칭 + 대소문자 변환 10 · 음가 분석 미반영</div></div>
-        <div class="area-score"><span id="scWrite">24</span> / <span id="lblWriteMax">24</span>점</div>
-      </div>
-      <div class="subhead">① 대문자/소문자 매칭 + 쓰기 (14개 · 클릭으로 채점)</div>
-      <div class="legend">
-        <span><i class="ldot" style="background:#2d9b5f"></i>정답 1점</span>
-        <span><i class="ldot" style="background:#e24b4a"></i>오답 0점</span>
-        <span style="color:#bbb">탭하면 정답/오답 전환</span>
-      </div>
-      <div class="qgrid c7" id="gridWrite"></div>
-      <div class="subhead">② 대소문자 변환 (10개 · 맞은 개수)</div>
-      <div class="count-row">
-        <span class="cl">맞은 개수</span>
-        <input type="number" id="cConv" min="0" max="10" value="10" oninput="recalc()">
-        <span class="ct">/ 총 10개 (1개 1점)</span>
-      </div>
-    </div>
-
-    <!-- Speaking: 그리드 (분석 근거) -->
-    <div class="area-sec">
-      <div class="area-head">
-        <div><div class="area-name">PART 4 · Speaking</div><div class="area-sub">음가 42 + 단어 <span id="lblSpkWordN">18</span> · 음가 분석의 핵심 근거</div></div>
-        <div class="area-score"><span id="scSpeak">60</span> / <span id="lblSpkMax">60</span>점</div>
-      </div>
-      <div class="legend">
-        <span><i class="ldot" style="background:#2d9b5f"></i>맞음 1점</span>
-        <span><i class="ldot" style="background:#e24b4a"></i>틀림 0점</span>
-        <span style="color:#bbb">틀린 것만 탭하세요</span>
-      </div>
-      <div class="subhead">① 음가 인식 (알파벳·소리 42개)</div>
-      <div class="qgrid c7" id="gridSpkSound"></div>
-      <div class="subhead">② 단어 읽기 / CVC 블렌딩 (18개)</div>
-      <div class="qgrid c9" id="gridSpkWord"></div>
-    </div>
+    <!-- 채점 영역: areas 데이터 기반 동적 생성 -->
+    <div id="gradeAreas"></div>
 
     <!-- BONUS -->
     <div class="bonus-card">
@@ -388,7 +327,6 @@ const LV={
     label:"Sound Doctor 1", name:"Letter Sound (Consonants + Vowels)",
     focus:"자음 B/T/P/G/N/S/J/K/L/V/D + 단모음 A/E/I",
     units:["Consonant B/T","Consonant P/G/N","Vowel A/E","Review B·T·P·G·N+A·E","Consonant S/J/K","Consonant L/V/D","Vowel I","Review S·J·K·L·V·D+I"],
-    // Speaking 음가 42 (3칼럼 14씩): 대문자/소문자/음가기호. type:'C' 자음 / 'V' 모음
     spkSound:[
       {w:"A",t:"V"},{w:"S",t:"C"},{w:"V",t:"C"},{w:"I",t:"V"},{w:"B",t:"C"},{w:"L",t:"C"},{w:"N",t:"C"},
       {w:"G",t:"C"},{w:"P",t:"C"},{w:"E",t:"V"},{w:"J",t:"C"},{w:"D",t:"C"},{w:"T",t:"C"},{w:"K",t:"C"},
@@ -397,19 +335,25 @@ const LV={
       {w:"[n]",t:"C"},{w:"[v]",t:"C"},{w:"[l]",t:"C"},{w:"[æ]",t:"V"},{w:"[p]",t:"C"},{w:"[i]",t:"V"},{w:"[s]",t:"C"},
       {w:"[k]",t:"C"},{w:"[e]",t:"V"},{w:"[t]",t:"C"},{w:"[g]",t:"C"},{w:"[b]",t:"C"},{w:"[d]",t:"C"},{w:"[dʒ]",t:"C"}
     ],
-    // Speaking 단어 18 (모음 v: a/e/i)
     spkWord:[
       {w:"big",v:"i"},{w:"bag",v:"a"},{w:"beg",v:"e"},{w:"pin",v:"i"},{w:"pan",v:"a"},{w:"pen",v:"e"},
       {w:"tan",v:"a"},{w:"ten",v:"e"},{w:"tin",v:"i"},{w:"lid",v:"i"},{w:"net",v:"e"},{w:"dig",v:"i"},
       {w:"nap",v:"a"},{w:"kin",v:"i"},{w:"bib",v:"i"},{w:"pat",v:"a"},{w:"tap",v:"a"},{w:"bit",v:"i"}
     ],
-    // Writing 매칭 14 (대문자-소문자 짝, 부분점수)
     writeMatch:["B-b","T-t","P-p","G-g","N-n","A-a","E-e","S-s","J-j","K-k","L-l","V-v","D-d","I-i"],
     maxRaw:110,
     vowels:[
       {key:"a",label:"단모음 a",ex:"bag, pan, tap",kw:["단모음 a 단어(bag, pan, tap) 집중 반복","a 소리 입모양 연습","a 단어 카드 읽기"]},
       {key:"e",label:"단모음 e",ex:"beg, pen, ten",kw:["단모음 e 단어(beg, pen, ten) 집중 반복","e와 i 소리 구별 연습","e 단어 카드 읽기"]},
       {key:"i",label:"단모음 i",ex:"big, pin, lid",kw:["단모음 i 단어(big, pin, lid) 집중 반복","i 소리 입모양 연습","i 단어 카드 읽기"]}
+    ],
+    areas:[
+      {id:"voca",name:"PART 3 · Voca",type:"count",max:12,sub:"단어-그림 매칭 6 + 그림 보고 쓰기 6 · 음가 분석 미반영"},
+      {id:"list",name:"PART 1 · Listening",type:"count",max:14,sub:"소리 듣고 찾기 8 + 듣고 쓰기 6 · 음가 분석 미반영"},
+      {id:"writeMatch",name:"PART 2 · Writing",type:"grid",source:"writeMatch",cols:7,sub:"대소문자 매칭 + 쓰기 · 음가 분석 미반영"},
+      {id:"conv",name:"PART 2 · Writing (변환)",type:"count",max:10,sub:"대소문자 변환 · 음가 분석 미반영"},
+      {id:"spkSound",name:"PART 4 · Speaking (음가)",type:"grid",source:"spkSound",cols:7,sub:"음가 인식 (알파벳·소리) · 음가 분석의 핵심 근거"},
+      {id:"spkWord",name:"PART 4 · Speaking (단어)",type:"grid",source:"spkWord",cols:9,sub:"단어 읽기 / CVC 블렌딩 · 음가 분석의 핵심 근거"}
     ],
     bonus:{total:48,per:6}
   },
@@ -436,16 +380,62 @@ const LV={
       {key:"o",label:"단모음 o",ex:"top, dot, log",kw:["단모음 o 단어(top, dot, log) 집중 반복","o 소리 입모양 연습","o 단어 카드 읽기"]},
       {key:"u",label:"단모음 u",ex:"sun, gum, cup",kw:["단모음 u 단어(sun, gum, cup) 집중 반복","u 소리 입모양 연습","u 단어 카드 읽기"]}
     ],
+    areas:[
+      {id:"voca",name:"PART 3 · Voca",type:"count",max:12,sub:"단어-그림 매칭 6 + 그림 보고 쓰기 6 · 음가 분석 미반영"},
+      {id:"list",name:"PART 1 · Listening",type:"count",max:14,sub:"소리 듣고 찾기 8 + 듣고 쓰기 6 · 음가 분석 미반영"},
+      {id:"writeMatch",name:"PART 2 · Writing",type:"grid",source:"writeMatch",cols:7,sub:"대소문자 매칭 + 쓰기 · 음가 분석 미반영"},
+      {id:"conv",name:"PART 2 · Writing (변환)",type:"count",max:10,sub:"대소문자 변환 · 음가 분석 미반영"},
+      {id:"spkSound",name:"PART 4 · Speaking (음가)",type:"grid",source:"spkSound",cols:7,sub:"음가 인식 (알파벳·소리) · 음가 분석의 핵심 근거"},
+      {id:"spkWord",name:"PART 4 · Speaking (단어)",type:"grid",source:"spkWord",cols:9,sub:"단어 읽기 / CVC 블렌딩 · 음가 분석의 핵심 근거"}
+    ],
     bonus:{total:9,per:3}
+  },
+  "SD3":{
+    line:"Sound Doctor",
+    label:"Sound Doctor 3", name:"Long Vowel + Magic E",
+    focus:"장모음 a/i/e/o/u (Magic E) + 단모음 vs 장모음 구별",
+    units:["Magic E a_e","Magic E i_e","Magic E o_e","Magic E u_e","장모음 ee/ea","단모음 vs 장모음 구별","Review","Review"],
+    maxRaw:104,
+    spkSound:[],
+    spkWord:[
+      {w:"box",v:"S"},{w:"fun",v:"S"},{w:"fed",v:"S"},{w:"cap",v:"S"},{w:"hat",v:"S"},
+      {w:"pig",v:"S"},{w:"kit",v:"S"},{w:"met",v:"S"},{w:"bug",v:"S"},{w:"mom",v:"S"},
+      {w:"cute",v:"Lu"},{w:"seat",v:"Le"},{w:"bee",v:"Le"},{w:"mope",v:"Lo"},{w:"like",v:"Li"},
+      {w:"hate",v:"La"},{w:"name",v:"La"},{w:"tune",v:"Lu"},{w:"hope",v:"Lo"},{w:"seat",v:"Le"},
+      {w:"man",v:"S"},{w:"top",v:"S"},{w:"cane",v:"La"},{w:"rid",v:"S"},{w:"robe",v:"Lo"},
+      {w:"nine",v:"Li"},{w:"meat",v:"Le"},{w:"set",v:"S"},{w:"cane",v:"La"},{w:"kit",v:"S"},
+      {w:"cake",v:"La"},{w:"fine",v:"Li"},{w:"eat",v:"Le"},{w:"dive",v:"Li"},{w:"date",v:"La"},
+      {w:"five",v:"Li"},{w:"hide",v:"Li"},{w:"hive",v:"Li"},{w:"make",v:"La"},{w:"mice",v:"Li"},
+      {w:"nice",v:"Li"},{w:"rice",v:"Li"},
+      {w:"rope",v:"Lo"},{w:"save",v:"La"},{w:"seal",v:"Le"},{w:"seed",v:"Le"},{w:"take",v:"La"},
+      {w:"tile",v:"Li"},{w:"time",v:"Li"},{w:"wake",v:"La"},{w:"use",v:"Lu"},{w:"jeep",v:"Le"},
+      {w:"wine",v:"Li"}
+    ],
+    writeMatch:[],
+    areas:[
+      {id:"list",name:"PART 1 · Listening",type:"count",max:15,sub:"소리 찾기 10 + 듣고 쓰기 5 · 음가 분석 미반영"},
+      {id:"write",name:"PART 2 · Writing",type:"count",max:14,sub:"Magic E 5 + 그림단어 쓰기 9 · 음가 분석 미반영"},
+      {id:"voca",name:"PART 3 · Voca/Reading",type:"count",max:22,sub:"단어-그림 매칭 8 + 장모음 찾기 14 · 음가 분석 미반영"},
+      {id:"spkWord",name:"PART 4 · Speaking",type:"grid",source:"spkWord",cols:9,sub:"단어 53 (단모음 vs 장모음) · 음가 분석의 핵심 근거"}
+    ],
+    vowels:[
+      {key:"S",label:"단모음",ex:"box, cap, pig",kw:["단모음 단어(box, cap, pig) 집중 반복","단모음과 장모음 소리 구별 연습","단모음 카드 읽기"]},
+      {key:"La",label:"장모음 a",ex:"cake, name, gate",kw:["장모음 a 단어(cake, name) 집중 반복","Magic E a_e 소리 연습","단모음 a와 장모음 a 구별"]},
+      {key:"Li",label:"장모음 i",ex:"bike, nine, kite",kw:["장모음 i 단어(bike, nine) 집중 반복","Magic E i_e 소리 연습","단모음 i와 장모음 i 구별"]},
+      {key:"Le",label:"장모음 e",ex:"meet, seat, bee",kw:["장모음 e 단어(meet, seat) 집중 반복","ee/ea 소리 연습","단모음 e와 장모음 e 구별"]},
+      {key:"Lo",label:"장모음 o",ex:"rose, home, hope",kw:["장모음 o 단어(rose, home) 집중 반복","Magic E o_e 소리 연습","단모음 o와 장모음 o 구별"]},
+      {key:"Lu",label:"장모음 u",ex:"cube, tune, use",kw:["장모음 u 단어(cube, tune) 집중 반복","Magic E u_e 소리 연습","단모음 u와 장모음 u 구별"]}
+    ],
+    bonus:{total:21,per:3}
   }
 };
 
 /* ===== 상태 ===== */
 let curLv="";
-let writeState={};   // 인덱스 -> 'ok'|'half'|'wrong'
-let spkSoundState={};// 인덱스 -> true(맞음) 기본 / false(틀림)
-let spkWordState={};
 let bonusOn=false;
+// areas 기반 상태: gridState[areaId] = {idx:true/false}, countState[areaId] = 정수
+let gridState={};   // type:"grid" 영역의 항목별 맞음(true)/틀림(false)
+let countState={};  // type:"count" 영역의 맞은 개수
 
 /* ===== 이력 저장 (silver 방식 · prefix np_ · 음가 포함) ===== */
 function LS(action,key,data){
@@ -534,21 +524,13 @@ function onLvChange(){
   if(hdrT)hdrT.innerHTML=`<i class="ti ti-abc"></i> ${d.line} — Monthly Report`;
   if(hdrS)hdrS.textContent=`파머스국제어학원 광교브랜치 · 강사용 · ${d.label} · Monthly Test`;
   updateScoreLabels();
-  buildGrids();
+  buildGradeAreas();
   recalc();
 }
 
 function updateScoreLabels(){
   const d=LV[curLv]; if(!d)return;
-  const wMatchN=d.writeMatch.length;          // 매칭 개수
-  const writeMax=wMatchN+10;                  // 매칭 + 변환 10
-  const spkN=d.spkSound.length+d.spkWord.length; // 음가+단어
-  const spkWordN=d.spkWord.length;
   if(g('lblMaxRaw'))g('lblMaxRaw').textContent=d.maxRaw;
-  if(g('lblWMatchN'))g('lblWMatchN').textContent=wMatchN;
-  if(g('lblWriteMax'))g('lblWriteMax').textContent=writeMax;
-  if(g('lblSpkWordN'))g('lblSpkWordN').textContent=spkWordN;
-  if(g('lblSpkMax'))g('lblSpkMax').textContent=spkN;
   const bcfg=(d.bonus)||{total:48,per:6};
   const bmax=Math.floor(bcfg.total/bcfg.per);
   if(g('lblBonusTotal'))g('lblBonusTotal').textContent=bcfg.total;
@@ -558,50 +540,74 @@ function updateScoreLabels(){
   if(g('cBonus'))g('cBonus').max=bcfg.total;
 }
 
-function buildGrids(){
-  const d=LV[curLv]; if(!d)return;
-  // Writing 매칭: 기본 정답(ok)
-  writeState={};
-  let wh='';
-  d.writeMatch.forEach((m,i)=>{
-    writeState[i]='ok';
-    wh+=`<div class="qcell ok" id="wq${i}" onclick="cycleWrite(${i})"><span class="qw">${m}</span><span class="qmk" id="wm${i}">1</span></div>`;
-  });
-  g('gridWrite').innerHTML=wh;
-  // Speaking 음가: 기본 맞음
-  spkSoundState={};
-  let sh='';
-  d.spkSound.forEach((s,i)=>{
-    spkSoundState[i]=true;
-    sh+=`<div class="qcell" id="sq${i}" onclick="toggleSpk('sound',${i})"><span class="qw">${s.w}</span><span class="qv">${s.t==='V'?'모음':'자음'}</span></div>`;
-  });
-  g('gridSpkSound').innerHTML=sh;
-  // Speaking 단어: 기본 맞음
-  spkWordState={};
-  let wo='';
-  d.spkWord.forEach((s,i)=>{
-    spkWordState[i]=true;
-    wo+=`<div class="qcell" id="kq${i}" onclick="toggleSpk('word',${i})"><span class="qw">${s.w}</span><span class="qv">단모음 ${s.v}</span></div>`;
-  });
-  g('gridSpkWord').innerHTML=wo;
+function areaMaxOf(d,a){
+  // 영역 만점: count는 max, grid는 해당 source 배열 길이
+  if(a.type==='count')return a.max;
+  return (d[a.source]||[]).length;
 }
 
-function cycleWrite(i){
-  const cur=writeState[i];
-  const next=cur==='ok'?'wrong':'ok';
-  writeState[i]=next;
-  const el=g('wq'+i);
-  el.classList.remove('ok','half','wrong');
-  el.classList.add(next);
-  g('wm'+i).textContent=next==='ok'?'1':'0';
+function buildGradeAreas(){
+  const d=LV[curLv]; if(!d)return;
+  gridState={}; countState={};
+  const cont=g('gradeAreas'); if(!cont)return;
+  let html='';
+  (d.areas||[]).forEach(a=>{
+    const amax=areaMaxOf(d,a);
+    if(a.type==='count'){
+      countState[a.id]=amax; // 기본 만점
+      html+=`<div class="area-sec">`+
+        `<div class="area-head"><div><div class="area-name">${a.name}</div><div class="area-sub">${a.sub||''}</div></div>`+
+        `<div class="area-score"><span id="sc_${a.id}">${amax}</span> / ${amax}점</div></div>`+
+        `<div class="count-row"><span class="cl">맞은 개수</span>`+
+        `<input type="number" id="c_${a.id}" min="0" max="${amax}" value="${amax}" oninput="onCountInput('${a.id}')">`+
+        `<span class="ct">/ 총 ${amax}개 (1개 1점)</span></div>`+
+        `</div>`;
+    }else{ // grid
+      const items=d[a.source]||[];
+      gridState[a.id]={};
+      const cols=a.cols||7;
+      let cells='';
+      items.forEach((it,i)=>{
+        gridState[a.id][i]=true; // 기본 맞음
+        // 셀 라벨: writeMatch는 문자열, spkSound는 {w,t}, spkWord는 {w,v}
+        let label, sub='';
+        if(typeof it==='string'){ label=it; }
+        else { label=it.w; sub = (it.t!==undefined)?(it.t==='V'?'모음':'자음'):(it.v!==undefined?('모음 '+it.v):''); }
+        const subHtml = sub?`<span class="qv">${sub}</span>`:'';
+        cells+=`<div class="qcell" id="gc_${a.id}_${i}" onclick="toggleGrid('${a.id}',${i})"><span class="qw">${label}</span>${subHtml}</div>`;
+      });
+      html+=`<div class="area-sec">`+
+        `<div class="area-head"><div><div class="area-name">${a.name}</div><div class="area-sub">${a.sub||''}</div></div>`+
+        `<div class="area-score"><span id="sc_${a.id}">${items.length}</span> / ${items.length}점</div></div>`+
+        `<div class="legend"><span><i class="ldot" style="background:#2d9b5f"></i>맞음 1점</span>`+
+        `<span><i class="ldot" style="background:#e24b4a"></i>틀림 0점</span>`+
+        `<span style="color:#bbb">틀린 것만 탭하세요</span></div>`+
+        `<div class="qgrid c${cols}" id="grid_${a.id}">${cells}</div>`+
+        `</div>`;
+    }
+  });
+  cont.innerHTML=html;
+}
+
+function onCountInput(id){
+  const d=LV[curLv]; if(!d)return;
+  const a=(d.areas||[]).find(x=>x.id===id); if(!a)return;
+  const amax=areaMaxOf(d,a);
+  let v=parseInt(g('c_'+id).value)||0;
+  v=Math.min(amax,Math.max(0,v));
+  countState[id]=v;
+  if(g('sc_'+id))g('sc_'+id).textContent=v;
   recalc();
 }
 
-function toggleSpk(kind,i){
-  const st=kind==='sound'?spkSoundState:spkWordState;
-  st[i]=!st[i];
-  const el=g((kind==='sound'?'sq':'kq')+i);
-  el.classList.toggle('wrong',!st[i]);
+function toggleGrid(id,i){
+  if(!gridState[id])return;
+  gridState[id][i]=!gridState[id][i];
+  const el=g(`gc_${id}_${i}`);
+  if(el)el.classList.toggle('wrong',!gridState[id][i]);
+  // 영역 점수 갱신
+  let ok=0; Object.values(gridState[id]).forEach(v=>{if(v)ok++;});
+  if(g('sc_'+id))g('sc_'+id).textContent=ok;
   recalc();
 }
 
@@ -620,64 +626,59 @@ function bonusPoints(){
   return Math.floor(bc/cfg.per);
 }
 
+function areaScore(d,a){
+  // 현재 상태에서 영역 점수 산출
+  if(a.type==='count')return countState[a.id]||0;
+  let ok=0; const st=gridState[a.id]||{}; Object.values(st).forEach(v=>{if(v)ok++;});
+  return ok;
+}
+
 function recalc(){
-  // Voca / Listening / 변환: 개수
-  const voca=Math.min(12,Math.max(0,parseInt(g('cVoca').value)||0));
-  const list=Math.min(14,Math.max(0,parseInt(g('cList').value)||0));
-  const conv=Math.min(10,Math.max(0,parseInt(g('cConv').value)||0));
-  // Writing 매칭: ok=1, half=0.5, wrong=0
-  let wmatch=0;
-  Object.values(writeState).forEach(s=>{wmatch+=s==='ok'?1:0;});
-  const write=wmatch+conv;
-  // Speaking: 맞은 개수 (sound 42 + word 18)
-  let spk=0;
-  Object.values(spkSoundState).forEach(v=>{if(v)spk++;});
-  Object.values(spkWordState).forEach(v=>{if(v)spk++;});
-  // 영역 점수 표시
-  g('scVoca').textContent=voca;
-  g('scList').textContent=list;
-  g('scWrite').textContent=write%1?write.toFixed(1):write;
-  g('scSpeak').textContent=spk;
-  // 본점수
-  let base=voca+list+write+spk;
-  // 보너스
+  const d=LV[curLv]; if(!d)return;
+  let base=0;
+  (d.areas||[]).forEach(a=>{
+    const v=areaScore(d,a);
+    if(g('sc_'+a.id))g('sc_'+a.id).textContent=(v%1?v.toFixed(1):v);
+    base+=v;
+  });
   let bonusPts=0;
   if(bonusOn){
     bonusPts=bonusPoints();
-    g('bonusPts').textContent='+'+bonusPts+'점';
-    g('liveBonus').textContent='보너스 +'+bonusPts;
+    if(g('bonusPts'))g('bonusPts').textContent='+'+bonusPts+'점';
+    if(g('liveBonus'))g('liveBonus').textContent='보너스 +'+bonusPts;
   }
   let raw=base+bonusPts;
-  let total=raw*100/((LV[curLv]&&LV[curLv].maxRaw)||110);
+  let total=raw*100/(d.maxRaw||110);
   if(total>100)total=100;
-  total=Math.round(total*10)/10;    // 소수 첫째자리
-  g('liveTotal').textContent=total%1?total.toFixed(1):total;
+  total=Math.round(total*10)/10;
+  if(g('liveTotal'))g('liveTotal').textContent=total%1?total.toFixed(1):total;
 }
 
 function computeScores(){
-  const voca=Math.min(12,Math.max(0,parseInt(g('cVoca').value)||0));
-  const list=Math.min(14,Math.max(0,parseInt(g('cList').value)||0));
-  const conv=Math.min(10,Math.max(0,parseInt(g('cConv').value)||0));
-  let wmatch=0; Object.values(writeState).forEach(v=>{wmatch+=v==='ok'?1:0;});
-  const write=wmatch+conv;
-  let spk=0; Object.values(spkSoundState).forEach(v=>{if(v)spk++;});
-  Object.values(spkWordState).forEach(v=>{if(v)spk++;});
-  return {voca,list,write,spk};
+  const d=LV[curLv];
+  const out={byId:{},base:0};
+  if(!d)return out;
+  (d.areas||[]).forEach(a=>{
+    const v=areaScore(d,a);
+    out.byId[a.id]=v;
+    out.base+=v;
+  });
+  return out;
 }
 
 function phonemeStats(){
   const d=LV[curLv]; if(!d)return null;
-  // 분석 대상 단모음 (레벨 데이터 vowels 기준)
+  const wordSt=(gridState['spkWord'])||{};
+  const soundSt=(gridState['spkSound'])||{};
   const vowel={};
   (d.vowels||[]).forEach(v=>{vowel[v.key]={ok:0,tot:0};});
-  d.spkWord.forEach((w,idx)=>{
-    if(vowel[w.v]){vowel[w.v].tot++; if(spkWordState[idx])vowel[w.v].ok++;}
+  (d.spkWord||[]).forEach((w,idx)=>{
+    if(vowel[w.v]){vowel[w.v].tot++; if(wordSt[idx])vowel[w.v].ok++;}
   });
-  // 자음/모음 (spkSound 기준)
   const snd={C:{ok:0,tot:0},V:{ok:0,tot:0}};
-  d.spkSound.forEach((x,idx)=>{
+  (d.spkSound||[]).forEach((x,idx)=>{
     snd[x.t].tot++;
-    if(spkSoundState[idx])snd[x.t].ok++;
+    if(soundSt[idx])snd[x.t].ok++;
   });
   return {vowel,snd};
 }
@@ -689,25 +690,22 @@ function barTag(p){return p>=90?'<span class="bar-tag tag-good">우수</span>':p
 function buildAnalysis(){
   const d=LV[curLv]; if(!d){g('areaBars').innerHTML='<p style="color:#999;font-size:13px">먼저 과정을 선택하고 채점해주세요.</p>';g('phonBars').innerHTML='';g('phonSummary').innerHTML='';return;}
   const sc=computeScores();
-  // 영역별 점수 막대 (만점 대비)
-  const areas=[
-    {n:'Voca',sub:'단어·어휘',ok:sc.voca,tot:12},
-    {n:'Listening',sub:'듣기',ok:sc.list,tot:14},
-    {n:'Writing',sub:'쓰기·매칭',ok:sc.write,tot:24},
-    {n:'Speaking',sub:'말하기·읽기',ok:sc.spk,tot:60}
-  ];
   let ah='';
-  areas.forEach(a=>{
-    const p=pct(a.ok,a.tot);
-    ah+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${a.n}<span class="sub">${a.sub}</span></span><span class="bar-pct" style="color:${barColor(p)}">${a.ok%1?a.ok.toFixed(1):a.ok} / ${a.tot}점 · ${p}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;
+  (d.areas||[]).forEach(a=>{
+    const tot=areaMaxOf(d,a);
+    const ok=sc.byId[a.id]||0;
+    const p=pct(ok,tot);
+    ah+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${a.name}</span><span class="bar-pct" style="color:${barColor(p)}">${ok%1?ok.toFixed(1):ok} / ${tot}점 · ${p}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;
   });
   g('areaBars').innerHTML=ah;
-  // 음가 세부
   const ps=phonemeStats();
+  const hasSound=(d.spkSound||[]).length>0;
   const rows=[
     ...(d.vowels||[]).map(v=>({n:v.label,sub:v.ex,ok:ps.vowel[v.key].ok,tot:ps.vowel[v.key].tot})),
-    {n:'자음 음가',sub:'알파벳 자음 인식',ok:ps.snd.C.ok,tot:ps.snd.C.tot},
-    {n:'모음 음가',sub:'알파벳 모음 인식',ok:ps.snd.V.ok,tot:ps.snd.V.tot}
+    ...(hasSound?[
+      {n:'자음 음가',sub:'알파벳 자음 인식',ok:ps.snd.C.ok,tot:ps.snd.C.tot},
+      {n:'모음 음가',sub:'알파벳 모음 인식',ok:ps.snd.V.ok,tot:ps.snd.V.tot}
+    ]:[])
   ];
   let ph='';
   rows.forEach(r=>{
@@ -715,7 +713,6 @@ function buildAnalysis(){
     ph+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${r.n}<span class="sub">${r.sub}</span>${barTag(p)}</span><span class="bar-pct" style="color:${barColor(p)}">${r.ok}/${r.tot} · ${p}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;
   });
   g('phonBars').innerHTML=ph;
-  // 요약: 약점/강점 음가 추출
   const weak=rows.filter(r=>pct(r.ok,r.tot)<70).map(r=>r.n);
   const good=rows.filter(r=>pct(r.ok,r.tot)>=90).map(r=>r.n);
   let sum='';
@@ -758,7 +755,6 @@ function toggleChip(kind,i){
 }
 
 const finish=str=>/[다요죠]$/.test(str)?str+'.':str;
-// 이름 뒤 주격/주제 조사: 받침 있으면 '은', 없으면 '는'. 한글 아니면 '는'
 function withTopic(name){
   if(!name)return '우리 친구는';
   const last=name[name.length-1];
@@ -784,14 +780,16 @@ function buildAutoFeedback(){
   const d=LV[curLv]; if(!d)return;
   const ps=phonemeStats();
   const name=val('stuName')||'우리 친구';
+  const hasSound=(d.spkSound||[]).length>0;
   const rows=[
     ...(d.vowels||[]).map(v=>({n:v.label,ok:ps.vowel[v.key].ok,tot:ps.vowel[v.key].tot,ex:v.ex})),
-    {n:'자음 음가',ok:ps.snd.C.ok,tot:ps.snd.C.tot,ex:''},
-    {n:'모음 음가',ok:ps.snd.V.ok,tot:ps.snd.V.tot,ex:''}
+    ...(hasSound?[
+      {n:'자음 음가',ok:ps.snd.C.ok,tot:ps.snd.C.tot,ex:''},
+      {n:'모음 음가',ok:ps.snd.V.ok,tot:ps.snd.V.tot,ex:''}
+    ]:[])
   ];
   const good=rows.filter(r=>pct(r.ok,r.tot)>=90);
   const weak=rows.filter(r=>pct(r.ok,r.tot)<70);
-  // 강점 자동 문장
   let sTxt='';
   if(good.length){
     sTxt=good.map(r=>`${r.n} 소리를 정확하게 익혀, 안정적으로 읽어내는 힘이 자리잡았어요`).join('. ')+'.';
@@ -799,7 +797,6 @@ function buildAutoFeedback(){
     sTxt=`${withTopic(name)} 이번 달도 새로운 소리에 꾸준히 도전하며 차근차근 익혀가고 있어요.`;
   }
   g('strengthAnalysis').textContent=sTxt;
-  // 보완점 자동 문장
   let iTxt='';
   if(weak.length){
     iTxt=weak.map(r=>{
@@ -822,27 +819,27 @@ const NEXT_GENERAL=["매일 소리 내어 읽기 습관","배운 단어 집에�
 function buildNextPlan(){
   const d=LV[curLv]; if(!d)return;
   const ps=phonemeStats();
+  const hasSound=(d.spkSound||[]).length>0;
   const rows=[
     ...(d.vowels||[]).map(v=>({key:v.key,n:v.label,ok:ps.vowel[v.key].ok,tot:ps.vowel[v.key].tot})),
-    {key:'자음',n:'자음 음가',ok:ps.snd.C.ok,tot:ps.snd.C.tot},
-    {key:'모음',n:'모음 음가',ok:ps.snd.V.ok,tot:ps.snd.V.tot}
+    ...(hasSound?[
+      {key:'자음',n:'자음 음가',ok:ps.snd.C.ok,tot:ps.snd.C.tot},
+      {key:'모음',n:'모음 음가',ok:ps.snd.V.ok,tot:ps.snd.V.tot}
+    ]:[])
   ];
   rows.forEach(r=>{r.p=pct(r.ok,r.tot);r.prio=r.p<70?'weak':r.p<90?'mid':'good';});
-  // 우선순위 진단 바 (약한 것부터)
   const order={weak:0,mid:1,good:2};
   const sorted=[...rows].sort((a,b)=>order[a.prio]-order[b.prio]);
   const sty={weak:{dot:'!',col:'#a32d2d',bg:'#fcebeb',tip:'보강 우선'},mid:{dot:'~',col:'#a8730a',bg:'#fff4e0',tip:'성장 중'},good:{dot:'+',col:'#1a7a40',bg:'#eaf6ee',tip:'강점'}};
   let pb=sorted.map(r=>{const s=sty[r.prio];return `<span style="display:inline-block;background:${s.bg};color:${s.col};border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;margin:0 5px 5px 0">[${s.dot}] ${r.n} ${r.p}% · ${s.tip}</span>`;}).join('');
   pb+=`<div style="font-size:10px;color:#9bb0c4;margin-top:4px;line-height:1.6">[!] 70% 미만 보강 우선 · [~] 70~89% 성장 중 · [+] 90% 이상 강점 → 약한 음가 키워드가 아래에서 자동 선택됩니다.</div>`;
   g('nextPriorityBar').innerHTML=pb;
-  // 키워드 칩 (약한 음가 먼저, 그다음 보통, 마지막에 공통)
   const result=[];
   const vkw={};(d.vowels||[]).forEach(v=>{vkw[v.key]=v.kw;});
   sorted.forEach(r=>{(vkw[r.key]||NEXT_KW[r.key]||[]).forEach(kw=>result.push({kw,prio:r.prio}));});
   NEXT_GENERAL.forEach(kw=>result.push({kw,prio:'general'}));
   const chipSty={weak:'#e6a3a3',mid:'#e8c98a',good:'#a9cd86',general:'#d0cfc8'};
   g('nextChips').innerHTML=result.map((r,i)=>`<span class="chip" data-i="${i}" onclick="toggleNextChip(${i})" style="border-color:${chipSty[r.prio]}">${r.kw}</span>`).join('');
-  // 약한 음가 키워드 자동 선택 (최대 3개)
   let auto=0;
   result.forEach((r,i)=>{
     if(auto>=3||r.prio!=='weak')return;
@@ -888,7 +885,7 @@ function buildReport(){
   const out=g('reportOut');
   if(!d){out.innerHTML='<p style="color:#999;font-size:13px">먼저 과정을 선택하고 채점해주세요.</p>';return;}
   const sc=computeScores();
-  const base=sc.voca+sc.list+sc.write+sc.spk;
+  const base=sc.base;
   let bonusPts=0;
   if(bonusOn){bonusPts=bonusPoints();}
   let raw=base+bonusPts;
@@ -900,16 +897,18 @@ function buildReport(){
   const teacher=val('teacher')||'선생님';
   const month=val('repMonth')||'-';
   const ps=phonemeStats();
+  const hasSound=(d.spkSound||[]).length>0;
   const rows=[
     ...(d.vowels||[]).map(v=>({n:v.label,ok:ps.vowel[v.key].ok,tot:ps.vowel[v.key].tot})),
-    {n:'자음 음가',ok:ps.snd.C.ok,tot:ps.snd.C.tot},
-    {n:'모음 음가',ok:ps.snd.V.ok,tot:ps.snd.V.tot}
+    ...(hasSound?[
+      {n:'자음 음가',ok:ps.snd.C.ok,tot:ps.snd.C.tot},
+      {n:'모음 음가',ok:ps.snd.V.ok,tot:ps.snd.V.tot}
+    ]:[])
   ];
   let phonRows='';
   rows.forEach(r=>{const p=pct(r.ok,r.tot);phonRows+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${r.n}${barTag(p)}</span><span class="bar-pct" style="color:${barColor(p)}">${p}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;});
-  const areas=[['Voca',sc.voca,12],['Listening',sc.list,14],['Writing',sc.write,24],['Speaking',sc.spk,60]];
   let areaRows='';
-  areas.forEach(a=>{const p=pct(a[1],a[2]);areaRows+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${a[0]}</span><span class="bar-pct" style="color:${barColor(p)}">${a[1]%1?a[1].toFixed(1):a[1]} / ${a[2]}점</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;});
+  (d.areas||[]).forEach(a=>{const tot=areaMaxOf(d,a);const ok=sc.byId[a.id]||0;const p=pct(ok,tot);areaRows+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${a.name}</span><span class="bar-pct" style="color:${barColor(p)}">${ok%1?ok.toFixed(1):ok} / ${tot}점</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;});
   const sCmt=val('cmtStrength')||g('strengthAnalysis').textContent;
   const iCmt=val('cmtImprove')||g('improveAnalysis').textContent;
   const sAuto=g('strengthAnalysis').textContent;
@@ -941,7 +940,7 @@ function buildReport(){
 function copyReport(){
   const d=LV[curLv]; if(!d){alert('먼저 과정을 선택해주세요.');return;}
   const sc=computeScores();
-  const base=sc.voca+sc.list+sc.write+sc.spk;
+  const base=sc.base;
   let bonusPts=0;
   if(bonusOn){bonusPts=bonusPoints();}
   let total=(base+bonusPts)*100/((LV[curLv]&&LV[curLv].maxRaw)||110); if(total>100)total=100; total=Math.round(total*10)/10;
@@ -957,7 +956,7 @@ function copyReport(){
     `${d.label} Monthly Report`,
     stu,
     `종합 점수: ${total} / 100점`+(bonusOn?` (보너스 +${bonusPts})`:''),
-    `영역별 · Voca ${sc.voca}/12 · Listening ${sc.list}/14 · Writing ${sc.write}/24 · Speaking ${sc.spk}/60`,
+    '영역별 · '+(LV[curLv].areas||[]).map(a=>`${a.name.replace(/^PART \d+ · /,'')} ${sc.byId[a.id]||0}/${areaMaxOf(LV[curLv],a)}`).join(' · '),
     sBlock, iBlock, nBlock,
     `파머스국제어학원 광교브랜치 ${teacher} 드림`
   ].filter(t=>t&&t.trim());
@@ -1009,17 +1008,16 @@ function downloadPDF(){
     const {jsPDF}=window.jspdf;
     const pdf=new jsPDF('p','mm','a4');
     const pageW=210, pageH=297;
-    const margin=8;                       // 페이지 가장자리 여백(mm)
+    const margin=8;
     const availW=pageW-margin*2;
     const availH=pageH-margin*2;
-    // 캔버스 비율 유지하며 A4 한 장(여백 안)에 들어가도록 축소
     let imgW=availW;
     let imgH=canvas.height*imgW/canvas.width;
-    if(imgH>availH){                      // 세로가 넘치면 높이 기준으로 맞춤
+    if(imgH>availH){
       imgH=availH;
       imgW=canvas.width*imgH/canvas.height;
     }
-    const x=(pageW-imgW)/2;               // 가운데 정렬
+    const x=(pageW-imgW)/2;
     const y=margin;
     pdf.addImage(canvas.toDataURL('image/png'),'PNG',x,y,imgW,imgH);
     pdf.save(fileBaseName()+'.pdf');
@@ -1034,15 +1032,14 @@ function saveReport(){
   const strengths=[...document.querySelectorAll('#strengthChips .chip.on')].map(c=>c.textContent);
   const improves=[...document.querySelectorAll('#improveChips .chip.on')].map(c=>c.textContent);
   const sc=computeScores();
-  const base=sc.voca+sc.list+sc.write+sc.spk;
+  const base=sc.base;
   let bonusPts=0;
   if(bonusOn){bonusPts=bonusPoints();}
   let total=(base+bonusPts)*100/((LV[curLv]&&LV[curLv].maxRaw)||110); if(total>100)total=100; total=Math.round(total*10)/10;
   const ps=phonemeStats();
-  const phon={
-    '자음':pct(ps.snd.C.ok,ps.snd.C.tot),
-    '모음':pct(ps.snd.V.ok,ps.snd.V.tot)
-  };
+  const hasSound=(LV[curLv].spkSound||[]).length>0;
+  const phon={};
+  if(hasSound){ phon['자음']=pct(ps.snd.C.ok,ps.snd.C.tot); phon['모음']=pct(ps.snd.V.ok,ps.snd.V.tot); }
   (LV[curLv].vowels||[]).forEach(v=>{phon[v.key]=pct(ps.vowel[v.key].ok,ps.vowel[v.key].tot);});
   let prev=LS('get',k+'_kw')||{};
   prev[month]={strength:strengths,improve:improves,level:val('lvSel'),teacher:val('teacher'),score:total,phon:phon};
@@ -1060,11 +1057,11 @@ function saveReport(){
 }
 
 function resetAll(){
-  writeState={};spkSoundState={};spkWordState={};bonusOn=false;curLv="";
+  gridState={};countState={};bonusOn=false;curLv="";
   ['stuName','stuSchool','stuGrade','sClass','teacher','repMonth','cmtStrength','cmtImprove','cmtNext'].forEach(id=>{
     const el=g(id); if(el){el.value='';delete el.dataset.edited;}
   });
-  ['cVoca','cList','cConv'].forEach((id,idx)=>{const el=g(id);if(el)el.value=[12,14,10][idx];});
+  if(g('gradeAreas'))g('gradeAreas').innerHTML='';
   if(g('cBonus'))g('cBonus').value=0;
   if(g('lvSel'))g('lvSel').value='';
   if(g('lvInfo')){g('lvInfo').innerHTML='';g('lvInfo').style.display='none';}
@@ -1135,5 +1132,6 @@ function go(step){
 
 document.addEventListener('DOMContentLoaded',()=>{go(0);});
 </script>
+</div>
 </body>
 </html>
