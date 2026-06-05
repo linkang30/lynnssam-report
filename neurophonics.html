@@ -161,7 +161,7 @@ textarea{resize:vertical}
           <option value="SD3">Sound Doctor 3 — Long Vowel + Magic E</option>
           <option value="SD4">Sound Doctor 4 — Double Consonants I</option>
           <option value="SD5">Sound Doctor 5 — Double Consonants II</option>
-          <option value="" disabled>Sound Doctor 6 — 준비 중</option>
+          <option value="SD6">Sound Doctor 6 — Double Vowel</option>
         </optgroup>
         <optgroup label="── Tooth Phonics 라인 ──">
           <option value="" disabled>Tooth Phonics 1 — 준비 중</option>
@@ -228,8 +228,8 @@ textarea{resize:vertical}
     <div id="areaBars"></div>
   </div>
   <div class="card">
-    <div class="ctitle"><i class="ti ti-volume"></i>음가 세부 분석 <span style="color:#bbb;font-weight:500;text-transform:none;letter-spacing:0">· Speaking 기반 (70% 미만 보강 필요)</span></div>
-    <p style="font-size:11.5px;color:#888;margin:-6px 0 12px">암기로 우회할 수 없는 Speaking 데이터만 사용해, 실제 소리 인식·읽기 능력을 분석합니다.</p>
+    <div class="ctitle" id="phonTitleScreen"><i class="ti ti-volume"></i>음가 세부 분석 <span style="color:#bbb;font-weight:500;text-transform:none;letter-spacing:0">· Speaking 기반 (70% 미만 보강 필요)</span></div>
+    <p id="phonDescScreen" style="font-size:11.5px;color:#888;margin:-6px 0 12px">암기로 우회할 수 없는 Speaking 데이터만 사용해, 실제 소리 인식·읽기 능력을 분석합니다.</p>
     <div id="phonBars"></div>
     <div id="phonSummary" style="margin-top:12px"></div>
   </div>
@@ -493,6 +493,33 @@ const LV={
       {key:"EN",label:"ending 이중자음",ex:"-ng, -nk, -mb, -kn",kw:["끝소리(-ng/-nk/-mb/-kn) 집중 반복","단어 끝 자음 결합·묵음 연습","ending 단어 카드 읽기"]}
     ],
     bonus:{total:21,per:3}
+  },
+  "SD6":{
+    line:"Sound Doctor",
+    label:"Sound Doctor 6", name:"Double Vowel",
+    focus:"이중모음 + 문장 단위 읽기(높낮이·끊어읽기) + 미니 신택스(1·2·3형식 기본 구조)",
+    units:["ay, igh, oa, ue / ai, ie, ow, ui","Review/Sentence","oy, ir, ou / oo(long), au","oi, ur, ow / oo(short), aw","er, or, ar / ew","Review/Sentence","Special Lesson: 음절·강세·슈와","Special Lesson"],
+    maxRaw:55,
+    analysisMode:"sentence",
+    spkSound:[],
+    spkWord:[],
+    writeMatch:[],
+    areas:[
+      {id:"list",name:"PART 1 · Listening",type:"count",max:15,sub:"소리 찾기 10 + 듣고 쓰기 5 · 문장 분석 미반영"},
+      {id:"write",name:"PART 2 · Writing",type:"count",max:15,sub:"단어 쓰기 10 + 문장 쓰기 5 · 문장 분석 미반영"},
+      {id:"voca",name:"PART 3 · Voca/Reading",type:"count",max:15,sub:"같은 모음 연결 10 + 문장 연결 5 · 문장 분석 미반영"},
+      {id:"rcWord",name:"PART 4 · Roller Coaster (단어 정확도)",type:"count",max:5,weight:0.5,sub:"① 단어 정확도: 문장 속 단어를 정확한 소리로 읽었는가 (문장당 0.5점)"},
+      {id:"rcInto",name:"PART 4 · Roller Coaster (높낮이)",type:"count",max:5,weight:0.5,sub:"② 높낮이: 문장의 인토네이션(음의 높낮이)을 살려 읽었는가 (문장당 0.5점)"},
+      {id:"scWord",name:"PART 4 · Scooping (단어 정확도)",type:"count",max:5,weight:0.5,sub:"① 단어 정확도: 문장 속 단어를 정확한 소리로 읽었는가 (문장당 0.5점)"},
+      {id:"scChunk",name:"PART 4 · Scooping (끊어읽기)",type:"count",max:5,weight:0.5,sub:"② 끊어읽기: 의미 있는 덩어리로 끊어 읽었는가 (문장당 0.5점)"}
+    ],
+    sentenceBars:[
+      {key:"word",label:"단어 정확도",ex:"문장 속 단어를 정확히",ids:["rcWord","scWord"],kw:["문장 속 단어 정확히 읽기 연습","이중모음이 든 단어 또박또박 읽기","새 단어도 문장 안에서 읽어내기"]},
+      {key:"into",label:"높낮이(억양)",ex:"Roller Coaster",ids:["rcInto"],kw:["문장 높낮이 살려 읽기(Roller Coaster)","올라가고 내려가는 억양 연습","문장 끝 억양 자연스럽게"]},
+      {key:"chunk",label:"끊어읽기",ex:"Scooping Sentence",ids:["scChunk"],kw:["의미 덩어리로 끊어 읽기(Scooping)","주어·동사·목적어 덩어리 인식","1·2·3형식 기본 문장 구조 이해","문장 단위로 읽고 이해하는 습관"]}
+    ],
+    vowels:[],
+    bonus:{total:15,per:3}
   }
 };
 
@@ -755,6 +782,34 @@ function phonemeStats(){
   return {vowel,snd};
 }
 
+// 분석 막대 통합: 음가(phoneme) 또는 문장능력(sentence) 모드에 따라 행 배열 반환
+// 반환: [{key,n,sub,ok,tot,kw}] — kw는 다음달방안 키워드(있으면)
+function analysisRows(){
+  const d=LV[curLv]; if(!d)return [];
+  if(d.analysisMode==='sentence'){
+    // 문장능력 막대: sentenceBars의 ids(영역 id)별 개수 합산
+    return (d.sentenceBars||[]).map(b=>{
+      let ok=0,tot=0;
+      b.ids.forEach(id=>{
+        const a=(d.areas||[]).find(x=>x.id===id);
+        if(!a)return;
+        tot+=a.max;
+        ok+=(countState[id]!=null?countState[id]:a.max);
+      });
+      return {key:b.key,n:b.label,sub:b.ex,ok,tot,kw:b.kw};
+    });
+  }
+  // 기본: 음가(phoneme) 모드
+  const ps=phonemeStats();
+  const hasSound=(d.spkSound||[]).length>0;
+  const rows=(d.vowels||[]).map(v=>({key:v.key,n:v.label,sub:v.ex,ok:ps.vowel[v.key].ok,tot:ps.vowel[v.key].tot,kw:v.kw}));
+  if(hasSound){
+    rows.push({key:'자음',n:'자음 음가',sub:'알파벳 자음 인식',ok:ps.snd.C.ok,tot:ps.snd.C.tot});
+    rows.push({key:'모음',n:'모음 음가',sub:'알파벳 모음 인식',ok:ps.snd.V.ok,tot:ps.snd.V.tot});
+  }
+  return rows;
+}
+
 function pct(ok,tot){return tot?Math.round(ok/tot*100):0;}
 function barColor(p){return p>=90?'#2d9b5f':p>=70?'#e6a417':'#e24b4a';}
 function barTag(p){return p>=90?'<span class="bar-tag tag-good">우수</span>':p>=70?'<span class="bar-tag tag-mid">양호</span>':'<span class="bar-tag tag-weak">보강 필요</span>';}
@@ -770,32 +825,37 @@ function buildAnalysis(){
     ah+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${a.name}</span><span class="bar-pct" style="color:${barColor(p)}">${ok%1?ok.toFixed(1):ok} / ${tot}점 · ${p}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;
   });
   g('areaBars').innerHTML=ah;
-  const ps=phonemeStats();
-  const hasSound=(d.spkSound||[]).length>0;
-  const rows=[
-    ...(d.vowels||[]).map(v=>({n:v.label,sub:v.ex,ok:ps.vowel[v.key].ok,tot:ps.vowel[v.key].tot})),
-    ...(hasSound?[
-      {n:'자음 음가',sub:'알파벳 자음 인식',ok:ps.snd.C.ok,tot:ps.snd.C.tot},
-      {n:'모음 음가',sub:'알파벳 모음 인식',ok:ps.snd.V.ok,tot:ps.snd.V.tot}
-    ]:[])
-  ];
+  const isSent=d.analysisMode==='sentence';
+  if(g('phonTitleScreen')){
+    g('phonTitleScreen').innerHTML = isSent
+      ? '<i class="ti ti-volume"></i>문장 읽기 능력 분석 <span style="color:#bbb;font-weight:500;text-transform:none;letter-spacing:0">· Roller Coaster/Scooping 기반 (70% 미만 보강 필요)</span>'
+      : '<i class="ti ti-volume"></i>음가 세부 분석 <span style="color:#bbb;font-weight:500;text-transform:none;letter-spacing:0">· Speaking 기반 (70% 미만 보강 필요)</span>';
+  }
+  if(g('phonDescScreen')){
+    g('phonDescScreen').textContent = isSent
+      ? '문장 단위 Speaking 데이터(단어 정확도·높낮이·끊어읽기)로, 문장을 자연스럽게 읽어내는 힘을 분석합니다.'
+      : '암기로 우회할 수 없는 Speaking 데이터만 사용해, 실제 소리 인식·읽기 능력을 분석합니다.';
+  }
+  const rows=analysisRows();
   let ph='';
   rows.forEach(r=>{
     const p=pct(r.ok,r.tot);
-    ph+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${r.n}<span class="sub">${r.sub}</span>${barTag(p)}</span><span class="bar-pct" style="color:${barColor(p)}">${r.ok}/${r.tot} · ${p}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;
+    ph+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${r.n}<span class="sub">${r.sub}</span>${barTag(p)}</span><span class="bar-pct" style="color:${barColor(p)}">${r.ok%1?r.ok.toFixed(1):r.ok}/${r.tot} · ${p}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;
   });
   g('phonBars').innerHTML=ph;
   const weak=rows.filter(r=>pct(r.ok,r.tot)<70).map(r=>r.n);
   const good=rows.filter(r=>pct(r.ok,r.tot)>=90).map(r=>r.n);
+  const noun=isSent?'문장 읽기 능력':'음가';
   let sum='';
   if(weak.length){
-    sum+=`<div class="phon-note note-weak"><b>보강이 필요한 음가:</b> ${weak.join(', ')}<br>해당 음가가 포함된 단어를 반복해서 듣고 소리 내어 읽는 연습이 도움이 됩니다.</div>`;
+    const tip=isSent?'해당 부분을 의식하며 문장을 소리 내어 반복해 읽는 연습이 도움이 됩니다.':'해당 음가가 포함된 단어를 반복해서 듣고 소리 내어 읽는 연습이 도움이 됩니다.';
+    sum+=`<div class="phon-note note-weak"><b>보강이 필요한 ${noun}:</b> ${weak.join(', ')}<br>${tip}</div>`;
   }
   if(good.length){
-    sum+=`<div class="phon-note note-good" style="margin-top:8px"><b>안정적으로 자리잡은 음가:</b> ${good.join(', ')}</div>`;
+    sum+=`<div class="phon-note note-good" style="margin-top:8px"><b>안정적으로 자리잡은 ${noun}:</b> ${good.join(', ')}</div>`;
   }
   if(!weak.length&&!good.length){
-    sum=`<div class="phon-note note-good">전 음가 영역이 고르게 양호한 수준입니다.</div>`;
+    sum=`<div class="phon-note note-good">전 ${noun} 영역이 고르게 양호한 수준입니다.</div>`;
   }
   g('phonSummary').innerHTML=sum;
 }
@@ -850,33 +910,31 @@ function buildCommentText(kind){
 function buildAutoFeedback(){
   buildChips();
   const d=LV[curLv]; if(!d)return;
-  const ps=phonemeStats();
   const name=val('stuName')||'우리 친구';
-  const hasSound=(d.spkSound||[]).length>0;
-  const rows=[
-    ...(d.vowels||[]).map(v=>({n:v.label,ok:ps.vowel[v.key].ok,tot:ps.vowel[v.key].tot,ex:v.ex})),
-    ...(hasSound?[
-      {n:'자음 음가',ok:ps.snd.C.ok,tot:ps.snd.C.tot,ex:''},
-      {n:'모음 음가',ok:ps.snd.V.ok,tot:ps.snd.V.tot,ex:''}
-    ]:[])
-  ];
+  const isSent=d.analysisMode==='sentence';
+  const rows=analysisRows().map(r=>({n:r.n,ok:r.ok,tot:r.tot,ex:r.sub}));
   const good=rows.filter(r=>pct(r.ok,r.tot)>=90);
   const weak=rows.filter(r=>pct(r.ok,r.tot)<70);
   let sTxt='';
   if(good.length){
-    sTxt=good.map(r=>`${r.n} 소리를 정확하게 익혀, 안정적으로 읽어내는 힘이 자리잡았어요`).join('. ')+'.';
+    sTxt = isSent
+      ? good.map(r=>`${r.n}이(가) 안정적으로 자리잡아, 문장을 자연스럽게 읽어내는 힘이 보여요`).join('. ')+'.'
+      : good.map(r=>`${r.n} 소리를 정확하게 익혀, 안정적으로 읽어내는 힘이 자리잡았어요`).join('. ')+'.';
   }else{
-    sTxt=`${withTopic(name)} 이번 달도 새로운 소리에 꾸준히 도전하며 차근차근 익혀가고 있어요.`;
+    sTxt = isSent
+      ? `${withTopic(name)} 이번 달도 문장을 한 호흡으로 읽어내려 꾸준히 도전하며 차근차근 익혀가고 있어요.`
+      : `${withTopic(name)} 이번 달도 새로운 소리에 꾸준히 도전하며 차근차근 익혀가고 있어요.`;
   }
   g('strengthAnalysis').textContent=sTxt;
   let iTxt='';
   if(weak.length){
-    iTxt=weak.map(r=>{
-      const exTxt=r.ex?` (${r.ex} 같은 단어)`:'';
-      return `${r.n}${exTxt}가 아직 익숙하지 않아, 소리 내어 읽는 연습을 조금 더 하면 좋겠어요`;
-    }).join('. ')+'.';
+    iTxt = isSent
+      ? weak.map(r=>`${r.n} 부분이 아직 익숙해지는 중이라, 문장을 소리 내어 반복해 읽는 연습을 조금 더 하면 좋겠어요`).join('. ')+'.'
+      : weak.map(r=>{const exTxt=r.ex?` (${r.ex} 같은 단어)`:'';return `${r.n}${exTxt}가 아직 익숙하지 않아, 소리 내어 읽는 연습을 조금 더 하면 좋겠어요`;}).join('. ')+'.';
   }else{
-    iTxt=`전반적으로 음가가 고르게 자리잡았어요. 지금처럼 꾸준히 소리 내어 읽으면 더 단단해질 거예요.`;
+    iTxt = isSent
+      ? `전반적으로 문장 읽기가 고르게 자리잡았어요. 이제 문장을 의미 덩어리로 받아들이는 연습으로 한 단계 더 나아가면 좋겠어요.`
+      : `전반적으로 음가가 고르게 자리잡았어요. 지금처럼 꾸준히 소리 내어 읽으면 더 단단해질 거예요.`;
   }
   g('improveAnalysis').textContent=iTxt;
 }
@@ -890,26 +948,24 @@ const NEXT_GENERAL=["매일 소리 내어 읽기 습관","배운 단어 집에�
 
 function buildNextPlan(){
   const d=LV[curLv]; if(!d)return;
-  const ps=phonemeStats();
-  const hasSound=(d.spkSound||[]).length>0;
-  const rows=[
-    ...(d.vowels||[]).map(v=>({key:v.key,n:v.label,ok:ps.vowel[v.key].ok,tot:ps.vowel[v.key].tot})),
-    ...(hasSound?[
-      {key:'자음',n:'자음 음가',ok:ps.snd.C.ok,tot:ps.snd.C.tot},
-      {key:'모음',n:'모음 음가',ok:ps.snd.V.ok,tot:ps.snd.V.tot}
-    ]:[])
-  ];
+  const isSent=d.analysisMode==='sentence';
+  const rows=analysisRows(); // {key,n,sub,ok,tot,kw}
   rows.forEach(r=>{r.p=pct(r.ok,r.tot);r.prio=r.p<70?'weak':r.p<90?'mid':'good';});
   const order={weak:0,mid:1,good:2};
   const sorted=[...rows].sort((a,b)=>order[a.prio]-order[b.prio]);
   const sty={weak:{dot:'!',col:'#a32d2d',bg:'#fcebeb',tip:'보강 우선'},mid:{dot:'~',col:'#a8730a',bg:'#fff4e0',tip:'성장 중'},good:{dot:'+',col:'#1a7a40',bg:'#eaf6ee',tip:'강점'}};
   let pb=sorted.map(r=>{const s=sty[r.prio];return `<span style="display:inline-block;background:${s.bg};color:${s.col};border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;margin:0 5px 5px 0">[${s.dot}] ${r.n} ${r.p}% · ${s.tip}</span>`;}).join('');
-  pb+=`<div style="font-size:10px;color:#9bb0c4;margin-top:4px;line-height:1.6">[!] 70% 미만 보강 우선 · [~] 70~89% 성장 중 · [+] 90% 이상 강점 → 약한 음가 키워드가 아래에서 자동 선택됩니다.</div>`;
+  const noun=isSent?'문장 읽기 능력':'음가';
+  pb+=`<div style="font-size:10px;color:#9bb0c4;margin-top:4px;line-height:1.6">[!] 70% 미만 보강 우선 · [~] 70~89% 성장 중 · [+] 90% 이상 강점 → 약한 ${noun} 키워드가 아래에서 자동 선택됩니다.</div>`;
   g('nextPriorityBar').innerHTML=pb;
   const result=[];
-  const vkw={};(d.vowels||[]).forEach(v=>{vkw[v.key]=v.kw;});
-  sorted.forEach(r=>{(vkw[r.key]||NEXT_KW[r.key]||[]).forEach(kw=>result.push({kw,prio:r.prio}));});
-  NEXT_GENERAL.forEach(kw=>result.push({kw,prio:'general'}));
+  // 각 행의 kw가 있으면 사용, 없으면 NEXT_KW(자음/모음) fallback
+  sorted.forEach(r=>{(r.kw||NEXT_KW[r.key]||[]).forEach(kw=>result.push({kw,prio:r.prio}));});
+  // 공통 키워드: SD6은 문장 단위 맥락, 그 외는 음가 맥락
+  const generalKw=isSent
+    ? ["매일 한 문장씩 소리 내어 읽기","문장을 의미 덩어리로 끊어 읽는 습관","1·2·3형식 기본 문장 구조 익히기","단어가 아닌 문장 단위로 읽고 이해하는 연습"]
+    : NEXT_GENERAL;
+  generalKw.forEach(kw=>result.push({kw,prio:'general'}));
   const chipSty={weak:'#e6a3a3',mid:'#e8c98a',good:'#a9cd86',general:'#d0cfc8'};
   g('nextChips').innerHTML=result.map((r,i)=>`<span class="chip" data-i="${i}" onclick="toggleNextChip(${i})" style="border-color:${chipSty[r.prio]}">${r.kw}</span>`).join('');
   let auto=0;
@@ -930,20 +986,24 @@ function toggleNextChip(i){
 function buildNextText(){
   const ta=g('cmtNext'); if(!ta)return;
   if(ta.dataset.edited==='1')return;
+  const d=LV[curLv];
+  const isSent=d&&d.analysisMode==='sentence';
   const sel=[...g('nextChips').querySelectorAll('.chip.on')].map(c=>c.textContent);
-  const ps=phonemeStats();
-  const weakNames=[];
-  if(ps){
-    const dd=LV[curLv];
-    (dd&&dd.vowels||[]).forEach(v=>{if(pct(ps.vowel[v.key].ok,ps.vowel[v.key].tot)<70)weakNames.push(v.label);});
-    if(pct(ps.snd.C.ok,ps.snd.C.tot)<70)weakNames.push('자음');
-    if(pct(ps.snd.V.ok,ps.snd.V.tot)<70)weakNames.push('모음');
-  }
+  const rows=analysisRows();
+  const weakNames=rows.filter(r=>pct(r.ok,r.tot)<70).map(r=>r.n);
   let txt='';
-  if(weakNames.length){
-    txt=`다음 달에는 ${weakNames.join(', ')} 소리를 누적 반복하며 더 단단히 다지고, 새로 배우는 소리에서도 단자음과 단모음을 결합해 읽는 원리를 이어서 연습하겠습니다.`;
+  if(isSent){
+    if(weakNames.length){
+      txt=`다음 달에는 ${weakNames.join(', ')}을(를) 누적 복습하며 문장을 더 자연스럽게 읽도록 다지고, 의미 덩어리로 끊어 읽기와 1·2·3형식 기본 문장 구조 이해를 이어가겠습니다. 단어가 아니라 문장 단위로 읽고 받아들이는 힘을 키워, 다음 단계 문장 중심 학습으로 자연스럽게 넘어갈 수 있도록 준비하겠습니다.`;
+    }else{
+      txt=`다음 달에는 지금까지 다진 문장 읽기 힘을 바탕으로, 의미 덩어리로 끊어 읽기와 1·2·3형식 기본 문장 구조 이해를 이어가겠습니다. 단어가 아니라 문장 단위로 읽고 받아들이는 힘을 키워, 다음 단계 문장 중심 학습으로 자연스럽게 넘어갈 수 있도록 준비하겠습니다.`;
+    }
   }else{
-    txt=`다음 달에는 지금까지 익힌 소리를 누적 반복하면서, 단자음과 단모음을 결합해 읽는 원리를 새로운 음가로 확장해 나가겠습니다.`;
+    if(weakNames.length){
+      txt=`다음 달에는 ${weakNames.join(', ')} 소리를 누적 반복하며 더 단단히 다지고, 새로 배우는 소리에서도 단자음과 단모음을 결합해 읽는 원리를 이어서 연습하겠습니다.`;
+    }else{
+      txt=`다음 달에는 지금까지 익힌 소리를 누적 반복하면서, 단자음과 단모음을 결합해 읽는 원리를 새로운 음가로 확장해 나가겠습니다.`;
+    }
   }
   if(sel.length){
     txt+=` 특히 ${sel.join(', ')}을(를) 중심으로 지도할 예정입니다.`;
@@ -968,17 +1028,10 @@ function buildReport(){
   const sClass=val('sClass')||'-';
   const teacher=val('teacher')||'선생님';
   const month=val('repMonth')||'-';
-  const ps=phonemeStats();
-  const hasSound=(d.spkSound||[]).length>0;
-  const rows=[
-    ...(d.vowels||[]).map(v=>({n:v.label,ok:ps.vowel[v.key].ok,tot:ps.vowel[v.key].tot})),
-    ...(hasSound?[
-      {n:'자음 음가',ok:ps.snd.C.ok,tot:ps.snd.C.tot},
-      {n:'모음 음가',ok:ps.snd.V.ok,tot:ps.snd.V.tot}
-    ]:[])
-  ];
+  const rows=analysisRows();
   let phonRows='';
   rows.forEach(r=>{const p=pct(r.ok,r.tot);phonRows+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${r.n}${barTag(p)}</span><span class="bar-pct" style="color:${barColor(p)}">${p}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;});
+  const phonTitle=(d.analysisMode==='sentence')?'문장 읽기 능력 분석':'음가 세부 분석';
   let areaRows='';
   (d.areas||[]).forEach(a=>{const tot=areaMaxOf(d,a);const ok=sc.byId[a.id]||0;const p=pct(ok,tot);areaRows+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${a.name}</span><span class="bar-pct" style="color:${barColor(p)}">${ok%1?ok.toFixed(1):ok} / ${tot}점</span></div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;});
   const sCmt=val('cmtStrength')||g('strengthAnalysis').textContent;
@@ -998,7 +1051,7 @@ function buildReport(){
     <div class="rpt-score-big"><div><div class="n">${total}</div><div class="l">종합 점수 (100점 만점)</div></div>${bonusOn?`<div class="b">보너스 +${bonusPts}</div>`:''}</div>
     <div class="rpt-sec" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
       <div><h3><i class="ti ti-chart-bar"></i>영역별 점수</h3>${areaRows}</div>
-      <div><h3><i class="ti ti-volume"></i>음가 세부 분석</h3>${phonRows}</div>
+      <div><h3><i class="ti ti-volume"></i>${phonTitle}</h3>${phonRows}</div>
     </div>
     <div class="rpt-sec" style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
       <div><h3><i class="ti ti-mood-smile"></i>이달의 강점</h3><div class="rpt-txt">${sBlock||'-'}</div></div>
@@ -1108,11 +1161,8 @@ function saveReport(){
   let bonusPts=0;
   if(bonusOn){bonusPts=bonusPoints();}
   let total=(base+bonusPts)*100/((LV[curLv]&&LV[curLv].maxRaw)||110); if(total>100)total=100; total=Math.round(total*10)/10;
-  const ps=phonemeStats();
-  const hasSound=(LV[curLv].spkSound||[]).length>0;
   const phon={};
-  if(hasSound){ phon['자음']=pct(ps.snd.C.ok,ps.snd.C.tot); phon['모음']=pct(ps.snd.V.ok,ps.snd.V.tot); }
-  (LV[curLv].vowels||[]).forEach(v=>{phon[v.key]=pct(ps.vowel[v.key].ok,ps.vowel[v.key].tot);});
+  analysisRows().forEach(r=>{phon[r.n]=pct(r.ok,r.tot);});
   let prev=LS('get',k+'_kw')||{};
   prev[month]={strength:strengths,improve:improves,level:val('lvSel'),teacher:val('teacher'),score:total,phon:phon};
   const keepMonths=Object.keys(prev).sort().reverse().slice(0,3);
