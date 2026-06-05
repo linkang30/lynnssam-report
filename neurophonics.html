@@ -159,7 +159,7 @@ textarea{resize:vertical}
           <option value="SD1">Sound Doctor 1 — Letter Sound (Consonants + Vowels)</option>
           <option value="SD2">Sound Doctor 2 — Letter Sound (Consonants + Vowels o/u)</option>
           <option value="SD3">Sound Doctor 3 — Long Vowel + Magic E</option>
-          <option value="" disabled>Sound Doctor 4 — 준비 중</option>
+          <option value="SD4">Sound Doctor 4 — Double Consonants I</option>
           <option value="" disabled>Sound Doctor 5 — 준비 중</option>
           <option value="" disabled>Sound Doctor 6 — 준비 중</option>
         </optgroup>
@@ -427,6 +427,39 @@ const LV={
       {key:"Lu",label:"장모음 u",ex:"cube, tune, use",kw:["장모음 u 단어(cube, tune) 집중 반복","Magic E u_e 소리 연습","단모음 u와 장모음 u 구별"]}
     ],
     bonus:{total:21,per:3}
+  },
+  "SD4":{
+    line:"Sound Doctor",
+    label:"Sound Doctor 4", name:"Double Consonants I",
+    focus:"이중자음 digraph(sh/ch/th/wh/ph) + blend(sl·sp·st / pl·fl·bl / pr·fr·br)",
+    units:["sh, ch","ck, th(voiceless)","wh, th(voiced), ph","Review/Sentence","pl, pr, sl","fl, fr","br, bl","Review/Sentence"],
+    maxRaw:74,
+    spkSound:[],
+    spkWord:[
+      {w:"beach",v:"DG"},{w:"peach",v:"DG"},{w:"sheep",v:"DG"},{w:"teeth",v:"DG"},
+      {w:"three",v:"DG"},{w:"wheel",v:"DG"},{w:"sleep",v:"SB"},{w:"freezer",v:"RB"},
+      {w:"chip",v:"DG"},{w:"ship",v:"DG"},{w:"stick",v:"SB"},{w:"thin",v:"DG"},
+      {w:"fish",v:"DG"},{w:"whisk",v:"DG"},{w:"prince",v:"RB"},{w:"princess",v:"RB"},
+      {w:"phone",v:"DG"},{w:"whale",v:"DG"},{w:"white",v:"DG"},{w:"plane",v:"LB"},
+      {w:"plate",v:"LB"},{w:"slice",v:"SB"},{w:"slide",v:"SB"},{w:"flute",v:"LB"},
+      {w:"bridge",v:"RB"},{w:"brave",v:"RB"}
+    ],
+    writeMatch:[],
+    areas:[
+      {id:"list",name:"PART 1 · Listening",type:"count",max:15,sub:"소리 찾기 10 + 듣고 쓰기 5 · 음가 분석 미반영"},
+      {id:"write",name:"PART 2 · Writing",type:"count",max:13,sub:"단어 쓰기 10 + 문장 쓰기 3 · 음가 분석 미반영"},
+      {id:"voca",name:"PART 3 · Voca/Reading",type:"count",max:15,sub:"단어 동그라미 10 + 문장 연결 5 · 음가 분석 미반영"},
+      {id:"spkWord",name:"PART 4 · Speaking (단어)",type:"grid",source:"spkWord",cols:9,sub:"단어 26 (이중자음) · 음가 분석의 핵심 근거"},
+      {id:"sentWord",name:"PART 4 · Speaking (문장: 단어 정확도)",type:"count",max:5,weight:0.5,sub:"① 단어 정확도: 각 단어를 정확한 소리로 읽었는가 (문장당 0.5점)"},
+      {id:"sentInto",name:"PART 4 · Speaking (문장: 억양·띄어읽기)",type:"count",max:5,weight:0.5,sub:"② 억양·띄어읽기: 문장의 높낮이와 끊어 읽기가 자연스러운가 (문장당 0.5점)"}
+    ],
+    vowels:[
+      {key:"DG",label:"이중자음 digraph",ex:"sh, ch, th, wh, ph",kw:["digraph(sh/ch/th/wh/ph) 소리 집중 반복","두 글자가 한 소리 내는 원리 연습","digraph 단어 카드 읽기"]},
+      {key:"SB",label:"s-blend",ex:"sl, sp, st",kw:["s-blend(sl/sp/st) 소리 집중 반복","첫 두 자음 이어 읽기 연습","s-blend 단어 카드 읽기"]},
+      {key:"LB",label:"l-blend",ex:"pl, fl, bl",kw:["l-blend(pl/fl/bl) 소리 집중 반복","자음+l 이어 읽기 연습","l-blend 단어 카드 읽기"]},
+      {key:"RB",label:"r-blend",ex:"pr, fr, br",kw:["r-blend(pr/fr/br) 소리 집중 반복","자음+r 이어 읽기 연습","r-blend 단어 카드 읽기"]}
+    ],
+    bonus:{total:28,per:4}
   }
 };
 
@@ -541,8 +574,9 @@ function updateScoreLabels(){
 }
 
 function areaMaxOf(d,a){
-  // 영역 만점: count는 max, grid는 해당 source 배열 길이
-  if(a.type==='count')return a.max;
+  // 영역 만점: count는 max*weight(미지정 1), grid는 해당 source 배열 길이
+  const w=(a.weight!=null)?a.weight:1;
+  if(a.type==='count')return a.max*w;
   return (d[a.source]||[]).length;
 }
 
@@ -554,13 +588,16 @@ function buildGradeAreas(){
   (d.areas||[]).forEach(a=>{
     const amax=areaMaxOf(d,a);
     if(a.type==='count'){
-      countState[a.id]=amax; // 기본 만점
+      const w=(a.weight!=null)?a.weight:1;
+      countState[a.id]=a.max; // 기본 만점(개수 기준)
+      const perTxt = (w===1)?'1개 1점':`1개 ${w}점`;
+      const scoreTxt = (amax%1?amax.toFixed(1):amax);
       html+=`<div class="area-sec">`+
         `<div class="area-head"><div><div class="area-name">${a.name}</div><div class="area-sub">${a.sub||''}</div></div>`+
-        `<div class="area-score"><span id="sc_${a.id}">${amax}</span> / ${amax}점</div></div>`+
+        `<div class="area-score"><span id="sc_${a.id}">${scoreTxt}</span> / ${scoreTxt}점</div></div>`+
         `<div class="count-row"><span class="cl">맞은 개수</span>`+
-        `<input type="number" id="c_${a.id}" min="0" max="${amax}" value="${amax}" oninput="onCountInput('${a.id}')">`+
-        `<span class="ct">/ 총 ${amax}개 (1개 1점)</span></div>`+
+        `<input type="number" id="c_${a.id}" min="0" max="${a.max}" value="${a.max}" oninput="onCountInput('${a.id}')">`+
+        `<span class="ct">/ 총 ${a.max}개 (${perTxt})</span></div>`+
         `</div>`;
     }else{ // grid
       const items=d[a.source]||[];
@@ -592,11 +629,12 @@ function buildGradeAreas(){
 function onCountInput(id){
   const d=LV[curLv]; if(!d)return;
   const a=(d.areas||[]).find(x=>x.id===id); if(!a)return;
-  const amax=areaMaxOf(d,a);
+  const w=(a.weight!=null)?a.weight:1;
   let v=parseInt(g('c_'+id).value)||0;
-  v=Math.min(amax,Math.max(0,v));
+  v=Math.min(a.max,Math.max(0,v)); // 개수는 a.max로 제한
   countState[id]=v;
-  if(g('sc_'+id))g('sc_'+id).textContent=v;
+  const sc=v*w;
+  if(g('sc_'+id))g('sc_'+id).textContent=(sc%1?sc.toFixed(1):sc);
   recalc();
 }
 
@@ -628,7 +666,8 @@ function bonusPoints(){
 
 function areaScore(d,a){
   // 현재 상태에서 영역 점수 산출
-  if(a.type==='count')return countState[a.id]||0;
+  const w=(a.weight!=null)?a.weight:1;
+  if(a.type==='count')return (countState[a.id]||0)*w;
   let ok=0; const st=gridState[a.id]||{}; Object.values(st).forEach(v=>{if(v)ok++;});
   return ok;
 }
