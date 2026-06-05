@@ -126,7 +126,7 @@ textarea{resize:vertical}
     <h1 id="hdrTitle"><i class="ti ti-abc"></i> Neuro Phonics — Monthly Report</h1>
     <p id="hdrSub">파머스국제어학원 광교브랜치 · 강사용 · Sound Doctor · Tooth Phonics</p>
   </div>
-  <div class="hbadge">v1.4</div>
+  <div class="hbadge">v2.0</div>
 </div>
 
 <div class="steps">
@@ -145,6 +145,9 @@ textarea{resize:vertical}
       <div><label>학생 이름</label><input type="text" id="stuName" placeholder="예: 강코니" oninput="onNameInput()"></div>
       <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 광교초" oninput="onNameInput()"></div>
       <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 7세"></div>
+    </div>
+    <div id="nameHint" style="display:none;font-size:12px;color:#8a8a8a;margin:2px 0 8px;line-height:1.5">
+      💡 학생 이름을 입력하면 코멘트가 “민준이는 …”처럼 그 아이만을 위한 문장으로 바뀝니다. 이름 없이는 “이 친구는 …”으로 나가요.
     </div>
     <div class="row3">
       <div><label>학원 반</label><input type="text" id="sClass" placeholder="예: 월수금 3:00"></div>
@@ -532,7 +535,7 @@ const LV={
     label:"Tooth Phonics 1", name:"Single-Letter Sounds",
     focus:"알파벳 A~Z 음가 + 단모음 A·E·I·O·U 음가조합 (라임·패턴 리딩 기초)",
     units:["Unit1 ABCDE","Unit2 FGHIJ","Unit3 KLMNO","Unit4 PQRST","Unit5 UVWXYZ","Unit6 단모음 Aa Ee","Unit7 단모음 Oo Uu","Unit8 단모음 결합"],
-    summary:"알파벳 A~Z의 음가와 단모음 A·E·I·O·U의 소리 조합을 익히고, 라임과 패턴을 활용해 단어를 빠르게 읽어내는 기초를 다졌습니다. 또한 페어리 스토리 리더스 'Zoo animals / My pet'을 읽으며, 배운 음가를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
+    summary:"알파벳 A~Z의 음가와 단모음 A·E·I·O·U의 소리 조합을 익히고, 라임과 패턴을 활용해 단어를 빠르게 읽어내는 기초를 다졌습니다. 또한 Fairy Story Readers 'Zoo animals / My pet'을 읽으며, 배운 음가를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
     maxRaw:45,
     analysisMode:"area",
     spkSound:[],
@@ -551,7 +554,7 @@ const LV={
     label:"Tooth Phonics 2", name:"Vowel Sounds (Short / Long)",
     focus:"단모음 라임(an·am·at·op·ot·og·in·ig·it·en·et·ed 등) + 장모음 A·I·O·U (Magic e)",
     units:["Unit1 단모음 an·am·at·op·ot·og","Unit2 단모음 in·ig·it·en·et·ed","Unit3 단모음 ox·ot·og·um·un·ud","Unit4 Review & Test (단모음)","Unit5 장모음 Aa","Unit6 장모음 Ii","Unit7 장모음 Oo","Unit8 장모음 Uu"],
-    summary:"단모음 라임(an·am·at·op·ot·og·in·ig·it·en·et·ed 등)으로 단어를 빠르게 읽는 연습을 한 뒤, 장모음 A·I·O·U(Magic e)를 배워 단모음과 장모음의 소리 차이를 비교하며 익혔습니다. 또한 페어리 스토리 리더스 'In the woods / Playground'를 읽으며, 배운 음가를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
+    summary:"단모음 라임(an·am·at·op·ot·og·in·ig·it·en·et·ed 등)으로 단어를 빠르게 읽는 연습을 한 뒤, 장모음 A·I·O·U(Magic e)를 배워 단모음과 장모음의 소리 차이를 비교하며 익혔습니다. 또한 Fairy Story Readers 'In the woods / Playground'를 읽으며, 배운 음가를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
     maxRaw:45,
     analysisMode:"area",
     spkSound:[],
@@ -570,7 +573,7 @@ const LV={
     label:"Tooth Phonics 3", name:"Double Consonants I",
     focus:"이중자음 blends(gl·gr·pl·pr·bl·br·cl·cr·fl·fr·dr·tr) + digraph(ch·sh) + 장모음 Magic e 복습",
     units:["Unit1 Review&Test (Magic e a-e·i-e·o-e·u-e)","Unit2 gl·gr","Unit3 pl·pr","Unit4 bl·br","Unit5 cl·cr","Unit6 fl·fr·dr·tr","Unit7 Review&Test (l&r blends)","Unit8 ch·sh"],
-    summary:"장모음 Magic e(a-e·i-e·o-e·u-e)를 복습한 뒤, 자음이 이어지는 l·r 블렌드(gl·gr·pl·pr·bl·br·cl·cr·fl·fr·dr·tr)와 두 글자가 한 소리를 내는 ch·sh를 익혔습니다. 또한 페어리 스토리 리더스 'Painting / Days of the week'를 읽으며, 배운 소리를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
+    summary:"장모음 Magic e(a-e·i-e·o-e·u-e)를 복습한 뒤, 자음이 이어지는 l·r 블렌드(gl·gr·pl·pr·bl·br·cl·cr·fl·fr·dr·tr)와 두 글자가 한 소리를 내는 ch·sh를 익혔습니다. 또한 Fairy Story Readers 'Painting / Days of the week'를 읽으며, 배운 소리를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
     maxRaw:45,
     analysisMode:"area",
     spkSound:[],
@@ -589,7 +592,7 @@ const LV={
     label:"Tooth Phonics 4", name:"Double Consonants II",
     focus:"이중자음 digraph(wh·ph·ck·ng·voiced th·unvoiced th) + blends(sk·sp·st·sw·sn·sm·nt·nk·nd)",
     units:["Unit1 wh·ph","Unit2 ck·ng","Unit3 voiced th·unvoiced th","Unit4 Review&Test (ch·sh·wh·ph·ck·ng·th)","Unit5 sk·sp·sw","Unit6 st·sn·sm","Unit7 nt·nk·nd","Unit8 Review&Test (sk·sp·st·sw·sn·sm·nt·nk·nd)"],
-    summary:"두 글자가 한 소리를 내는 이중자음(wh·ph·ck·ng·voiced th·unvoiced th)과 자음이 이어지는 다양한 블렌드(sk·sp·st·sw·sn·sm·nt·nk·nd)를 익혔습니다. 또한 페어리 스토리 리더스 'My house / Outdoor activities'를 읽으며, 배운 소리를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
+    summary:"두 글자가 한 소리를 내는 이중자음(wh·ph·ck·ng·voiced th·unvoiced th)과 자음이 이어지는 다양한 블렌드(sk·sp·st·sw·sn·sm·nt·nk·nd)를 익혔습니다. 또한 Fairy Story Readers 'My house / Outdoor activities'를 읽으며, 배운 소리를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
     maxRaw:45,
     analysisMode:"area",
     spkSound:[],
@@ -608,7 +611,7 @@ const LV={
     label:"Tooth Phonics 5", name:"Long Vowels II",
     focus:"장모음 대표 패턴(a_e/ai·ay, ee/ea, i_e/ie·y, o_e/oa·ow, u_e/ui·ue·oo·ew)을 비교·구별",
     units:["Unit1 Review&Test (Magic e: a_e·i_e·o_e·u_e)","Unit2 ai·ay","Unit3 ee·ea","Unit4 ie·y","Unit5 Review&Test (ai·ay·ee·ea·ie·y)","Unit6 oa·ow","Unit7 ui·ue·oo·ew","Unit8 Review&Test (oa·ow·ui·ue·oo·ew)"],
-    summary:"한 소리를 길게 내는 장모음의 여러 표기(a_e/ai·ay, ee/ea, i_e/ie·y, o_e/oa·ow, u_e/ui·ue·oo·ew)를 비교하며, 같은 소리라도 철자가 달라질 수 있음을 익혔습니다. 또한 페어리 스토리 리더스 'Why / True or False'를 읽으며, 배운 장모음을 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
+    summary:"한 소리를 길게 내는 장모음의 여러 표기(a_e/ai·ay, ee/ea, i_e/ie·y, o_e/oa·ow, u_e/ui·ue·oo·ew)를 비교하며, 같은 소리라도 철자가 달라질 수 있음을 익혔습니다. 또한 Fairy Story Readers 'Why / True or False'를 읽으며, 배운 장모음을 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
     maxRaw:45,
     analysisMode:"area",
     spkSound:[],
@@ -627,7 +630,7 @@ const LV={
     label:"Tooth Phonics 6", name:"Other Sounds (불규칙)",
     focus:"이중모음(oi·oy/ou·ow, au·aw)·r-controlled 모음(ar·or, er·ir·ur)·묵음(kn·wr·st·mb)·soft c&g 등 불규칙 음가를 정리",
     units:["Unit1 oi·oy/ou·ow","Unit2 au·aw","Unit3 ar·or","Unit4 er·ir·ur","Unit5 Review&Test (oi·oy·ou·ow·au·aw·ar·or·er·ir·ur)","Unit6 kn·wr·st·mb","Unit7 Soft c&g","Unit8 Review&Test (kn·wr·st·mb·Soft Cc&Gg)"],
-    summary:"규칙만으로는 읽기 어려운 불규칙 음가들 — 이중모음(oi·oy/ou·ow, au·aw), r이 모음 소리를 바꾸는 r-controlled(ar·or, er·ir·ur), 소리 나지 않는 묵음(kn·wr·st·mb), 부드럽게 소리 나는 soft c&g — 를 정리하며 파닉스를 마무리했습니다. 또한 페어리 스토리 리더스 'Future dream / Four seasons'를 읽으며, 배운 소리를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
+    summary:"규칙만으로는 읽기 어려운 불규칙 음가들 — 이중모음(oi·oy/ou·ow, au·aw), r이 모음 소리를 바꾸는 r-controlled(ar·or, er·ir·ur), 소리 나지 않는 묵음(kn·wr·st·mb), 부드럽게 소리 나는 soft c&g — 를 정리하며 파닉스를 마무리했습니다. 또한 Fairy Story Readers 'Future dream / Four seasons'를 읽으며, 배운 소리를 실제 문장과 이야기 속에서 읽어내는 연습을 했습니다.",
     maxRaw:45,
     analysisMode:"area",
     spkSound:[],
@@ -662,6 +665,8 @@ function getStudentKey(){
   return n?`${s}_${n}`:null;
 }
 function onNameInput(){
+  const hintBox=g('nameHint');
+  if(hintBox)hintBox.style.display = val('stuName') ? 'none' : (curLv ? 'block' : 'none');
   const k=getStudentKey();
   if(k&&LS('get',k+'_kw'))showHistoryAlert();
   else{const box=g('historyAlert');if(box)box.style.display='none';}
@@ -1015,23 +1020,37 @@ function toggleChip(kind,i){
 }
 
 const finish=str=>/[다요죠]$/.test(str)?str+'.':str;
+// 받침 유무 판정 (한글 마지막 글자 기준; 영문/기타는 받침 없음 취급)
+function hasJong(word){
+  if(!word)return false;
+  const last=word[word.length-1];
+  const code=last.charCodeAt(0);
+  if(code<0xAC00||code>0xD7A3)return false;
+  return ((code-0xAC00)%28)!==0;
+}
+// 목적격 조사: 받침 있으면 "을", 없으면 "를"
+function objJosa(word){ return word+(hasJong(word)?'을':'를'); }
+// 주격 조사: 받침 있으면 "이", 없으면 "가"
+function subJosa(word){ return word+(hasJong(word)?'이':'가'); }
+// 학생 이름을 자연스러운 호칭+주제격조사로: 받침 있으면 "민준이는", 없으면 "서아는"
 function withTopic(name){
-  if(!name)return '우리 친구는';
+  if(!name)return '이 친구는';
   const last=name[name.length-1];
   const code=last.charCodeAt(0);
   if(code<0xAC00||code>0xD7A3)return name+'는';
   const jong=(code-0xAC00)%28;
-  return name+(jong?'은':'는');
+  return jong ? name+'이는' : name+'는';
 }
 
 function buildCommentText(kind){
   const wrap=kind==='s'?g('strengthChips'):g('improveChips');
   const ta=kind==='s'?g('cmtStrength'):g('cmtImprove');
-  const name=val('stuName')||'우리 친구';
+  const name=val('stuName')||'이 친구';
   const sel=[...wrap.querySelectorAll('.chip.on')].map(c=>c.textContent);
   if(!sel.length){ta.value='';delete ta.dataset.edited;return;}
   const subj=withTopic(name);
-  ta.value=sel.map(c=>finish(`${subj} ${c}`)).join(' ');
+  // 첫 문장에만 이름을 넣고, 이후 문장은 호칭을 반복하지 않아 사람이 쓴 듯 자연스럽게
+  ta.value=sel.map((c,i)=>finish(i===0?`${subj} ${c}`:c)).join(' ');
   delete ta.dataset.edited;
 }
 
@@ -1051,7 +1070,7 @@ function areaProfile(d){
     const meta=AREA_META[a.id]||{lab:a.name,strong:a.name,weak:a.name,tip:"꾸준한 반복 연습"};
     return {id:a.id,name:meta.lab,p:pct(ok,tot),meta:meta};
   });
-  const name=val('stuName')||'우리 친구';
+  const name=val('stuName')||'이 친구';
   const subj=withTopic(name);
   // 강점: 70% 이상 영역(높은 순). 보완: 70% 미만 영역(낮은 순)
   const good=rows.filter(r=>r.p>=70).sort((a,b)=>b.p-a.p);
@@ -1077,15 +1096,15 @@ function areaProfile(d){
   let iTxt='';
   if(weak.length){
     const low=weak[0];
-    iTxt=`${low.meta.weak}(${low.name} ${low.p}%)은 아직 익숙해지는 중이에요. ${low.meta.tip}이 도움이 될 거예요.`;
+    iTxt=`${subj} ${low.meta.weak}(${low.name} ${low.p}%)이 아직 익숙해지는 중이에요. ${low.meta.tip}이 도움이 될 거예요.`;
     if(weak.length>1){
       iTxt+=` ${weak.slice(1).map(r=>`${r.meta.weak}(${r.name} ${r.p}%)`).join(', ')}도 함께 다지면 좋겠어요.`;
     }
   }else if(gap>=15){
     const low=rows.slice().sort((a,b)=>a.p-b.p)[0];
-    iTxt=`전반적으로 모든 영역이 안정적이에요. 그중 ${low.meta.weak}(${low.name} ${low.p}%)을 조금 더 다지면 균형이 한층 좋아질 거예요.`;
+    iTxt=`${subj} 전반적으로 모든 영역이 안정적이에요. 그중 ${low.meta.weak}(${low.name} ${low.p}%)을 조금 더 다지면 균형이 한층 좋아질 거예요.`;
   }else{
-    iTxt=`네 영역이 고르게 안정적이에요. 지금처럼 꾸준히 읽고 들으면 더 단단해질 거예요.`;
+    iTxt=`${subj} 네 영역이 고르게 안정적이에요. 지금처럼 꾸준히 읽고 들으면 더 단단해질 거예요.`;
   }
   return {strength:sTxt,improve:iTxt};
 }
@@ -1093,7 +1112,10 @@ function areaProfile(d){
 function buildAutoFeedback(){
   buildChips();
   const d=LV[curLv]; if(!d)return;
-  const name=val('stuName')||'우리 친구';
+  const name=val('stuName')||'이 친구';
+  // 이름 미입력 안내: 코멘트가 개인화되도록 이름 입력을 권유
+  const hintBox=g('nameHint');
+  if(hintBox)hintBox.style.display = val('stuName') ? 'none' : 'block';
   const isArea=d.analysisMode==='area';
   if(g('strengthLayer1'))g('strengthLayer1').style.display='';
   if(g('improveLayer1'))g('improveLayer1').style.display='';
@@ -1117,9 +1139,12 @@ function buildAutoFeedback(){
   const weak=rows.filter(r=>pct(r.ok,r.tot)<70);
   let sTxt='';
   if(good.length){
+    const subj=withTopic(name);
+    const names=good.map(r=>r.n);
+    const list=names.length>1 ? names.slice(0,-1).join(', ')+', '+names[names.length-1] : names[0];
     sTxt = isSent
-      ? good.map(r=>`${r.n}이(가) 안정적으로 자리잡아, 문장을 자연스럽게 읽어내는 힘이 보여요`).join('. ')+'.'
-      : good.map(r=>`${r.n} 소리를 정확하게 익혀, 안정적으로 읽어내는 힘이 자리잡았어요`).join('. ')+'.';
+      ? `${subj} ${objJosa(list)} 안정적으로 읽어내고 있어요. 문장을 자연스럽게 소화하는 힘이 보여요.`
+      : `${subj} ${list} 소리를 정확하게 익혀 안정적으로 읽어내고 있어요.`;
   }else{
     sTxt = isSent
       ? `${withTopic(name)} 이번 달도 문장을 한 호흡으로 읽어내려 꾸준히 도전하며 차근차근 익혀가고 있어요.`
@@ -1128,13 +1153,21 @@ function buildAutoFeedback(){
   g('strengthAnalysis').textContent=sTxt;
   let iTxt='';
   if(weak.length){
-    iTxt = isSent
-      ? weak.map(r=>`${r.n} 부분이 아직 익숙해지는 중이라, 문장을 소리 내어 반복해 읽는 연습을 조금 더 하면 좋겠어요`).join('. ')+'.'
-      : weak.map(r=>{const exTxt=r.ex?` (${r.ex} 같은 단어)`:'';return `${r.n}${exTxt}가 아직 익숙하지 않아, 소리 내어 읽는 연습을 조금 더 하면 좋겠어요`;}).join('. ')+'.';
+    const subj=withTopic(name);
+    const names=weak.map(r=>r.n);
+    const list=names.length>1 ? names.slice(0,-1).join(', ')+', '+names[names.length-1] : names[0];
+    if(isSent){
+      iTxt=`${subj} ${list} 부분이 아직 익숙해지는 중이에요. 소리 내어 반복해 읽으면 한결 편안해질 거예요.`;
+    }else{
+      const ex=weak.find(r=>r.ex);
+      const exTxt=ex?` (${ex.ex} 같은 단어)`:'';
+      iTxt=`${subj} ${list} 소리${exTxt}가 아직 익숙해지는 중이에요. 소리 내어 읽는 연습을 조금 더 하면 좋겠어요.`;
+    }
   }else{
+    const subj=withTopic(name);
     iTxt = isSent
-      ? `전반적으로 문장 읽기가 고르게 자리잡았어요. 이제 문장을 의미 덩어리로 받아들이는 연습으로 한 단계 더 나아가면 좋겠어요.`
-      : `전반적으로 음가가 고르게 자리잡았어요. 지금처럼 꾸준히 소리 내어 읽으면 더 단단해질 거예요.`;
+      ? `${subj} 전반적으로 문장 읽기가 고르게 자리잡았어요. 이제 문장을 의미 덩어리로 받아들이는 연습으로 한 단계 더 나아가면 좋겠어요.`
+      : `${subj} 전반적으로 음가가 고르게 자리잡았어요. 지금처럼 꾸준히 소리 내어 읽으면 더 단단해질 거예요.`;
   }
   g('improveAnalysis').textContent=iTxt;
 }
@@ -1201,7 +1234,7 @@ function buildNextText(){
     txt=`다음 달에는 라임과 패턴을 활용해 단어를 빠르게 읽어내는 힘을 키우고, 아는 통글자를 점점 늘려가겠습니다. 음가를 단단히 다진 뒤 비슷한 소리의 단어를 묶어 읽으며, 짧은 문장도 리듬감 있게 읽어내도록 이어가겠습니다.`;
   }else if(isSent){
     if(weakNames.length){
-      txt=`다음 달에는 ${weakNames.join(', ')}을(를) 누적 복습하며 문장을 더 자연스럽게 읽도록 다지고, 의미 덩어리로 끊어 읽기와 1·2·3형식 기본 문장 구조 이해를 이어가겠습니다. 단어가 아니라 문장 단위로 읽고 받아들이는 힘을 키워, 다음 단계 문장 중심 학습으로 자연스럽게 넘어갈 수 있도록 준비하겠습니다.`;
+      txt=`다음 달에는 ${objJosa(weakNames.join(', '))} 누적 복습하며 문장을 더 자연스럽게 읽도록 다지고, 의미 덩어리로 끊어 읽기와 1·2·3형식 기본 문장 구조 이해를 이어가겠습니다. 단어가 아니라 문장 단위로 읽고 받아들이는 힘을 키워, 다음 단계 문장 중심 학습으로 자연스럽게 넘어갈 수 있도록 준비하겠습니다.`;
     }else{
       txt=`다음 달에는 지금까지 다진 문장 읽기 힘을 바탕으로, 의미 덩어리로 끊어 읽기와 1·2·3형식 기본 문장 구조 이해를 이어가겠습니다. 단어가 아니라 문장 단위로 읽고 받아들이는 힘을 키워, 다음 단계 문장 중심 학습으로 자연스럽게 넘어갈 수 있도록 준비하겠습니다.`;
     }
@@ -1213,7 +1246,7 @@ function buildNextText(){
     }
   }
   if(sel.length){
-    txt+=` 특히 ${sel.join(', ')}을(를) 중심으로 지도할 예정입니다.`;
+    txt+=` 특히 ${objJosa(sel.join(', '))} 중심으로 지도할 예정입니다.`;
   }
   ta.value=txt;
   delete ta.dataset.edited;
@@ -1280,10 +1313,6 @@ function buildReport(){
 function copyReport(){
   const d=LV[curLv]; if(!d){alert('먼저 과정을 선택해주세요.');return;}
   const sc=computeScores();
-  const base=sc.base;
-  let bonusPts=0;
-  if(bonusOn){bonusPts=bonusPoints();}
-  let total=(base+bonusPts)*100/((LV[curLv]&&LV[curLv].maxRaw)||110); if(total>100)total=100; total=Math.round(total*10)/10;
   const name=val('stuName')||'';
   const stu=[name,[val('stuSchool'),val('stuGrade')].filter(t=>t).join(' '),val('sClass')].filter(t=>t&&t!=='-').join(' | ');
   const sAuto=g('strengthAnalysis').textContent;
@@ -1296,7 +1325,6 @@ function copyReport(){
   const parts=[
     `${d.label} Monthly Report`,
     stu,
-    `종합 점수: ${total} / 100점`+(bonusOn?` (보너스 +${bonusPts})`:''),
     uBlock,
     '영역별 · '+(LV[curLv].areas||[]).map(a=>`${a.name.replace(/^PART \d+ · /,'')} ${sc.byId[a.id]||0}/${areaMaxOf(LV[curLv],a)}`).join(' · '),
     sBlock, iBlock, nBlock,
@@ -1430,17 +1458,27 @@ async function refineText(taId,type){
   if(!orig){alert('먼저 내용을 입력해주세요.');return;}
   const statusId='refineStatus_'+type;
   if(g(statusId)){g(statusId).style.display='block';g(statusId).textContent='\u2728 AI가 작성 중입니다...';}
-  const name=val('stuName')||'우리 친구';
-  const typeGuide={strength:'이달의 강점 \u2014 발음과 소리 학습에서 잘한 점을 따뜻하게 칭찬',improve:'더 키워가요 \u2014 앞으로 발음과 읽기에서 성장할 방향을 다정하게 격려',next:'다음 달 지도 방안 \u2014 이번 달 약한 음가를 누적 반복하고 단자음·단모음 결합 원리를 이어간다는 계획을 따뜻하게 안내'}[type]||'피드백';
-  const systemPrompt=`당신은 파머스국제어학원 광교브랜치에서 ${name} 학생을 직접 가르치는 파닉스 담임 선생님입니다. 사운드닥터(Sound Doctor)는 알파벳 음가와 발음, 소리 내어 읽기를 배우는 과정이고, 학생들은 유아\uB098 초등 저학년의 어린 친구들입니다. 이 리포트는 담임 선생님이 학부모님께 직접 쓰는 글입니다.
+  const name=val('stuName')||'';
+  const typeGuide={strength:'이달의 강점 \u2014 발음과 소리 학습에서 잘한 점을 따뜻하게 칭찬',improve:'더 키워가요 \u2014 앞으로 발음과 읽기에서 성장할 방향을 다정하게 격려',next:'다음 달 지도 방안 \u2014 이번 달 약했던 소리·음가를 누적 반복하고, 배운 소리를 단어와 문장으로 이어 읽어가도록 안내하는 계획을 따뜻하게 안내'}[type]||'피드백';
+  const nameRule = name
+    ? `- 학생 이름은 "${name}". 첫 문장에서 한 번만 자연스러운 호칭으로 부를 것(받침 있는 이름은 "○○이는/○○이가/○○이", 받침 없는 이름은 "○○는/○○가" 식으로 한국어 어법에 맞게). 그 다음 문장부터는 이름을 반복하지 말고, 주어를 생략(무주어)하거나 문맥으로 자연스럽게 이어 쓸 것. 같은 이름을 매 문장 반복하면 어색하다.
+- "그/그녀/그 아이" 같은 3인칭 대명사는 한국어 리포트에서 어색하므로 쓰지 말 것. 이름을 다시 부르는 대신 주어를 생략하라.`
+    : `- 학생 이름이 입력되지 않았다. 이름이나 "그/그녀" 같은 대명사를 지어내지 말 것. 주어를 생략(무주어)해 자연스럽게 쓰고, 꼭 호칭이 필요하면 "이 친구" 정도만 한 번 사용할 것.`;
+  const curD=LV[curLv]||{};
+  const courseLine=curD.line||'Sound Doctor';
+  const courseLabel=curD.label||courseLine;
+  const courseDesc = courseLine==='Tooth Phonics'
+    ? `투스파닉스(Tooth Phonics)는 음가를 빠르게 정리해 단어와 문장, 스토리북으로 확장해 읽어내는 과정`
+    : `사운드닥터(Sound Doctor)는 알파벳 음가와 발음, 소리 내어 읽기를 배우는 과정`;
+  const systemPrompt=`당신은 파머스국제어학원 광교브랜치에서 ${name||'이 친구'} 학생의 ${courseLabel} 과정을 직접 가르치는 파닉스 담임 선생님입니다. ${courseDesc}이고, 학생들은 유아\uB098 초등 저학년의 어린 친구들입니다. 이 리포트는 담임 선생님이 학부모님께 직접 쓰는 글입니다.
 아래 내용을 학부모에게 보내는 월간 리포트 문장으로 자연스럽게 다듬어 주세요.
 [이 섹션의 목적] ${typeGuide}
 [작성 규칙]
-- 학생 이름(${name})을 호칭할 때: 받침에 맞게 "이름이는/이름이가" 또는 "이름이" 형태로 자연스럽게
+${nameRule}
 - 문체: 어린 학생의 담임 선생님이 직접 쓴 듯한 아주 따뜻하고 다정한 어투. 발음\u00b7소리\u00b7읽기 같은 파닉스 맥락을 살려 구체적으로. AI 느낌 금지
 - 화자: 글쓴이는 담임 선생님 본인. 자신을 가리킬 때 1인칭("저","제가")을 쓴다
 - 분량: 2~3문장. 간결하고 쉽게
-- 절대 금지 표현: "부족","미흡","못하다","아쉽다"
+- 절대 금지 표현: "부족","미흡","못하다","아쉽다", 그리고 "분명히/반드시/꼭" 같은 단정적 표현
 - 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 식으로 긍정적으로
 - 한국어로만 작성, 이모지 사용 금지
 - 바로 본문 내용부터 시작할 것`;
