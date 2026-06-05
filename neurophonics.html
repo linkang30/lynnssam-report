@@ -160,7 +160,7 @@ textarea{resize:vertical}
           <option value="SD2">Sound Doctor 2 — Letter Sound (Consonants + Vowels o/u)</option>
           <option value="SD3">Sound Doctor 3 — Long Vowel + Magic E</option>
           <option value="SD4">Sound Doctor 4 — Double Consonants I</option>
-          <option value="" disabled>Sound Doctor 5 — 준비 중</option>
+          <option value="SD5">Sound Doctor 5 — Double Consonants II</option>
           <option value="" disabled>Sound Doctor 6 — 준비 중</option>
         </optgroup>
         <optgroup label="── Tooth Phonics 라인 ──">
@@ -460,6 +460,39 @@ const LV={
       {key:"RB",label:"r-blend",ex:"pr, fr, br",kw:["r-blend(pr/fr/br) 소리 집중 반복","자음+r 이어 읽기 연습","r-blend 단어 카드 읽기"]}
     ],
     bonus:{total:28,per:4}
+  },
+  "SD5":{
+    line:"Sound Doctor",
+    label:"Sound Doctor 5", name:"Double Consonants II",
+    focus:"이중자음 blend(cl·gl / cr·gr·dr·tr / st·sp·sk·sn·sm·sw) + ending(-ng·-nk·-mb·-kn)",
+    units:["cl, cr","gl, gr","dr, tr","Review/Sentence","st, sp, sk","sn, sm, sw","-ng, -nk, -mb, -kn","Review/Sentence"],
+    maxRaw:74,
+    spkSound:[],
+    spkWord:[
+      {w:"clap",v:"LB"},{w:"clam",v:"LB"},{w:"glue",v:"LB"},{w:"green",v:"RB"},
+      {w:"dry",v:"RB"},{w:"tree",v:"RB"},{w:"stove",v:"SB"},{w:"speed",v:"SB"},
+      {w:"skate",v:"SB"},{w:"ski",v:"SB"},{w:"swim",v:"SB"},{w:"drink",v:"EN"},
+      {w:"king",v:"EN"},{w:"bank",v:"EN"},{w:"clean",v:"LB"},{w:"comb",v:"EN"},
+      {w:"crane",v:"RB"},{w:"glad",v:"LB"},{w:"smile",v:"SB"},{w:"skate",v:"SB"},
+      {w:"speed",v:"SB"},{w:"grade",v:"RB"},{w:"drive",v:"RB"},{w:"trash",v:"RB"},
+      {w:"stove",v:"SB"},{w:"tree",v:"RB"}
+    ],
+    writeMatch:[],
+    areas:[
+      {id:"list",name:"PART 1 · Listening",type:"count",max:15,sub:"소리 찾기 10 + 듣고 쓰기 5 · 음가 분석 미반영"},
+      {id:"write",name:"PART 2 · Writing",type:"count",max:13,sub:"단어 쓰기 10 + 문장 쓰기 3 · 음가 분석 미반영"},
+      {id:"voca",name:"PART 3 · Voca/Reading",type:"count",max:15,sub:"단어 동그라미 10 + 문장 연결 5 · 음가 분석 미반영"},
+      {id:"spkWord",name:"PART 4 · Speaking (단어)",type:"grid",source:"spkWord",cols:9,sub:"단어 26 (이중자음) · 음가 분석의 핵심 근거"},
+      {id:"sentWord",name:"PART 4 · Speaking (문장: 단어 정확도)",type:"count",max:5,weight:0.5,sub:"① 단어 정확도: 각 단어를 정확한 소리로 읽었는가 (문장당 0.5점)"},
+      {id:"sentInto",name:"PART 4 · Speaking (문장: 억양·띄어읽기)",type:"count",max:5,weight:0.5,sub:"② 억양·띄어읽기: 문장의 높낮이와 끊어 읽기가 자연스러운가 (문장당 0.5점)"}
+    ],
+    vowels:[
+      {key:"LB",label:"l-blend",ex:"cl, gl",kw:["l-blend(cl/gl) 소리 집중 반복","자음+l 이어 읽기 연습","l-blend 단어 카드 읽기"]},
+      {key:"RB",label:"r-blend",ex:"cr, gr, dr, tr",kw:["r-blend(cr/gr/dr/tr) 소리 집중 반복","자음+r 이어 읽기 연습","r-blend 단어 카드 읽기"]},
+      {key:"SB",label:"s-blend",ex:"st, sp, sk, sn, sm, sw",kw:["s-blend(st/sp/sk/sn/sm/sw) 소리 집중 반복","s+자음 이어 읽기 연습","s-blend 단어 카드 읽기"]},
+      {key:"EN",label:"ending 이중자음",ex:"-ng, -nk, -mb, -kn",kw:["끝소리(-ng/-nk/-mb/-kn) 집중 반복","단어 끝 자음 결합·묵음 연습","ending 단어 카드 읽기"]}
+    ],
+    bonus:{total:21,per:3}
   }
 };
 
