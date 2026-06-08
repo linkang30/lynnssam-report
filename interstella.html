@@ -3,112 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Inter Stella — Monthly Report</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a1a;font-size:14px;line-height:1.6}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f4fa;color:#1a1a2e;font-size:14px;line-height:1.6}
 .app{max-width:960px;margin:0 auto;padding:16px}
-.tool-header{background:linear-gradient(135deg,#c0392b 0%,#8b0000 100%);color:#fff;border-radius:14px;padding:16px 22px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(139,0,0,.25)}
-.tool-header h1{font-size:16px;font-weight:700;letter-spacing:.3px}
-.tool-header p{font-size:11px;opacity:.7;margin-top:2px}
-.hbadge{background:rgba(255,255,255,.2);border-radius:7px;padding:4px 11px;font-size:11px;font-weight:700;margin-left:auto;letter-spacing:.5px}
+.tool-header{background:linear-gradient(135deg,#1a1f5c 0%,#0a0a1f 60%,#2d1b69 100%);color:#fff;border-radius:14px;padding:16px 22px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(91,76,220,.4);position:relative;overflow:hidden}
+.tool-header::after{content:"";position:absolute;top:-40px;right:-20px;width:160px;height:160px;background:radial-gradient(circle,rgba(140,120,255,.35),transparent 70%);pointer-events:none}
+.tool-header h1{font-size:16px;font-weight:700;letter-spacing:.3px;position:relative}
+.tool-header p{font-size:11px;opacity:.72;margin-top:2px;position:relative}
+.hbadge{background:rgba(255,255,255,.18);border-radius:7px;padding:4px 11px;font-size:11px;font-weight:700;margin-left:auto;letter-spacing:.5px;position:relative}
 .steps{display:flex;gap:5px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
-.sbtn{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1.5px solid #d8d6cf;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:#888;display:flex;align-items:center;gap:5px;transition:.2s}
-.sbtn.active{background:#c0392b;color:#fff;border-color:#c0392b;box-shadow:0 2px 8px rgba(192,57,43,.35)}
-.sbtn.done{border-color:#2d7a4f;color:#2d7a4f;background:#eaf3de}
-.card{background:#fff;border:0.5px solid #e4e2db;border-radius:13px;padding:18px 22px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.ctitle{font-size:10.5px;font-weight:700;color:#aaa;letter-spacing:.7px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
-.ctitle i{font-size:15px;color:#c0392b}
-.part-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:10px 14px;border-radius:9px}
-.ph-voc{background:#fff8e1;border-left:4px solid #f39c12}
-.ph-rdg{background:#e8f5e9;border-left:4px solid #27ae60}
-.ph-lis{background:#e3f2fd;border-left:4px solid #2196f3}
-.ph-grm{background:#f3e5f5;border-left:4px solid #9c27b0}
-.ph-wrt{background:#fce4ec;border-left:4px solid #e91e63}
-.ph-label{font-size:12px;font-weight:700}
-.ph-sub{font-size:10px;color:#888;margin-top:1px}
-.ph-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px}
-.badge-voc{background:#f39c12;color:#fff}
-.badge-rdg{background:#27ae60;color:#fff}
-.badge-lis{background:#2196f3;color:#fff}
-.badge-grm{background:#9c27b0;color:#fff}
-.badge-wrt{background:#e91e63;color:#fff}
-.q-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:6px}
-.q-grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:6px}
-.q-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}
-.q-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px}
-.qbtn{border-radius:9px;padding:8px 4px;text-align:center;cursor:pointer;border:1.5px solid #e4e2db;background:#f8f7f4;transition:.15s}
-.qbtn:hover{border-color:#c0392b;background:#fdf0ef}
-.qbtn .qn{display:block;font-size:9.5px;color:#bbb;font-weight:600;margin-bottom:2px}
-.qbtn .qt{font-size:10px;font-weight:600;color:#666}
-.qbtn .qd{font-size:8.5px;color:#aaa;margin-top:1px}
-.qbtn.voc{border-color:#f0c060}
-.qbtn.voc .qn{color:#c0860a}
-.qbtn.rdg{border-color:#80c97a}
-.qbtn.rdg .qn{color:#1a7a40}
-.qbtn.lis{border-color:#70b8f0}
-.qbtn.lis .qn{color:#1060b0}
-.qbtn.grm{border-color:#c090d8}
-.qbtn.grm .qn{color:#7020a0}
-.qbtn.wrt{border-color:#f090b0}
-.qbtn.wrt .qn{color:#b0104a}
-.qbtn.wrong{background:#fcebeb!important;border-color:#e24b4a!important}
-.qbtn.wrong .qn,.qbtn.wrong .qt,.qbtn.wrong .qd{color:#a32d2d!important}
-.score-input-area{display:flex;align-items:center;gap:8px;background:#f8f7f4;border-radius:9px;padding:8px 12px;margin-bottom:6px}
-.score-input-area input{width:56px;text-align:center;font-size:18px;font-weight:800;border:1.5px solid #e0dfd8;border-radius:7px;padding:4px 0;color:#c0392b;background:#fff;outline:none}
-.score-input-area input:focus{border-color:#c0392b}
-.score-label{font-size:11px;color:#888;flex:1}
-.score-max{font-size:10px;color:#bbb}
+.sbtn{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1.5px solid #d8d8ea;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:#8a8ab5;display:flex;align-items:center;gap:5px;transition:.2s}
+.sbtn.active{background:#5b4cdc;color:#fff;border-color:#5b4cdc;box-shadow:0 2px 12px rgba(91,76,220,.4)}
+.sbtn.done{border-color:#3fa46a;color:#2d7a4f;background:#eaf6ee}
+.card{background:#fff;border:1px solid #e8e8f2;border-radius:13px;padding:18px 22px;margin-bottom:12px;box-shadow:0 1px 6px rgba(40,40,80,.06)}
+.ctitle{font-size:10.5px;font-weight:700;color:#8a8ab5;letter-spacing:.7px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.ctitle i{font-size:15px;color:#5b4cdc}
+.q-grid{display:grid;gap:6px;margin-bottom:6px}
+.qbtn{border-radius:9px;padding:8px 4px;text-align:center;cursor:pointer;border:1.5px solid #e2e2ee;background:#fafaff;transition:.15s}
+.qbtn:hover{border-color:#5b4cdc;background:#f2f0fe}
+.qbtn .qn{display:block;font-size:9.5px;color:#9a9ab5;font-weight:600;margin-bottom:2px}
+.qbtn .qt{font-size:10px;font-weight:600;color:#555}
+.qbtn .qd{font-size:8.5px;color:#9a9ab5;margin-top:1px}
+.qbtn.voc{border-color:#e6cd8a}.qbtn.voc .qn{color:#b8860b}
+.qbtn.lis{border-color:#a9cdee}.qbtn.lis .qn{color:#2b6cb0}
+.qbtn.rdg{border-color:#a9dab9}.qbtn.rdg .qn{color:#2f855a}
+.qbtn.grm{border-color:#cfb0e6}.qbtn.grm .qn{color:#7c3aed}
+.qbtn.wrong{background:#fdeaea!important;border-color:#e24b4a!important}
+.qbtn.wrong .qn,.qbtn.wrong .qt,.qbtn.wrong .qd{color:#c0392b!important}
 label{display:block;font-size:11px;color:#666;margin-bottom:3px;font-weight:500}
-input[type=text],select,textarea{width:100%;border:1px solid #ddd;border-radius:8px;padding:7px 10px;font-size:13px;font-family:inherit;color:#1a1a1a;background:#fff;outline:none}
-input[type=text]:focus,select:focus,textarea:focus{border-color:#c0392b}
+input[type=text],select,textarea{width:100%;border:1px solid #cfcfe6;border-radius:8px;padding:7px 10px;font-size:13px;font-family:inherit;color:#1a1a2e;background:#fff;outline:none}
+input[type=text]::placeholder,textarea::placeholder{color:#a8a8c0}
+input[type=text]:focus,select:focus,textarea:focus{border-color:#5b4cdc;box-shadow:0 0 0 2px rgba(91,76,220,.12)}
 textarea{resize:vertical}
+select option{background:#fff;color:#1a1a2e}
 .dombar{margin-bottom:10px}
 .dbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
 .dbn{font-weight:600;color:#444}.dbpct{color:#888}
-.bg{background:#ece9e0;border-radius:4px;height:8px;overflow:hidden}
+.bg{background:#e7e7f0;border-radius:4px;height:8px;overflow:hidden}
 .bf{height:100%;border-radius:4px;transition:.5s}
-.bf-voc{background:#f39c12}
-.bf-rdg{background:#27ae60}
-.bf-lis{background:#2196f3}
-.bf-grm{background:#9c27b0}
-.bf-wrt{background:#e91e63}
-.bf-ok{background:#27ae60}
-.bf-mid{background:#f39c12}
-.bf-low{background:#e24b4a}
-.atbl{border-radius:9px;overflow:hidden;border:0.5px solid #e8e6de;font-size:11px}
-.ah{display:grid;grid-template-columns:44px 52px 1fr 80px 1fr;background:#3c1010;color:#fff}
-.ar{display:grid;grid-template-columns:44px 52px 1fr 80px 1fr;border-bottom:0.5px solid #ece9e0}
+.bf-ok{background:#27ae60}.bf-mid{background:#f39c12}.bf-low{background:#e24b4a}
+.atbl{border-radius:9px;overflow:hidden;border:1px solid #e8e8f2;font-size:11px}
+.ah{display:grid;grid-template-columns:44px 52px 1fr 70px 1fr;background:#f0eefb;color:#5b4cdc;font-weight:700}
+.ar{display:grid;grid-template-columns:44px 52px 1fr 70px 1fr;border-bottom:0.5px solid #eeeef5}
 .ah>div,.ar>div{padding:7px 8px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.chip{display:inline-block;padding:4px 11px;border-radius:14px;border:1px solid #ddd;background:#f8f7f4;font-size:11px;color:#666;cursor:pointer;transition:.15s}
-.chip:hover{border-color:#c0392b;color:#c0392b}
-.chip.on{background:#c0392b;color:#fff;border-color:#c0392b}
+.chip{display:inline-block;padding:4px 11px;border-radius:14px;border:1px solid #d8d8ea;background:#fff;font-size:11px;color:#666;cursor:pointer;transition:.15s}
+.chip:hover{border-color:#5b4cdc;color:#5b4cdc}
+.chip.on{background:#5b4cdc;color:#fff;border-color:#5b4cdc}
 .chip.on .kw-dom{background:rgba(255,255,255,.22)!important;color:#fff!important}
-.chip:hover{border-color:#c0392b}
-.next-weak{border-color:#e24b4a!important;background:#fff5f5}
-.next-weak.on{background:#c0392b;color:#fff;border-color:#c0392b}
-.next-mid{border-color:#f0a830!important;background:#fffbf0}
-.next-mid.on{background:#c0392b;color:#fff;border-color:#c0392b}
-.sigbox{background:#f9f0f0;border-radius:8px;padding:10px 12px;margin-top:8px}
-.sigtitle{font-size:11px;font-weight:700;color:#c0392b;margin-bottom:7px}
-.sig-badge{display:inline-block;background:#fcebeb;color:#a32d2d;border:1px solid #e8c0c0;border-radius:10px;padding:3px 9px;font-size:11px;font-weight:700;margin:2px}
+.sigbox{background:#f3f0fb;border-radius:8px;padding:10px 12px;margin-top:8px}
+.sigtitle{font-size:11px;font-weight:700;color:#7c3aed;margin-bottom:7px}
+.sig-badge{display:inline-block;background:#fdeaea;color:#c0392b;border:1px solid #f0c0bd;border-radius:10px;padding:3px 9px;font-size:11px;font-weight:700;margin:2px}
 .navrow{display:flex;justify-content:space-between;margin-top:12px;gap:8px}
 .btn{border:none;border-radius:9px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:.15s}
-.bprim{background:#c0392b;color:#fff}.bprim:hover{background:#962d22}
-.bsec{background:#fff;color:#555;border:1px solid #d0cfc8}.bsec:hover{background:#f5f4f0}
+.bprim{background:#5b4cdc;color:#fff}.bprim:hover{background:#4a3cc0}
+.bsec{background:#fff;color:#555;border:1px solid #d8d8ea}.bsec:hover{background:#f2f2f8}
 .bgrn{background:#2d7a4f;color:#fff}.bgrn:hover{background:#246040}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
 .hidden{display:none}
-.sec-divider{border:none;border-top:0.5px solid #e8e6de;margin:14px 0}
-.total-display{background:linear-gradient(135deg,#c0392b,#8b0000);color:#fff;border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:12px}
-.total-num{font-size:32px;font-weight:900;letter-spacing:-1px}
-.total-label{font-size:11px;opacity:.75}
-.total-grade{background:rgba(255,255,255,.2);border-radius:6px;padding:3px 10px;font-size:14px;font-weight:800;margin-left:auto}
-.gram-unit{background:#f9f0f0;border-left:3px solid #c0392b;border-radius:0 8px 8px 0;padding:7px 11px;margin-bottom:5px;font-size:11.5px;color:#444}
-.hist-box{display:none;background:#fff8f0;border:1px solid #f0b040;border-radius:8px;padding:0;margin-bottom:14px;font-size:12px;overflow:hidden}
+.gram-unit{background:#f3f0fb;border-left:3px solid #8c7bff;border-radius:0 8px 8px 0;padding:7px 11px;margin-bottom:5px;font-size:11.5px;color:#444}
+.hist-box{display:none;background:#f3f0fb;border:1px solid #d6cdf0;border-radius:8px;margin-bottom:14px;font-size:12px;overflow:hidden}
 .hist-head{padding:11px 14px;cursor:pointer;display:flex;align-items:center;gap:7px}
-.hist-body{display:none;padding:0 14px 12px;border-top:0.5px solid #f0d090}
+.hist-body{display:none;padding:0 14px 12px;border-top:0.5px solid #e0d8f5}
 </style>
 </head>
 <body>
@@ -116,10 +75,10 @@ textarea{resize:vertical}
 
 <div class="tool-header">
   <div>
-    <h1>🔴 Silver Stella — Monthly Report</h1>
-    <p>파머스국제어학원 광교브랜치 · 강사용 · SA1~SA6 + SB1~SB6 · 실제 시험 40문항 기반</p>
+    <h1>&#127756; Inter Stella &mdash; Monthly Report</h1>
+    <p>파머스국제어학원 광교브랜치 &middot; 강사용 &middot; S1~S6 &middot; Final Test 45문항</p>
   </div>
-  <div class="hbadge">v2.0</div>
+  <div class="hbadge">v1.0</div>
 </div>
 
 <div class="steps">
@@ -130,43 +89,31 @@ textarea{resize:vertical}
   <button id="sb4" class="sbtn" onclick="go(4)"><i class="ti ti-file-text"></i>리포트</button>
 </div>
 
-<!-- STEP 0: 학생 정보 -->
 <div id="s0">
   <div class="card">
     <div class="ctitle"><i class="ti ti-user"></i>학생 기본 정보</div>
     <div class="row3">
       <div><label>학생 이름</label><input type="text" id="stuName" placeholder="홍길동" oninput="onNameInput()"></div>
-      <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 광교초등학교" oninput="onNameInput()"></div>
-      <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 3학년"></div>
+      <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 광교초" oninput="onNameInput()"></div>
+      <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 초6"></div>
     </div>
     <div class="row3">
-      <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: 김선생님"></div>
+      <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: 린쌤"></div>
       <div><label>보고서 월</label><input type="text" id="repMonth" placeholder="예: 2026년 6월"></div>
-
     </div>
     <div style="margin-bottom:10px">
       <label>과정 선택</label>
       <select id="lvSel" onchange="onLvChange()">
         <option value="">-- 과정을 선택하세요 --</option>
-        <optgroup label="── Silver Stella A 과정 ──">
-          <option value="SA1">Silver Stella A1 — Animals</option>
-          <option value="SA2">Silver Stella A2 — Smell Adventure</option>
-          <option value="SA3">Silver Stella A3 — Present Simple</option>
-          <option value="SA4">Silver Stella A4 — Halloween</option>
-          <option value="SA5">Silver Stella A5 — Book and Story</option>
-          <option value="SA6">Silver Stella A6 — Bugs</option>
-        </optgroup>
-        <optgroup label="── Silver Stella B 과정 ──">
-          <option value="SB1">Silver Stella B1 — Bicycle</option>
-          <option value="SB2">Silver Stella B2 — A Pet</option>
-          <option value="SB3">Silver Stella B3 — Responsible</option>
-          <option value="SB4">Silver Stella B4 — Adventure</option>
-          <option value="SB5">Silver Stella B5 — A Dream</option>
-          <option value="SB6">Silver Stella B6 — Earth</option>
-        </optgroup>
+        <option value="1">Inter Stella 1 (S1) &mdash; 간접의문문·과거형</option>
+        <option value="2">Inter Stella 2 (S2) &mdash; 문장패턴(4→3형식)</option>
+        <option value="3">Inter Stella 3 (S3) &mdash; 가주어 It·동명사</option>
+        <option value="4">Inter Stella 4 (S4) &mdash; 시제(미래·과거·현재완료)</option>
+        <option value="5">Inter Stella 5 (S5) &mdash; 문장합치기·현재완료수동</option>
+        <option value="6">Inter Stella 6 (S6) &mdash; 문장합치기·동사형</option>
       </select>
     </div>
-    <div id="lvInfo" style="background:#fdf2f2;border:1px solid #f0c0b8;border-radius:8px;padding:9px 14px;font-size:12px;color:#555;min-height:32px;display:none"></div>
+    <div id="lvInfo" style="background:#f3f0fb;border:1px solid #d6cdf0;border-radius:8px;padding:9px 14px;font-size:12px;color:#444;min-height:32px;display:none"></div>
     <div id="historyAlert" class="hist-box">
       <div id="historyAlertHead" class="hist-head" onclick="toggleHistoryPanel()"></div>
       <div id="historyAlertBody" class="hist-body"></div>
@@ -177,22 +124,18 @@ textarea{resize:vertical}
   </div>
 </div>
 
-<!-- STEP 1: 오답 선택 -->
 <div id="s1" class="hidden">
   <div class="card">
-    <div class="ctitle"><i class="ti ti-target"></i>틀린 문항 확인 — 점수 0점 문항이 자동 오답 표시됩니다</div>
+    <div class="ctitle"><i class="ti ti-target"></i>틀린 문항 선택 &mdash; 45문항</div>
     <p style="font-size:11px;color:#888;margin-bottom:12px">문항을 클릭하면 오답(빨간색) 처리됩니다. 다시 클릭하면 정답으로 복원됩니다. 기본값은 모두 정답입니다.</p>
-
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;font-size:10.5px">
-      <span style="background:#fff8e1;border:1px solid #f39c12;color:#c0860a;padding:3px 9px;border-radius:5px;font-weight:600">■ VOC</span>
-      <span style="background:#e8f5e9;border:1px solid #27ae60;color:#1a7a40;padding:3px 9px;border-radius:5px;font-weight:600">■ RDG</span>
-      <span style="background:#e3f2fd;border:1px solid #2196f3;color:#1060b0;padding:3px 9px;border-radius:5px;font-weight:600">■ LIS</span>
-      <span style="background:#f3e5f5;border:1px solid #9c27b0;color:#7020a0;padding:3px 9px;border-radius:5px;font-weight:600">■ GRM</span>
-      <span style="background:#fce4ec;border:1px solid #e91e63;color:#b0104a;padding:3px 9px;border-radius:5px;font-weight:600">■ WRT</span>
+      <span style="background:#fdf6e3;border:1px solid #e6cd8a;color:#b8860b;padding:3px 9px;border-radius:5px;font-weight:600">&#9632; VOC 어휘 /20</span>
+      <span style="background:#eaf3fb;border:1px solid #a9cdee;color:#2b6cb0;padding:3px 9px;border-radius:5px;font-weight:600">&#9632; LIS 듣기 /10</span>
+      <span style="background:#eaf6ee;border:1px solid #a9dab9;color:#2f855a;padding:3px 9px;border-radius:5px;font-weight:600">&#9632; RDG 독해 /10</span>
+      <span style="background:#f5eefb;border:1px solid #cfb0e6;color:#7c3aed;padding:3px 9px;border-radius:5px;font-weight:600">&#9632; GRM 문법 /5</span>
     </div>
-
     <div id="wrongGrid"></div>
-    <div style="margin-top:10px;font-size:12px;color:#aaa" id="wrongCount">오답: 0문항 · 감점: 0점</div>
+    <div style="margin-top:10px;font-size:12px;color:#888" id="wrongCount">오답: 0문항</div>
   </div>
   <div class="navrow">
     <button class="btn bsec" onclick="go(0)"><i class="ti ti-arrow-left"></i> 이전</button>
@@ -200,20 +143,24 @@ textarea{resize:vertical}
   </div>
 </div>
 
-<!-- STEP 2: 역량 분석 -->
 <div id="s2" class="hidden">
   <div class="card">
-    <div class="ctitle"><i class="ti ti-chart-bar"></i>영역별 역량 분석</div>
+    <div class="ctitle"><i class="ti ti-chart-bar"></i>영역별 역량 분석 (100점 환산)</div>
+    <div id="totalDisp2" style="background:linear-gradient(135deg,#5b4cdc,#1a1f5c);color:#fff;border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <div style="font-size:32px;font-weight:900" id="tot100">0</div>
+      <div style="font-size:11px;opacity:.8">/ 100점<br><span id="raw45">0/45</span></div>
+      <div style="margin-left:auto;background:rgba(255,255,255,.2);border-radius:6px;padding:3px 12px;font-size:15px;font-weight:800" id="gradeDisp">-</div>
+    </div>
     <div id="domBars"></div>
     <div class="sigbox" id="sigBox" style="display:none">
-      <div class="sigtitle">⚠️ 보완 집중 영역</div>
+      <div class="sigtitle">&#9888; 보완 집중 영역</div>
       <div id="sigRow"></div>
     </div>
   </div>
   <div class="card">
     <div class="ctitle"><i class="ti ti-microscope"></i>문항별 상세 분석</div>
     <div class="atbl">
-      <div class="ah"><div>문항</div><div>영역</div><div>측정 내용</div><div>판정</div><div>해석</div></div>
+      <div class="ah"><div>문항</div><div>영역</div><div>측정 내용</div><div>판정</div><div>분류</div></div>
       <div id="atblBody"></div>
     </div>
   </div>
@@ -223,42 +170,31 @@ textarea{resize:vertical}
   </div>
 </div>
 
-<!-- STEP 3: 코멘트 -->
 <div id="s3" class="hidden">
   <div class="card">
     <div class="ctitle"><i class="ti ti-sparkles"></i>자동 피드백 초안</div>
     <div style="position:relative">
-      <textarea id="autoFb" rows="5" style="font-size:13px;line-height:1.9;color:#333;background:#fdf9f9;border:1px solid #e8d8d8;border-radius:8px;padding:11px 16px;border-left:3px solid #c0392b;width:100%;resize:vertical;font-family:inherit;padding-right:110px"></textarea>
-      <button onclick="refineText('autoFb','auto')" style="position:absolute;bottom:8px;right:8px;background:#c0392b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+      <textarea id="autoFb" rows="5" style="font-size:13px;line-height:1.9;color:#1a1a2e;background:#f7f7fc;border:1px solid #cfcfe6;border-radius:8px;padding:11px 16px;border-left:3px solid #5b4cdc;width:100%;padding-right:110px"></textarea>
+      <button onclick="refineText('autoFb','auto')" style="position:absolute;bottom:8px;right:8px;background:#5b4cdc;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
     </div>
     <div id="refineStatus_auto" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
   </div>
 
   <div class="card">
-    <div class="ctitle"><i class="ti ti-pencil"></i>이달의 강점 & 보완점</div>
+    <div class="ctitle"><i class="ti ti-pencil"></i>이달의 강점 &amp; 보완점</div>
     <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <button onclick="showHistory()" style="background:#f8f7f4;border:1px solid #d0d0cc;border-radius:7px;padding:6px 14px;font-size:12px;cursor:pointer;color:#666;display:flex;align-items:center;gap:5px"><i class="ti ti-history" style="font-size:13px"></i>지난 리포트 확인</button>
-      <span style="font-size:11px;color:#aaa">· Layer 1은 오답 분석 자동 생성 · Layer 2는 키워드 선택 후 작성</span>
+      <button onclick="showHistory()" style="background:#fff;border:1px solid #d8d8ea;border-radius:7px;padding:6px 14px;font-size:12px;cursor:pointer;color:#555;display:flex;align-items:center;gap:5px"><i class="ti ti-history" style="font-size:13px"></i>지난 리포트 확인</button>
     </div>
-    <div id="historyBox" style="display:none;background:#fff8f0;border:1px solid #f0b040;border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:12px"></div>
+    <div id="historyBox" style="display:none;background:#f3f0fb;border:1px solid #d6cdf0;border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:12px"></div>
 
-    <!-- ★ 강점 -->
     <div style="margin-bottom:18px">
-      <div style="font-size:12px;font-weight:700;color:#2d7a4f;margin-bottom:10px;display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:1.5px solid #d4edda">
-        <i class="ti ti-star-filled" style="font-size:14px"></i>이달의 강점
+      <div style="font-size:12px;font-weight:700;color:#2d7a4f;margin-bottom:10px;padding-bottom:6px;border-bottom:1.5px solid #cde8d6"><i class="ti ti-star-filled"></i> 이달의 강점</div>
+      <div style="background:#eaf6ee;border:1px solid #cde8d6;border-radius:9px;padding:12px 14px;margin-bottom:10px">
+        <div style="font-size:10.5px;font-weight:700;color:#2d7a4f;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center"><span>&#128202; Layer 1 &mdash; 역량 분석 (자동)</span><button onclick="generateStrengthAnalysis()" style="background:#2d7a4f;color:#fff;border:none;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer">&#9851; 재생성</button></div>
+        <div id="strengthAnalysis" style="font-size:12px;color:#444;line-height:1.85;min-height:36px;white-space:pre-wrap"></div>
       </div>
-
-      <div style="background:#f0faf4;border:1px solid #b8e0c8;border-radius:9px;padding:12px 14px;margin-bottom:10px">
-        <div style="font-size:10.5px;font-weight:700;color:#1a6640;margin-bottom:6px">
-          <span>📊 Layer 1 — 영어 역량 분석 <span style="font-weight:400;color:#666">(오답 기반 자동 생성)</span></span>
-        </div>
-        <div id="strengthAnalysis" style="font-size:12px;color:#333;line-height:1.85;min-height:40px;white-space:pre-wrap"></div>
-      </div>
-
-      <div style="background:#f8fdf9;border:1px solid #d4edda;border-radius:9px;padding:12px 14px">
-        <div style="font-size:10.5px;font-weight:700;color:#1a6640;margin-bottom:8px">
-          👀 Layer 2 — 수업 태도·관찰 <span style="font-weight:400;color:#666">(키워드 선택 후 AI 작성)</span>
-        </div>
+      <div style="background:#f1faf4;border:1px solid #d4ecdc;border-radius:9px;padding:12px 14px">
+        <div style="font-size:10.5px;font-weight:700;color:#2d7a4f;margin-bottom:8px">&#128064; Layer 2 &mdash; 수업 태도·관찰 (키워드 선택)</div>
         <div class="chips" id="strengthChips" style="margin-bottom:8px"></div>
         <div style="position:relative">
           <textarea id="cmtStrength" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
@@ -268,25 +204,16 @@ textarea{resize:vertical}
       </div>
     </div>
 
-    <hr style="border:none;border-top:0.5px solid #e8e6de;margin:16px 0">
+    <hr style="border:none;border-top:1px solid #ececf3;margin:16px 0">
 
-    <!-- ★ 보완점 -->
     <div style="margin-bottom:14px">
-      <div style="font-size:12px;font-weight:700;color:#854f0b;margin-bottom:10px;display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:1.5px solid #fce8cd">
-        <i class="ti ti-adjustments" style="font-size:14px"></i>파악된 보완점
+      <div style="font-size:12px;font-weight:700;color:#b8860b;margin-bottom:10px;padding-bottom:6px;border-bottom:1.5px solid #f0e2bd"><i class="ti ti-adjustments"></i> 파악된 보완점</div>
+      <div style="background:#fdf6e3;border:1px solid #f0e2bd;border-radius:9px;padding:12px 14px;margin-bottom:10px">
+        <div style="font-size:10.5px;font-weight:700;color:#b8860b;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center"><span>&#128202; Layer 1 &mdash; 역량 분석 (자동)</span><button onclick="generateImproveAnalysis()" style="background:#854f0b;color:#fff;border:none;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer">&#9851; 재생성</button></div>
+        <div id="improveAnalysis" style="font-size:12px;color:#444;line-height:1.85;min-height:36px;white-space:pre-wrap"></div>
       </div>
-
-      <div style="background:#fffbf0;border:1px solid #fce8cd;border-radius:9px;padding:12px 14px;margin-bottom:10px">
-        <div style="font-size:10.5px;font-weight:700;color:#854f0b;margin-bottom:6px">
-          <span>📊 Layer 1 — 영어 역량 분석 <span style="font-weight:400;color:#666">(오답 기반 자동 생성)</span></span>
-        </div>
-        <div id="improveAnalysis" style="font-size:12px;color:#333;line-height:1.85;min-height:40px;white-space:pre-wrap"></div>
-      </div>
-
-      <div style="background:#fffdf8;border:1px solid #fce8cd;border-radius:9px;padding:12px 14px">
-        <div style="font-size:10.5px;font-weight:700;color:#854f0b;margin-bottom:8px">
-          👀 Layer 2 — 수업 태도·관찰 <span style="font-weight:400;color:#666">(키워드 선택 후 AI 작성)</span>
-        </div>
+      <div style="background:#fdfaf0;border:1px solid #f0e8d0;border-radius:9px;padding:12px 14px">
+        <div style="font-size:10.5px;font-weight:700;color:#b8860b;margin-bottom:8px">&#128064; Layer 2 &mdash; 수업 태도·관찰 (키워드 선택)</div>
         <div class="chips" id="attitudeChips" style="margin-bottom:8px"></div>
         <div style="position:relative">
           <textarea id="cmtImprove" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
@@ -296,28 +223,19 @@ textarea{resize:vertical}
       </div>
     </div>
 
-    <hr style="border:none;border-top:0.5px solid #e8e6de;margin:14px 0">
-
+    <hr style="border:none;border-top:1px solid #ececf3;margin:14px 0">
     <div>
-      <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:6px">추가 관찰 메모 <span style="font-weight:400;color:#aaa">(선택)</span></div>
-      <div style="background:#f9f0f0;border-radius:8px;padding:9px 12px;margin-bottom:7px">
-        <div id="promptQs" style="font-size:11px;color:#666;line-height:2.1"></div>
-      </div>
+      <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:6px">추가 관찰 메모 <span style="font-weight:400;color:#999">(선택)</span></div>
       <textarea id="cmtExtra" rows="3" style="font-size:12px"></textarea>
     </div>
   </div>
 
   <div class="card">
     <div class="ctitle"><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</div>
-    <div style="background:#fbf3f2;border:0.5px solid #f0d5d0;border-radius:9px;padding:11px 13px;margin-bottom:12px">
-      <div style="font-size:10px;font-weight:700;color:#c0392b;margin-bottom:7px;display:flex;align-items:center;gap:5px"><i class="ti ti-stethoscope" style="font-size:13px"></i>STEP 1. 영역별 우선순위 진단 <span style="font-weight:500;color:#bfa6a2">— 참고용 (클릭 아님)</span></div>
-      <div id="nextPriorityBar"></div>
-    </div>
-    <div style="font-size:10px;font-weight:700;color:#c0392b;margin-bottom:7px;display:flex;align-items:center;gap:5px"><i class="ti ti-hand-click" style="font-size:13px"></i>STEP 2. 지도 키워드 선택 <span style="font-weight:500;color:#bfa6a2">— 클릭하면 아래 문장이 채워집니다</span></div>
     <div class="chips" id="nextChips"></div>
     <div style="position:relative">
       <textarea id="cmtNext" rows="3" style="font-size:12px;padding-right:110px"></textarea>
-      <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#c0392b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+      <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#5b4cdc;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
     </div>
     <div id="refineStatus_next" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
   </div>
@@ -328,7 +246,6 @@ textarea{resize:vertical}
   </div>
 </div>
 
-<!-- STEP 4: 리포트 -->
 <div id="s4" class="hidden">
   <div id="reportOut"></div>
   <div class="navrow" style="margin-top:12px">
@@ -339,1200 +256,235 @@ textarea{resize:vertical}
     </div>
   </div>
   <div id="saveStatus" style="font-size:12px;color:#2d7a4f;margin-top:8px;text-align:right;display:none"></div>
-  <div id="resetConfirmBox" style="display:none;margin-top:10px;background:#eaf3de;border:1px solid #90c060;border-radius:10px;padding:13px 16px">
-    <div style="font-size:12px;color:#2d7a4f;font-weight:600;margin-bottom:8px"><i class="ti ti-circle-check" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i><span id="resetConfirmMsg"></span></div>
+  <div id="resetConfirmBox" style="display:none;margin-top:10px;background:#eaf6ee;border:1px solid #cde8d6;border-radius:10px;padding:13px 16px">
+    <div style="font-size:12px;color:#2d7a4f;font-weight:600;margin-bottom:8px"><i class="ti ti-circle-check"></i> <span id="resetConfirmMsg"></span></div>
     <div style="display:flex;gap:7px">
-      <button onclick="resetAll()" style="background:#2d7a4f;color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer">초기화하고 다음 학생 작성</button>
-      <button onclick="g('resetConfirmBox').style.display='none'" style="background:#fff;color:#555;border:1px solid #ccc;border-radius:7px;padding:7px 14px;font-size:12px;cursor:pointer">이 화면 유지</button>
+      <button onclick="resetAll()" style="background:#2d7a4f;color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer">초기화하고 다음 학생</button>
+      <button onclick="g('resetConfirmBox').style.display='none'" style="background:#fff;color:#555;border:1px solid #d8d8ea;border-radius:7px;padding:7px 14px;font-size:12px;cursor:pointer">이 화면 유지</button>
     </div>
   </div>
 </div>
 </div>
 
-<div style="display:none">
-<input type="hidden" id="q1" value="2.5">
-<input type="hidden" id="q2" value="2.5">
-<input type="hidden" id="q3" value="2.5">
-<input type="hidden" id="q4" value="2.5">
-<input type="hidden" id="q5" value="2.5">
-<input type="hidden" id="q6" value="2.5">
-<input type="hidden" id="q7" value="2.5">
-<input type="hidden" id="q8" value="2.5">
-<input type="hidden" id="q9" value="2.5">
-<input type="hidden" id="q10" value="2.5">
-<input type="hidden" id="q11" value="2.5">
-<input type="hidden" id="q12" value="2.5">
-<input type="hidden" id="q13" value="2.5">
-<input type="hidden" id="q14" value="2.5">
-<input type="hidden" id="q15" value="2.5">
-<input type="hidden" id="q16" value="2.5">
-<input type="hidden" id="q17" value="2.5">
-<input type="hidden" id="q18" value="2.5">
-<input type="hidden" id="q19" value="2.5">
-<input type="hidden" id="q20" value="2.5">
-<input type="hidden" id="q21" value="2.5">
-<input type="hidden" id="q22" value="2.5">
-<input type="hidden" id="q23" value="2.5">
-<input type="hidden" id="q24" value="2.5">
-<input type="hidden" id="q25" value="2.5">
-<input type="hidden" id="q26" value="2.5">
-<input type="hidden" id="q27" value="2.5">
-<input type="hidden" id="q28" value="2.5">
-<input type="hidden" id="q29" value="2.5">
-<input type="hidden" id="q30" value="2.5">
-<input type="hidden" id="q31" value="2.5">
-<input type="hidden" id="q32" value="2.5">
-<input type="hidden" id="q33" value="2.5">
-<input type="hidden" id="q34" value="2.5">
-<input type="hidden" id="q35" value="2.5">
-<input type="hidden" id="q36" value="2.5">
-<input type="hidden" id="q37" value="2.5">
-<input type="hidden" id="q38" value="2.5">
-<input type="hidden" id="q39" value="2.5">
-<input type="hidden" id="q40" value="2.5">
-</div>
+<div style="display:none" id="scoreInputs"></div>
+
 <script>
-// ============================================================
-// Silver Stella B Monthly Report v2.0
-// 실제 시험 40문항 구조 기반 (각 2.5점 = 100점)
-// 파머스국제어학원 광교브랜치
-// ============================================================
+const LV={"1": {"label": "S1", "name": "Indirect Questions & Past Tense", "theme": "A Fable / At the Doctor / Wishes & Cities / The News / Scout Camp", "grammar": "간접의문문·과거형·의문사+to부정사", "cefr": "A2-B1", "lexile": "750L", "units": [{"u": 1, "theme": "A Fable"}, {"u": 2, "theme": "At the Doctor"}, {"u": 3, "theme": "Wishes & Cities"}, {"u": 4, "theme": "The News"}, {"u": 5, "theme": "Scout Camp"}], "gramUnits": ["간접의문문 (Do you know what~?)", "과거형 (told me that~)", "가정법 wish (I wish I could~)", "의문사+to부정사 (how to read)"], "ipattern": [{"unit": 1, "q": "What is a fable?", "a": "Do you know what a fable is?", "qk": "우화가 무엇이니?", "ak": "우화가 무엇인지 아니?", "theme": "A Fable"}, {"unit": 2, "q": "What did the doctor say to you?", "a": "She told me that I had a fever.", "qk": "의사선생님이 너에게 뭐라고 했니?", "ak": "그녀는 내가 열이 있다고 했어.", "theme": "At the Doctor"}, {"unit": 3, "q": "If you could go to another city, where do you wish you could go to?", "a": "I wish I could go to California.", "qk": "만약 당신이 다른 도시로 간다면, 어디로 가고 싶습니까?", "ak": "내가 캘리포니아에 갈 수 있다면 좋을텐데.", "theme": "Wishes & Cities"}, {"unit": 4, "q": "Did you see the news yesterday night?", "a": "I saw the weather report.", "qk": "너 어제 밤에 뉴스 봤니?", "ak": "난 일기 예보를 봤어.", "theme": "The News"}, {"unit": 5, "q": "I want to know what they teach at the scout camp.", "a": "They teach you how to read a map.", "qk": "나는 그들이 스카우트 캠프에서 무엇을 가르쳐주는지 알고 싶어.", "ak": "그들은 네가 지도를 읽는 방법을 가르쳐 줘.", "theme": "Scout Camp"}], "answerKey": {"VOC": {"1": 1, "2": 4, "3": 3, "4": 1, "5": 4, "6": 1, "7": 4, "8": 4, "9": 1, "10": 3, "11": 2, "12": 4, "13": 1, "14": 1, "15": 4, "16": 1, "17": 2, "18": 3, "19": 2, "20": 3}, "LIS": {"21": 2, "22": 3, "23": 2, "24": 3, "25": 1, "26": 2, "27": 1, "28": 2, "29": 3, "30": 2}, "RDG": {"31": 1, "32": 2, "33": 4, "34": 1, "35": 2, "36": 2, "37": 3, "38": 1, "39": 3, "40": 1}, "GRM": {"41": "what time it is?", "42": "He had a cold.", "43": "She didn't have a fever.", "44": "how to read a map.", "45": "where to go."}}}, "2": {"label": "S2", "name": "Sentence Patterns & Verbals", "theme": "Birds / Making a Sandwich / A Veterinarian / Oceans / The Calendar", "grammar": "looking forward to·과거형·4↔3형식·to부정사/동명사", "cefr": "A2-B1", "lexile": "750L", "units": [{"u": 1, "theme": "Birds"}, {"u": 2, "theme": "Making a Sandwich"}, {"u": 3, "theme": "A Veterinarian"}, {"u": 4, "theme": "Oceans"}, {"u": 5, "theme": "The Calendar"}], "gramUnits": ["looking forward to + 명사/동명사", "과거 불규칙동사 (brought/made/bought)", "4형식 ↔ 3형식 문장 전환 (to/for)", "to부정사 vs 동명사 목적어 (promise to / forgot to)"], "ipattern": [{"unit": 1, "theme": "Looking Forward To", "q": "What are you looking forward to?", "a": "I am looking forward to the trip.", "qk": "너는 무엇을 기대하고 있니?", "ak": "나는 여행을 기대하고 있어."}, {"unit": 2, "theme": "Past Verbs", "q": "What did you bring for lunch?", "a": "I brought a sandwich.", "qk": "너는 점심으로 무엇을 가져왔니?", "ak": "나는 샌드위치를 가져왔어."}, {"unit": 3, "theme": "4↔3 형식", "q": "He gave my dog an injection.", "a": "He gave an injection to my dog.", "qk": "그는 내 개에게 주사를 놓았습니다. (4형식)", "ak": "그는 내 개에게 주사를 놓았습니다. (3형식)"}, {"unit": 4, "theme": "to부정사·동명사", "q": "What did you promise to do?", "a": "You promised to help me build my giant sand castle.", "qk": "당신은 무엇을 하기로 약속했습니까?", "ak": "너는 내가 거대한 모래성 만드는 걸 도와주기로 약속했습니다."}, {"unit": 5, "theme": "분실물 찾기 회화", "q": "Have you seen my glasses?", "a": "I lost my glasses and I can't seem to find them.", "qk": "내 안경 봤어?", "ak": "안경을 잃어버렸는데 찾을 수가 없어."}], "answerKey": {"VOC": {"1": 4, "2": 3, "3": 1, "4": 4, "5": 2, "6": 2, "7": 3, "8": 1, "9": 4, "10": 4, "11": 1, "12": 3, "13": 1, "14": 4, "15": 3, "16": 2, "17": 3, "18": 4, "19": 2, "20": 1}, "LIS": {"21": 2, "22": 1, "23": 1, "24": 2, "25": 1, "26": 2, "27": 2, "28": 3, "29": 2, "30": 1}, "RDG": {"31": 1, "32": 1, "33": 4, "34": 1, "35": 2, "36": 4, "37": 3, "38": 2, "39": 2, "40": 3}, "GRM": {"41": "an injection to my dog", "42": "I bought a swimsuit", "43": "I went hiking", "44": "seeing a koala", "45": "to read a book"}}}, "3": {"label": "S3", "name": "It (가주어) & Gerunds", "theme": "A Photo Album / Paper / Soccer / Clocks / The Empty Lot", "grammar": "가주어 It·동명사", "cefr": "A2-B1", "lexile": "750L", "units": [{"u": 1, "theme": "A Photo Album"}, {"u": 2, "theme": "Paper"}, {"u": 3, "theme": "Soccer"}, {"u": 4, "theme": "Clocks"}, {"u": 5, "theme": "The Empty Lot"}], "gramUnits": ["가주어 It (It is ~ to V)", "동명사 (V-ing as 주어/목적어)", "진주어 구문", "동명사 관용표현"], "ipattern": [{"unit": 1, "theme": "A Photo Album", "q": "What does a camera do?", "a": "It is used to take pictures of people, places and things.", "qk": "카메라는 뭘 하는 거야?", "ak": "사람이나 장소, 어떤 것들의 사진을 찍는 데 쓰여."}, {"unit": 2, "theme": "Paper", "q": "What are you doing?", "a": "Throwing away paper.", "qk": "뭐하고 있어?", "ak": "종이 버리고 있어."}, {"unit": 3, "theme": "Soccer", "q": "Who is he?", "a": "He's the best striker in Tottenham.", "qk": "그가 누군데?", "ak": "그는 토트넘 최고의 스트라이커야."}, {"unit": 4, "theme": "Clocks", "q": "Why don't you know the time?", "a": "I don't know how to read the time on an analog watch.", "qk": "왜 시간을 모르니?", "ak": "아날로그 시계를 어떻게 읽는지 모르겠어."}, {"unit": 5, "theme": "The Empty Lot", "q": "What are you doing there?", "a": "I'm going to clean up the beach!", "qk": "거기서 뭐 할 거야?", "ak": "나는 해변을 청소할 거야!"}], "answerKey": {"VOC": {"1": 3, "2": 2, "3": 4, "4": 1, "5": 3, "6": 4, "7": 2, "8": 3, "9": 1, "10": 3, "11": 1, "12": 2, "13": 4, "14": 3, "15": 1, "16": 3, "17": 2, "18": 1, "19": 3, "20": 4}, "LIS": {"21": 1, "22": 3, "23": 2, "24": 1, "25": 1, "26": 2, "27": 3, "28": 2, "29": 1, "30": 2}, "RDG": {"31": 1, "32": 2, "33": 4, "34": 2, "35": 1, "36": 3, "37": 4, "38": 2, "39": 1, "40": 1}, "GRM": {"41": "It is interesting to read books.", "42": "It is important to exercise regularly.", "43": "It is bad to tell a lie.", "44": "lending", "45": "reading"}}}, "4": {"label": "S4", "name": "Tenses: Future·Past·Present Perfect", "theme": "Jokes / Rain / Earth / Museum Trip / The Post Office", "grammar": "미래·과거·현재완료", "cefr": "A2-B1", "lexile": "750L", "units": [{"u": 1, "theme": "Jokes"}, {"u": 2, "theme": "Rain"}, {"u": 3, "theme": "Earth"}, {"u": 4, "theme": "Museum Trip"}, {"u": 5, "theme": "The Post Office"}], "gramUnits": ["미래 시제 (will / be going to)", "과거 시제", "현재완료 (have/has p.p.)", "시제 비교"], "ipattern": [{"unit": 1, "theme": "Jokes", "q": "What is the joke?", "a": "She fell down and hurt herself.", "qk": "무슨 농담인데?", "ak": "그녀가 넘어져서 다쳤어."}, {"unit": 2, "theme": "Rain", "q": "Don't you know a heavy rain is approaching?", "a": "You can study with me in the library until heavy rain passes.", "qk": "폭우가 다가오고 있다는 것을 모르니?", "ak": "폭우가 지나갈 때까지 도서관에서 나랑 공부해도 돼."}, {"unit": 3, "theme": "Earth", "q": "Which planet is red?", "a": "Humans have been exploring this planet for a long time.", "qk": "어느 행성이 빨간색이야?", "ak": "인류는 오랫동안 이 행성을 탐사해 왔어."}, {"unit": 4, "theme": "Museum Trip", "q": "Who are you going with?", "a": "Ms. Amy and all of our class are going together.", "qk": "누구랑 같이 가?", "ak": "에이미 선생님과 우리 반 전체가 함께 가."}, {"unit": 5, "theme": "The Post Office", "q": "Do you have a stamp?", "a": "No, but I will get a stamp for you.", "qk": "우표 있어?", "ak": "아니, 하지만 내가 우표를 가져다 줄게."}], "answerKey": {"VOC": {"1": 4, "2": 2, "3": 3, "4": 1, "5": 3, "6": 4, "7": 2, "8": 3, "9": 1, "10": 3, "11": 1, "12": 2, "13": 4, "14": 3, "15": 1, "16": 3, "17": 2, "18": 1, "19": 3, "20": 4}, "LIS": {"21": 2, "22": 3, "23": 1, "24": 2, "25": 1, "26": 2, "27": 1, "28": 3, "29": 1, "30": 3}, "RDG": {"31": 1, "32": 2, "33": 1, "34": 1, "35": 2, "36": 4, "37": 3, "38": 3, "39": 2, "40": 3}, "GRM": {"41": "This lecture will be really interesting.", "42": "Our class went on a trip to the museum.", "43": "Miss amy explained those tools.", "44": "has worked at the post office.", "45": "has seen letters and packages."}}}, "5": {"label": "S5", "name": "Combining Sentences & Present Perfect Passive", "theme": "The Wolf / Gandhi / School Life / Fairy Tales / Horses", "grammar": "문장합치기·현재완료수동", "cefr": "A2-B1", "lexile": "750L", "units": [{"u": 1, "theme": "The Wolf"}, {"u": 2, "theme": "Gandhi"}, {"u": 3, "theme": "School Life"}, {"u": 4, "theme": "Fairy Tales"}, {"u": 5, "theme": "Horses"}], "gramUnits": ["문장 합치기 (관계사·접속사)", "현재완료 수동 (have been p.p.)", "복문 구성", "수동태 심화"], "ipattern": [{"unit": 1, "theme": "The Wolf", "q": "Why did you study so late?", "a": "We have a test next Monday!", "qk": "왜 그렇게 늦게까지 공부했어?", "ak": "다음 주 월요일에 시험이 있어!"}, {"unit": 2, "theme": "Gandhi", "q": "How did he fight against the British Empire?", "a": "He encouraged people to protest against British rule but never to use violence.", "qk": "그는 대영제국에 어떻게 맞서 싸웠어?", "ak": "그는 사람들이 영국 통치에 저항하되 결코 폭력을 쓰지 않도록 격려했어."}, {"unit": 3, "theme": "School Life", "q": "Are you going to write about it in your diary?", "a": "I just thought it was something you might want to write about.", "qk": "그것에 대해 일기에 쓸 거니?", "ak": "그냥 네가 쓰고 싶어할 만한 거라고 생각했어."}, {"unit": 4, "theme": "Fairy Tales", "q": "Then what is Cinderella about?", "a": "It's about a poor girl who goes to a ball, where the prince falls in love with her and marries her later!", "qk": "그럼 신데렐라는 무슨 내용이야?", "ak": "무도회에 간 가난한 소녀 이야기인데, 거기서 왕자가 그녀와 사랑에 빠져 나중에 결혼하게 돼!"}, {"unit": 5, "theme": "Horses", "q": "What is it like to ride horses?", "a": "Once you get used to it, it can be quite fun.", "qk": "말 타는 건 어떤 느낌이야?", "ak": "일단 익숙해지면 꽤 재미있을 수 있어."}], "answerKey": {"VOC": {"1": 1, "2": 2, "3": 2, "4": 4, "5": 3, "6": 1, "7": 4, "8": 3, "9": 1, "10": 3, "11": 2, "12": 4, "13": 1, "14": 4, "15": 1, "16": 2, "17": 3, "18": 4, "19": 1, "20": 3}, "LIS": {"21": 3, "22": 1, "23": 2, "24": 1, "25": 3, "26": 1, "27": 3, "28": 2, "29": 1, "30": 2}, "RDG": {"31": 2, "32": 3, "33": 2, "34": 1, "35": 2, "36": 4, "37": 3, "38": 3, "39": 4, "40": 1}, "GRM": {"41": "Do you know who he is?", "42": "to tell", "43": "telling", "44": "Delivery has been completed.", "45": "Horses have been tamed by men."}}}, "6": {"label": "S6", "name": "Combining Sentences & Verb Forms", "theme": "Photography / Recycling / Technology / Time Zones / The Grocery Store", "grammar": "문장합치기·동사형·현재완료수동", "cefr": "A2-B1", "lexile": "750L", "units": [{"u": 1, "theme": "Photography"}, {"u": 2, "theme": "Recycling"}, {"u": 3, "theme": "Technology"}, {"u": 4, "theme": "Time Zones"}, {"u": 5, "theme": "The Grocery Store"}], "gramUnits": ["문장 합치기 (분사·관계사)", "동사형 변화 (동명사/부정사)", "현재완료 수동", "복합 문장 구조"], "ipattern": [{"unit": 1, "theme": "Photography", "q": "Who is the photographer for that exhibition?", "a": "He is a talented musician as well as being a photographer.", "qk": "그 전시회의 사진작가는 누구예요?", "ak": "그는 사진작가일 뿐만 아니라 재능 있는 음악가이기도 해."}, {"unit": 2, "theme": "Recycling", "q": "What is recycling about, Billy?", "a": "It is about reusing items that are thrown away.", "qk": "재활용이 뭐야, 빌리?", "ak": "버려지는 물건들을 다시 쓰는 거야."}, {"unit": 3, "theme": "Technology", "q": "Is there a connection to the Internet on our school computers?", "a": "Donny, our computer technician, has just installed the connection for us.", "qk": "학교 컴퓨터에 인터넷 연결이 있나요?", "ak": "우리 컴퓨터 기사 도니가 방금 우리를 위해 연결을 설치했단다."}, {"unit": 4, "theme": "Time Zones", "q": "Are you sure your time isn't wrong, Mina?", "a": "I've checked with the home and computer clocks.", "qk": "네 시간이 틀린 거 아니야, 미나?", "ak": "집 시계랑 컴퓨터 시계로 확인했어."}, {"unit": 5, "theme": "The Grocery Store", "q": "Do you know where the milk is?", "a": "I haven't gone shopping in a long time.", "qk": "우유가 어디 있는지 알아요?", "ak": "저 오랫동안 장을 안 봤어요."}], "answerKey": {"VOC": {"1": 2, "2": 3, "3": 4, "4": 2, "5": 1, "6": 4, "7": 3, "8": 4, "9": 1, "10": 2, "11": 3, "12": 2, "13": 2, "14": 1, "15": 4, "16": 1, "17": 4, "18": 2, "19": 1, "20": 3}, "LIS": {"21": 1, "22": 3, "23": 2, "24": 2, "25": 1, "26": 3, "27": 2, "28": 1, "29": 3, "30": 1}, "RDG": {"31": 2, "32": 4, "33": 3, "34": 1, "35": 2, "36": 3, "37": 4, "38": 1, "39": 4, "40": 2}, "GRM": {"41": "Do you know where the milk is?", "42": "To remember", "43": "remembered", "44": "The technology has been advanced.", "45": "The film has been developed."}}}};
+const Q_META={};
+for(let i=1;i<=20;i++)Q_META[i]={part:'P1',domain:'VOC',label:'어휘'+i,desc:i<=16?'단어 뜻':'문맥 어휘'};
+for(let i=21;i<=30;i++)Q_META[i]={part:'P2',domain:'LIS',label:'듣기'+(i-20),desc:'듣고 답하기'};
+for(let i=31;i<=40;i++)Q_META[i]={part:'P3',domain:'RDG',label:'독해'+(i-30),desc:'지문 이해'};
+for(let i=41;i<=45;i++)Q_META[i]={part:'P4',domain:'GRM',label:'문법'+(i-40),desc:'문법·영작'};
+const DOM_MAX={VOC:20,LIS:10,RDG:10,GRM:5};
+const DOM_LABEL={VOC:"어휘(VOC)",LIS:"듣기(LIS)",RDG:"읽기(RDG)",GRM:"문법(GRM)"};
+const DOM_COLOR={VOC:"#e0b94d",LIS:"#5aa9e6",RDG:"#6cc06c",GRM:"#b07de0"};
+const QBTN_CLS={VOC:"voc",LIS:"lis",RDG:"rdg",GRM:"grm"};
+const TOTAL_RAW=45;
 
-// ── 레벨 데이터 ──────────────────────────────────────────────
-const LV = {
-  SA1:{label:"SA1",name:"Animals",grammar:"be동사 (긍정·부정·의문)",
-    ipattern:[
-      {q:"What animal is it?",a:"It's an elephant.",vocab:["elephant","giraffe","penguin","dolphin","gorilla"]},
-      {q:"What are they?",a:"They're lions.",vocab:["lions","tigers","bears","wolves","foxes"]},
-      {q:"Is it a rabbit?",a:"Yes, it is. / No, it isn't.",vocab:["rabbit","hamster","parrot","turtle","snake"]},
-      {q:"Who's in the kitchen?",a:"Mom is in the kitchen.",vocab:["mom","dad","grandma","grandpa","sister"]},
-      {q:"Are you hungry?",a:"Yes, I am. / No, I'm not.",vocab:["hungry","thirsty","tired","bored","excited"]},
-      {q:"Is he a chef?",a:"Yes, he is. / No, he isn't.",vocab:["chef","cook","baker","helper","busy"]},
-      {q:"Are they friends?",a:"Yes, they are. / No, they aren't.",vocab:["friends","siblings","cooks","helpers","animals"]},
-      {q:"What is it?",a:"It's a spoon.",vocab:["spoon","fork","knife","bowl","pan"]}
-    ],
-    gramUnits:["be동사 긍정문 (am/is/are)","be동사 부정문 (is not / are not)","be동사 의문문 (Is it ~? / Are they ~?)"],
-    PROMPT_QS:["동물 이름을 영어로 자신있게 말하나요?","be동사를 주어에 맞게 변형하나요?","그림카드 보고 영어 문장을 만드나요?"]},
-  SA2:{label:"SA2",name:"Smell Adventure",grammar:"대명사 & be동사",
-    ipattern:[
-      {q:"What does it smell like?",a:"It smells sweet.",vocab:["sweet","sour","spicy","fresh","awful"]},
-      {q:"What do they smell like?",a:"They smell wonderful.",vocab:["wonderful","terrible","amazing","strange","nice"]},
-      {q:"Does it smell good?",a:"Yes, it does. / No, it doesn't.",vocab:["good","bad","funny","strong","mild"]},
-      {q:"Who is he?",a:"He is my brother.",vocab:["brother","sister","cousin","uncle","aunt"]},
-      {q:"What is he like?",a:"He is kind.",vocab:["kind","smart","funny","shy","brave"]},
-      {q:"Are you ready?",a:"Yes, I am. / No, I'm not.",vocab:["ready","happy","scared","curious","sleepy"]},
-      {q:"Is it yours?",a:"Yes, it is. / No, it isn't.",vocab:["yours","mine","his","hers","ours"]},
-      {q:"Are these shoes yours?",a:"Yes, they are. / No, they aren't.",vocab:["shoes","socks","gloves","glasses","books"]}
-    ],
-    gramUnits:["인칭대명사 주격 (I/You/He/She/We/They)","소유대명사 (mine/yours/his/hers)","be동사 심화 의문문"],
-    PROMPT_QS:["대명사(he/she/they)를 올바르게 쓰나요?","냄새 어휘를 실생활과 연결하나요?","소유대명사 구별이 자연스럽나요?"]},
-  SA3:{label:"SA3",name:"Present Simple",grammar:"현재 단순시제 (긍정·3단수·부정·의문)",
-    ipattern:[
-      {q:"What do you like to do?",a:"I like to go fishing.",vocab:["fishing","ice skating","hiking","skiing","swimming"]},
-      {q:"What does he like to do?",a:"He likes to watch movies.",vocab:["watch movies","play baseball","hide-and-seek","paint","listen to music"]},
-      {q:"What do you do on weekends?",a:"I bake a cake.",vocab:["bake a cake","do homework","watch a movie","work out","play basketball"]},
-      {q:"What does she do on weekends?",a:"She practices the violin.",vocab:["do the laundry","practice the violin","study math","do volunteer work","bake muffins"]},
-      {q:"Do you need a recorder?",a:"No, I don't have a music class.",vocab:["recorder (music)","magnet (science)","calculator (math)","sweatpants (P.E.)","paints (art)"]},
-      {q:"Does she need a tennis racket?",a:"No, she doesn't need it.",vocab:["tennis racket","magnifying glass","triangle","dictionary","crayons"]},
-      {q:"Does he want to be a doctor?",a:"Yes, he does. / No, he doesn't.",vocab:["doctor","vet","flight attendant","dancer","photographer"]},
-      {q:"Do vets help sick animals?",a:"Yes, they do. / No, they don't.",vocab:["vets–help animals","bakers–bake bread","barbers–cut hair","salesclerks–sell things","artists–draw"]}
-    ],
-    gramUnits:["현재 단순 긍정 (I like / We watch)","3인칭 단수 -s (He likes / She practices)","현재 단순 부정 (don't / doesn't)","현재 단순 의문 (Do you ~? / Does she ~?)"],
-    PROMPT_QS:["3인칭 단수 -s를 빠뜨리지 않나요?","don't/doesn't 구별이 되나요?","Do/Does 의문문을 자신있게 만드나요?"]},
-  SA4:{label:"SA4",name:"Halloween",grammar:"의문사 의문문 (Wh-)",
-    ipattern:[
-      {q:"What does he like to do?",a:"He likes to play video games.",vocab:["play video games","read comic books","bake a cake","prepare","bring"]},
-      {q:"When does she wake up?",a:"She wakes up at six.",vocab:["wake up","go to bed","exercise","eat breakfast","write in a diary"]},
-      {q:"Who does the laundry?",a:"My dad does the laundry.",vocab:["wipe windows","do the laundry","vacuum","mop the floor","decorate"]},
-      {q:"Where are the forks?",a:"They're in the drawer.",vocab:["in the drawer","on the couch","in the backyard","on the table","in the kitchen"]},
-      {q:"How can I go there?",a:"You can go by bicycle.",vocab:["go straight","by bicycle","pay with cash","take 3 minutes","look both ways"]},
-      {q:"Why does Mom wear glasses?",a:"Because she can't see well without them.",vocab:["wear glasses","wear earrings","wear a necklace","can't see well","because"]},
-      {q:"How many exams do you have?",a:"I have four exams.",vocab:["science","music","English","math","the most difficult"]},
-      {q:"Which bag is yours?",a:"The black one is mine.",vocab:["soda","get a perm","dye hair","light brown","locker"]}
-    ],
-    gramUnits:["Wh- 의문문 (What/Where/When/Who/Why/How)","How many / Which 의문문","전치사구 위치 표현 (in/on)","because 이유절"],
-    PROMPT_QS:["Wh- 의문사를 상황에 맞게 쓰나요?","Halloween 어휘를 풍부하게 쓰나요?","전치사를 정확하게 활용하나요?"]},
-  SA5:{label:"SA5",name:"Book and Story",grammar:"형용사·부사·조동사",
-    ipattern:[
-      {q:"How does she look?",a:"She looks strong.",vocab:["strong","smart","short","outgoing","funny"]},
-      {q:"What does he look like?",a:"He has blue eyes.",vocab:["blue eyes","short bangs","long beard","blonde hair","white mustache"]},
-      {q:"How often do you work out?",a:"I work out once a day.",vocab:["once a day","twice a day","once a week","once a month","twice a month"]},
-      {q:"Do you go camping?",a:"I sometimes go camping.",vocab:["always","usually","often","sometimes","never"]},
-      {q:"What can you do?",a:"I can play the piano.",vocab:["play the piano","play basketball","speak Spanish","make pizzas","ride a bicycle"]},
-      {q:"May I watch TV now?",a:"Yes, you may. / No, you may not.",vocab:["watch TV","taste the food","use the bathroom","go outside","use the laptop"]},
-      {q:"What do you have to do?",a:"I have to clean my room.",vocab:["clean my room","wash the dishes","do the laundry","do my homework","wear a helmet"]},
-      {q:"What should we do in the library?",a:"We should be quiet.",vocab:["put the book back","be quiet","be careful","not eat food","not use the phone"]}
-    ],
-    gramUnits:["외모 묘사 (looks + 형용사 / has + 명사)","How often + 빈도 표현","빈도 부사 (always/usually/often/sometimes/never)","can / may / have to / should"],
-    PROMPT_QS:["형용사와 부사를 구별해 쓰나요?","can/should를 상황에 맞게 쓰나요?","빈도 부사를 자연스럽게 쓰나요?"]},
-  SA6:{label:"SA6",name:"Bugs",grammar:"전치사 (시간·위치·이동)",
-    ipattern:[
-      {q:"What time do you eat cereal?",a:"I eat cereal at 8.",vocab:["at 8 o'clock","at 8:30","at 4","at around 8","at around 10"]},
-      {q:"When will you go on vacation?",a:"I will go in the summer.",vocab:["in the afternoon","in April","in the summer","on weekends","on Sundays"]},
-      {q:"Where is she?",a:"She's in front of the mirror.",vocab:["in front of the mirror","in front of the door","behind the curtains","behind Mom","beside the chair"]},
-      {q:"Is the cat under the sofa?",a:"No, the cat isn't under the sofa.",vocab:["in the backyard","on the table","under the sofa","above the flower","in the backpack"]},
-      {q:"Where is the bank?",a:"It's next to the cinema.",vocab:["next to the cinema","next to the hospital","across from the café","across from the bookstore","near the supermarket"]},
-      {q:"Do you know where the aquarium is?",a:"Yes, it's on the 7th floor.",vocab:["on the 7th floor","on Wall Street","in the USA","in Peru","at the bus stop"]},
-      {q:"Where does he go?",a:"He goes up a hill.",vocab:["up a hill","down the stairs","over an overpass","along the bridge","around the tree"]},
-      {q:"Where does the train go?",a:"It goes from Seoul to Busan.",vocab:["from Seoul to Busan","through the tunnel","into the woods","out of town","across the river"]}
-    ],
-    gramUnits:["시간 전치사 (at 8 / in the summer / on weekends)","위치 전치사 (in front of / behind / beside / above)","장소 전치사 (next to / across from / near)","이동 전치사 (up/down/over/through/across)"],
-    PROMPT_QS:["위치·이동 전치사를 정확히 구분하나요?","시간 전치사(at/in/on)를 구별하나요?","간접의문문(where ~ is)을 쓰나요?"]},
-  SB1:{label:"SB1",name:"Bicycle",grammar:"Past Simple Be-verb (was/were)",
-    ipattern:[
-      {q:"Where was the deer?",a:"The deer was under the tree.",vocab:["deer","horse","bird","cat","sheep"]},
-      {q:"What was in the garden?",a:"Lilies were in the garden.",vocab:["lilies","roses","sunflowers","maples","oaks"]},
-      {q:"Was the movie boring?",a:"No, the movie wasn't boring.",vocab:["boring","exciting","thrilling","interesting","disappointing"]},
-      {q:"Were they good at football?",a:"No, they weren't good at football.",vocab:["football","badminton","volleyball","table tennis","snowboarding"]},
-      {q:"What was in the basket?",a:"An egg was in the basket.",vocab:["egg","sandwich","cheese","apple","juice"]},
-      {q:"What were the babies like?",a:"The babies were lovely.",vocab:["lovely","fresh","scary","active","tall"]},
-      {q:"What was there in the box?",a:"There was a toy.",vocab:["toy","slide","honey","cups","ducks"]},
-      {q:"Was there a pond before?",a:"No, there wasn't a pond there before.",vocab:["before","last week","two years ago","last night","yesterday"]}
-    ],
-    gramUnits:["be동사 과거 긍정 (was/were)","be동사 과거 부정 (wasn't/weren't)","be동사 과거 의문문 (Was/Were ~?)","There was/were 구문"],
-    PROMPT_QS:["was/were를 주어에 맞게 쓸 수 있나요?","There was와 There were를 구별해서 쓰나요?","과거 부정문 wasn't/weren't를 정확히 쓰나요?"]},
-  SB2:{label:"SB2",name:"A Pet",grammar:"Past Simple Verbs (규칙/불규칙 동사)",
-    ipattern:[
-      {q:"What did you do yesterday when it rained?",a:"I stayed home.",vocab:["stayed home","read a book","watched TV","slept","cooked"]},
-      {q:"When did he pick apples?",a:"He picked apples last weekend.",vocab:["picked","planted","washed","watered","carried"]},
-      {q:"What did she do?",a:"She got an invitation.",vocab:["got","drew","wrote","built","read"]},
-      {q:"Where did you buy the violin?",a:"I bought it in the store.",vocab:["store","market","mall","shop","bookstore"]},
-      {q:"Did you take a math class?",a:"No, I didn't. I took a science class.",vocab:["math","science","music","art","history"]},
-      {q:"Did he know the teacher?",a:"Yes, he did. He knew the teacher.",vocab:["knew","brought","came","had","sat"]},
-      {q:"Was he an actor before?",a:"Yes, he was. Is he an artist now? Yes, he is.",vocab:["actor","artist","singer","dancer","writer"]},
-      {q:"What did he do last year?",a:"He learned English. What does he do on weekends? He speaks English.",vocab:["learned","studied","taught","spoke","practiced"]}
-    ],
-    gramUnits:["과거 규칙 동사 (-ed)","과거 불규칙 동사 (got/drew/wrote/knew)","과거 부정문 (didn't + 동사원형)","과거 의문문 (Did/When/Where + 동사원형?)"],
-    PROMPT_QS:["불규칙 과거 동사를 정확히 쓰나요?","didn't와 동사원형 조합을 올바르게 쓰나요?","Did 의문문에서 동사원형을 쓰나요?"]},
-  SB3:{label:"SB3",name:"Responsible",grammar:"Present Continuous (현재진행형)",
-    ipattern:[
-      {q:"What are you doing?",a:"I'm surfing the Internet.",vocab:["surfing the Internet","reading","drawing","cooking","writing"]},
-      {q:"What is she doing?",a:"She's using a laptop.",vocab:["using a laptop","cleaning","painting","singing","dancing"]},
-      {q:"Is she looking at the artwork?",a:"No, she isn't looking at the artwork.",vocab:["looking","listening","waiting","talking","sitting"]},
-      {q:"Is she playing tennis?",a:"No, she isn't. She is playing the cello.",vocab:["tennis","the violin","the cello","soccer","the piano"]},
-      {q:"When do you write in your diary?",a:"Every night. What are you doing now? I am brushing my hair.",vocab:["write/brushing","read/cleaning","study/eating","draw/walking","sing/running"]},
-      {q:"Does he go to the library?",a:"Twice a week. Is he reading books? At the moment.",vocab:["library/reading","park/running","gym/exercising","pool/swimming","store/shopping"]},
-      {q:"What were you doing?",a:"I was choosing bread then. What are you doing now? I'm buying it.",vocab:["choosing","picking","carrying","holding","paying"]},
-      {q:"Was he looking for his bag?",a:"Yes, then. Is he still looking? No, not now.",vocab:["looking for","searching","checking","finding","waiting"]}
-    ],
-    gramUnits:["현재진행형 긍정 (am/is/are + -ing)","현재진행형 부정 (isn't/aren't + -ing)","현재진행형 의문문 (Is/Are + 주어 + -ing?)","현재 습관 vs 현재진행 / 과거진행 then vs now"],
-    PROMPT_QS:["is/are를 주어에 맞게 쓰나요?","-ing 철자 변화 규칙을 지키나요?","현재진행형과 현재시제를 구별하나요?"]},
-  SB4:{label:"SB4",name:"Adventure",grammar:"Future (will / be going to)",
-    ipattern:[
-      {q:"When will you look at the stars?",a:"Tonight.",vocab:["tonight","around 10","by tomorrow","next week","this weekend"]},
-      {q:"What will the robot do in the future?",a:"The robot will teach children.",vocab:["teach","mop","read","make","fix"]},
-      {q:"What are you going to do this vacation?",a:"I'm going to visit Gyeongbok Palace.",vocab:["visit","travel","study","play","rest"]},
-      {q:"Where is he going to go?",a:"He's going to go to Mt. Everest.",vocab:["Mt. Everest","the beach","the museum","Paris","the zoo"]},
-      {q:"Will you do the laundry today?",a:"No, I won't do the laundry.",vocab:["do the laundry","wash dishes","clean","cook","study"]},
-      {q:"Are you going to make a hamburger?",a:"No, I'm not going to make a hamburger.",vocab:["hamburger","pizza","sandwich","salad","soup"]},
-      {q:"Will you take the tent?",a:"Yes, I'll take it. Will he take the towel? No, he'll take the hat.",vocab:["tent","towel","hat","bag","map"]},
-      {q:"Are you going to ride a bus?",a:"Yes. Are you going to take a taxi? No, I'll take the subway.",vocab:["bus","taxi","subway","train","bike"]}
-    ],
-    gramUnits:["will 미래 긍정/부정/의문","be going to 미래 긍정/부정/의문","will vs. be going to 구별","미래 부정 (won't / isn't going to)"],
-    PROMPT_QS:["will과 be going to를 상황에 맞게 쓰나요?","won't와 동사원형 조합이 정확한가요?","be going to에서 be동사 주어 일치가 되나요?"]},
-  SB5:{label:"SB5",name:"A Dream",grammar:"형용사·부사 → 조동사 (can/could/may/should/must)",
-    ipattern:[
-      {q:"What is she training?",a:"She is training a smart dog.",vocab:["smart","colorful","hungry","strong","beautiful"]},
-      {q:"What do you think about waterskiing?",a:"I think waterskiing is exciting.",vocab:["exciting","easy","confusing","amazing","interesting"]},
-      {q:"Is he a careful driver?",a:"Yes, he drives carefully.",vocab:["careful/carefully","good/well","fast","kind/kindly","hard"]},
-      {q:"Does he skate carelessly?",a:"No, he skates carefully.",vocab:["carelessly↔carefully","quickly↔slowly","loudly↔softly","noisily↔quietly","messily↔neatly"]},
-      {q:"Can you ride a skateboard?",a:"Yes, I can. Could you swim two years ago? Yes, I could.",vocab:["ride a skateboard","play the cello","say a long sentence","swim","snowboard"]},
-      {q:"May I eat this cookie?",a:"Yes, you may. / No, you may not.",vocab:["eat this cookie","go out and play","use your phone","sit here","borrow your book"]},
-      {q:"What should I do?",a:"You should take out the garbage. / You shouldn't use plastic bags.",vocab:["take out garbage","use plastic bags","turn off the faucet","throw trash anywhere","recycle paper"]},
-      {q:"What does the sign mean?",a:"It means you must wear seat belts. / you mustn't park here.",vocab:["wear seat belts","park here","stop","walk on the grass","fly a drone"]}
-    ],
-    gramUnits:["형용사 vs 부사 (-ly 형태)","can/can't (현재 능력) · could/couldn't (과거 능력)","may (허락)","should/shouldn't (조언)","must/mustn't (의무/금지)"],
-    PROMPT_QS:["modal verb 뒤에 동사원형을 쓰나요?","can과 could를 현재/과거로 구별하나요?","부사와 형용사를 구별해서 쓰나요?"]},
-  SB6:{label:"SB6",name:"Earth",grammar:"감탄문 · 명령문(and/or) · 부가의문문",
-    ipattern:[
-      {q:"How about this story?",a:"What an interesting story!",vocab:["interesting story","lovely dress","great idea","nice sunglasses","colorful beads"]},
-      {q:"Look at the bird!",a:"How beautiful the bird is!",vocab:["beautiful/bird","small/fish","slow/turtle","scary/sharks","pretty/starfish"]},
-      {q:"What should I do?",a:"Cleanse your wound.",vocab:["Cleanse your wound","Get the first-aid kit","Go outside","Call the police","Stay indoors"]},
-      {q:"How can I be healthy?",a:"Please exercise regularly. / Don't skip breakfast.",vocab:["exercise regularly","drink water often","wash your hands","skip breakfast","overeat"]},
-      {q:"Can you give me some advice?",a:"Take this medicine, and you'll get better.",vocab:["and you'll get better","and you'll be in time","and you'll be healthy","and you'll be warm","and you'll find it"]},
-      {q:"What do you think I should do?",a:"Be quiet, or you'll wake up the baby.",vocab:["or you'll wake the baby","or you'll be cold","or you'll be thirsty","or you'll fail","or you'll break it"]},
-      {q:"You're taking a bus, aren't you?",a:"Yes, I'm taking a bus.",vocab:["aren't you?","are you?","aren't you?","are you?","aren't you?"]},
-      {q:"He went to the mall, didn't he?",a:"Yes. / She didn't write this letter, did she? No.",vocab:["didn't he?","didn't he?","didn't he?","did she?","did she?"]}
-    ],
-    gramUnits:["What 감탄문 (What + a/an + 형용사 + 명사!)","How 감탄문 (How + 형용사 + 주어 + 동사!)","명령문 + and/or","부가의문문 (현재진행 aren't you? / 과거 didn't he?)"],
-    PROMPT_QS:["What 감탄문에서 a/an을 정확히 쓰나요?","명령문 뒤 and/or 선택이 맞나요?","부가의문문의 시제와 인칭이 정확한가요?"]}
-};
+const ATTITUDE_STRENGTH_KW=["수업 집중력이 높아요","먼저 발표하려는 의지가 있어요","모르는 것을 바로 질문해요","선생님 설명을 끝까지 잘 들어요","숙제를 성실하게 완성해요","노트 정리가 꼼꼼해요","자기주도 학습이 잘 되어요","영어에 자신감과 긍정적 태도가 좋아요","실수를 두려워하지 않고 말하려 해요","짝 활동에 적극적으로 참여해요","끝까지 해내려는 끈기가 있어요","어휘를 빠르게 익혀요"];
+const ATTITUDE_IMPROVE_KW=["수업 중 집중 시간을 늘려가면 좋겠어요","발표 기회에 더 적극적으로 참여하면 좋겠어요","모르는 부분을 바로 질문하는 용기를 키워봐요","숙제를 제때 완성하는 습관을 함께 만들어가요","수업 후 복습 습관을 들이면 좋겠어요","교재 예습을 조금씩 해오면 이해도가 높아져요","어휘를 조금이라도 더 익히면 좋겠어요","긴 독해 지문에 더 자신감을 가지도록 독려할게요","문장 표현 정확도를 더 높여가면 좋겠어요","실수를 두려워하지 않고 더 편하게 말해봐요","문법 규칙을 정확히 적용하는 연습을 함께 해요","꾸준한 참여로 학습 효과를 더 높여가요"];
 
-// ── 40문항 메타 정보 ──────────────────────────────────────────
-const Q_META = {
-  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
-  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
-  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
-  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
-  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
-  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
-  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
-  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
-  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
-  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
-  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
-  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
-  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
-  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
-  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
-  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
-  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
-  18:{part:"P4A",domain:"GRM",label:"문법선택①",desc:"문법 형태 선택"},
-  19:{part:"P4A",domain:"GRM",label:"문법선택②",desc:"문법 형태 선택"},
-  20:{part:"P4A",domain:"GRM",label:"문법선택③",desc:"문법 형태 선택"},
-  21:{part:"P4A",domain:"GRM",label:"문법선택④",desc:"문법 형태 선택"},
-  22:{part:"P4B",domain:"WRT",label:"문장쓰기①",desc:"어순 배열 쓰기"},
-  23:{part:"P4B",domain:"WRT",label:"문장쓰기②",desc:"어순 배열 쓰기"},
-  24:{part:"P4B",domain:"WRT",label:"문장쓰기③",desc:"문장 완성 쓰기"},
-  25:{part:"P4B",domain:"WRT",label:"문장쓰기④",desc:"문장 완성 쓰기"},
-  26:{part:"P4C",domain:"GRM",label:"문법응용①",desc:"문법 규칙 적용"},
-  27:{part:"P4C",domain:"GRM",label:"문법응용②",desc:"문법 규칙 적용"},
-  28:{part:"P4C",domain:"GRM",label:"문법응용③",desc:"문법 규칙 적용"},
-  29:{part:"P4C",domain:"GRM",label:"문법응용④",desc:"문법 규칙 적용"},
-  30:{part:"P4C",domain:"GRM",label:"문법응용⑤",desc:"문법 규칙 적용"},
-  31:{part:"P4C",domain:"GRM",label:"답쓰기①",desc:"주관식 문장 작성"},
-  32:{part:"P4C",domain:"GRM",label:"답쓰기②",desc:"주관식 문장 작성"},
-  33:{part:"P4C",domain:"GRM",label:"답쓰기③",desc:"주관식 문장 작성"},
-  34:{part:"P4C",domain:"GRM",label:"답쓰기④",desc:"주관식 문장 작성"},
-  35:{part:"P4D",domain:"GRM",label:"심화문법①",desc:"고급 문법 적용"},
-  36:{part:"P4D",domain:"GRM",label:"심화문법②",desc:"고급 문법 적용"},
-  37:{part:"P4D",domain:"GRM",label:"심화문법③",desc:"고급 문법 적용"},
-  38:{part:"P4D",domain:"GRM",label:"심화문법④",desc:"고급 문법 적용"},
-  39:{part:"P4D",domain:"GRM",label:"심화문법⑤",desc:"고급 문법 적용"},
-  40:{part:"P4D",domain:"GRM",label:"심화문법⑥",desc:"고급 문법 적용"}
-};
+let wrongSet=new Set();
+const g=id=>document.getElementById(id);
+const val=id=>{const el=g(id);return el?el.value.trim():'';};
 
-const DOM_MAX = {VOC:15, RDG:15, LIS:12.5, GRM:47.5, WRT:10};
-const DOM_LABEL = {VOC:"어휘(VOC)",RDG:"읽기(RDG)",LIS:"듣기(LIS)",GRM:"문법(GRM)",WRT:"쓰기(WRT)"};
-const DOM_COLOR = {VOC:"#f39c12",RDG:"#27ae60",LIS:"#2196f3",GRM:"#9c27b0",WRT:"#e91e63"};
-const DOM_BF   = {VOC:"bf-voc",RDG:"bf-rdg",LIS:"bf-lis",GRM:"bf-grm",WRT:"bf-wrt"};
-const QBTN_CLS = {VOC:"voc",RDG:"rdg",LIS:"lis",GRM:"grm",WRT:"wrt"};
+function LS(action,key,data){const PFX='is_';if(action==='get')return JSON.parse(localStorage.getItem(PFX+key)||'null');if(action==='set')localStorage.setItem(PFX+key,JSON.stringify(data));}
+function getStudentKey(){const n=val('stuName').replace(/\s/g,'');const s=val('stuSchool').replace(/\s/g,'');return n?`${s}_${n}`:null;}
+function onNameInput(){const k=getStudentKey();if(k&&LS('get',k+'_kw'))showHistoryAlert();else{const b=g('historyAlert');if(b)b.style.display='none';}}
+function toggleHistoryPanel(){const b=g('historyAlertBody'),ic=g('histToggleIcon');if(!b)return;const open=b.style.display==='none'||!b.style.display;b.style.display=open?'block':'none';if(ic)ic.className='ti '+(open?'ti-chevron-up':'ti-chevron-down');}
+function showHistoryAlert(){const k=getStudentKey();if(!k)return;const data=LS('get',k+'_kw');const box=g('historyAlert'),head=g('historyAlertHead'),body=g('historyAlertBody');if(!box||!data){if(box)box.style.display='none';return;}const months=Object.keys(data).sort().reverse().slice(0,3);if(!months.length){box.style.display='none';return;}const name=val('stuName')||'학생';head.innerHTML=`<i class="ti ti-history" style="font-size:14px;color:#e0b94d"></i><div style="flex:1"><strong>${name}</strong> 학생의 최근 ${months.length}개월 이력이 있습니다. <span style="color:#b07de0;margin-left:5px">${months.join(' · ')}</span></div><i id="histToggleIcon" class="ti ti-chevron-down" style="color:#e0b94d"></i>`;body.innerHTML=months.map((m,i)=>{const r=data[m]||{};const sC=(r.strength&&r.strength.length)?r.strength.map(x=>`<span style="background:#eaf6ee;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#666;font-size:10px">없음</span>';const aC=(r.improve&&r.improve.length)?r.improve.map(x=>`<span style="background:#fdf6e3;color:#b8860b;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#666;font-size:10px">없음</span>';return `<div style="padding-top:11px"><div style="font-size:11px;font-weight:700;color:#8c7bff;margin-bottom:5px">${m}</div><div style="margin-bottom:4px"><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">강점</span>${sC}</div><div><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">보완점</span>${aC}</div></div>`;}).join('');box.style.display='block';}
+function showHistory(){const k=getStudentKey();const box=g('historyBox');if(!box)return;if(!k){box.innerHTML='<div style="font-size:12px;color:#888">학생 이름과 학교를 먼저 입력해주세요.</div>';box.style.display='block';return;}const data=LS('get',k+'_kw');if(!data){box.innerHTML='<div style="font-size:12px;color:#888">이전 리포트 기록이 없습니다.</div>';box.style.display='block';return;}const months=Object.keys(data).sort().reverse().slice(0,3);box.style.display='block';box.innerHTML=`<div style="font-size:11px;font-weight:700;color:#b8860b;margin-bottom:8px"><i class="ti ti-history"></i> 최근 ${months.length}개월 키워드 이력</div>`+months.map(m=>{const r=data[m]||{};const lvTag=r.level?` <span style="color:#8c7bff;font-weight:700">[S${r.level}]</span>`:'';return `<div style="font-size:11px;margin-bottom:5px;padding:6px 9px;background:#f3f0fb;border-radius:6px"><b style="color:#8c7bff">${m}</b>${lvTag} — 강점: ${(r.strength||[]).join(', ')||'-'} / 보완: ${(r.improve||[]).join(', ')||'-'}</div>`;}).join('');}
 
-const PROMPT_QS = {
-  SA1:["동물 이름을 영어로 자신있게 말하나요?","be동사를 주어에 맞게 변형하나요?","그림카드 보고 영어 문장을 만드나요?"],
-  SA2:["대명사(he/she/they)를 올바르게 쓰나요?","냄새 어휘를 실생활과 연결하나요?","소유대명사 구별이 자연스럽나요?"],
-  SA3:["3인칭 단수 -s를 빠뜨리지 않나요?","don't/doesn't 구별이 되나요?","Do/Does 의문문을 자신있게 만드나요?"],
-  SA4:["Wh- 의문사를 상황에 맞게 쓰나요?","Halloween 어휘를 풍부하게 쓰나요?","전치사를 정확하게 활용하나요?"],
-  SA5:["형용사와 부사를 구별해 쓰나요?","can/should를 상황에 맞게 쓰나요?","빈도 부사를 자연스럽게 쓰나요?"],
-  SA6:["위치·이동 전치사를 정확히 구분하나요?","시간 전치사(at/in/on)를 구별하나요?","간접의문문(where ~ is)을 쓰나요?"],
-  SB1:["was/were를 주어에 맞게 자연스럽게 사용하나요?","There was/were 구문을 정확히 쓰나요?","과거 부정문 wasn't/weren't를 제대로 쓰나요?"],
-  SB2:["불규칙 과거 동사를 정확히 쓰나요?","didn't + 동사원형 구조를 올바르게 쓰나요?","Did 의문문에서 동사원형을 지키나요?"],
-  SB3:["is/are를 주어에 맞게 선택하나요?","-ing 철자 변화 규칙을 지키나요?","현재진행형과 현재시제를 상황에 맞게 구별하나요?"],
-  SB4:["will과 be going to를 상황에 맞게 쓰나요?","won't + 동사원형이 정확한가요?","be going to에서 am/is/are 주어 일치가 되나요?"],
-  SB5:["modal verb 뒤에 동사원형을 쓰나요?","can과 could를 현재/과거로 구별하나요?","부사와 형용사를 구별해서 사용하나요?"],
-  SB6:["What 감탄문에서 a/an을 정확히 쓰나요?","명령문 뒤 and/or 선택이 올바른가요?","부가의문문의 시제와 인칭이 정확한가요?"]
-};
+function onLvChange(){const lv=val('lvSel');if(!lv)return;const d=LV[lv];if(!d)return;const box=g('lvInfo');box.style.display='block';box.innerHTML=`<span style="font-weight:700;color:#8c7bff">Inter Stella ${lv}</span> &mdash; ${d.name} <span style="color:#888">| ${d.grammar}</span><br><span style="font-size:11px;color:#888">테마: ${d.theme} · CEFR ${d.cefr} · Lexile ${d.lexile}</span>`;}
 
-const NEXT_BY_DOM = {
-  VOC: {
-    SA1: ["동물 어휘 확장 (elephant/giraffe)","주방 사물 어휘 복습","어휘 플래시카드 자기주도"],
-    SA2: ["냄새·감정 어휘 확장","대명사 어휘 게임","어휘 카드 짝 맞추기"],
-    SA3: ["취미·직업 어휘 확장","과목 어휘 복습","어휘 문장 만들기 연습"],
-    SA4: ["Wh- 의문 어휘 확장","Halloween 어휘 복습","어휘 카드 자기주도"],
-    SA5: ["외모·성격 형용사 확장","빈도 표현 어휘 정리","어휘 퀴즈 게임"],
-    SA6: ["전치사 어휘 확장","장소·곤충 어휘 복습","어휘 플래시카드 자기주도"],
-    SB1: ["과거 상황 어휘 확장 (under/in/on)","감정 형용사 복습 (boring/exciting)","어휘 플래시카드 자기주도"],
-    SB2: ["불규칙 동사 어휘 집중 복습","감정·행동 어휘 확장","어휘 카드 get/got 짝 맞추기"],
-    SB3: ["동작 동사 + ing 어휘 확장","활동 묘사 어휘 퀴즈","일상 동작 어휘 플래시카드"],
-    SB4: ["미래 계획 어휘 확장","교통·모험 어휘 복습","어휘 문장 만들기 연습"],
-    SB5: ["형용사·부사 짝 어휘 확장","부사 어휘 정리 (-ly 목록)","조동사 상황 어휘 퀴즈"],
-    SB6: ["감탄문 형용사 어휘 확장","안전·규칙 관련 어휘 복습","어휘 카드 자기주도 학습"]
-  },
-  RDG: {
-    SA1: ["짧은 지문 읽고 동물 찾기","be동사 문장 독해","읽기 후 핵심 단어 찾기"],
-    SA2: ["대명사 지문 독해","읽기 후 인물 파악","지문 O/X 판단 연습"],
-    SA3: ["현재시제 지문 독해","읽기 후 동사 찾기","지문 내용 파악 연습"],
-    SA4: ["Wh- 의문 지문 독해","정보 찾기 읽기 훈련","지문 요약 연습"],
-    SA5: ["인물 묘사 지문 독해","읽기 후 형용사 찾기","지문 내용 파악 O/X"],
-    SA6: ["위치 설명 지문 독해","전치사 찾기 읽기","지문 요약 쓰기 연습"],
-    SB1: ["과거 지문 O/X 판단 연습","지문 읽고 was/were 찾기","독해 후 핵심 문장 쓰기"],
-    SB2: ["과거 지문 내용 파악","빈칸 추론 (불규칙 동사)","독해 후 요약 문장 쓰기"],
-    SB3: ["현재진행형 지문 독해","읽기 후 is/are -ing 찾기","지문 내용 파악 O/X 연습"],
-    SB4: ["미래 지문 독해 집중","will/be going to 구별 독해","지문 빈칸 추론 훈련"],
-    SB5: ["조동사 포함 지문 독해","지문 내 조언/허락 의미 파악","독해 후 질문 만들기"],
-    SB6: ["감탄문·부가의문문 지문 독해","O/X 판단 집중 훈련","지문 요약 쓰기 연습"]
-  },
-  LIS: {
-    SA1: ["동물 이름 듣고 받아쓰기","be동사 문장 듣기","듣기 후 그림 매칭"],
-    SA2: ["대명사 표현 듣기","냄새 묘사 듣고 파악","받아쓰기 집중 훈련"],
-    SA3: ["현재시제 동사 듣기","do/does 의문 듣기","대화 듣고 내용 파악"],
-    SA4: ["Wh- 의문 듣고 답하기","정보 청취 훈련","받아쓰기 집중 연습"],
-    SA5: ["빈도·조동사 표현 듣기","외모 묘사 듣고 파악","받아쓰기 훈련"],
-    SA6: ["전치사 표현 듣기","위치 설명 듣고 그림 매칭","받아쓰기 집중 훈련"],
-    SB1: ["과거 표현 듣고 받아쓰기","was/were 구별 듣기","듣기 후 O/X 판단 연습"],
-    SB2: ["과거 동사 듣고 받아쓰기","불규칙 동사 듣기 집중","대화 듣고 내용 파악"],
-    SB3: ["현재진행형 듣고 그림 매칭","동작 묘사 표현 듣기","받아쓰기 집중 훈련"],
-    SB4: ["will/going to 표현 듣기","미래 계획 대화 듣고 파악","받아쓰기 집중 연습"],
-    SB5: ["조동사 표현 듣기","조언/금지 표현 듣고 구별","부사 표현 듣기 훈련"],
-    SB6: ["감탄문 듣고 따라 말하기","부가의문문 듣기 집중","받아쓰기 집중 훈련"]
-  },
-  GRM: {
-    SA1: ["be동사 주어 일치 드릴","be동사 의문문 반복 게임","긍정·부정·의문 전환 연습"],
-    SA2: ["대명사 격 구별 드릴","소유대명사 게임","be동사 심화 의문 연습"],
-    SA3: ["3인칭 단수 -s 집중 드릴","don't/doesn't 부정 연습","Do/Does 의문문 반복"],
-    SA4: ["Wh- 의문사 카드게임","How many/Which 연습","because 이유절 만들기"],
-    SA5: ["형용사→부사 변환 드릴","빈도 부사 위치 연습","can/may/should 상황극"],
-    SA6: ["시간 전치사 구별 드릴","위치 전치사 게임","이동 전치사 문장 만들기"],
-    SB1: ["was/were 주어 일치 드릴","과거 be동사 Q&A 반복 게임","There was/were 문장 완성"],
-    SB2: ["불규칙 동사 변화표 암기","didn't + 동사원형 드릴","Did 의문문 반복 연습"],
-    SB3: ["is/are -ing 문장 만들기","현재진행형 부정문 드릴","now vs. everyday 구별 연습"],
-    SB4: ["will 미래 문장 드릴","be going to 주어 일치 연습","won't/isn't going to 부정문"],
-    SB5: ["조동사 상황별 선택 게임","can vs. could 시제 구별","should/must/may 상황극"],
-    SB6: ["What/How 감탄문 전환 드릴","명령문 + and/or 상황 연습","부가의문문 시제·인칭 집중"]
-  },
-  WRT: {
-    SA1: ["be동사 포함 문장 쓰기","동물 묘사 문장 쓰기","It's a ~ 문장 완성"],
-    SA2: ["대명사 포함 문장 쓰기","인물 소개 쓰기","소유대명사 문장 완성"],
-    SA3: ["현재시제 일기 쓰기","3인칭 단수 문장 쓰기","do/does 문장 완성"],
-    SA4: ["Wh- 의문문 쓰기","정보 묻고 답하기 쓰기","because 문장 완성"],
-    SA5: ["외모 묘사 문장 쓰기","빈도 부사 일기 쓰기","조동사 포함 문장 쓰기"],
-    SA6: ["전치사 포함 문장 쓰기","위치 묘사 쓰기","이동 표현 문장 완성"],
-    SB1: ["was/were 포함 문장 쓰기","There was/were 문장 완성","과거 상황 묘사 쓰기"],
-    SB2: ["과거 일기 쓰기 연습","불규칙 동사 포함 문장 쓰기","didn't 부정문 쓰기"],
-    SB3: ["현재진행형 문장 쓰기","지금 하고 있는 일 묘사 쓰기","is/are -ing 일기 쓰기"],
-    SB4: ["미래 계획 문장 쓰기","will/going to 포함 일기","부정 미래 문장 완성 쓰기"],
-    SB5: ["조동사 포함 문장 쓰기","조언 편지 쓰기 연습","부사 포함 문장 만들기"],
-    SB6: ["감탄문 문장 쓰기 연습","명령문 + and/or 쓰기","부가의문문 완성 쓰기"]
-  }
-};
-
-const NEXT_GENERAL = [
-  "아이패턴 예습 권장","소리 내어 읽기 습관","매일 영어 노출 시간 확보",
-  "오답 노트 정리 습관","수업 집중도 유지"
-];
-
-const ATTITUDE_STRENGTH_KW = [
-  "수업 시간에 집중력이 높아요",
-  "먼저 손들고 발표하려는 의지가 있어요",
-  "모르는 것을 바로 질문하는 습관이 잘 돼 있어요",
-  "선생님 설명을 끝까지 귀 기울여 들어요",
-  "숙제를 빠짐없이 성실하게 완성해요",
-  "노트 정리가 꼼꼼하고 체계적이에요",
-  "스스로 복습하는 자기주도 학습이 잘 돼요",
-  "오답을 확인하고 다시 풀어보는 습관이 있어요",
-  "영어에 대한 자신감과 긍정적인 태도가 훌륭해요",
-  "실수를 두려워하지 않고 과감하게 말하려고 해요",
-  "짝 활동이나 그룹 활동에 적극적으로 참여해요",
-  "칭찬받을 때 더 열심히 하려는 동기부여가 잘 돼요"
-];
-
-const ATTITUDE_IMPROVE_KW = [
-  "수업 중 집중 시간을 조금 더 늘려가면 좋겠어요",
-  "발표 기회가 생겼을 때 더 적극적으로 참여하면 좋겠어요",
-  "모르는 부분이 있을 때 바로 질문하는 용기를 키워봐요",
-  "선생님 설명 중 딴짓 줄이기를 함께 연습해봐요",
-  "숙제를 제때 완성하는 습관을 함께 만들어 가고 있어요",
-  "수업 후 그날 배운 내용을 한 번 더 보는 복습 습관을 권장해요",
-  "오답 노트를 활용해 틀린 부분을 정리하면 더 효과적이에요",
-  "교재 예습을 조금씩 해오면 수업 이해도가 높아질 거예요",
-  "영어를 말할 때 자신감을 조금 더 키워가면 좋겠어요",
-  "실수해도 괜찮다는 마음으로 더 편하게 말해봐요",
-  "짝 활동 시 친구와 영어로 더 많이 소통해보면 좋겠어요",
-  "칭찬 스티커 목표를 정해 동기부여를 함께 만들어봐요"
-];
-
-let wrongSet = new Set();
-
-const g = id => document.getElementById(id);
-const val = id => { const el=g(id); return el ? el.value.trim() : ''; };
-
-// ── LocalStorage ──────────────────────────────────────────
-function LS(action, key, data){
-  const PFX = 'silver_B_';
-  if(action==='get') return JSON.parse(localStorage.getItem(PFX+key)||'null');
-  if(action==='set') localStorage.setItem(PFX+key, JSON.stringify(data));
-}
-
-// 학생 식별 키: 학교_이름 (레벨·담임 제외 — 월반/담임변경에도 이력 연결)
-function getStudentKey(){
-  const n = val('stuName').replace(/\s/g,'');
-  const s = val('stuSchool').replace(/\s/g,'');
-  return n ? `${s}_${n}` : null;
-}
-
-function onNameInput(){
-  const k = getStudentKey();
-  if(k && LS('get', k+'_kw')) showHistoryAlert();
-  else { const box=g('historyAlert'); if(box) box.style.display='none'; }
-}
-
-function toggleHistoryPanel(){
-  const b=g('historyAlertBody'), ic=g('histToggleIcon');
-  if(!b) return;
-  const open = b.style.display==='none' || !b.style.display;
-  b.style.display = open?'block':'none';
-  if(ic) ic.className = 'ti '+(open?'ti-chevron-up':'ti-chevron-down');
-}
-
-// 최근 3개월 이력을 접이식 패널로 표시
-function showHistoryAlert(){
-  const k = getStudentKey();
-  if(!k) return;
-  const data = LS('get', k+'_kw');
-  const box = g('historyAlert'), head = g('historyAlertHead'), body = g('historyAlertBody');
-  if(!box||!head||!body) return;
-  if(!data){ box.style.display='none'; return; }
-  // data: { "2026년 6월": {strength:[], improve:[], level, teacher}, ... }
-  const months = Object.keys(data).sort().reverse().slice(0,3);
-  if(months.length===0){ box.style.display='none'; return; }
-  const name = val('stuName')||'학생';
-  head.innerHTML = `<i class="ti ti-history" style="font-size:14px;color:#854f0b;flex-shrink:0"></i>`+
-    `<div style="flex:1"><strong>${name}</strong> 학생의 최근 ${months.length}개월 이력이 있습니다.`+
-    `<span style="color:#aa8030;margin-left:5px">${months.join(' · ')}</span></div>`+
-    `<i id="histToggleIcon" class="ti ti-chevron-down" style="font-size:15px;color:#854f0b"></i>`;
-  body.innerHTML = months.map((m,i)=>{
-    const r = data[m]||{};
-    const lvTag = r.level?`<span style="background:#fde4dd;color:#c0392b;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:5px">${r.level}</span>`:'';
-    const tch = r.teacher?`<span style="color:#bba;font-size:10px;margin-left:5px">담임 ${r.teacher}</span>`:'';
-    const sC = (r.strength&&r.strength.length)?r.strength.map(x=>`<span style="background:#eaf3de;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#bbb;font-size:10px">없음</span>';
-    const aC = (r.improve&&r.improve.length)?r.improve.map(x=>`<span style="background:#faeeda;color:#854f0b;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#bbb;font-size:10px">없음</span>';
-    return `<div style="padding-top:11px${i<months.length-1?';border-bottom:0.5px solid #f0d090;padding-bottom:11px':''}">`+
-      `<div style="font-size:11px;font-weight:700;color:#c0392b;margin-bottom:5px">${m}${lvTag}${tch}</div>`+
-      `<div style="margin-bottom:4px"><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">강점</span>${sC}</div>`+
-      `<div><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">보완점</span>${aC}</div></div>`;
-  }).join('');
-  box.style.display='block';
-}
-
-// 코멘트 탭의 '지난 리포트 확인' — 최근 3개월 펼쳐 보기
-function showHistory(){
-  const k = getStudentKey();
-  const box = g('historyBox');
-  if(!box) return;
-  if(!k){ box.innerHTML='<div style="font-size:12px;color:#888">학생 이름과 학교를 먼저 입력해주세요.</div>'; box.style.display='block'; return; }
-  const data = LS('get', k+'_kw');
-  if(!data){ box.innerHTML='<div style="font-size:12px;color:#888">이전 리포트 기록이 없습니다.</div>'; box.style.display='block'; return; }
-  const months = Object.keys(data).sort().reverse().slice(0,3);
-  box.style.display = 'block';
-  box.innerHTML = `<div style="font-size:11px;font-weight:700;color:#854f0b;margin-bottom:8px"><i class="ti ti-history"></i> 최근 ${months.length}개월 키워드 이력</div>`+
-    months.map(m=>{
-      const r=data[m]||{};
-      const lvTag = r.level?` <span style="color:#c0392b;font-weight:700">[${r.level}]</span>`:'';
-      return `<div style="font-size:11px;margin-bottom:5px;padding:6px 9px;background:#fff;border-radius:6px">`+
-      `<b style="color:#c0392b">${m}</b>${lvTag} — 강점: ${(r.strength||[]).join(', ')||'-'} / 보완: ${(r.improve||[]).join(', ')||'-'}</div>`;
-    }).join('');
-}
-
-function onLvChange(){
-  const lv = val('lvSel');
-  if(!lv) return;
-  const d = LV[lv];
-  if(!d) return;
-  const box = g('lvInfo');
-  box.style.display = 'block';
-  box.innerHTML = `<span style="font-weight:700;color:#c0392b">${d.label}</span> ${d.name} — <span style="color:#555">${d.grammar}</span>`;
-}
-
-function calcTotal(){
-  let tot = 0;
-  for(let i=1; i<=40; i++){
-    const v = parseFloat(g('q'+i)?.value) || 0;
-    tot += Math.max(0, Math.min(2.5, v));
-  }
-  const rounded = Math.round(tot * 10) / 10;
-  const pct = Math.round(rounded);
-  const grade = pct>=95?'A+':pct>=90?'A':pct>=85?'B+':pct>=80?'B':pct>=75?'C+':pct>=70?'C':pct>=60?'D':'F';
-  if(g('totalDisp')) g('totalDisp').textContent = rounded;
-  if(g('gradeDisp')){
-    g('gradeDisp').textContent = grade;
-    g('gradeDisp').style.background = pct>=80?'rgba(255,255,255,.25)':pct>=70?'rgba(255,200,0,.3)':'rgba(255,100,100,.3)';
-  }
-  if(g('s1') && !g('s1').classList.contains('hidden')){
-    syncWrongFromScores();
-    for(let i=1; i<=40; i++){
-      const btn = g('wb'+i);
-      if(!btn) continue;
-      const isWrong = wrongSet.has(i);
-      btn.classList.toggle('wrong', isWrong);
-      const wd = g('wd'+i);
-      if(wd) wd.textContent = isWrong ? '0점' : '2.5점';
-    }
-    updateWrongCount();
-  }
-}
-
-function syncWrongFromScores(){
-  for(let i=1; i<=40; i++){
-    const score = parseFloat(g('q'+i)?.value)||0;
-    if(score < 2.5) wrongSet.add(i);
-    else wrongSet.delete(i);
-  }
-}
-
+function initScoreInputs(){let h='';for(let i=1;i<=45;i++)h+=`<input type="hidden" id="q${i}" value="1">`;g('scoreInputs').innerHTML=h;}
+function syncWrongFromScores(){for(let i=1;i<=45;i++){const s=parseFloat(g('q'+i)?.value);if(s<1)wrongSet.add(i);else wrongSet.delete(i);}}
 function buildWrongGrid(){
   syncWrongFromScores();
-  const groups = [
-    {label:"Part 1 — Vocabulary",qs:[1,2,3,4,5,6]},
-    {label:"Part 2 — Reading",qs:[7,8,9,10,11,12]},
-    {label:"Part 3 — Listening & Speaking",qs:[13,14,15,16,17]},
-    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
-    {label:"Part 4-B — Writing",qs:[22,23,24,25]},
-    {label:"Part 4-C — Grammar 응용·주관식",qs:[26,27,28,29,30,31,32,33,34]},
-    {label:"Part 4-D — Grammar 심화",qs:[35,36,37,38,39,40]}
+  const groups=[
+    {label:"PART 1 — Vocabulary (1~20)",qs:Array.from({length:20},(_,i)=>i+1),cols:5},
+    {label:"PART 2 — Listening (21~30)",qs:Array.from({length:10},(_,i)=>i+21),cols:5},
+    {label:"PART 3 — Reading (31~40)",qs:Array.from({length:10},(_,i)=>i+31),cols:5},
+    {label:"PART 4 — Grammar (41~45)",qs:[41,42,43,44,45],cols:5}
   ];
-  let html = '';
-  groups.forEach(grp => {
-    html += `<div style="font-size:10.5px;font-weight:700;color:#888;margin:10px 0 5px;letter-spacing:.4px;text-transform:uppercase">${grp.label}</div>`;
-    html += `<div style="display:grid;grid-template-columns:repeat(${Math.min(grp.qs.length,6)},1fr);gap:5px;margin-bottom:4px">`;
-    grp.qs.forEach(n => {
-      const m = Q_META[n];
-      const score = parseFloat(g('q'+n)?.value)||0;
-      const isWrong = wrongSet.has(n);
-      html += `<div class="qbtn ${QBTN_CLS[m.domain]}${isWrong?' wrong':''}" id="wb${n}" onclick="toggleWrong(${n})">
-        <span class="qn">Q${n}</span>
-        <span class="qt">${m.label}</span>
-        <span class="qd" id="wd${n}">${score===0?'0점':'2.5점'}</span>
-      </div>`;
-    });
-    html += '</div>';
+  let html='';
+  groups.forEach(grp=>{
+    html+=`<div style="font-size:10.5px;font-weight:700;color:#666;margin:10px 0 5px;letter-spacing:.4px">${grp.label}</div>`;
+    html+=`<div class="q-grid" style="grid-template-columns:repeat(${grp.cols},1fr)">`;
+    grp.qs.forEach(n=>{const m=Q_META[n];const isW=wrongSet.has(n);html+=`<div class="qbtn ${QBTN_CLS[m.domain]}${isW?' wrong':''}" id="wb${n}" onclick="toggleWrong(${n})"><span class="qn">Q${n}</span><span class="qt">${m.label}</span><span class="qd" id="wd${n}">${isW?'오답':'정답'}</span></div>`;});
+    html+='</div>';
   });
-  g('wrongGrid').innerHTML = html;
-  updateWrongCount();
+  g('wrongGrid').innerHTML=html;updateWrongCount();
 }
+function toggleWrong(n){const sEl=g('q'+n);if(wrongSet.has(n)){wrongSet.delete(n);if(sEl)sEl.value='1';g('wb'+n)?.classList.remove('wrong');if(g('wd'+n))g('wd'+n).textContent='정답';}else{wrongSet.add(n);if(sEl)sEl.value='0';g('wb'+n)?.classList.add('wrong');if(g('wd'+n))g('wd'+n).textContent='오답';}updateWrongCount();}
+function updateWrongCount(){const c=wrongSet.size;if(g('wrongCount'))g('wrongCount').textContent=`오답: ${c}문항 / 45문항`;}
 
-function toggleWrong(n){
-  const el = g('wb'+n);
-  const scoreEl = g('q'+n);
-  if(wrongSet.has(n)){
-    wrongSet.delete(n);
-    if(scoreEl) scoreEl.value = '2.5';
-    if(el) el.classList.remove('wrong');
-    if(g('wd'+n)) g('wd'+n).textContent = '2.5점';
-  } else {
-    wrongSet.add(n);
-    if(scoreEl) scoreEl.value = '0';
-    if(el) el.classList.add('wrong');
-    if(g('wd'+n)) g('wd'+n).textContent = '0점';
-  }
-  calcTotal();
-  updateWrongCount();
-}
-
-function updateWrongCount(){
-  const cnt = wrongSet.size;
-  const deduct = (cnt * 2.5).toFixed(1);
-  if(g('wrongCount')) g('wrongCount').textContent = `오답: ${cnt}문항 · 감점: ${deduct}점`;
-}
-
-function computeDomScore(){
-  const domScore = {VOC:0, RDG:0, LIS:0, GRM:0, WRT:0};
-  for(let i=1; i<=40; i++){
-    const m = Q_META[i];
-    if(!m) continue;
-    if(wrongSet.has(i)){ domScore[m.domain] += 0; continue; }
-    const raw = parseFloat(g('q'+i)?.value);
-    const score = isNaN(raw) ? 2.5 : Math.max(0, Math.min(2.5, raw));
-    domScore[m.domain] += score;
-  }
-  Object.keys(domScore).forEach(k => {
-    domScore[k] = Math.round(domScore[k] * 10) / 10;
-  });
-  return domScore;
-}
+function computeDomScore(){const ds={VOC:0,LIS:0,RDG:0,GRM:0};for(let i=1;i<=45;i++){const m=Q_META[i];if(!m)continue;if(wrongSet.has(i))continue;ds[m.domain]+=1;}return ds;}
+function rawTotal(){let t=0;for(let i=1;i<=45;i++)t+=parseFloat(g('q'+i)?.value)||0;return t;}
+function to100(raw){return Math.round(raw/TOTAL_RAW*1000)/10;}
+function gradeOf(pct){return pct>=95?'A+':pct>=90?'A':pct>=85?'B+':pct>=80?'B':pct>=75?'C+':pct>=70?'C':pct>=60?'D':'F';}
 
 function buildAnalysis(){
-  const domScore = computeDomScore();
-  const itemRows = [];
-  for(let i=1; i<=40; i++){
-    const m = Q_META[i];
-    const isWrong = wrongSet.has(i);
-    const raw = parseFloat(g('q'+i)?.value)||0;
-    const score = isWrong ? 0 : Math.max(0, Math.min(2.5, raw));
-    const judgeTxt = score>=2.5?'정답':score>0?'부분':'오답';
-    const jcol = score>=2.5?'#27ae60':score>0?'#f39c12':'#a32d2d';
-    const domColor = DOM_COLOR[m.domain];
-    itemRows.push(`<div class="ar" style="align-items:center">
-      <div style="font-weight:700;color:#555">Q${i}</div>
-      <div><span style="background:${domColor}22;color:${domColor};border-radius:4px;padding:2px 6px;font-size:9.5px;font-weight:700">${m.domain}</span></div>
-      <div style="font-size:11px;color:#555">${m.desc}</div>
-      <div style="font-weight:700;color:${jcol};font-size:11px">${judgeTxt}</div>
-      <div style="font-size:10.5px;color:#777">${m.label}</div>
-    </div>`);
-  }
-  let bars = '';
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(dom => {
-    const raw = domScore[dom];
-    const max = DOM_MAX[dom];
-    const pct = Math.round(raw/max*100);
-    const bf = pct>=80?'bf-ok':pct>=60?'bf-mid':'bf-low';
-    bars += `<div class="dombar">
-      <div class="dbl"><span class="dbn">${DOM_LABEL[dom]}</span><span class="dbpct">${raw.toFixed(1)}/${max}점 (${pct}%)</span></div>
-      <div class="bg"><div class="bf ${bf}" style="width:${pct}%"></div></div>
-    </div>`;
-  });
-  if(g('domBars')) g('domBars').innerHTML = bars;
-  if(g('atblBody')) g('atblBody').innerHTML = itemRows.join('');
-  const weak = ['VOC','RDG','LIS','GRM','WRT'].filter(d => domScore[d]/DOM_MAX[d] < 0.6);
-  const sigBox = g('sigBox');
-  const sigRow = g('sigRow');
-  if(sigBox && sigRow){
-    if(weak.length){
-      sigBox.style.display = 'block';
-      sigRow.innerHTML = weak.map(d=>`<span class="sig-badge">${DOM_LABEL[d]}</span>`).join('');
-    } else { sigBox.style.display = 'none'; }
-  }
+  const ds=computeDomScore();const raw=rawTotal();const pct=to100(raw);
+  if(g('tot100'))g('tot100').textContent=pct;
+  if(g('raw45'))g('raw45').textContent=raw+'/45';
+  if(g('gradeDisp'))g('gradeDisp').textContent=gradeOf(pct);
+  let bars='';
+  ['VOC','LIS','RDG','GRM'].forEach(dom=>{const r=ds[dom];const mx=DOM_MAX[dom];const p=Math.round(r/mx*100);const bf=p>=80?'bf-ok':p>=60?'bf-mid':'bf-low';bars+=`<div class="dombar"><div class="dbl"><span class="dbn">${DOM_LABEL[dom]}</span><span class="dbpct">${r}/${mx} (${p}%)</span></div><div class="bg"><div class="bf ${bf}" style="width:${p}%"></div></div></div>`;});
+  if(g('domBars'))g('domBars').innerHTML=bars;
+  let rows='';
+  for(let i=1;i<=45;i++){const m=Q_META[i];const w=wrongSet.has(i);const j=w?'오답':'정답';const jc=w?'#c0392b':'#2f855a';const dc=DOM_COLOR[m.domain];rows+=`<div class="ar" style="align-items:center"><div style="font-weight:700;color:#444">Q${i}</div><div><span style="background:${dc}22;color:${dc};border-radius:4px;padding:2px 6px;font-size:9.5px;font-weight:700">${m.domain}</span></div><div style="font-size:11px;color:#666">${m.desc}</div><div style="font-weight:700;color:${jc};font-size:11px">${j}</div><div style="font-size:10.5px;color:#888">${m.label}</div></div>`;}
+  if(g('atblBody'))g('atblBody').innerHTML=rows;
+  const weak=['VOC','LIS','RDG','GRM'].filter(d=>ds[d]/DOM_MAX[d]<0.6);
+  const sb=g('sigBox'),sr=g('sigRow');if(sb&&sr){if(weak.length){sb.style.display='block';sr.innerHTML=weak.map(d=>`<span class="sig-badge">${DOM_LABEL[d]}</span>`).join('');}else sb.style.display='none';}
 }
 
 function setupCommentTab(){
-  const lv = val('lvSel');
-  const sChips = g('strengthChips');
-  if(sChips) sChips.innerHTML = ATTITUDE_STRENGTH_KW.map(k=>
-    `<span class="chip" onclick="toggleChip(this,'strength')">${k}</span>`
-  ).join('');
-  const aChips = g('attitudeChips');
-  if(aChips) aChips.innerHTML = ATTITUDE_IMPROVE_KW.map(k=>
-    `<span class="chip" onclick="toggleChip(this,'improve')">${k}</span>`
-  ).join('');
-  if(!lv) return;
-  buildNextChipsByAnalysis(lv);
-  const qs = PROMPT_QS[lv]||[];
-  if(g('promptQs')) g('promptQs').innerHTML = qs.map(q=>`• ${q}`).join('<br>');
+  const sC=g('strengthChips');if(sC)sC.innerHTML=ATTITUDE_STRENGTH_KW.map(k=>`<span class="chip" onclick="toggleChip(this,'strength')">${k}</span>`).join('');
+  const aC=g('attitudeChips');if(aC)aC.innerHTML=ATTITUDE_IMPROVE_KW.map(k=>`<span class="chip" onclick="toggleChip(this,'improve')">${k}</span>`).join('');
+  buildNextChips();
 }
-
-function buildNextPriorityBar(rates){
-  const el = g('nextPriorityBar');
-  if(!el) return;
-  const prio = {};
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(d=>{ prio[d] = rates[d]<60?'weak':rates[d]<80?'mid':'strong'; });
-  const style = {weak:{dot:'[!]',tip:'보완 필요',col:'#a32d2d',bg:'#fcebeb'},mid:{dot:'[~]',tip:'성장 중',col:'#854f0b',bg:'#faeeda'},strong:{dot:'[+]',tip:'강점',col:'#2d7a4f',bg:'#eef6e3'}};
-  const order = {weak:0,mid:1,strong:2};
-  const items = ['VOC','RDG','LIS','GRM','WRT'].sort((a,b)=>order[prio[a]]-order[prio[b]]).map(dom=>{
-    const s = style[prio[dom]];
-    return `<span style="display:inline-block;background:${s.bg};color:${s.col};border:0.5px solid ${s.col}33;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;margin:0 5px 5px 0;cursor:default">${s.dot} ${DOM_LABEL[dom]} ${rates[dom]}% · ${s.tip}</span>`;
-  }).join('');
-  el.innerHTML = `${items}<div style="font-size:10px;color:#b09a96;margin-top:5px;line-height:1.6"><b style="color:#a32d2d">[!]</b> 가장 시급 (60% 미만) · <b style="color:#854f0b">[~]</b> 성장 중 (60~80%) · <b style="color:#2d7a4f">[+]</b> 강점 (80% 이상)<br>→ 시급한 영역부터 아래 STEP 2 키워드를 골라 주세요.</div>`;
-}
-function buildNextChipsByAnalysis(lv){
-  const nChips = g('nextChips');
-  if(!nChips) return;
-  const ds = computeDomScore();
-  const rates = {};
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(dom => {
-    rates[dom] = DOM_MAX[dom] > 0 ? Math.round((ds[dom] ?? 0) / DOM_MAX[dom] * 100) : 100;
-  });
-  buildNextPriorityBar(rates);
-  const sortedDoms = ['VOC','RDG','LIS','GRM','WRT'].sort((a,b) => rates[a] - rates[b]);
-  const result = [];
-  sortedDoms.forEach(dom => {
-    const kwList = (NEXT_BY_DOM[dom]?.[lv]) || [];
-    const rate = rates[dom];
-    const priority = rate < 60 ? 'weak' : rate < 80 ? 'mid' : 'strong';
-    kwList.forEach(kw => result.push({kw, dom, rate, priority}));
-  });
-  NEXT_GENERAL.forEach(kw => result.push({kw, dom:'ALL', rate:100, priority:'general'}));
-  const priorityStyle = {
-    weak:  {dot:'[!]', col:{bd:'#e6a3a3',bg:'#fcebeb',tx:'#a32d2d'}},
-    mid:   {dot:'[~]', col:{bd:'#e8c98a',bg:'#faeeda',tx:'#854f0b'}},
-    strong:{dot:'[+]', col:{bd:'#a9cd86',bg:'#eef6e3',tx:'#2d7a4f'}},
-    general:{dot:'[+]', col:{bd:'#d0cfc8',bg:'#f2f1ec',tx:'#777'}}
-  };
-  nChips.innerHTML = result.map(({kw, dom, rate, priority}, i) => {
-    const {dot, col} = priorityStyle[priority];
-    const domShort = dom==='ALL' ? '공통' : DOM_LABEL[dom];
-    return `<span class="chip next-chip" data-i="${i}" data-bd="${col.bd}" onclick="toggleChipNext(this)" style="border-color:${col.bd}"><span class="kw-dom" style="background:${col.bg};color:${col.tx};border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;margin-right:5px">${dot} ${domShort}</span>${kw}</span>`;
-  }).join('');
-  let autoCount = 0;
-  result.forEach((r, i) => {
-    if(autoCount >= 3 || r.priority !== 'weak') return;
-    const chip = nChips.querySelector(`[data-i="${i}"]`);
-    if(chip){ chip.classList.add('on'); chip.style.borderColor=''; autoCount++; }
-  });
+function buildNextChips(){
+  const nC=g('nextChips');if(!nC)return;const ds=computeDomScore();
+  const rates={};['VOC','LIS','RDG','GRM'].forEach(d=>rates[d]=Math.round(ds[d]/DOM_MAX[d]*100));
+  const NEXT={VOC:["어휘 반복 필사 확장","문맥 속 어휘 추론 연습","단어 철자 정확도 훈련"],LIS:["받아쓰기 집중 훈련","대화 듣고 핵심 파악","패턴 듣기 반복"],RDG:["지문 참거짓 판단 연습","주제·세부 파악 훈련","빈칸 추론 연습"],GRM:["핵심 문법 드릴 반복","영작 문장 쓰기 연습","아이패턴 문장 암기"]};
+  const NEXT_GEN=["아이패턴 예습 권장","소리 내어 읽기 습관","매일 영어 노출 시간 확보"];
+  const sorted=['VOC','LIS','RDG','GRM'].sort((a,b)=>rates[a]-rates[b]);
+  const items=[];
+  sorted.forEach(dom=>{const pr=rates[dom]<60?'weak':rates[dom]<80?'mid':'strong';(NEXT[dom]||[]).forEach(kw=>items.push({kw,dom,pr}));});
+  NEXT_GEN.forEach(kw=>items.push({kw,dom:'ALL',pr:'general'}));
+  const ps={weak:{dot:'[!]',c:{bd:'#f0c0bd',bg:'#fdeaea',tx:'#c0392b'}},mid:{dot:'[~]',c:{bd:'#f0e2bd',bg:'#fdf6e3',tx:'#b8860b'}},strong:{dot:'[+]',c:{bd:'#cde8d6',bg:'#eaf6ee',tx:'#2d7a4f'}},general:{dot:'[+]',c:{bd:'#d8d8ea',bg:'#f4f4fa',tx:'#666'}}};
+  nC.innerHTML=items.map(({kw,dom,pr},i)=>{const{dot,c}=ps[pr];const ds2=dom==='ALL'?'공통':DOM_LABEL[dom];return `<span class="chip" data-i="${i}" data-bd="${c.bd}" onclick="toggleChipNext(this)" style="border-color:${c.bd}"><span class="kw-dom" style="background:${c.bg};color:${c.tx};border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;margin-right:5px">${dot} ${ds2}</span>${kw}</span>`;}).join('');
+  let auto=0;items.forEach((r,i)=>{if(auto>=3||r.pr!=='weak')return;const ch=nC.querySelector(`[data-i="${i}"]`);if(ch){ch.classList.add('on');ch.style.borderColor='';auto++;}});
   buildNextCmt();
 }
 
-function buildAutoFeedback(domScore){
-  const lv = val('lvSel');
-  const name = val('stuName')||'학생';
-  const d = LV[lv];
-  const keys = Object.keys(domScore||{});
-  const ds = keys.length>0 ? domScore : computeDomScore();
-  const rates = {};
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(dom => {
-    const score = ds[dom] ?? 0;
-    const max = DOM_MAX[dom];
-    rates[dom] = max > 0 ? Math.round(score / max * 100) : 100;
-  });
-  const strong = ['VOC','RDG','LIS','GRM','WRT'].filter(dom => rates[dom] >= 80);
-  const mid    = ['VOC','RDG','LIS','GRM','WRT'].filter(dom => rates[dom] >= 60 && rates[dom] < 80);
-  const weak   = ['VOC','RDG','LIS','GRM','WRT'].filter(dom => rates[dom] < 60);
-  const total = Math.round(Object.values(ds).reduce((a,b)=>a+b,0)*10)/10;
-  let fb = '';
-  if(lv && d){
-    fb += `${name} 학생은 이번 달 ${d.label} (${d.name}) 과정을 학습하였습니다. `;
-    fb += `이번 월간 테스트 총점은 ${total}점입니다.\n\n`;
-  } else {
-    fb += `${name} 학생의 이번 달 월간 테스트 총점은 ${total}점입니다.\n\n`;
-  }
-  if(strong.length > 0){
-    fb += `[강점]\n`;
-    fb += strong.map(dom => `${DOM_LABEL[dom]} (${ds[dom]?.toFixed(1)}/${DOM_MAX[dom]}점, ${rates[dom]}%)`).join(', ');
-    fb += ` 영역에서 우수한 성취를 보여주었습니다.\n`;
-  }
-  if(weak.length > 0){
-    fb += `[보완]\n`;
-    fb += weak.map(dom => `${DOM_LABEL[dom]} (${ds[dom]?.toFixed(1)}/${DOM_MAX[dom]}점, ${rates[dom]}%)`).join(', ');
-    fb += ` 영역은 추가 연습을 통해 더욱 발전할 수 있습니다.\n`;
-  }
-  if(mid.length > 0 && weak.length === 0){
-    fb += `【성장 중】 ${mid.map(dom=>DOM_LABEL[dom]).join(', ')} 영역은 꾸준히 향상되고 있습니다.\n`;
-  }
-  fb += `\n다음 달에도 함께 열심히 성장해 나가요! 화이팅!`;
-  const ta = g('autoFb');
-  if(ta) ta.value = fb;
-  autoSelectChipsByDomain(ds, rates);
-  setTimeout(()=>{ generateStrengthAnalysis(); generateImproveAnalysis(); }, 50);
+function buildAutoFeedback(){
+  const lv=val('lvSel');const name=val('stuName')||'학생';const d=LV[lv];const ds=computeDomScore();
+  const rates={};['VOC','LIS','RDG','GRM'].forEach(dom=>rates[dom]=Math.round(ds[dom]/DOM_MAX[dom]*100));
+  const strong=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]>=80);
+  const weak=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]<60);
+  const mid=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]>=60&&rates[d]<80);
+  const raw=rawTotal();const pct=to100(raw);
+  let fb='';
+  if(lv&&d){fb+=`${name} 학생은 이번 달 Inter Stella ${lv} (${d.name}) 과정을 학습하였습니다. `;fb+=`이번 월간 테스트 점수는 100점 만점 기준 ${pct}점입니다 (${raw}/45).\n\n`;}
+  else fb+=`${name} 학생의 이번 달 월간 테스트 점수는 ${pct}점입니다.\n\n`;
+  if(strong.length){fb+=`[강점]\n`+strong.map(dom=>`${DOM_LABEL[dom]} (${ds[dom]}/${DOM_MAX[dom]}, ${rates[dom]}%)`).join(', ')+` 영역에서 우수한 성취를 보여주었습니다.\n`;}
+  if(weak.length){fb+=`[보완]\n`+weak.map(dom=>`${DOM_LABEL[dom]} (${ds[dom]}/${DOM_MAX[dom]}, ${rates[dom]}%)`).join(', ')+` 영역은 추가 연습을 통해 더욱 발전할 수 있습니다.\n`;}
+  if(mid.length&&!weak.length){fb+=`성장 중: ${mid.map(dom=>DOM_LABEL[dom]).join(', ')} 영역은 꾸준히 향상되고 있습니다.\n`;}
+  fb+=`\n다음 달에도 함께 열심히 성장해 나가요!`;
+  if(g('autoFb'))g('autoFb').value=fb;
+  setTimeout(()=>{generateStrengthAnalysis();generateImproveAnalysis();},50);
 }
+function generateStrengthAnalysis(){const ds=computeDomScore();const box=g('strengthAnalysis');if(!box)return;const rates={};['VOC','LIS','RDG','GRM'].forEach(d=>rates[d]=Math.round(ds[d]/DOM_MAX[d]*100));const strong=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]>=80);const mid=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]>=60&&rates[d]<80);if(!strong.length&&!mid.length){box.textContent='(정답률 80% 이상 영역이 없습니다. 오답을 확인해주세요.)';return;}const sd={VOC:{s:"어휘를 정확하게 파악하고 문맥에 맞게 활용",m:"어휘 이해력이 꾸준히 향상"},LIS:{s:"듣기 내용을 명확하게 이해",m:"청취 집중력이 점차 향상"},RDG:{s:"지문 내용을 빠르고 정확하게 파악",m:"독해 흐름 파악이 안정적으로 발전"},GRM:{s:"문법 규칙을 정확하게 적용하고 영작",m:"핵심 문법 구조를 잘 이해"}};let t='';strong.forEach(dom=>t+=`• ${DOM_LABEL[dom]} (${ds[dom]}/${DOM_MAX[dom]} · ${rates[dom]}%): ${sd[dom].s}하는 역량이 우수합니다.\n`);mid.forEach(dom=>t+=`• ${DOM_LABEL[dom]} (${ds[dom]}/${DOM_MAX[dom]} · ${rates[dom]}%): ${sd[dom].m}하고 있습니다.\n`);box.textContent=t.trim();}
+function generateImproveAnalysis(){const ds=computeDomScore();const box=g('improveAnalysis');if(!box)return;const rates={};['VOC','LIS','RDG','GRM'].forEach(d=>rates[d]=Math.round(ds[d]/DOM_MAX[d]*100));const weak=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]<60);const mid=['VOC','LIS','RDG','GRM'].filter(d=>rates[d]>=60&&rates[d]<80);if(!weak.length&&!mid.length){box.textContent='(모든 영역이 80% 이상입니다. 탁월한 성취입니다!)';return;}const wd={VOC:{w:"어휘 정확도를 높이는 연습이 필요합니다. 새 어휘를 문장 속에서 반복 접하는 것이 효과적입니다.",m:"어휘 활용이 안정되고 있으나, 문맥 추론을 더 키워가면 좋겠습니다."},LIS:{w:"듣기 집중력과 핵심 정보 추출을 집중 훈련할 필요가 있습니다. 받아쓰기 훈련이 도움이 됩니다.",m:"기본 청취는 잘 되고 있으나, 세부 내용 파악을 더 키워가면 좋겠습니다."},RDG:{w:"지문 내용 일치 판단과 세부 정보 파악에 집중 훈련이 필요합니다.",m:"독해 전반은 안정적이나, 심화 독해 정확도를 높여가면 좋겠습니다."},GRM:{w:"문법 규칙의 정확한 적용과 영작 훈련이 필요합니다. 반복 드릴과 문장 쓰기를 병행할 예정입니다.",m:"기본 문법은 이해하고 있으나, 영작 정확도를 더 높여가면 좋겠습니다."}};let t='';weak.forEach(dom=>t+=`• ${DOM_LABEL[dom]} (${ds[dom]}/${DOM_MAX[dom]} · ${rates[dom]}%): ${wd[dom].w}\n`);mid.forEach(dom=>t+=`• ${DOM_LABEL[dom]} (${ds[dom]}/${DOM_MAX[dom]} · ${rates[dom]}%): ${wd[dom].m}\n`);box.textContent=t.trim();}
 
-function generateStrengthAnalysis(){
-  const ds = computeDomScore();
-  const box = g('strengthAnalysis');
-  if(!box) return;
-  const rates = {};
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(dom => {
-    rates[dom] = DOM_MAX[dom]>0 ? Math.round((ds[dom]??0)/DOM_MAX[dom]*100) : 100;
-  });
-  const strong = ['VOC','RDG','LIS','GRM','WRT'].filter(d=>rates[d]>=80);
-  const mid    = ['VOC','RDG','LIS','GRM','WRT'].filter(d=>rates[d]>=60&&rates[d]<80);
-  if(strong.length===0 && mid.length===0){
-    box.textContent = '(정답률 80% 이상 영역이 없습니다. 오답을 확인해주세요.)';
-    return;
-  }
-  const domDesc = {
-    VOC:{s:"어휘를 정확하게 파악하고 문맥에 맞게 활용",m:"어휘 이해력이 꾸준히 향상"},
-    RDG:{s:"지문 내용을 빠르고 정확하게 파악",m:"독해 흐름 파악이 안정적으로 발전"},
-    LIS:{s:"듣기 지시와 대화 내용을 명확하게 이해",m:"청취 집중력이 점차 향상"},
-    GRM:{s:"문법 규칙을 정확하게 적용하고 문장을 완성",m:"핵심 문법 구조를 잘 이해"},
-    WRT:{s:"문장 구조와 어순을 정확하게 쓰기로 표현",m:"쓰기 표현이 점차 안정"}
-  };
-  let txt = '';
-  strong.forEach(dom => { txt += `• ${DOM_LABEL[dom]} (${ds[dom]?.toFixed(1)}/${DOM_MAX[dom]}점 · ${rates[dom]}%): ${domDesc[dom].s}하는 역량이 우수합니다.\n`; });
-  mid.forEach(dom => { txt += `• ${DOM_LABEL[dom]} (${ds[dom]?.toFixed(1)}/${DOM_MAX[dom]}점 · ${rates[dom]}%): ${domDesc[dom].m}하고 있습니다.\n`; });
-  box.textContent = txt.trim();
-}
+function toggleChip(el,type){el.classList.toggle('on');const ta=g(type==='strength'?'cmtStrength':'cmtImprove');if(!ta?.dataset.edited)buildAutoText(type);}
+function toggleChipNext(el){if(el){el.classList.toggle('on');el.style.borderColor=el.classList.contains('on')?'':(el.dataset.bd||'');}const ta=g('cmtNext');if(ta&&ta.dataset.edited!=='1')buildNextCmt();}
+function buildAutoText(type){const taId=type==='strength'?'cmtStrength':'cmtImprove';const selId=type==='strength'?'strengthChips':'attitudeChips';const chips=[...document.querySelectorAll(`#${selId} .chip.on`)].map(c=>c.textContent);const ta=g(taId);if(!chips.length){ta.value='';return;}const name=val('stuName')||'학생';if(type==='strength')ta.value=chips.map(c=>`${name} 학생은 ${c}.`).join(' ');else ta.value=chips.map(c=>`앞으로 ${c} 꾸준히 실천하면 더욱 성장할 수 있어요.`).join(' ');delete ta.dataset.edited;}
+function buildNextCmt(){const nC=g('nextChips');const ta=g('cmtNext');if(!nC||!ta)return;const chips=[...nC.querySelectorAll('.chip.on')].map(c=>{const cl=c.cloneNode(true);const b=cl.querySelector('.kw-dom');if(b)b.remove();return cl.textContent.trim();}).filter(t=>t);if(!chips.length){ta.value='';delete ta.dataset.edited;return;}ta.value=`다음 달에는 ${chips.join(', ')} 등을 중심으로 지도할 예정입니다.`;delete ta.dataset.edited;}
 
-function generateImproveAnalysis(){
-  const ds = computeDomScore();
-  const box = g('improveAnalysis');
-  if(!box) return;
-  const rates = {};
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(dom => {
-    rates[dom] = DOM_MAX[dom]>0 ? Math.round((ds[dom]??0)/DOM_MAX[dom]*100) : 100;
-  });
-  const weak = ['VOC','RDG','LIS','GRM','WRT'].filter(d=>rates[d]<60);
-  const mid  = ['VOC','RDG','LIS','GRM','WRT'].filter(d=>rates[d]>=60&&rates[d]<80);
-  if(weak.length===0 && mid.length===0){
-    box.textContent = '(모든 영역이 80% 이상입니다. 탁월한 성취입니다!)';
-    return;
-  }
-  const domWeakDesc = {
-    VOC:{w:"어휘 선택·쓰기 정확도를 높이는 연습이 필요합니다. 새 어휘를 문장 속에서 반복 접하는 것이 효과적입니다.",m:"어휘 활용이 전반적으로 안정되고 있으나, 맥락 추론 능력을 더 키워가면 좋겠습니다."},
-    RDG:{w:"지문 내용 일치 판단과 세부 정보 파악에 집중적인 훈련이 필요합니다. 읽기 후 핵심 문장을 찾는 연습을 권장합니다.",m:"독해 전반은 안정적이나, 빈칸 추론 등 심화 독해에서 정확도를 높여가면 좋겠습니다."},
-    LIS:{w:"듣기 집중력과 핵심 정보 추출 능력을 집중적으로 키울 필요가 있습니다. 받아쓰기 훈련이 도움이 됩니다.",m:"기본 청취는 잘 되고 있으나, 세부 내용 파악에서 더 정확도를 높여가면 좋겠습니다."},
-    GRM:{w:"문법 규칙의 정확한 적용 훈련이 집중적으로 필요합니다. 반복 드릴과 문장 완성 연습을 병행할 예정입니다.",m:"기본 문법은 이해하고 있으나, 응용과 쓰기에서의 정확도를 더 높여가면 좋겠습니다."},
-    WRT:{w:"어순 배열과 문장 완성 쓰기 훈련이 필요합니다. 아이패턴 문장을 반복해서 쓰는 연습을 권장합니다.",m:"문장 구성은 이해하고 있으나, 쓰기에서 좀 더 정확하고 완성도 있는 표현을 만들어가면 좋겠습니다."}
-  };
-  let txt = '';
-  weak.forEach(dom => { txt += `• ${DOM_LABEL[dom]} (${ds[dom]?.toFixed(1)}/${DOM_MAX[dom]}점 · ${rates[dom]}%): ${domWeakDesc[dom].w}\n`; });
-  mid.forEach(dom => { txt += `• ${DOM_LABEL[dom]} (${ds[dom]?.toFixed(1)}/${DOM_MAX[dom]}점 · ${rates[dom]}%): ${domWeakDesc[dom].m}\n`; });
-  box.textContent = txt.trim();
-}
-
-function autoSelectChipsByDomain(ds, rates){
-  document.querySelectorAll('#strengthChips .chip').forEach(c=>c.classList.remove('on'));
-  document.querySelectorAll('#attitudeChips .chip').forEach(c=>c.classList.remove('on'));
-  const ts = g('cmtStrength'); if(ts){ ts.value=''; delete ts.dataset.edited; }
-  const ti = g('cmtImprove'); if(ti){ ti.value=''; delete ti.dataset.edited; }
-}
-
-function toggleChip(el, type){
-  el.classList.toggle('on');
-  const taId = type==='strength'?'cmtStrength':'cmtImprove';
-  const ta = g(taId);
-  if(!ta?.dataset.edited) buildAutoText(type);
-}
-function toggleChipNext(el){
-  if(el){
-    el.classList.toggle('on');
-    el.style.borderColor = el.classList.contains('on') ? '' : (el.dataset.bd || '');
-  }
-  const ta = g('cmtNext');
-  if(ta && ta.dataset.edited !== '1') buildNextCmt();
-}
-function buildAutoText(type){
-  const taId = type==='strength'?'cmtStrength':'cmtImprove';
-  const selId = type==='strength'?'strengthChips':'attitudeChips';
-  const chips = [...document.querySelectorAll(`#${selId} .chip.on`)].map(c=>c.textContent);
-  const ta = g(taId);
-  if(!chips.length){ ta.value=''; return; }
-  const name = val('stuName')||'학생';
-  // 키워드가 '~요/~어요'로 끝나는 완결 문장이므로 조사 템플릿 없이 그대로 이어붙인다.
-  // 종결어미로 끝나면 마침표를, 그 외(명사구 등)는 마침표 없이 둔다.
-  const finish = s => /[다요죠]$/.test(s) ? s + '.' : s;
-  if(type==='strength'){
-    ta.value = chips.map(c=>finish(`${name} 학생은 ${c}`)).join(' ');
-  } else {
-    ta.value = chips.map(c=>finish(c)).join(' ');
-  }
-  delete ta.dataset.edited;
-}
-function buildNextCmt(){
-  const nChips = g('nextChips');
-  const ta = g('cmtNext');
-  if(!nChips || !ta) return;
-  // 키워드만 추출 (영역 배지 .kw-dom 텍스트는 제외)
-  const chips = [...nChips.querySelectorAll('.chip.on')].map(c=>{
-    const clone = c.cloneNode(true);
-    const badge = clone.querySelector('.kw-dom');
-    if(badge) badge.remove();
-    return clone.textContent.trim();
-  }).filter(t=>t);
-  if(!chips.length){ ta.value=''; delete ta.dataset.edited; return; }
-  ta.value = `다음 달에는 ${chips.join(', ')} 등을 중심으로 지도할 예정입니다.`;
-  delete ta.dataset.edited;
-}
-
-async function refineText(taId, type){
-  const orig = g(taId).value.trim();
-  if(!orig){ alert('먼저 내용을 입력해주세요.'); return; }
-  const statusId = 'refineStatus_'+type;
-  if(g(statusId)){ g(statusId).style.display='block'; g(statusId).textContent='✨ AI가 작성 중입니다...'; }
-  const name = val('stuName')||'학생';
-  const typeDesc = type==='strength'?'강점/칭찬':type==='improve'?'보완점/격려':type==='next'?'다음달 지도계획':'전체 피드백';
-  const typeGuide = {
-    auto: '전체 피드백 — 이번 달 학습 총평',
-    strength: '이달의 강점 — 잘한 점 칭찬',
-    improve: '보완점 — 앞으로의 성장 방향 격려',
-    next: '다음 달 지도 방안 — 계획 안내'
-  }[type] || typeDesc;
-  const systemPrompt = `당신은 파머스국제어학원 광교브랜치에서 ${name} 학생을 직접 가르치는 담임 선생님입니다. 20년 경력의 영어 교육 전문가입니다. 이 리포트는 담임 선생님이 학부모님께 직접 쓰는 글입니다.
+async function refineText(taId,type){const orig=g(taId).value.trim();if(!orig){alert('먼저 내용을 입력해주세요.');return;}const statusId='refineStatus_'+type;if(g(statusId)){g(statusId).style.display='block';g(statusId).textContent='✨ AI가 작성 중입니다...';}const name=val('stuName')||'학생';const typeGuide={auto:'전체 피드백 — 이번 달 학습 총평',strength:'이달의 강점 — 잘한 점 칭찬',improve:'보완점 — 성장 방향 격려',next:'다음 달 지도 방안'}[type]||'피드백';
+  const systemPrompt=`당신은 파머스국제어학원 광교브랜치에서 ${name} 학생을 직접 가르치는 담임 선생님입니다. 20년 경력의 영어 교육 전문가입니다. 이 리포트는 담임 선생님이 학부모님께 직접 쓰는 글입니다.
 아래 내용을 학부모에게 보내는 월간 리포트 문장으로 자연스럽게 다듬어 주세요.
-
-[이 섹션의 목적]
-${typeGuide}
-
+[이 섹션의 목적] ${typeGuide}
 [작성 규칙]
-- 학생 이름(${name})을 호칭할 때: "이름 학생이" 또는 "이름이" 형태로 자연스럽게. "이름 학생의"처럼 소유격 남발 금지
-- 문체: 담임 선생님이 직접 쓴 듯한 따뜻하고 구체적인 어투. AI 느낌 나는 표현 금지
-- 화자(매우 중요): 글쓴이는 담임 선생님 본인이다. 자신을 가리킬 때는 반드시 1인칭("저", "제가")을 쓴다. "선생님이", "선생님도", "선생님께서", "담임 선생님이"처럼 자신을 제3자로 지칭하지 않는다 (예: "선생님도 함께 독려하겠습니다" → "저도 함께 독려하겠습니다")
-- 지도 의지 표현: "제가 지도하겠습니다", "수업에서 함께 ~해 나가겠습니다", "앞으로 ~하도록 돕겠습니다" 처럼 1인칭으로
-- 문장 시작: "${name} 학생은" 또는 이름 뒤에 받침에 맞는 조사(이/가)를 붙여 자연스럽게 시작
-- 분량: 3~4문장. 간결하고 핵심만
-- 절대 금지 표현: "부족", "미흡", "떨어지다", "못하다", "아쉽다", "개선이 필요하다"
-- 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 또는 "~을 함께 연습해 나갈 예정입니다" 식으로
-- 한국어로만 작성
-- 이모지(😊 🌟 등) 절대 사용 금지 — 텍스트 복사 시 깨질 수 있음
-- 문장 끝 강조는 '!' 또는 '~' 사용
-- 절대 금지 문구: '아래와 같이', '다음과 같이', '다듬어 보았습니다', '작성해 보았습니다' 등 AI 전형 표현 금지
+- 학생 이름(${name})을 호칭할 때: "이름 학생이" 또는 "이름이" 형태로 자연스럽게
+- 문체: 담임 선생님이 직접 쓴 듯한 따뜻하고 구체적인 어투. AI 느낌 금지
+- 화자: 글쓴이는 담임 선생님 본인. 자신을 가리킬 때 반드시 1인칭("저","제가")을 쓴다
+- 분량: 3~4문장. 간결하게
+- 절대 금지 표현: "부족", "미흡", "못하다", "아쉽다"
+- 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 식으로 긍정적으로
+- 한국어로만 작성, 이모지 사용 금지
 - 바로 본문 내용부터 시작할 것`;
-  try {
-    const resp = await fetch('/api/ai', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        system: systemPrompt,
-        messages:[{role:'user',content:orig}]
-      })
-    });
-    if(!resp.ok) throw new Error('HTTP '+resp.status);
-    const data = await resp.json();
-    const out = data.content?.find(c=>c.type==='text')?.text || orig;
-    g(taId).value = out;
-    g(taId).dataset.edited = '1';
-    if(g(statusId)){ g(statusId).textContent='완료!'; setTimeout(()=>{ g(statusId).style.display='none'; },2000); }
-  } catch(e){
-    if(g(statusId)) g(statusId).textContent='오류 발생. 다시 시도해주세요.';
-  }
+  try{const resp=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:orig}]})});if(!resp.ok)throw new Error('HTTP '+resp.status);const data=await resp.json();const out=data.content?.find(c=>c.type==='text')?.text||orig;g(taId).value=out;g(taId).dataset.edited='1';if(g(statusId)){g(statusId).textContent='완료!';setTimeout(()=>{g(statusId).style.display='none';},2000);}}catch(e){if(g(statusId))g(statusId).textContent='오류 발생. 다시 시도해주세요.';}
 }
 
-function buildReport(domScore){
-  const lv = val('lvSel');
-  const d = LV[lv];
-  if(!d) return;
-  const name = val('stuName')||'이름 없음';
-  const school = val('stuSchool')||'-';
-  const grade = val('stuGrade')||'-';
-  const teacher = val('teacher')||'선생님';
-  const month = val('repMonth')||'-';
-  let tot = 0;
-  for(let i=1;i<=40;i++) tot += parseFloat(g('q'+i)?.value)||0;
-  tot = Math.round(tot*10)/10;
-  const pct = Math.round(tot);
-  const gradeTxt = pct>=95?'A+':pct>=90?'A':pct>=85?'B+':pct>=80?'B':pct>=75?'C+':pct>=70?'C':pct>=60?'D':'F';
-  const domScoreCopyLines = ['VOC','RDG','LIS','GRM','WRT'].map(dom => {
-    const raw = domScore[dom]; const max = DOM_MAX[dom]; const p = Math.round(raw/max*100);
-    return `${DOM_LABEL[dom]}  ${raw.toFixed(1)}/${max}점 (${p}%)`;
-  }).join('\n');
-  const domBarsHtml = ['VOC','RDG','LIS','GRM','WRT'].map(dom => {
-    const raw = domScore[dom]; const max = DOM_MAX[dom]; const p = Math.round(raw/max*100);
-    const col = p>=80?'#27ae60':p>=60?'#f39c12':'#e24b4a';
-    return `<div style="margin-bottom:9px">
-      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">
-        <span style="font-weight:600;color:#444">${DOM_LABEL[dom]}</span>
-        <span style="color:#888">${raw.toFixed(1)}/${max}점 (${p}%)</span>
-      </div>
-      <div style="background:#ece9e0;border-radius:4px;height:7px">
-        <div style="width:${p}%;height:100%;background:${col};border-radius:4px"></div>
-      </div>
-    </div>`;
-  }).join('');
-  let growthTxt = '';
-  if(pct>=90) growthTxt='이번 달 전반적으로 매우 우수한 성취를 보여주었습니다. 꾸준한 노력이 빛을 발하고 있어요!';
-  else if(pct>=80) growthTxt='목표 수준 이상의 성취를 달성하였습니다. 꾸준히 성장하는 모습이 인상적입니다.';
-  else if(pct>=70) growthTxt='기본기가 잘 갖춰지고 있으며, 몇 가지 영역에서 더 발전 가능성이 보입니다.';
-  else growthTxt='기초 학습에 더 집중이 필요한 시점입니다. 저와 함께 차근차근 실력을 쌓아가요!';
-  const ipRows = d.ipattern.map((p,i)=>`
-    <tr style="border-bottom:0.5px solid #ece9e0">
-      <td style="padding:7px 10px;text-align:center;font-size:10px;font-weight:700;color:#c0392b;background:#fdf2f2">D${(i+1)*2}</td>
-      <td style="padding:7px 10px;font-size:11px;color:#333;font-weight:600">${p.q}</td>
-      <td style="padding:7px 10px;font-size:11px;color:#555">${p.a}</td>
-      <td style="padding:7px 10px;font-size:10px;color:#777">${p.vocab.join(', ')}</td>
-    </tr>`).join('');
-  const ipTable = `<table style="width:100%;border-collapse:collapse;font-size:11px;border-radius:8px;overflow:hidden;border:0.5px solid #e8d8d8">
-    <thead><tr style="background:#c0392b;color:#fff">
-      <th style="padding:7px 10px;width:36px">Day</th>
-      <th style="padding:7px 10px">Question</th>
-      <th style="padding:7px 10px">Answer</th>
-      <th style="padding:7px 10px">핵심 어휘</th>
-    </tr></thead>
-    <tbody>${ipRows}</tbody>
-  </table>`;
-  const gramHtml = d.gramUnits.map(u=>`<div class="gram-unit">✓ ${u}</div>`).join('');
-  const strengthTxt = g('cmtStrength')?.value||'';
-  const improveTxt = g('cmtImprove')?.value||'';
-  const strengthAnalysisTxt = g('strengthAnalysis')?.textContent?.trim()||'';
-  const improveAnalysisTxt = g('improveAnalysis')?.textContent?.trim()||'';
-  const extraTxt = g('cmtExtra')?.value||'';
-  const nextTxt = g('cmtNext')?.value||'';
-  const autoFbTxt = g('autoFb')?.value||'';
-  const html = `<div style="background:#fff;border:1px solid #e0dfd8;border-radius:16px;padding:28px;max-width:820px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
-    <div style="background:linear-gradient(135deg,#c0392b 0%,#8b0000 100%);color:#fff;border-radius:12px;padding:20px 24px;margin-bottom:20px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div>
-          <div style="font-size:10px;opacity:.7;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">파머스국제어학원 광교브랜치</div>
-          <div style="font-size:20px;font-weight:800;letter-spacing:.3px">Silver Stella B — Monthly Report</div>
-          <div style="font-size:11.5px;opacity:.8;margin-top:4px">${month}</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:38px;font-weight:900;letter-spacing:-1px">${tot}</div>
-          <div style="font-size:10px;opacity:.75">/ 100점 (40문항)</div>
-          <div style="background:rgba(255,255,255,.22);border-radius:6px;padding:2px 11px;font-size:14px;font-weight:800;margin-top:4px">${gradeTxt}</div>
-        </div>
-      </div>
-    </div>
-    <div id="rpt-student" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
-      <div style="background:#fdf2f2;border-radius:10px;padding:12px 14px;border-left:3px solid #c0392b">
-        <div style="font-size:10px;color:#999;font-weight:600;margin-bottom:3px">학생</div>
-        <div style="font-size:16px;font-weight:700;color:#c0392b">${name}</div>
-      </div>
-      <div style="background:#f8f7f4;border-radius:10px;padding:12px 14px">
-        <div style="font-size:10px;color:#999;font-weight:600;margin-bottom:3px">학교 · 학년</div>
-        <div style="font-size:13px;font-weight:600;color:#444">${school} ${grade}</div>
-      </div>
-      <div style="background:#f8f7f4;border-radius:10px;padding:12px 14px">
-        <div style="font-size:10px;color:#999;font-weight:600;margin-bottom:3px">레벨 · 담당</div>
-        <div style="font-size:13px;font-weight:600;color:#444">${lv} · ${teacher}</div>
-      </div>
-    </div>
-    <div id="rpt-textbook" style="background:#fdf2f2;border-radius:10px;padding:16px 18px;margin-bottom:16px;border:0.5px solid #f0c0b8">
-      <div style="font-size:10px;font-weight:700;color:#c0392b;letter-spacing:1.2px;margin-bottom:6px">SILVER STELLA ${lv}<span style="background:${lv.startsWith('SB')?'#fdecea':'#fef3e2'};color:${lv.startsWith('SB')?'#c0392b':'#b9770e'};border-radius:5px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px">${lv.startsWith('SB')?'B 과정':'A 과정'}</span></div>
-      <div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:4px">THIS MONTH'S UNIT</div>
-      <div style="font-size:17px;font-weight:700;color:#1a1a1a;margin-bottom:8px">${d.name}</div>
-      <div style="font-size:12px;color:#555;line-height:1.7;margin-bottom:12px">「${d.name}」 과정을 통해 <b style="color:#c0392b">${d.grammar}</b>을(를) 중심으로 듣기·말하기·읽기·쓰기를 통합적으로 학습했습니다.</div>
-      <div style="margin-bottom:12px">
-        <div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:5px">말이 되는 패턴 (I-Pattern)</div>
-        ${d.ipattern.slice(0,5).map(p=>`<div style="display:inline-block;background:#fff;border:0.5px solid #f0c0b8;color:#a83226;border-radius:6px;padding:3px 9px;font-size:12px;font-weight:600;margin:2px 3px 2px 0">${p.q}</div>`).join('')}
-      </div>
-      <div>
-        <div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:5px">핵심 학습 영역</div>
-        <div>${gramHtml}</div>
-      </div>
-    </div>
-    <div id="rpt-scores" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
-      <div style="background:#fff;border:0.5px solid #e8e6de;border-radius:10px;padding:14px 16px">
-        <div style="font-size:11px;font-weight:700;color:#444;margin-bottom:10px">▪ 영역별 점수 (40문항 · 각 2.5점)</div>
-        <div id="rpt-score-text" style="display:none;white-space:pre">${domScoreCopyLines}</div>
-        ${domBarsHtml}
-      </div>
-      <div style="background:#fff;border:0.5px solid #e8e6de;border-radius:10px;padding:14px 16px">
-        <div style="font-size:11px;font-weight:700;color:#444;margin-bottom:10px">▪ 성장 분석</div>
-        <p id="rpt-growth" style="font-size:12px;line-height:1.85;color:#444">${growthTxt}</p>
-        ${autoFbTxt?`<div style="margin-top:10px;padding:10px;background:#fdf2f2;border-radius:8px;font-size:11px;line-height:1.85;color:#444;border-left:3px solid #c0392b">${autoFbTxt.replace(/\n/g,'<br>')}</div>`:''}
-      </div>
-    </div>
-    <div id="rpt-ipattern" style="margin-bottom:16px">
-      <div style="font-size:11px;font-weight:700;color:#444;margin-bottom:8px">이달 아이패턴 (I-Pattern)</div>
-      ${ipTable}
-    </div>
-    ${(strengthAnalysisTxt||strengthTxt||improveAnalysisTxt||improveTxt)?`<div id="rpt-feedback" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-      <div style="background:#eaf3de;border-radius:10px;padding:14px 16px;border-left:3px solid #27ae60">
-        <div style="font-size:11px;font-weight:700;color:#2d7a4f;margin-bottom:8px">이달의 강점</div>
-        ${strengthAnalysisTxt?`<div style="font-size:11px;color:#2a5c3a;background:#fff;border-radius:7px;padding:9px 12px;margin-bottom:8px;line-height:1.85;white-space:pre-wrap">${strengthAnalysisTxt}</div>`:''}
-        ${strengthTxt?`<div style="font-size:12px;line-height:1.85;color:#333;margin-top:4px">${strengthTxt.replace(/\n/g,'<br>')}</div>`:''}
-      </div>
-      <div style="background:#fff4e6;border-radius:10px;padding:14px 16px;border-left:3px solid #f39c12">
-        <div style="font-size:11px;font-weight:700;color:#854f0b;margin-bottom:8px">파악된 보완점</div>
-        ${improveAnalysisTxt?`<div style="font-size:11px;color:#7a4000;background:#fff;border-radius:7px;padding:9px 12px;margin-bottom:8px;line-height:1.85;white-space:pre-wrap">${improveAnalysisTxt}</div>`:''}
-        ${improveTxt?`<div style="font-size:12px;line-height:1.85;color:#333;margin-top:4px">${improveTxt.replace(/\n/g,'<br>')}</div>`:''}
-      </div>
-    </div>`:''}
-    ${extraTxt?`<div id="rpt-memo" style="background:#f8f7f4;border-radius:10px;padding:12px 16px;margin-bottom:12px">
-      <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:4px">추가 관찰 메모</div>
-      <div style="font-size:12px;line-height:1.85;color:#444">${extraTxt.replace(/\n/g,'<br>')}</div>
-    </div>`:''}
-    ${nextTxt?`<div id="rpt-next" style="background:#f9f0f0;border-radius:10px;padding:12px 16px;margin-bottom:16px;border-left:3px solid #c0392b">
-      <div style="font-size:11px;font-weight:700;color:#c0392b;margin-bottom:4px">▶ 다음 달 지도 방안</div>
-      <div style="font-size:12px;line-height:1.85;color:#444">${nextTxt.replace(/\n/g,'<br>')}</div>
-    </div>`:''}
-    <div style="border-top:1px solid #ece9e0;padding-top:12px;text-align:center;font-size:10px;color:#bbb">
-      파머스국제어학원 광교브랜치 · Silver Stella Program · ${teacher} 담당
+function buildReport(){
+  const lv=val('lvSel');const d=LV[lv];if(!d)return;
+  const name=val('stuName')||'이름 없음';const school=val('stuSchool')||'-';const grade=val('stuGrade')||'-';const teacher=val('teacher')||'선생님';const month=val('repMonth')||'-';
+  const raw=rawTotal();const pct=to100(raw);const gradeTxt=gradeOf(pct);
+  const ds=computeDomScore();
+  const SYN_TAG={RDG:'구문 해석',GRM:'구문·영작'};
+  const domBars=['VOC','LIS','RDG','GRM'].map(dom=>{const r=ds[dom];const mx=DOM_MAX[dom];const p=Math.round(r/mx*100);const col=p>=80?'#27ae60':p>=60?'#f39c12':'#e24b4a';const tag=SYN_TAG[dom]?`<span style="font-size:9px;color:#b07de0;background:#241433;border-radius:4px;padding:1px 5px;margin-left:5px;font-weight:600">${SYN_TAG[dom]}</span>`:'';return `<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="font-weight:600;color:#444">${DOM_LABEL[dom]}${tag}</span><span style="color:#888">${r}/${mx} (${p}%)</span></div><div style="background:#e7e7f0;border-radius:4px;height:7px"><div style="width:${p}%;height:100%;background:${col};border-radius:4px"></div></div></div>`;}).join('');
+  const domScoreCopy=['VOC','LIS','RDG','GRM'].map(dom=>{const p=Math.round(ds[dom]/DOM_MAX[dom]*100);return `${DOM_LABEL[dom]}  ${ds[dom]}/${DOM_MAX[dom]} (${p}%)`;}).join('\n');
+  let growthTxt='';if(pct>=90)growthTxt='이번 달 전반적으로 매우 우수한 성취를 보여주었습니다. 꾸준한 노력이 빛을 발하고 있어요!';else if(pct>=80)growthTxt='목표 수준 이상의 성취를 달성하였습니다. 꾸준히 성장하는 모습이 인상적입니다.';else if(pct>=70)growthTxt='기본기가 잘 갖춰지고 있으며, 몇 가지 영역에서 더 발전 가능성이 보입니다.';else growthTxt='기초 학습에 더 집중이 필요한 시점입니다. 저와 함께 차근차근 실력을 쌓아가요!';
+  // I-Pattern 표 (Unit별 대표문장)
+  const ipRows=(d.ipattern||[]).map(s=>`<tr style="border-bottom:0.5px solid #ececf3"><td style="padding:7px 10px;text-align:center;font-size:10px;font-weight:700;color:#5b4cdc;background:#f3f1fb">U${s.unit}</td><td style="padding:7px 10px;font-size:10.5px;color:#7a6fc0;font-weight:600">${s.theme||''}</td><td style="padding:7px 10px;font-size:11px;color:#333;font-weight:600">${s.q}</td><td style="padding:7px 10px;font-size:11px;color:#555">${s.a}</td></tr>`).join('');
+  const ipTable=`<table style="width:100%;border-collapse:collapse;font-size:11px;border-radius:8px;overflow:hidden;border:0.5px solid #e2dff0"><thead><tr style="background:#5b4cdc;color:#fff"><th style="padding:7px 10px;width:38px">Unit</th><th style="padding:7px 10px;width:90px">주제</th><th style="padding:7px 10px">표현 1</th><th style="padding:7px 10px">표현 2</th></tr></thead><tbody>${ipRows}</tbody></table>`;
+  const ipShow=(lv==='1'||lv==='2');
+  const gramHtml=d.gramUnits.map(u=>`<div class="gram-unit" style="background:#f1f0fb;color:#444">✓ ${u}</div>`).join('');
+  const SYNTAX_GOAL={
+    '1':'Inter Stella 1은 간접의문문과 과거형을 통해 문장을 더 정교하게 확장하는 단계입니다. 의문사가 포함된 복합 문장을 정확히 해석하고, 시제를 구분해 영작하는 힘을 기릅니다.',
+    '2':'Inter Stella 2는 문장의 형식(4형식→3형식 전환)을 익혀 문장 구조를 자유롭게 변형하는 단계입니다. 수여동사 문장을 정확히 분석하고 다양하게 표현하는 힘을 기릅니다.',
+    '3':'Inter Stella 3은 가주어 It 구문과 동명사를 통해 문장의 주어·목적어를 풍부하게 다루는 단계입니다. 긴 주어를 가주어로 처리하고 동명사를 자유롭게 활용하는 힘을 기릅니다.',
+    '4':'Inter Stella 4는 미래·과거·현재완료 시제를 통합적으로 다루는 단계입니다. 시간의 흐름에 따라 정확한 시제를 선택해 문장을 구성하는 힘을 기릅니다.',
+    '5':'Inter Stella 5는 문장 합치기와 현재완료 수동태를 통해 복문을 자유롭게 구성하는 단계입니다. 여러 문장을 하나로 연결하고 수동 표현을 정확히 다루는 힘을 기릅니다.',
+    '6':'Inter Stella 6은 문장 합치기와 다양한 동사형, 현재완료 수동을 통해 복합 문장 구조를 완성하는 단계입니다. 시험영어로 나아가는 정교한 문장 구성 능력을 완성해갑니다.'
+  };
+  const synRate=Math.round((ds.GRM+ds.RDG)/(DOM_MAX.GRM+DOM_MAX.RDG)*100);
+  let synStatus='';
+  if(synRate>=80)synStatus=`${name} 학생은 문법과 독해 영역에서 안정적인 성취를 보이며, 문장을 구조로 분석하고 정확하게 해석하는 구문의 힘이 잘 자리잡고 있습니다.`;
+  else if(synRate>=60)synStatus=`${name} 학생은 구문을 파악하는 기초가 잘 잡혀가고 있으며, 문법·독해 연습을 통해 문장 구조를 더욱 정확히 분석하는 단계로 나아가고 있습니다.`;
+  else synStatus=`${name} 학생은 아직 구문 분석에 익숙해지는 과정에 있습니다. 앞으로 문장을 단위로 나누어 파악하고 정확히 해석하는 훈련을 함께 이어갈 예정입니다.`;
+  const syntaxHtml=`<div id="rpt-syntax" data-goal="${(SYNTAX_GOAL[lv]||'').replace(/"/g,'&quot;')}" data-status="${synStatus.replace(/"/g,'&quot;')}" data-rate="${synRate}" style="background:linear-gradient(135deg,#f3f1fb,#ece9fa);border-radius:10px;padding:16px 18px;margin-bottom:16px;border:0.5px solid #c8c0e8">
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><span style="font-size:13px">🧩</span><span style="font-size:12px;font-weight:800;color:#3730a3">이 단계의 학습 목표 — 구문(Syntax)의 심화</span></div>
+    <div style="font-size:11.5px;color:#4a4a6a;line-height:1.8;margin-bottom:10px">인터스텔라는 PRE TOEFL 수준의 실용·시험영어를 통합하는 과정입니다. ${SYNTAX_GOAL[lv]||''}</div>
+    <div style="background:#fff;border-radius:8px;padding:11px 13px;border-left:3px solid #5b4cdc">
+      <div style="font-size:10px;font-weight:700;color:#5b4cdc;margin-bottom:4px">📍 구문 도달 현황 <span style="color:#999;font-weight:600">(문법·독해 ${synRate}%)</span></div>
+      <div style="font-size:11.5px;color:#444;line-height:1.8">${synStatus}</div>
     </div>
   </div>`;
-  if(g('reportOut')) g('reportOut').innerHTML = html;
+  const strengthTxt=g('cmtStrength')?.value||'';const improveTxt=g('cmtImprove')?.value||'';
+  const strengthA=g('strengthAnalysis')?.textContent?.trim()||'';const improveA=g('improveAnalysis')?.textContent?.trim()||'';
+  const extraTxt=g('cmtExtra')?.value||'';const nextTxt=g('cmtNext')?.value||'';const autoFbTxt=g('autoFb')?.value||'';
+  const html=`<div style="background:#fff;border:1px solid #e2e3f0;border-radius:16px;padding:28px;max-width:820px;margin:0 auto;color:#1a1a2e">
+    <div style="background:linear-gradient(135deg,#1a1f5c,#0a0a1f 60%,#2d1b69);color:#fff;border-radius:12px;padding:20px 24px;margin-bottom:20px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-30px;right:-10px;width:140px;height:140px;background:radial-gradient(circle,rgba(140,120,255,.4),transparent 70%)"></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
+        <div><div style="font-size:10px;opacity:.7;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">파머스국제어학원 광교브랜치</div><div style="font-size:20px;font-weight:800">Inter Stella ${lv} — Monthly Report</div><div style="font-size:11.5px;opacity:.8;margin-top:4px">${month}</div></div>
+        <div style="text-align:right"><div style="font-size:38px;font-weight:900;letter-spacing:-1px">${pct}</div><div style="font-size:10px;opacity:.75">/ 100점 (${raw}/45문항)</div><div style="background:rgba(255,255,255,.22);border-radius:6px;padding:2px 11px;font-size:14px;font-weight:800;margin-top:4px">${gradeTxt}</div></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+      <div style="background:#f3f1fb;border-radius:10px;padding:12px 14px;border-left:3px solid #5b4cdc"><div style="font-size:10px;color:#999;font-weight:600;margin-bottom:3px">학생</div><div style="font-size:16px;font-weight:700;color:#5b4cdc">${name}</div></div>
+      <div style="background:#f6f6fb;border-radius:10px;padding:12px 14px"><div style="font-size:10px;color:#999;font-weight:600;margin-bottom:3px">학교 · 학년</div><div style="font-size:13px;font-weight:600;color:#444">${school} ${grade}</div></div>
+      <div style="background:#f6f6fb;border-radius:10px;padding:12px 14px"><div style="font-size:10px;color:#999;font-weight:600;margin-bottom:3px">레벨 · 담당</div><div style="font-size:13px;font-weight:600;color:#444">S${lv} · ${teacher}</div></div>
+    </div>
+    <div style="background:#f3f1fb;border-radius:10px;padding:16px 18px;margin-bottom:16px;border:0.5px solid #c8c0e8">
+      <div style="font-size:10px;font-weight:700;color:#5b4cdc;letter-spacing:1.2px;margin-bottom:6px">INTER STELLA ${lv}</div>
+      <div style="font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:8px">${d.name}</div>
+      <div style="font-size:12px;color:#555;line-height:1.7;margin-bottom:12px">이번 과정은 <b style="color:#5b4cdc">${d.grammar}</b>을(를) 중심으로 듣기·말하기·읽기·쓰기를 통합적으로 학습했습니다. (테마: ${d.theme})</div>
+      <div><div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:5px">핵심 문법</div>${gramHtml}</div>
+    </div>
+    ${syntaxHtml}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+      <div style="background:#fff;border:0.5px solid #e6e6f0;border-radius:10px;padding:14px 16px"><div style="font-size:11px;font-weight:700;color:#444;margin-bottom:10px">▪ 영역별 점수 (45문항 · 100점 환산)</div><div id="rpt-score-text" style="display:none;white-space:pre">${domScoreCopy}</div>${domBars}</div>
+      <div style="background:#fff;border:0.5px solid #e6e6f0;border-radius:10px;padding:14px 16px"><div style="font-size:11px;font-weight:700;color:#444;margin-bottom:10px">▪ 성장 분석</div><p id="rpt-growth" style="font-size:12px;line-height:1.85;color:#444">${growthTxt}</p>${autoFbTxt?`<div style="margin-top:10px;padding:10px;background:#f3f1fb;border-radius:8px;font-size:11px;line-height:1.85;color:#444;border-left:3px solid #5b4cdc">${autoFbTxt.replace(/\n/g,'<br>')}</div>`:''}</div>
+    </div>
+    ${ipShow?`<div style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:#444;margin-bottom:8px">이달 아이패턴 (I-Pattern) — 말이 되는 어법</div>${ipTable}</div>`:''}
+    ${(strengthA||strengthTxt||improveA||improveTxt)?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="background:#eaf3de;border-radius:10px;padding:14px 16px;border-left:3px solid #27ae60"><div style="font-size:11px;font-weight:700;color:#2d7a4f;margin-bottom:8px">이달의 강점</div>${strengthA?`<div style="font-size:11px;color:#2a5c3a;background:#fff;border-radius:7px;padding:9px 12px;margin-bottom:8px;line-height:1.85;white-space:pre-wrap">${strengthA}</div>`:''}${strengthTxt?`<div style="font-size:12px;line-height:1.85;color:#333">${strengthTxt.replace(/\n/g,'<br>')}</div>`:''}</div>
+      <div style="background:#fff4e6;border-radius:10px;padding:14px 16px;border-left:3px solid #f39c12"><div style="font-size:11px;font-weight:700;color:#854f0b;margin-bottom:8px">파악된 보완점</div>${improveA?`<div style="font-size:11px;color:#7a4000;background:#fff;border-radius:7px;padding:9px 12px;margin-bottom:8px;line-height:1.85;white-space:pre-wrap">${improveA}</div>`:''}${improveTxt?`<div style="font-size:12px;line-height:1.85;color:#333">${improveTxt.replace(/\n/g,'<br>')}</div>`:''}</div>
+    </div>`:''}
+    ${extraTxt?`<div style="background:#f6f6fb;border-radius:10px;padding:12px 16px;margin-bottom:12px"><div style="font-size:11px;font-weight:600;color:#666;margin-bottom:4px">추가 관찰 메모</div><div style="font-size:12px;line-height:1.85;color:#444">${extraTxt.replace(/\n/g,'<br>')}</div></div>`:''}
+    ${nextTxt?`<div style="background:#f3f1fb;border-radius:10px;padding:12px 16px;margin-bottom:16px;border-left:3px solid #5b4cdc"><div style="font-size:11px;font-weight:700;color:#5b4cdc;margin-bottom:4px">▶ 다음 달 지도 방안</div><div style="font-size:12px;line-height:1.85;color:#444">${nextTxt.replace(/\n/g,'<br>')}</div></div>`:''}
+    <div style="border-top:1px solid #ececf3;padding-top:12px;text-align:center;font-size:10px;color:#bbb">파머스국제어학원 광교브랜치 · Inter Stella Program · ${teacher} 담당</div>
+  </div>`;
+  if(g('reportOut'))g('reportOut').innerHTML=html;
 }
 
-function copyRpt(){
-  const el = g('reportOut');
-  if(!el || !el.innerText.trim()){ alert('먼저 리포트를 생성해주세요.'); return; }
-  const parts = [];
-  const stuName2 = val('stuName') || '';
-  const stuSchool2 = [val('stuSchool'), val('stuGrade')].filter(t=>t).join(' ');
-  const stuLv = val('lvSel') ? (LV[val('lvSel')]?.label + ' ' + LV[val('lvSel')]?.name) : '';
-  const studentLine = [stuName2, stuSchool2, stuLv].filter(t=>t).join(' | ');
-  if(studentLine) parts.push(studentLine);
-  const lv2 = val('lvSel');
-  const d2 = LV[lv2];
-  if(d2){
-    const gramLines = (d2.gramUnits||[]).map(u => '  • ' + u).join('\n');
-    parts.push([`[이달의 교재] ${d2.label} ${d2.name}`,`[문법 포인트] ${d2.grammar}`,gramLines].filter(t=>t).join('\n'));
-  }
-  const secScoreText = document.getElementById('rpt-score-text');
-  const secGrowth = document.getElementById('rpt-growth');
-  const scoreLine = secScoreText ? secScoreText.innerText.trim() : '';
-  const growthLine = secGrowth ? secGrowth.innerText.trim() : '';
-  const scoresPart = ['▪ 영역별 점수', scoreLine, growthLine ? '\n\n▪ 성장 분석\n' + growthLine : ''].filter(t=>t).join('\n');
-  if(scoresPart.trim()) parts.push(scoresPart.trim());
-  const strengthA = g('strengthAnalysis')?.textContent?.trim() || '';
-  const strengthT = g('cmtStrength')?.value?.trim() || '';
-  const improveA  = g('improveAnalysis')?.textContent?.trim() || '';
-  const improveT  = g('cmtImprove')?.value?.trim() || '';
-  const strengthBlock = ['이달의 강점', strengthA, strengthT].filter(t=>t).join('\n');
-  const improveBlock  = ['파악된 보완점', improveA, improveT].filter(t=>t).join('\n');
-  const feedbackPart = [strengthBlock, improveBlock].filter(t=>t).join('\n\n');
-  if(feedbackPart.trim()) parts.push(feedbackPart.trim());
-  const secMemo = document.getElementById('rpt-memo');
-  if(secMemo && secMemo.innerText.trim()) parts.push(secMemo.innerText.trim());
-  const secNext = document.getElementById('rpt-next');
-  if(secNext) parts.push(secNext.innerText.trim());
-  if(!parts.length){ alert('먼저 리포트를 생성해주세요.'); return; }
-  const teacherName = val('teacher') || '선생님';
-  const text = parts.join('\n\n─────────────────────\n\n') + '\n\n파머스국제어학원 광교브랜치 ' + teacherName + ' 드림';
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(()=>showCopyToast()).catch(()=>fallbackCopy(text));
-    return;
-  }
-  fallbackCopy(text);
-}
+function copyRpt(){const el=g('reportOut');if(!el||!el.innerText.trim()){alert('먼저 리포트를 생성해주세요.');return;}const parts=[];const nm=val('stuName')||'';const sc=[val('stuSchool'),val('stuGrade')].filter(t=>t).join(' ');const lv=val('lvSel');const d=LV[lv];const lvStr=d?`Inter Stella ${lv} ${d.name}`:'';const sl=[nm,sc,lvStr].filter(t=>t).join(' | ');if(sl)parts.push(sl);if(d){const gl=(d.gramUnits||[]).map(u=>'  • '+u).join('\n');parts.push([`[이달의 과정] Inter Stella ${lv} ${d.name}`,`[문법 포인트] ${d.grammar}`,gl].filter(t=>t).join('\n'));const ipl=(lv==='1'||lv==='2')?(d.ipattern||[]).map(s=>`  U${s.unit} ${s.theme||''}: ${s.q} / ${s.a}`).join('\n'):'';if(ipl)parts.push('[이달 아이패턴]\n'+ipl);}const synEl=g('rpt-syntax');if(synEl){const goal=synEl.dataset.goal||'';const status=synEl.dataset.status||'';const rate=synEl.dataset.rate||'';parts.push(['[이 단계의 학습 목표 — 구문(Syntax)의 심화]',goal,`▸ 구문 도달 현황 (문법·독해 ${rate}%): ${status}`].filter(t=>t).join('\n'));}const st=g('rpt-score-text');const gr=g('rpt-growth');const sLine=st?st.innerText.trim():'';const gLine=gr?gr.innerText.trim():'';const sp=['▪ 영역별 점수',sLine,gLine?'\n\n▪ 성장 분석\n'+gLine:''].filter(t=>t).join('\n');if(sp.trim())parts.push(sp.trim());const sA=g('strengthAnalysis')?.textContent?.trim()||'';const sT=g('cmtStrength')?.value?.trim()||'';const iA=g('improveAnalysis')?.textContent?.trim()||'';const iT=g('cmtImprove')?.value?.trim()||'';const sB=['이달의 강점',sA,sT].filter(t=>t).join('\n');const iB=['파악된 보완점',iA,iT].filter(t=>t).join('\n');const fp=[sB,iB].filter(t=>t).join('\n\n');if(fp.trim())parts.push(fp.trim());const ex=g('cmtExtra')?.value?.trim();if(ex)parts.push('추가 관찰 메모\n'+ex);const nx=g('cmtNext')?.value?.trim();if(nx)parts.push('▶ 다음 달 지도 방안\n'+nx);const tc=val('teacher')||'선생님';const text=parts.join('\n\n──────────\n\n')+'\n\n파머스국제어학원 광교브랜치 '+tc+' 드림';if(navigator.clipboard?.writeText){navigator.clipboard.writeText(text).then(showCopyToast).catch(()=>fallbackCopy(text));return;}fallbackCopy(text);}
+function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;top:-9999px;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');showCopyToast();}catch(e){alert('자동 복사 실패. 직접 선택해서 복사해주세요.');}document.body.removeChild(ta);}
+function showCopyToast(){const b=document.querySelector('[onclick="copyRpt()"]');if(b){const o=b.innerHTML;b.innerHTML='<i class="ti ti-check"></i> 복사 완료!';b.style.background='#2d7a4f';b.style.color='#fff';setTimeout(()=>{b.innerHTML=o;b.style.background='';b.style.color='';},2000);}}
 
-function fallbackCopy(text){
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
-  document.body.appendChild(ta);
-  ta.focus(); ta.select();
-  try { const ok = document.execCommand('copy'); document.body.removeChild(ta); if(ok) showCopyToast(); else showCopyFail(); }
-  catch(e){ document.body.removeChild(ta); showCopyFail(); }
-}
+function saveReport(){const k=getStudentKey();if(!k){if(g('saveStatus')){g('saveStatus').style.display='block';g('saveStatus').style.color='#e24b4a';g('saveStatus').textContent='학생 이름과 학교를 먼저 입력해주세요.';}return;}const month=val('repMonth')||new Date().toISOString().slice(0,7);const strengths=[...document.querySelectorAll('#strengthChips .chip.on')].map(c=>c.textContent);const improves=[...document.querySelectorAll('#attitudeChips .chip.on')].map(c=>c.textContent);let prev=LS('get',k+'_kw')||{};prev[month]={strength:strengths,improve:improves,level:val('lvSel'),teacher:val('teacher')};const keep=Object.keys(prev).sort().reverse().slice(0,3);const trimmed={};keep.forEach(m=>trimmed[m]=prev[m]);LS('set',k+'_kw',trimmed);if(g('saveStatus')){g('saveStatus').style.display='block';g('saveStatus').style.color='#5fd48f';g('saveStatus').textContent='리포트가 이력에 저장되었습니다. (최근 3개월 보관)';}const rb=g('resetConfirmBox'),rm=g('resetConfirmMsg');if(rb&&rm){rm.textContent=`${val('stuName')} 학생 리포트가 저장되었습니다. 다음 학생을 작성하시겠어요?`;rb.style.display='block';}}
 
-function showCopyToast(){
-  const btn = document.querySelector('[onclick="copyRpt()"]');
-  if(btn){
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<i class="ti ti-check"></i> 복사 완료!';
-    btn.style.background = '#2d7a4f'; btn.style.color = '#fff';
-    setTimeout(()=>{ btn.innerHTML = orig; btn.style.background=''; btn.style.color=''; }, 2000);
-  }
-}
+function resetAll(){wrongSet.clear();const sa=g('strengthAnalysis');if(sa)sa.textContent='';const ia=g('improveAnalysis');if(ia)ia.textContent='';['stuName','stuSchool','stuGrade','teacher','repMonth','autoFb','cmtStrength','cmtImprove','cmtExtra','cmtNext'].forEach(id=>{const el=g(id);if(el){el.value='';delete el.dataset?.edited;}});for(let i=1;i<=45;i++){const el=g('q'+i);if(el)el.value='1';}if(g('lvSel'))g('lvSel').value='';if(g('lvInfo')){g('lvInfo').innerHTML='';g('lvInfo').style.display='none';}['historyAlert','historyAlertBody','historyBox','resetConfirmBox','saveStatus'].forEach(id=>{if(g(id))g(id).style.display='none';});if(g('wrongGrid'))g('wrongGrid').innerHTML='';if(g('reportOut'))g('reportOut').innerHTML='';go(0);}
 
-function showCopyFail(){
-  alert('자동 복사가 지원되지 않는 환경입니다.\n리포트 텍스트를 직접 선택(Ctrl+A) 후 복사(Ctrl+C)해주세요.');
-}
+function go(step){const steps=['s0','s1','s2','s3','s4'];const btns=document.querySelectorAll('.sbtn');steps.forEach((id,i)=>{const el=g(id);if(el)el.classList.toggle('hidden',i!==step);if(btns[i]){btns[i].classList.toggle('active',i===step);btns[i].classList.toggle('done',i<step);}});if(step===1)buildWrongGrid();if(step===2)buildAnalysis();if(step===3){setupCommentTab();setTimeout(buildAutoFeedback,0);}if(step===4)buildReport();window.scrollTo(0,0);}
 
-// 이력 저장: 학교_이름 키 / 최근 3개월만 보관 / 레벨·담임 함께 기록
-function saveReport(){
-  const k = getStudentKey();
-  if(!k){ if(g('saveStatus')){ g('saveStatus').style.display='block'; g('saveStatus').style.color='#e24b4a'; g('saveStatus').textContent='학생 이름과 학교를 먼저 입력해주세요.'; } return; }
-  const month = val('repMonth')||new Date().toISOString().slice(0,7);
-  const strengths = [...document.querySelectorAll('#strengthChips .chip.on')].map(c=>c.textContent);
-  const improves = [...document.querySelectorAll('#attitudeChips .chip.on')].map(c=>c.textContent);
-  let prev = LS('get', k+'_kw')||{};
-  // 같은 달은 갱신, 그 외 최근 3개월만 유지
-  prev[month] = {strength:strengths, improve:improves, level:val('lvSel'), teacher:val('teacher')};
-  const keepMonths = Object.keys(prev).sort().reverse().slice(0,3);
-  const trimmed = {};
-  keepMonths.forEach(mm=>{ trimmed[mm]=prev[mm]; });
-  LS('set', k+'_kw', trimmed);
-  const hist = LS('get', k+'_hist')||[];
-  let tot = 0; for(let i=1;i<=40;i++) tot += parseFloat(g('q'+i)?.value)||0;
-  hist.push({name:val('stuName'),lv:val('lvSel'),school:val('stuSchool'),grade:val('stuGrade'),teacher:val('teacher'),month,score:Math.round(tot*10)/10,date:new Date().toISOString()});
-  LS('set', k+'_hist', hist);
-  if(g('saveBtn')) g('saveBtn').textContent = '저장 완료';
-  if(g('saveStatus')){ g('saveStatus').style.display='block'; g('saveStatus').style.color='#2d7a4f'; g('saveStatus').textContent='리포트가 이력에 저장되었습니다. (최근 3개월 보관)'; }
-  const rb = g('resetConfirmBox'), rm = g('resetConfirmMsg');
-  if(rb&&rm){ rm.textContent=`${val('stuName')} 학생 리포트가 저장되었습니다. 다음 학생을 작성하시겠어요?`; rb.style.display='block'; }
-}
-
-function resetAll(){
-  wrongSet.clear();
-  const saBox = g('strengthAnalysis'); if(saBox) saBox.textContent='';
-  const iaBox = g('improveAnalysis'); if(iaBox) iaBox.textContent='';
-  ['stuName','stuSchool','stuGrade','teacher','repMonth','autoFb','cmtStrength','cmtImprove','cmtExtra','cmtNext'].forEach(id=>{
-    const el=g(id); if(el){ el.value=''; delete el.dataset?.edited; }
-  });
-  for(let i=1;i<=40;i++){ const el=g('q'+i); if(el) el.value='2.5'; }
-  if(g('lvSel')) g('lvSel').value='';
-  if(g('lvInfo')){ g('lvInfo').innerHTML=''; g('lvInfo').style.display='none'; }
-  if(g('historyAlert')) g('historyAlert').style.display='none';
-  if(g('historyAlertBody')) g('historyAlertBody').style.display='none';
-  if(g('historyBox')) g('historyBox').style.display='none';
-  if(g('wrongGrid')) g('wrongGrid').innerHTML='';
-  if(g('wrongCount')) g('wrongCount').textContent='오답: 0문항 · 감점: 0점';
-  if(g('reportOut')) g('reportOut').innerHTML='';
-  if(g('resetConfirmBox')) g('resetConfirmBox').style.display='none';
-  if(g('saveBtn')) g('saveBtn').innerHTML='<i class="ti ti-device-floppy"></i>이력 저장';
-  if(g('saveStatus')) g('saveStatus').style.display='none';
-  calcTotal();
-  go(0);
-}
-
-function go(step){
-  const steps = ['s0','s1','s2','s3','s4'];
-  const btns = document.querySelectorAll('.sbtn');
-  steps.forEach((id,i)=>{
-    const el = g(id);
-    if(el) el.classList.toggle('hidden', i!==step);
-    if(btns[i]){
-      btns[i].classList.toggle('active', i===step);
-      btns[i].classList.toggle('done', i<step);
-    }
-  });
-  if(step===1){ buildWrongGrid(); }
-  if(step===2){ buildAnalysis(); }
-  if(step===3){
-    setupCommentTab();
-    setTimeout(()=>{ const ds = computeDomScore(); buildAutoFeedback(ds); }, 0);
-  }
-  if(step===4){ const ds = computeDomScore(); buildReport(ds); }
-  window.scrollTo(0,0);
-}
-
-document.addEventListener('DOMContentLoaded', ()=>{
-  calcTotal();
-  g('lvSel')?.addEventListener('change', onLvChange);
-  g('stuName')?.addEventListener('input', onNameInput);
-  go(0);
-});
+document.addEventListener('DOMContentLoaded',()=>{initScoreInputs();g('lvSel')?.addEventListener('change',onLvChange);g('stuName')?.addEventListener('input',onNameInput);go(0);});
 </script>
 </body>
 </html>
