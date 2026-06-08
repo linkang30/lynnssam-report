@@ -69,6 +69,8 @@ select option{background:#fff;color:#1a1a2e}
 .hist-head{padding:11px 14px;cursor:pointer;display:flex;align-items:center;gap:7px}
 .hist-body{display:none;padding:0 14px 12px;border-top:0.5px solid #e0d8f5}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="app">
@@ -255,7 +257,11 @@ select option{background:#fff;color:#1a1a2e}
       <button class="btn bgrn" id="saveBtn" onclick="saveReport()"><i class="ti ti-device-floppy"></i>이력 저장</button>
     </div>
   </div>
-  <div id="saveStatus" style="font-size:12px;color:#2d7a4f;margin-top:8px;text-align:right;display:none"></div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+    <button class="btn bsec" onclick="downloadImage()" style="background:#e3f4f0;border-color:#b6e0d7;color:#2ba89a"><i class="ti ti-photo-down"></i>이미지 저장 · 카톡 전송용</button>
+    <button class="btn bsec" onclick="downloadPDF()" style="background:#fef0f0;border-color:#f0cccc;color:#c0392b"><i class="ti ti-file-type-pdf"></i>PDF 저장 · 인쇄 보관용</button>
+  </div>
+<div id="saveStatus" style="font-size:12px;color:#2d7a4f;margin-top:8px;text-align:right;display:none"></div>
   <div id="resetConfirmBox" style="display:none;margin-top:10px;background:#eaf6ee;border:1px solid #cde8d6;border-radius:10px;padding:13px 16px">
     <div style="font-size:12px;color:#2d7a4f;font-weight:600;margin-bottom:8px"><i class="ti ti-circle-check"></i> <span id="resetConfirmMsg"></span></div>
     <div style="display:flex;gap:7px">
@@ -409,7 +415,6 @@ function buildReport(){
   const domBars=['VOC','LIS','RDG','GRM'].map(dom=>{const r=ds[dom];const mx=DOM_MAX[dom];const p=Math.round(r/mx*100);const col=p>=80?'#27ae60':p>=60?'#f39c12':'#e24b4a';const tag=SYN_TAG[dom]?`<span style="font-size:9px;color:#b07de0;background:#241433;border-radius:4px;padding:1px 5px;margin-left:5px;font-weight:600">${SYN_TAG[dom]}</span>`:'';return `<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="font-weight:600;color:#444">${DOM_LABEL[dom]}${tag}</span><span style="color:#888">${r}/${mx} (${p}%)</span></div><div style="background:#e7e7f0;border-radius:4px;height:7px"><div style="width:${p}%;height:100%;background:${col};border-radius:4px"></div></div></div>`;}).join('');
   const domScoreCopy=['VOC','LIS','RDG','GRM'].map(dom=>{const p=Math.round(ds[dom]/DOM_MAX[dom]*100);return `${DOM_LABEL[dom]}  ${ds[dom]}/${DOM_MAX[dom]} (${p}%)`;}).join('\n');
   let growthTxt='';if(pct>=90)growthTxt='이번 달 전반적으로 매우 우수한 성취를 보여주었습니다. 꾸준한 노력이 빛을 발하고 있어요!';else if(pct>=80)growthTxt='목표 수준 이상의 성취를 달성하였습니다. 꾸준히 성장하는 모습이 인상적입니다.';else if(pct>=70)growthTxt='기본기가 잘 갖춰지고 있으며, 몇 가지 영역에서 더 발전 가능성이 보입니다.';else growthTxt='기초 학습에 더 집중이 필요한 시점입니다. 저와 함께 차근차근 실력을 쌓아가요!';
-  // I-Pattern 표 (Unit별 대표문장)
   const ipRows=(d.ipattern||[]).map(s=>`<tr style="border-bottom:0.5px solid #ececf3"><td style="padding:7px 10px;text-align:center;font-size:10px;font-weight:700;color:#5b4cdc;background:#f3f1fb">U${s.unit}</td><td style="padding:7px 10px;font-size:10.5px;color:#7a6fc0;font-weight:600">${s.theme||''}</td><td style="padding:7px 10px;font-size:11px;color:#333;font-weight:600">${s.q}</td><td style="padding:7px 10px;font-size:11px;color:#555">${s.a}</td></tr>`).join('');
   const ipTable=`<table style="width:100%;border-collapse:collapse;font-size:11px;border-radius:8px;overflow:hidden;border:0.5px solid #e2dff0"><thead><tr style="background:#5b4cdc;color:#fff"><th style="padding:7px 10px;width:38px">Unit</th><th style="padding:7px 10px;width:90px">주제</th><th style="padding:7px 10px">표현 1</th><th style="padding:7px 10px">표현 2</th></tr></thead><tbody>${ipRows}</tbody></table>`;
   const ipShow=(lv==='1'||lv==='2');
@@ -485,6 +490,61 @@ function resetAll(){wrongSet.clear();const sa=g('strengthAnalysis');if(sa)sa.tex
 function go(step){const steps=['s0','s1','s2','s3','s4'];const btns=document.querySelectorAll('.sbtn');steps.forEach((id,i)=>{const el=g(id);if(el)el.classList.toggle('hidden',i!==step);if(btns[i]){btns[i].classList.toggle('active',i===step);btns[i].classList.toggle('done',i<step);}});if(step===1)buildWrongGrid();if(step===2)buildAnalysis();if(step===3){setupCommentTab();setTimeout(buildAutoFeedback,0);}if(step===4)buildReport();window.scrollTo(0,0);}
 
 document.addEventListener('DOMContentLoaded',()=>{initScoreInputs();g('lvSel')?.addEventListener('change',onLvChange);g('stuName')?.addEventListener('input',onNameInput);go(0);});
+
+function fileBaseName(){
+  const sel=g('lvSel');
+  let lvName='리포트';
+  if(sel){
+    if(sel.tagName==='SELECT'&&sel.selectedIndex>=0){
+      const t=sel.options[sel.selectedIndex].text.split(/[—–\-(]/)[0].trim();
+      if(t)lvName=t;
+    }else if(sel.value){lvName=sel.value;}
+  }
+  const name=(g('stuName')?g('stuName').value.trim():'')||'학생';
+  const month=(g('repMonth')?g('repMonth').value.trim():'')||'';
+  return [name,lvName,month].filter(t=>t).join('_');
+}
+function captureReport(){
+  const el=g('reportOut');
+  if(!el||!el.innerHTML.trim())return null;
+  const wrap=document.createElement('div');
+  wrap.style.cssText='position:fixed;left:-9999px;top:0;width:880px;background:#ffffff';
+  const clone=el.cloneNode(true);
+  clone.style.padding='30px';
+  wrap.appendChild(clone);
+  document.body.appendChild(wrap);
+  return wrap;
+}
+function downloadImage(){
+  const el=g('reportOut');
+  if(!el||!el.innerHTML.trim()){alert('먼저 리포트를 생성해주세요.');return;}
+  if(typeof html2canvas==='undefined'){alert('이미지 라이브러리를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');return;}
+  html2canvas(el,{scale:2,backgroundColor:'#ffffff',useCORS:true}).then(canvas=>{
+    const link=document.createElement('a');
+    link.download=fileBaseName()+'.png';
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+  }).catch(()=>alert('이미지 저장 중 오류가 발생했습니다.'));
+}
+function downloadPDF(){
+  const el=g('reportOut');
+  if(!el||!el.innerHTML.trim()){alert('먼저 리포트를 생성해주세요.');return;}
+  if(typeof html2canvas==='undefined'||!window.jspdf){alert('PDF 라이브러리를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');return;}
+  const wrap=captureReport();
+  html2canvas(wrap,{scale:2,backgroundColor:'#ffffff',useCORS:true}).then(canvas=>{
+    if(wrap.parentNode)document.body.removeChild(wrap);
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF('p','mm','a4');
+    const pageW=210, pageH=297, margin=8;
+    const availW=pageW-margin*2, availH=pageH-margin*2;
+    let imgW=availW, imgH=canvas.height*imgW/canvas.width;
+    if(imgH>availH){imgH=availH;imgW=canvas.width*imgH/canvas.height;}
+    const x=(pageW-imgW)/2, y=margin;
+    pdf.addImage(canvas.toDataURL('image/png'),'PNG',x,y,imgW,imgH);
+    pdf.save(fileBaseName()+'.pdf');
+  }).catch(()=>{if(wrap.parentNode)document.body.removeChild(wrap);alert('PDF 저장 중 오류가 발생했습니다.');});
+}
+
 </script>
 </body>
 </html>
