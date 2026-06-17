@@ -227,6 +227,34 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
 .rost-item .ri-cls{font-size:11px;color:#889;margin-left:auto}
 .rost-item .ri-del{color:#c0392b;cursor:pointer;font-size:15px;padding:2px}
 .rost-hint{font-size:11px;color:#3f5a85;background:#eef2fb;border-radius:8px;padding:8px 12px;margin-bottom:12px}
+
+/* ===== 반 현황 표 ===== */
+.ovwrap{overflow-x:auto;border:1px solid #e4e8f1;border-radius:11px;background:#fff}
+table.ovtable{border-collapse:collapse;width:100%;min-width:640px;font-size:12.5px}
+table.ovtable th,table.ovtable td{border:1px solid #eef1f7;padding:9px 8px;text-align:center}
+table.ovtable thead th{background:#f4f6fb;color:#445;font-weight:700;font-size:11.5px;position:sticky;top:0;cursor:pointer;user-select:none;white-space:nowrap}
+table.ovtable thead th:hover{background:#e9edf7}
+table.ovtable thead th .arr{font-size:9px;color:#9fb0d0;margin-left:2px}
+table.ovtable thead th.colhd-voc{border-top:3px solid #b8860b}
+table.ovtable thead th.colhd-comp{border-top:3px solid #2d7a4f}
+table.ovtable thead th.colhd-wk{border-top:3px solid #2b6cb0}
+table.ovtable thead th.colhd-grm{border-top:3px solid #7c3aed}
+table.ovtable td.ov-name{text-align:left;font-weight:700;color:#16243e;cursor:pointer;white-space:nowrap}
+table.ovtable td.ov-name:hover{color:#2b6cb0;text-decoration:underline}
+table.ovtable td.ov-name .ov-id{font-size:10px;color:#9aa3b8;font-weight:600;margin-right:5px}
+table.ovtable td .ov-pct{font-weight:700}
+table.ovtable td .ov-na{color:#cbd2e0}
+table.ovtable td .ov-g{display:inline-block;font-size:9.5px;font-weight:800;border-radius:5px;padding:1px 6px;margin-left:4px}
+table.ovtable tr:hover td{background:#fafbff}
+table.ovtable tr.ov-total td{background:#f4f6fb;font-weight:800;color:#16243e;border-top:2px solid #d2d8e6}
+table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
+.ov-cnt{font-size:10px;color:#99a}
+.ov-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.ov-sumcard{flex:1;min-width:120px;border:1px solid #e4e8f1;border-radius:10px;padding:11px 12px;background:#fafbff;text-align:center}
+.ov-sumcard .l{font-size:10px;font-weight:700;color:#8590ad;letter-spacing:.3px;margin-bottom:4px}
+.ov-sumcard .v{font-size:20px;font-weight:900;color:#22365a;line-height:1}
+.ov-sumcard .s{font-size:10px;color:#99a;margin-top:3px}
+.ov-empty{text-align:center;color:#889;padding:36px 10px;font-size:13px}
 </style>
 </head>
 <body>
@@ -242,6 +270,7 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
 </div>
 
 <div class="steps">
+  <button id="sb4" class="sbtn" onclick="go(4)"><i class="ti ti-layout-grid"></i>반 현황</button>
   <button id="sb0" class="sbtn active" onclick="go(0)"><i class="ti ti-table"></i>누적 점수 입력</button>
   <button id="sb1" class="sbtn" onclick="go(1)"><i class="ti ti-target"></i>Monthly Test</button>
   <button id="sb2" class="sbtn" onclick="go(2)"><i class="ti ti-chart-bar"></i>집계 · 진단</button>
@@ -256,11 +285,15 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
       <div class="fld"><label>반 선택</label>
         <select id="classSelect" onchange="onClassSelect()"><option value="">— 반을 선택하세요 —</option></select>
       </div>
+      <div class="fld"><label>레벨 (교재)</label>
+        <select id="levelSelect" onchange="onLevelSelect()"></select>
+      </div>
       <div class="fld"><label>담당 강사</label><input type="text" id="teacher" placeholder="예: Lynn T." oninput="onTeacherInput()"></div>
       <div style="display:flex;gap:6px">
         <button class="btn bsec" onclick="openRoster()"><i class="ti ti-list-check"></i>명단 관리</button>
       </div>
     </div>
+    <div id="levelNote" style="display:none"></div>
     <div id="stuChipArea"></div>
     <div id="curStuArea"></div>
     <div id="stuHint" class="hint" style="display:none"></div>
@@ -374,6 +407,26 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
   </div>
 </div>
 
+<!-- STEP 4: 반 현황 -->
+<div id="s4" class="hidden">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div class="ctitle" style="margin:0"><i class="ti ti-layout-grid"></i>반 현황 <span style="font-weight:600;color:#aab;text-transform:none;letter-spacing:0;margin-left:4px">반 전체 학생의 영역별 누적 평균을 한눈에</span></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <select id="overviewClass" onchange="renderOverview()" style="width:auto;font-size:12px;padding:6px 8px"></select>
+        <select id="overviewLevel" onchange="renderOverview()" style="width:auto;font-size:12px;padding:6px 8px"></select>
+      </div>
+    </div>
+    <div id="overviewNote" class="hint" style="margin-top:10px;line-height:1.75"><i class="ti ti-info-circle"></i> <b>표 보는 법</b><br>
+    · <b>열 제목(어휘·작문·독해·문법·종합)을 클릭</b>하면 그 점수 기준으로 정렬됩니다. 한 번 더 누르면 오름↔내림이 바뀝니다(제목 옆 ▲오름순 / ▼내림순).<br>
+    · <b>낮은 순(▲)으로 정렬</b>하면 보강이 필요한 학생이 위로 모입니다. <b>높은 순(▼)</b>으로 두면 잘 따라오는 학생이 위로 옵니다.<br>
+    · 아직 응시 기록이 없는 학생은 점수가 <b>–</b>로 표시되며, 정렬해도 <b>항상 맨 아래</b>에 모입니다(누가 미입력인지 한눈에 확인).<br>
+    · 점수·등급·반 평균은 <b>응시한 회차만</b> 반영되어, 시험을 적게 본 학생도 평균이 낮아지지 않습니다.<br>
+    · <b>학생 이름을 클릭</b>하면 그 학생 점수 입력 화면으로 바로 이동합니다.</div>
+  </div>
+  <div id="overviewArea"></div>
+</div>
+
 <!-- Weekly 오답그리드 모달 -->
 <div class="modal-bg" id="weeklyModal">
   <div class="modal">
@@ -402,9 +455,10 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
     <div class="rost-hint"><i class="ti ti-info-circle"></i> 학번은 학생의 고유 번호입니다. <b>반이 바뀌어도 학번이 같으면 점수가 그대로 유지</b>됩니다. 학번은 숫자·영문 모두 가능하며 중복될 수 없습니다.</div>
     <div style="margin-bottom:10px"><label style="font-size:11px;font-weight:700;color:#445">새 학생 추가</label>
       <div class="rost-row">
-        <input type="text" id="rostId" placeholder="학번 (예: 1023)" style="max-width:120px">
-        <input type="text" id="rostName" placeholder="이름 (예: 김민준)">
-        <input type="text" id="rostClass" placeholder="반 (예: 월수금[6시])" list="classDatalist">
+        <input type="text" id="rostId" placeholder="학번 (예: 1023)" style="max-width:110px">
+        <input type="text" id="rostName" placeholder="이름">
+        <input type="text" id="rostClass" placeholder="반" list="classDatalist">
+        <input type="text" id="rostSchool" placeholder="학교·학년 (선택)" style="max-width:130px">
         <button class="btn bprim" onclick="addStudent()" style="white-space:nowrap"><i class="ti ti-plus"></i>추가</button>
       </div>
       <div id="rostAddMsg" style="font-size:11px;margin-top:4px;display:none"></div>
@@ -593,8 +647,24 @@ let maxByTest={voc:100, comp:8, wk:18, grm:100};
 let monthly={};         // {round:{wrong:[], byDom:{}, total:18}}
 let wkEditing=null;     // 현재 편집 중인 {unit, items, wrongSet}
 /* ===== 명단(roster) — 학번 중심 데이터 모델 (B 전환 대비) ===== */
-let roster={students:{}, classes:[]};  // students[id]={id,name,currentClass,classHistory,teacher}
+let roster={students:{}, classes:[]};  // students[id]={id,name,currentClass,classHistory,teacher,school}
 let currentStuId=null;                  // 현재 선택된 학생 학번
+/* ===== 레벨(교재) — 학번×레벨로 점수 분리 보관 ===== */
+const LEVELS=[
+  {key:'bridge-3', label:'The Class Bridge-3', ready:true},
+  {key:'bridge-1', label:'The Class Bridge-1', ready:false},
+  {key:'bridge-2', label:'The Class Bridge-2', ready:false},
+  {key:'tc7-1', label:'The Class 7-1', ready:false},
+  {key:'tc7-2', label:'The Class 7-2', ready:false},
+  {key:'tc7-3', label:'The Class 7-3', ready:false},
+  {key:'tc8', label:'The Class 8', ready:false},
+  {key:'tc9', label:'The Class 9', ready:false},
+  {key:'tc10', label:'The Class 10', ready:false}
+];
+const DEFAULT_LEVEL='bridge-3';
+let currentLevel=DEFAULT_LEVEL;       // 현재 선택된 레벨
+function levelLabel(k){const l=LEVELS.find(x=>x.key===k);return l?l.label:k;}
+function levelReady(k){const l=LEVELS.find(x=>x.key===k);return l?l.ready:false;}
 
 /* ===== localStorage ===== */
 function LS(action,key,data){const PFX='b3cum_';if(action==='get')return JSON.parse(localStorage.getItem(PFX+key)||'null');if(action==='set')localStorage.setItem(PFX+key,JSON.stringify(data));if(action==='del')localStorage.removeItem(PFX+key);}
@@ -602,10 +672,21 @@ function LS(action,key,data){const PFX='b3cum_';if(action==='get')return JSON.pa
 function curStu(){return currentStuId?roster.students[currentStuId]:null;}
 function curName(){const s=curStu();return s?s.name:'';}
 function curClass(){const s=curStu();return s?s.currentClass:'';}
-function studentKey(){return currentStuId?`stu_${currentStuId}`:null;}
+function studentKey(){return currentStuId?`stu_${currentStuId}_${currentLevel}`:null;}
 
 /* ===== 명단(roster) 저장·로드 ===== */
-function loadRoster(){const r=LS('get','roster');if(r&&r.students)roster=r;else roster={students:{},classes:[]};}
+/* ===== 명단 시드 (학생_통합관리대장 최종본, 74명) ===== */
+const ROSTER_SEED={"students":{"pm2791":{"id":"pm2791","name":"김아윤B","currentClass":"중등A (Jimmy) M/W/F 4:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm0809":{"id":"pm0809","name":"손민재","currentClass":"중등A (Jimmy) M/W/F 4:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm3242":{"id":"pm3242","name":"신동현","currentClass":"중등A (Jimmy) M/W/F 4:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm2046":{"id":"pm2046","name":"안동하","currentClass":"중등A (Jimmy) M/W/F 4:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm5114":{"id":"pm5114","name":"유호성","currentClass":"중등A (Jimmy) M/W/F 4:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm4704":{"id":"pm4704","name":"윤해준","currentClass":"중등A (Jimmy) M/W/F 4:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm0701":{"id":"pm0701","name":"이지윤","currentClass":"중등A (Jimmy) M/W/F 4:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":"다산중1"},"pm7909":{"id":"pm7909","name":"이지후B","currentClass":"중등A (Jimmy) M/W/F 4:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm1517":{"id":"pm1517","name":"김규은","currentClass":"중등A (Jimmy) M/W/F 6:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm29021":{"id":"pm29021","name":"김도윤B","currentClass":"중등A (Jimmy) M/W/F 6:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"다산중1"},"pm2233":{"id":"pm2233","name":"김진유 (Sandy)","currentClass":"중등A (Jimmy) M/W/F 6:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm0047":{"id":"pm0047","name":"김채은C (Chae Eun)","currentClass":"중등A (Jimmy) M/W/F 6:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm5834":{"id":"pm5834","name":"김태연","currentClass":"중등A (Jimmy) M/W/F 6:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm6463":{"id":"pm6463","name":"이건우","currentClass":"중등A (Jimmy) M/W/F 6:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm8182":{"id":"pm8182","name":"이승미","currentClass":"중등A (Jimmy) M/W/F 6:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm2427":{"id":"pm2427","name":"이아인","currentClass":"중등A (Jimmy) M/W/F 6:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm2615":{"id":"pm2615","name":"이현지","currentClass":"중등A (Jimmy) M/W/F 6:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm2377":{"id":"pm2377","name":"최이안","currentClass":"중등A (Jimmy) M/W/F 6:00","classHistory":[{"class":"중등A (Jimmy) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm4947":{"id":"pm4947","name":"양은유","currentClass":"중등A (Jimmy) T/Th 5:00","classHistory":[{"class":"중등A (Jimmy) T/Th 5:00","from":"2026-06-17"}],"teacher":"","school":"호수중1"},"pm3275":{"id":"pm3275","name":"이유림","currentClass":"중등A (Jimmy) T/Th 5:00","classHistory":[{"class":"중등A (Jimmy) T/Th 5:00","from":"2026-06-17"}],"teacher":"","school":"중기초6"},"pm6282":{"id":"pm6282","name":"김다솔 (Da-Sol)","currentClass":"중등B (HJ) M/W/F 4:00","classHistory":[{"class":"중등B (HJ) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm2272":{"id":"pm2272","name":"박재현","currentClass":"중등B (HJ) M/W/F 4:00","classHistory":[{"class":"중등B (HJ) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm0323":{"id":"pm0323","name":"박하람","currentClass":"중등B (HJ) M/W/F 4:00","classHistory":[{"class":"중등B (HJ) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm92552":{"id":"pm92552","name":"이윤아","currentClass":"중등B (HJ) M/W/F 4:00","classHistory":[{"class":"중등B (HJ) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm9724":{"id":"pm9724","name":"정찬율","currentClass":"중등B (HJ) M/W/F 4:00","classHistory":[{"class":"중등B (HJ) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm9615":{"id":"pm9615","name":"김하민","currentClass":"중등B (HJ) M/W/F 6:00","classHistory":[{"class":"중등B (HJ) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중2"},"pm4928":{"id":"pm4928","name":"문수현","currentClass":"중등B (HJ) M/W/F 6:00","classHistory":[{"class":"중등B (HJ) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm6490":{"id":"pm6490","name":"임승민","currentClass":"중등B (HJ) M/W/F 6:00","classHistory":[{"class":"중등B (HJ) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중2"},"pm8598":{"id":"pm8598","name":"최규원","currentClass":"중등B (HJ) M/W/F 6:00","classHistory":[{"class":"중등B (HJ) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":"호수중2"},"pm0189":{"id":"pm0189","name":"박서진","currentClass":"중등B (HJ) M/W/F 8:00","classHistory":[{"class":"중등B (HJ) M/W/F 8:00","from":"2026-06-17"}],"teacher":"","school":""},"pm9446":{"id":"pm9446","name":"배서연","currentClass":"중등B (HJ) M/W/F 8:00","classHistory":[{"class":"중등B (HJ) M/W/F 8:00","from":"2026-06-17"}],"teacher":"","school":""},"pm4948":{"id":"pm4948","name":"이서진","currentClass":"중등B (HJ) M/W/F 8:00","classHistory":[{"class":"중등B (HJ) M/W/F 8:00","from":"2026-06-17"}],"teacher":"","school":""},"pm1006":{"id":"pm1006","name":"이태영","currentClass":"중등B (HJ) M/W/F 8:00","classHistory":[{"class":"중등B (HJ) M/W/F 8:00","from":"2026-06-17"}],"teacher":"","school":""},"pm9558":{"id":"pm9558","name":"김연후","currentClass":"중등B (HJ) T/Th 7:00","classHistory":[{"class":"중등B (HJ) T/Th 7:00","from":"2026-06-17"}],"teacher":"","school":""},"pm9006":{"id":"pm9006","name":"김리희","currentClass":"중등D (SN) M/W/F 4:00","classHistory":[{"class":"중등D (SN) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm5893":{"id":"pm5893","name":"이하온","currentClass":"중등D (SN) M/W/F 4:00","classHistory":[{"class":"중등D (SN) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm5730":{"id":"pm5730","name":"선호태","currentClass":"중등D (SN) M/W/F 4:00","classHistory":[{"class":"중등D (SN) M/W/F 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm9848":{"id":"pm9848","name":"권시연","currentClass":"중등D (SN) M/W/F 6:00","classHistory":[{"class":"중등D (SN) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm0409":{"id":"pm0409","name":"신세영","currentClass":"중등D (SN) M/W/F 6:00","classHistory":[{"class":"중등D (SN) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm2871":{"id":"pm2871","name":"오세린","currentClass":"중등D (SN) M/W/F 6:00","classHistory":[{"class":"중등D (SN) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm6487":{"id":"pm6487","name":"이시연","currentClass":"중등D (SN) M/W/F 6:00","classHistory":[{"class":"중등D (SN) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm6993":{"id":"pm6993","name":"임지우","currentClass":"중등D (SN) M/W/F 6:00","classHistory":[{"class":"중등D (SN) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm1527":{"id":"pm1527","name":"김규리","currentClass":"중등D (SN) M/W/F 8:00","classHistory":[{"class":"중등D (SN) M/W/F 8:00","from":"2026-06-17"}],"teacher":"","school":""},"pm1280":{"id":"pm1280","name":"김민재","currentClass":"중등D (SN) M/W/F 8:00","classHistory":[{"class":"중등D (SN) M/W/F 8:00","from":"2026-06-17"}],"teacher":"","school":""},"pm9354":{"id":"pm9354","name":"김채윤","currentClass":"중등D (SN) M/W/F 8:00","classHistory":[{"class":"중등D (SN) M/W/F 8:00","from":"2026-06-17"}],"teacher":"","school":""},"pm4703":{"id":"pm4703","name":"윤해성","currentClass":"중등D (SN) M/W/F 8:00","classHistory":[{"class":"중등D (SN) M/W/F 8:00","from":"2026-06-17"}],"teacher":"","school":""},"pm8426":{"id":"pm8426","name":"이채린","currentClass":"중등D (SN) M/W/F 8:00","classHistory":[{"class":"중등D (SN) M/W/F 8:00","from":"2026-06-17"}],"teacher":"","school":""},"pm6957":{"id":"pm6957","name":"전동연","currentClass":"중등D (SN) M/W/F 8:00","classHistory":[{"class":"중등D (SN) M/W/F 8:00","from":"2026-06-17"}],"teacher":"","school":""},"pm4728":{"id":"pm4728","name":"김도윤C","currentClass":"중등D (SN) T/Th 5:00","classHistory":[{"class":"중등D (SN) T/Th 5:00","from":"2026-06-17"}],"teacher":"","school":"호수중3"},"pm1903":{"id":"pm1903","name":"김태완","currentClass":"중등D (SN) T/Th 5:00","classHistory":[{"class":"중등D (SN) T/Th 5:00","from":"2026-06-17"}],"teacher":"","school":"동수원중3"},"pm3182":{"id":"pm3182","name":"박우현","currentClass":"중등D (SN) T/Th 5:00","classHistory":[{"class":"중등D (SN) T/Th 5:00","from":"2026-06-17"}],"teacher":"","school":"호수중3"},"pm4458":{"id":"pm4458","name":"김의찬","currentClass":"고등A (Jimmy) T/Th 7:00","classHistory":[{"class":"고등A (Jimmy) T/Th 7:00","from":"2026-06-17"}],"teacher":"","school":"유신고1"},"pm8671":{"id":"pm8671","name":"장우혁","currentClass":"고등A (Jimmy) T/Th 7:00","classHistory":[{"class":"고등A (Jimmy) T/Th 7:00","from":"2026-06-17"}],"teacher":"","school":"광교고1"},"pm7925":{"id":"pm7925","name":"조현우","currentClass":"고등A (Jimmy) T/Th 7:00","classHistory":[{"class":"고등A (Jimmy) T/Th 7:00","from":"2026-06-17"}],"teacher":"","school":"광교고1"},"pm7506":{"id":"pm7506","name":"박서희","currentClass":"고등D (SN) T/Th 7:00","classHistory":[{"class":"고등D (SN) T/Th 7:00","from":"2026-06-17"}],"teacher":"","school":""},"pm4771":{"id":"pm4771","name":"윤경환","currentClass":"고등D (SN) T/Th 7:00","classHistory":[{"class":"고등D (SN) T/Th 7:00","from":"2026-06-17"}],"teacher":"","school":"매원고2"},"pm0471":{"id":"pm0471","name":"최범석","currentClass":"고등D (SN) T/Th 7:00","classHistory":[{"class":"고등D (SN) T/Th 7:00","from":"2026-06-17"}],"teacher":"","school":"매원고2"},"pm0304":{"id":"pm0304","name":"권민서(Min-Seo)","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm12801":{"id":"pm12801","name":"김도윤(Do-Yun)","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm6623":{"id":"pm6623","name":"문정원(Jeong Won)","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm4028":{"id":"pm4028","name":"박준서","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm9705":{"id":"pm9705","name":"송지아","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm7496":{"id":"pm7496","name":"송진우","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm5836":{"id":"pm5836","name":"이무연","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm3657":{"id":"pm3657","name":"이재운","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm7248":{"id":"pm7248","name":"이주하","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm3116":{"id":"pm3116","name":"정수현","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm4009":{"id":"pm4009","name":"최민우","currentClass":"초등C (Billie) M/W/F 6:00","classHistory":[{"class":"초등C (Billie) M/W/F 6:00","from":"2026-06-17"}],"teacher":"","school":""},"pm2476":{"id":"pm2476","name":"기호윤(June)","currentClass":"초등C (Billie) T/Th 4:00","classHistory":[{"class":"초등C (Billie) T/Th 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm3260":{"id":"pm3260","name":"김도현(Luna)","currentClass":"초등C (Billie) T/Th 4:00","classHistory":[{"class":"초등C (Billie) T/Th 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm4364":{"id":"pm4364","name":"박도윤(Aiden)","currentClass":"초등C (Billie) T/Th 4:00","classHistory":[{"class":"초등C (Billie) T/Th 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm48881":{"id":"pm48881","name":"박현서","currentClass":"초등C (Billie) T/Th 4:00","classHistory":[{"class":"초등C (Billie) T/Th 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm4501":{"id":"pm4501","name":"반예진","currentClass":"초등C (Billie) T/Th 4:00","classHistory":[{"class":"초등C (Billie) T/Th 4:00","from":"2026-06-17"}],"teacher":"","school":""},"pm2433":{"id":"pm2433","name":"배선우","currentClass":"초등C (Billie) T/Th 4:00","classHistory":[{"class":"초등C (Billie) T/Th 4:00","from":"2026-06-17"}],"teacher":"","school":""}},"classes":["고등A (Jimmy) T/Th 7:00","고등D (SN) T/Th 7:00","중등A (Jimmy) M/W/F 4:00","중등A (Jimmy) M/W/F 6:00","중등A (Jimmy) T/Th 5:00","중등B (HJ) M/W/F 4:00","중등B (HJ) M/W/F 6:00","중등B (HJ) M/W/F 8:00","중등B (HJ) T/Th 7:00","중등D (SN) M/W/F 4:00","중등D (SN) M/W/F 6:00","중등D (SN) M/W/F 8:00","중등D (SN) T/Th 5:00","초등C (Billie) M/W/F 6:00","초등C (Billie) T/Th 4:00"]};
+let SEED_VERSION='2026-06-17-v1';  // 시드 갱신 시 버전 올리면 재주입
+function loadRoster(){
+  const r=LS('get','roster');
+  if(r&&r.students&&Object.keys(r.students).length>0){roster=r;}
+  else{
+    // 최초 실행 또는 빈 명단 → 시드 주입
+    roster=JSON.parse(JSON.stringify(ROSTER_SEED));
+    LS('set','roster',roster);LS('set','rosterSeedVer',SEED_VERSION);
+  }
+}
 function saveRoster(){LS('set','roster',roster);}
 function classList(){
   // 등록된 반 + 학생들의 현재 반을 합쳐 유니크 정렬
@@ -616,7 +697,9 @@ function classList(){
 function studentsInClass(cls){
   return Object.values(roster.students).filter(s=>s.currentClass===cls).sort((a,b)=>a.name.localeCompare(b.name,'ko'));
 }
-function hasData(id){const d=LS('get',`stu_${id}`);if(!d)return 0;let n=0;if(d.scores){for(let u=1;u<=TOTAL_UNITS;u++)TESTS.forEach(t=>{if(d.scores[u]&&d.scores[u][t.key]&&d.scores[u][t.key].raw!=null)n++;});}return n;}
+function hasData(id,level){const lv=level||currentLevel;const d=LS('get',`stu_${id}_${lv}`);if(!d)return 0;let n=0;if(d.scores){for(let u=1;u<=TOTAL_UNITS;u++)TESTS.forEach(t=>{if(d.scores[u]&&d.scores[u][t.key]&&d.scores[u][t.key].raw!=null)n++;});}return n;}
+/* 학생이 점수 데이터를 가진 모든 레벨 목록 */
+function studentLevels(id){return LEVELS.filter(l=>hasData(id,l.key)>0).map(l=>l.key);}
 
 function loadStudent(){
   const k=studentKey();
@@ -1079,6 +1162,29 @@ function resetStudent(){
 function showSaved(msg,err){const e=g('savedMsg');if(!e)return;e.style.display='block';e.style.color=err?'#c0392b':'#2d7a4f';e.textContent=msg;}
 
 /* ===== 반·학생 선택 UI ===== */
+function renderLevelSelect(){
+  const sel=g('levelSelect');if(!sel)return;
+  sel.innerHTML=LEVELS.map(l=>`<option value="${l.key}">${esc(l.label)}${l.ready?'':' (준비 중)'}</option>`).join('');
+  sel.value=currentLevel;
+  renderLevelNote();
+}
+function renderLevelNote(){
+  const note=g('levelNote');if(!note)return;
+  if(!levelReady(currentLevel)){
+    note.style.display='block';
+    note.innerHTML=`<div style="font-size:11px;color:#c0392b;background:#fdf3f3;border:1px solid #f3d4d4;border-radius:8px;padding:8px 12px;margin-top:8px"><i class="ti ti-alert-triangle"></i> <b>${esc(levelLabel(currentLevel))}</b>는 아직 시험지 매핑이 준비되지 않았습니다. 현재 화면의 Weekly/Monthly 문항은 Bridge-3 기준이므로, 이 레벨의 점수 입력은 정확하지 않을 수 있습니다. 명단·반 선택 용도로만 사용하세요.</div>`;
+  }else{
+    note.style.display='none';note.innerHTML='';
+  }
+}
+function onLevelSelect(){
+  currentLevel=g('levelSelect').value;
+  renderLevelNote();
+  // 레벨이 바뀌면 현재 학생의 해당 레벨 데이터를 다시 로드
+  if(currentStuId){loadStudent();buildTable();const tc=g('teacherComment');if(tc)tc.value=teacherComment;}
+  else{scores=blankScores();monthly={};selectedKw=new Set();teacherComment='';buildTable();}
+  renderStuChips();renderCurStu();
+}
 function renderClassSelect(){
   const sel=g('classSelect');const cur=sel.value;
   const cls=classList();
@@ -1123,11 +1229,17 @@ function renderCurStu(){
   const area=g('curStuArea');const s=curStu();
   if(!s){area.innerHTML='';g('stuHint').style.display='none';return;}
   const filled=hasData(s.id);
+  // 다른 레벨에 데이터가 있으면 표시
+  const otherLevels=studentLevels(s.id).filter(l=>l!==currentLevel);
+  const otherTxt=otherLevels.length?` · <span style="font-size:10.5px;color:#8590ad">다른 레벨 기록: ${otherLevels.map(l=>levelLabel(l).replace('The Class ','')).join(', ')}</span>`:'';
+  const schoolTxt=s.school?`<span style="font-size:11px;color:#667">${esc(s.school)}</span>`:'';
   area.innerHTML=`<div class="curstu">
     <span class="cs-name">${esc(s.name)}</span>
     <span class="cs-id">학번 ${esc(s.id)}</span>
+    ${schoolTxt}
     <span class="cs-cls"><i class="ti ti-users"></i> ${esc(s.currentClass)}</span>
-    <span style="font-size:11px;color:#2d7a4f">입력된 점수 ${filled}칸</span>
+    <span style="font-size:11px;color:#3f5a85;font-weight:700">${esc(levelLabel(currentLevel))}</span>
+    <span style="font-size:11px;color:#2d7a4f">입력 ${filled}칸</span>${otherTxt}
     <span class="cs-actions">
       <button class="mini" onclick="openMove()"><i class="ti ti-switch-horizontal"></i>반 변경</button>
       <button class="mini danger" onclick="resetStudent()"><i class="ti ti-trash"></i>초기화</button>
@@ -1159,30 +1271,32 @@ function renderRosterList(){
   const sorted=Object.values(roster.students).sort((a,b)=>(a.currentClass||'').localeCompare(b.currentClass||'','ko')||a.name.localeCompare(b.name,'ko'));
   g('rostList').innerHTML=sorted.map(s=>{
     const filled=hasData(s.id);
-    return `<div class="rost-item"><span class="ri-id">${esc(s.id)}</span><span class="ri-name">${esc(s.name)}</span><span class="ri-cls">${esc(s.currentClass||'-')}${filled?` · ${filled}칸`:''}</span><i class="ti ti-trash ri-del" onclick="deleteStudent('${esc(s.id)}')"></i></div>`;
+    const sc=s.school?` <span style="color:#aab">·</span> ${esc(s.school)}`:'';
+    return `<div class="rost-item"><span class="ri-id">${esc(s.id)}</span><span class="ri-name">${esc(s.name)}</span>${sc}<span class="ri-cls">${esc(s.currentClass||'-')}${filled?` · ${filled}칸`:''}</span><i class="ti ti-trash ri-del" onclick="deleteStudent('${esc(s.id)}')"></i></div>`;
   }).join('');
 }
 function addStudent(){
-  const id=val('rostId').replace(/\s/g,'');const name=val('rostName').trim();const cls=val('rostClass').trim();
+  const id=val('rostId').replace(/\s/g,'');const name=val('rostName').trim();const cls=val('rostClass').trim();const school=val('rostSchool').trim();
   const msg=g('rostAddMsg');
   const show=(t,ok)=>{msg.style.display='block';msg.style.color=ok?'#2d7a4f':'#c0392b';msg.textContent=t;};
   if(!id||!name||!cls){show('학번·이름·반을 모두 입력하세요.',false);return;}
   if(roster.students[id]){show(`학번 ${id}은 이미 등록되어 있습니다 (${roster.students[id].name}).`,false);return;}
-  roster.students[id]={id,name,currentClass:cls,classHistory:[{class:cls,from:new Date().toISOString().slice(0,10)}],teacher:val('teacher')||''};
+  roster.students[id]={id,name,currentClass:cls,classHistory:[{class:cls,from:new Date().toISOString().slice(0,10)}],teacher:val('teacher')||'',school};
   if(!roster.classes.includes(cls))roster.classes.push(cls);
   saveRoster();
   show(`${name}(학번 ${id}) 추가 완료.`,true);
-  g('rostId').value='';g('rostName').value='';  // 반은 연속 입력 위해 유지
+  g('rostId').value='';g('rostName').value='';g('rostSchool').value='';  // 반은 연속 입력 위해 유지
   g('rostId').focus();
   renderRosterList();renderClassSelect();
 }
 function deleteStudent(id){
   const s=roster.students[id];if(!s)return;
-  const filled=hasData(id);
-  const warn=filled?`\n\n주의: 이 학생의 입력된 점수 ${filled}칸도 함께 삭제됩니다.`:'';
+  const lvls=studentLevels(id);
+  const totalFilled=lvls.reduce((a,l)=>a+hasData(id,l),0);
+  const warn=totalFilled?`\n\n주의: 이 학생의 입력된 점수(${lvls.map(l=>levelLabel(l)).join(', ')} 합 ${totalFilled}칸)도 함께 삭제됩니다.`:'';
   if(!confirm(`${s.name}(학번 ${id})을 명단에서 삭제할까요?${warn}\n\n이 작업은 되돌릴 수 없습니다.`))return;
   delete roster.students[id];
-  LS('del',`stu_${id}`);
+  LEVELS.forEach(l=>LS('del',`stu_${id}_${l.key}`));  // 모든 레벨 데이터 삭제
   if(currentStuId===id){currentStuId=null;scores=blankScores();monthly={};selectedKw=new Set();teacherComment='';buildTable();}
   saveRoster();
   renderRosterList();renderClassSelect();renderStuChips();renderCurStu();
@@ -1219,11 +1333,14 @@ function applyMove(){
 
 /* ===== 내보내기 / 가져오기 (B 전환 다리 + 원장 취합) ===== */
 function exportRoster(){
-  const payload={_format:'theclass-b3-cumulative', _version:1, exportedAt:new Date().toISOString(), roster, students:{}};
-  Object.keys(roster.students).forEach(id=>{const d=LS('get',`stu_${id}`);if(d)payload.students[id]=d;});
+  const payload={_format:'theclass-cumulative', _version:2, exportedAt:new Date().toISOString(), roster, data:{}};
+  // data[학번][레벨키] = 점수데이터
+  Object.keys(roster.students).forEach(id=>{
+    LEVELS.forEach(l=>{const d=LS('get',`stu_${id}_${l.key}`);if(d){if(!payload.data[id])payload.data[id]={};payload.data[id][l.key]=d;}});
+  });
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download=`bridge3_export_${new Date().toISOString().slice(0,10)}.json`;
+  a.download=`theclass_export_${new Date().toISOString().slice(0,10)}.json`;
   document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
 }
 function importRoster(ev){
@@ -1238,7 +1355,9 @@ function importRoster(ev){
         if(roster.students[s.id]){skipped++;return;}
         roster.students[s.id]=s;added++;
         if(s.currentClass&&!roster.classes.includes(s.currentClass))roster.classes.push(s.currentClass);
-        if(data.students&&data.students[s.id])LS('set',`stu_${s.id}`,data.students[s.id]);
+        // 레벨별 점수 데이터 복원 (v2: data[id][level], v1 호환: students[id])
+        if(data.data&&data.data[s.id]){Object.keys(data.data[s.id]).forEach(lv=>LS('set',`stu_${s.id}_${lv}`,data.data[s.id][lv]));}
+        else if(data.students&&data.students[s.id]){LS('set',`stu_${s.id}_${DEFAULT_LEVEL}`,data.students[s.id]);}
       });
       saveRoster();renderRosterList();renderClassSelect();
       alert(`가져오기 완료: ${added}명 추가${skipped?`, ${skipped}명 중복 건너뜀(기존 유지)`:''}.`);
@@ -1248,13 +1367,124 @@ function importRoster(ev){
   reader.readAsText(file);
 }
 
+/* ===== 반 현황 (학생×영역 표) ===== */
+let ovSort={key:'name', dir:1};  // 정렬 상태
+/* 저장된 학생 데이터(sc=scores, mx=maxByTest)에서 영역 평균 산출 */
+function domainAvgOf(sc,mx,key){
+  let sum=0,n=0;const m=(mx&&mx[key])||maxByTest[key];
+  if(sc)for(let u=1;u<=TOTAL_UNITS;u++){const c=sc[u]&&sc[u][key];if(c&&c.raw!=null&&m>0){sum+=c.raw/m;n++;}}
+  return n?{avg:sum/n,n}:{avg:null,n:0};
+}
+function renderOverviewSelectors(){
+  const cs=g('overviewClass');const cls=classList();
+  const curC=cs.value;
+  cs.innerHTML='<option value="">— 반 선택 —</option>'+cls.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  // 기본값: 입력화면에서 고른 반이 있으면 그걸로
+  const pick=(curC&&cls.includes(curC))?curC:(g('classSelect').value||'');
+  cs.value=pick;
+  const ls=g('overviewLevel');const curL=ls.value||currentLevel;
+  ls.innerHTML=LEVELS.map(l=>`<option value="${l.key}">${esc(l.label)}${l.ready?'':' (준비 중)'}</option>`).join('');
+  ls.value=curL;
+}
+function ovSortClick(key){
+  if(ovSort.key===key)ovSort.dir*=-1;else{ovSort.key=key;ovSort.dir=1;}
+  renderOverview();
+}
+function renderOverview(){
+  const area=g('overviewArea');
+  const cls=g('overviewClass').value;
+  const lv=g('overviewLevel').value||currentLevel;
+  if(!cls){area.innerHTML='<div class="card"><div class="ov-empty">반을 선택하면 그 반 학생 전체의 영역별 평균이 표시됩니다.</div></div>';return;}
+  const list=studentsInClass(cls);
+  if(list.length===0){area.innerHTML='<div class="card"><div class="ov-empty">이 반에 등록된 학생이 없습니다.</div></div>';return;}
+  // 각 학생의 레벨별 데이터 로드 & 영역평균 계산
+  const rows=list.map(s=>{
+    const d=LS('get',`stu_${s.id}_${lv}`);
+    const sc=d&&d.scores?d.scores:null;const mx=d&&d.maxByTest?d.maxByTest:maxByTest;
+    const dom={};let tsum=0,tn=0;
+    DOM_ORDER.forEach(k=>{const a=domainAvgOf(sc,mx,k);dom[k]=a;if(a.avg!=null){tsum+=a.avg;tn++;}});
+    const tot=tn?tsum/tn:null;
+    const filled=hasData(s.id,lv);
+    return {s, dom, tot, filled};
+  });
+  // 정렬
+  const k=ovSort.key, dir=ovSort.dir;
+  rows.sort((a,b)=>{
+    let av,bv;
+    if(k==='name'){return a.s.name.localeCompare(b.s.name,'ko')*dir;}
+    if(k==='total'){av=a.tot;bv=b.tot;}
+    else{av=a.dom[k].avg;bv=b.dom[k].avg;}
+    // null은 항상 뒤로
+    if(av==null&&bv==null)return 0;
+    if(av==null)return 1;
+    if(bv==null)return -1;
+    return (av-bv)*dir;
+  });
+  // 반 평균 (영역별: 값 있는 학생만)
+  const classAvg={};DOM_ORDER.forEach(key=>{let s=0,n=0;rows.forEach(r=>{if(r.dom[key].avg!=null){s+=r.dom[key].avg;n++;}});classAvg[key]=n?s/n:null;});
+  let ctsum=0,ctn=0;rows.forEach(r=>{if(r.tot!=null){ctsum+=r.tot;ctn++;}});
+  const classTot=ctn?ctsum/ctn:null;
+  // 응시 학생 수(데이터 있는 학생)
+  const activeN=rows.filter(r=>r.filled>0).length;
+
+  // 요약 카드
+  let html='<div class="card">';
+  html+='<div class="ov-summary">';
+  html+=`<div class="ov-sumcard"><div class="l">학생 수</div><div class="v">${list.length}</div><div class="s">입력 ${activeN}명</div></div>`;
+  DOM_ORDER.forEach(key=>{
+    const a=classAvg[key];const pv=a!=null?Math.round(a*1000)/10:null;
+    html+=`<div class="ov-sumcard"><div class="l" style="color:${DOM_COLOR[key]}">${DOM_LABEL[key]} 반평균</div><div class="v">${pv!=null?pv:'–'}</div><div class="s">${pv!=null?gradeOf(a):'미입력'}</div></div>`;
+  });
+  const ctpv=classTot!=null?Math.round(classTot*1000)/10:null;
+  html+=`<div class="ov-sumcard" style="background:linear-gradient(135deg,#16243e,#3f5a85);border:none"><div class="l" style="color:rgba(255,255,255,.8)">종합 반평균</div><div class="v" style="color:#fff">${ctpv!=null?ctpv:'–'}</div><div class="s" style="color:rgba(255,255,255,.7)">${ctpv!=null?gradeOf(classTot):'미입력'}</div></div>`;
+  html+='</div>';
+
+  // 표
+  const arr=key=>ovSort.key===key?`<span class="arr">${ovSort.dir>0?'▲':'▼'}</span>`:`<span class="arr" style="opacity:.3">⇅</span>`;
+  html+='<div class="ovwrap"><table class="ovtable"><thead><tr>';
+  html+=`<th onclick="ovSortClick('name')" style="text-align:left">학생${arr('name')}</th>`;
+  DOM_ORDER.forEach(key=>{html+=`<th class="colhd-${key}" onclick="ovSortClick('${key}')">${DOM_LABEL[key]}${arr(key)}</th>`;});
+  html+=`<th onclick="ovSortClick('total')">종합${arr('total')}</th>`;
+  html+=`<th>응시</th></tr></thead><tbody>`;
+  rows.forEach(r=>{
+    html+=`<tr><td class="ov-name" onclick="jumpToStudent('${esc(r.s.id)}','${esc(cls)}','${lv}')"><span class="ov-id">${esc(r.s.id)}</span>${esc(r.s.name)}</td>`;
+    DOM_ORDER.forEach(key=>{
+      const a=r.dom[key];
+      if(a.avg==null){html+=`<td><span class="ov-na">–</span></td>`;}
+      else{const pv=Math.round(a.avg*1000)/10;html+=`<td><span class="ov-pct">${pv}</span><span class="ov-g ${gradeCls(a.avg)}">${gradeOf(a.avg)}</span></td>`;}
+    });
+    if(r.tot==null){html+=`<td class="ov-total-pv"><span class="ov-na">–</span></td>`;}
+    else{const pv=Math.round(r.tot*1000)/10;html+=`<td class="ov-total-pv">${pv}</td>`;}
+    html+=`<td class="ov-cnt">${r.filled?r.filled+'칸':'–'}</td></tr>`;
+  });
+  // 반 평균 행
+  html+=`<tr class="ov-total"><td style="text-align:left">반 평균</td>`;
+  DOM_ORDER.forEach(key=>{const a=classAvg[key];html+=`<td>${a!=null?Math.round(a*1000)/10:'–'}</td>`;});
+  html+=`<td class="ov-total-pv">${classTot!=null?Math.round(classTot*1000)/10:'–'}</td><td class="ov-cnt">${activeN}/${list.length}</td></tr>`;
+  html+='</tbody></table></div>';
+  if(!levelReady(lv))html+=`<div style="font-size:10.5px;color:#c0392b;margin-top:8px"><i class="ti ti-alert-triangle"></i> ${esc(levelLabel(lv))}는 시험지 매핑이 준비 중인 레벨입니다. 표시된 값은 참고용입니다.</div>`;
+  html+='</div>';
+  area.innerHTML=html;
+}
+/* 반 현황 표에서 학생 클릭 → 입력 화면으로 점프 */
+function jumpToStudent(id,cls,lv){
+  currentLevel=lv;
+  g('classSelect').value=cls;renderClassSelect();g('classSelect').value=cls;
+  g('levelSelect').value=lv;renderLevelNote();
+  currentStuId=id;loadStudent();
+  renderStuChips();renderCurStu();buildTable();
+  const tc=g('teacherComment');if(tc)tc.value=teacherComment;
+  go(0);
+}
+
 /* ===== 네비게이션 ===== */
 function go(step){
-  ['s0','s1','s2','s3'].forEach((id,i)=>{const el=g(id);if(el)el.classList.toggle('hidden',i!==step);});
-  document.querySelectorAll('.sbtn').forEach((b,i)=>b.classList.toggle('active',i===step));
+  ['s0','s1','s2','s3','s4'].forEach((id,i)=>{const el=g(id);if(el)el.classList.toggle('hidden',i!==step);});
+  ['sb0','sb1','sb2','sb3','sb4'].forEach((id,i)=>{const b=g(id);if(b)b.classList.toggle('active',i===step);});
   if(step===1)renderMonthlyGrid();
   if(step===2){buildSummary();buildDiagnosis();buildKeywords();}
   if(step===3)renderReport();
+  if(step===4){renderOverviewSelectors();renderOverview();}
   window.scrollTo(0,0);
 }
 
@@ -1262,6 +1492,7 @@ function go(step){
 document.addEventListener('DOMContentLoaded',()=>{
   const al=g('appLogo');if(al)al.src=LOGO_DARK;
   loadRoster();
+  renderLevelSelect();
   renderClassSelect();
   scores=blankScores();
   buildTable();
