@@ -100,7 +100,6 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
 .modal-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;padding-top:12px;border-top:1px solid #eef1f7}
 .modal-score{font-size:13px;color:#445}
 .modal-score b{font-size:18px;color:#22365a}
-.tempnote{font-size:10px;color:#c0392b;background:#fdf3f3;border:1px solid #f3d4d4;border-radius:6px;padding:6px 9px;margin-bottom:12px}
 
 /* Layer1 진단 */
 .diagrow{border-left:3px solid #2b6cb0;background:#eef4fb;border-radius:0 8px 8px 0;padding:9px 13px;margin-bottom:7px;font-size:12px;color:#445}
@@ -194,6 +193,40 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
   .hide-on-export{display:none!important}
 }
 .hide-on-export-hidden{visibility:hidden}
+
+/* ===== 반·학생 선택 UI ===== */
+.roster-bar{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.roster-bar .fld{flex:1;min-width:150px}
+.stu-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.stu-chip{font-size:12.5px;font-weight:600;border:1.5px solid #dde3ef;background:#fff;color:#445;border-radius:18px;padding:6px 14px;cursor:pointer;transition:.12s;user-select:none;display:inline-flex;align-items:center;gap:6px}
+.stu-chip:hover{border-color:#9fb0d0;background:#f7f9fd}
+.stu-chip.on{background:#22365a;border-color:#22365a;color:#fff}
+.stu-chip .sid{font-size:10px;opacity:.6;font-weight:700}
+.stu-chip.on .sid{opacity:.8}
+.stu-chip .filled{font-size:9.5px;background:#eaf6ee;color:#2d7a4f;border-radius:8px;padding:1px 6px;font-weight:700}
+.stu-chip.on .filled{background:rgba(255,255,255,.22);color:#fff}
+.stu-chip.addnew{border-style:dashed;color:#3f5a85}
+.roster-empty{font-size:12px;color:#889;padding:14px 6px;text-align:center}
+.curstu{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#eef2fb;border-radius:9px;padding:9px 14px;margin-top:10px}
+.curstu .cs-name{font-size:14px;font-weight:800;color:#16243e}
+.curstu .cs-id{font-size:11px;color:#667;font-weight:700;background:#fff;border-radius:6px;padding:2px 8px}
+.curstu .cs-cls{font-size:11.5px;color:#3f5a85}
+.curstu .cs-actions{margin-left:auto;display:flex;gap:6px}
+.curstu .mini{font-size:11px;padding:5px 10px;border-radius:7px;border:1px solid #cdd5e6;background:#fff;color:#556;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.curstu .mini:hover{background:#f1f3f9}
+.curstu .mini.danger{color:#c0392b;border-color:#f3d4d4}
+
+/* 명단 관리 모달 내부 */
+.rost-row{display:flex;gap:8px;align-items:center;margin-bottom:7px}
+.rost-row input{flex:1}
+.rost-list{margin-top:12px;border:1px solid #e8ebf3;border-radius:9px;max-height:300px;overflow-y:auto}
+.rost-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid #f0f2f8;font-size:12.5px}
+.rost-item:last-child{border-bottom:none}
+.rost-item .ri-id{font-size:11px;font-weight:700;color:#3f5a85;background:#eef2fb;border-radius:6px;padding:2px 8px;min-width:48px;text-align:center}
+.rost-item .ri-name{font-weight:700;color:#1a2238}
+.rost-item .ri-cls{font-size:11px;color:#889;margin-left:auto}
+.rost-item .ri-del{color:#c0392b;cursor:pointer;font-size:15px;padding:2px}
+.rost-hint{font-size:11px;color:#3f5a85;background:#eef2fb;border-radius:8px;padding:8px 12px;margin-bottom:12px}
 </style>
 </head>
 <body>
@@ -218,12 +251,18 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
 <!-- STEP 0: 입력 -->
 <div id="s0">
   <div class="card">
-    <div class="ctitle"><i class="ti ti-user"></i>학생 정보</div>
-    <div class="row3">
-      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="예: 김태연" oninput="onStuChange()"></div>
-      <div><label>반</label><input type="text" id="stuClass" placeholder="예: 월수금[6시]" oninput="onStuChange()"></div>
-      <div><label>담당 강사</label><input type="text" id="teacher" placeholder="예: Lynn T."></div>
+    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택</div>
+    <div class="roster-bar">
+      <div class="fld"><label>반 선택</label>
+        <select id="classSelect" onchange="onClassSelect()"><option value="">— 반을 선택하세요 —</option></select>
+      </div>
+      <div class="fld"><label>담당 강사</label><input type="text" id="teacher" placeholder="예: Lynn T." oninput="onTeacherInput()"></div>
+      <div style="display:flex;gap:6px">
+        <button class="btn bsec" onclick="openRoster()"><i class="ti ti-list-check"></i>명단 관리</button>
+      </div>
     </div>
+    <div id="stuChipArea"></div>
+    <div id="curStuArea"></div>
     <div id="stuHint" class="hint" style="display:none"></div>
   </div>
 
@@ -239,8 +278,11 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
       <span><i style="background:#7c3aed"></i>문법 (Grammar)</span>
     </div>
     <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;gap:8px">
-      <span style="font-size:11px;color:#889">Tab 키로 칸을 이동하며 빠르게 입력하세요. 빈 칸은 미응시로 처리됩니다.</span>
-      <button class="btn bgrn" onclick="saveAll()"><i class="ti ti-device-floppy"></i>전체 저장</button>
+      <span style="font-size:11px;color:#889">Tab 키로 칸을 이동하며 빠르게 입력하세요. <b style="color:#2d7a4f">빈 칸은 0점이 아니라 미응시</b>로 처리되어 평균·진단에서 자동 제외됩니다(어휘·작문·독해·문법 모두 동일). 시험을 보지 않은 회차는 비워두세요.</span>
+      <div style="display:flex;gap:8px">
+        <button class="btn bsec" onclick="resetStudent()" style="color:#c0392b;border-color:#f3d4d4"><i class="ti ti-trash"></i>전체 초기화</button>
+        <button class="btn bgrn" onclick="saveAll()"><i class="ti ti-device-floppy"></i>전체 저장</button>
+      </div>
     </div>
     <div class="savedmsg" id="savedMsg"></div>
   </div>
@@ -337,11 +379,12 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
   <div class="modal">
     <h2 id="wkModalTitle">Weekly Test 오답 체크</h2>
     <div class="msub" id="wkModalSub"></div>
-    <div class="tempnote"><i class="ti ti-alert-triangle"></i> 문항별 영역은 잠정 배치입니다. 실제 시험지·답안지를 공유받으면 정확히 교체됩니다.</div>
+    <div class="hint" style="margin-bottom:12px"><i class="ti ti-circle-check"></i> 문항별 영역은 실제 시험지·답안지 기준으로 확정되었습니다.</div>
     <div class="qgrid" id="wkGrid"></div>
     <div class="modal-foot">
       <div class="modal-score" id="wkModalScore"></div>
       <div style="display:flex;gap:8px">
+        <button class="btn bsec" id="wkClearBtn" onclick="clearWeekly()" style="display:none;color:#c0392b;border-color:#f3d4d4"><i class="ti ti-eraser"></i>응시 기록 삭제</button>
         <button class="btn bsec" onclick="closeWeekly(false)">취소</button>
         <button class="btn bgrn" onclick="closeWeekly(true)"><i class="ti ti-check"></i>적용</button>
       </div>
@@ -350,6 +393,55 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
 </div>
 
 </div>
+
+<!-- 명단 관리 모달 -->
+<div class="modal-bg" id="rosterModal">
+  <div class="modal">
+    <h2>명단 관리</h2>
+    <div class="msub">반과 학생을 등록하면, 입력 화면에서 반 선택 → 학생 선택으로 빠르게 점수를 넣을 수 있습니다.</div>
+    <div class="rost-hint"><i class="ti ti-info-circle"></i> 학번은 학생의 고유 번호입니다. <b>반이 바뀌어도 학번이 같으면 점수가 그대로 유지</b>됩니다. 학번은 숫자·영문 모두 가능하며 중복될 수 없습니다.</div>
+    <div style="margin-bottom:10px"><label style="font-size:11px;font-weight:700;color:#445">새 학생 추가</label>
+      <div class="rost-row">
+        <input type="text" id="rostId" placeholder="학번 (예: 1023)" style="max-width:120px">
+        <input type="text" id="rostName" placeholder="이름 (예: 김민준)">
+        <input type="text" id="rostClass" placeholder="반 (예: 월수금[6시])" list="classDatalist">
+        <button class="btn bprim" onclick="addStudent()" style="white-space:nowrap"><i class="ti ti-plus"></i>추가</button>
+      </div>
+      <div id="rostAddMsg" style="font-size:11px;margin-top:4px;display:none"></div>
+    </div>
+    <div class="rost-list" id="rostList"></div>
+    <div class="modal-foot">
+      <div style="font-size:11px;color:#889" id="rostCount"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn bsec" onclick="exportRoster()"><i class="ti ti-download"></i>전체 내보내기</button>
+        <button class="btn bsec" onclick="g('importFile').click()"><i class="ti ti-upload"></i>가져오기</button>
+        <input type="file" id="importFile" accept="application/json" style="display:none" onchange="importRoster(event)">
+        <button class="btn bgrn" onclick="closeRoster()"><i class="ti ti-check"></i>완료</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 반 변경 모달 -->
+<div class="modal-bg" id="moveModal">
+  <div class="modal" style="max-width:440px">
+    <h2>반 변경</h2>
+    <div class="msub" id="moveSub"></div>
+    <div class="rost-hint"><i class="ti ti-arrow-right"></i> 반을 바꿔도 <b>기존 점수·독해·Monthly 기록은 그대로 유지</b>되며, 변경 이력이 자동 기록됩니다. 다시 입력할 필요가 없습니다.</div>
+    <div style="margin-bottom:6px"><label style="font-size:11px;font-weight:700;color:#445">새 반</label>
+      <input type="text" id="moveNewClass" placeholder="예: 화목[5시]" list="classDatalist">
+    </div>
+    <div id="moveHistory" style="margin-top:12px"></div>
+    <div class="modal-foot">
+      <div></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn bsec" onclick="g('moveModal').classList.remove('on')">취소</button>
+        <button class="btn bgrn" onclick="applyMove()"><i class="ti ti-check"></i>변경</button>
+      </div>
+    </div>
+  </div>
+</div>
+<datalist id="classDatalist"></datalist>
 
 <script>
 /* ===== The Class Bridge-3 누적 성적표 — 1단계 ===== */
@@ -371,18 +463,58 @@ const TESTS=[
 const TOTAL_UNITS=12;
 const GRADE_CUT={up:0.8, mid:0.6}; // 상 0.8↑, 중 0.6↑, 하 그 미만
 
-/* ===== Weekly Test 라운드별 영역 배치표 (잠정값 — 실제 시험지로 교체 예정) =====
-   메모리 매핑: 독해 7~8 고정, 작문 4 고정, 어휘·문법 2~5 변동. 합 18.
-   여기서는 영역별로 묶어 순서 배치 (독해→작문→어휘→문법).
-   round = Unit 쌍 (1: U1&2, 2: U3&4, ... 6: U11&12) */
-const WEEKLY_ROUND_DIST={
-  1:{wk:8,comp:4,voc:3,grm:3},
-  2:{wk:7,comp:4,voc:2,grm:5},
-  3:{wk:8,comp:4,voc:4,grm:2},
-  4:{wk:7,comp:4,voc:5,grm:2},
-  5:{wk:8,comp:4,voc:2,grm:4},
-  6:{wk:7,comp:4,voc:3,grm:4}
+/* ===== Weekly Test 실제 문항별 영역 (시험지·답안지 근거 확정) =====
+   [1-14] 객관식 + [15-16] 빈칸 영작 + [17-18] 문장 영작. 합 18문항.
+   round = Unit 쌍 (1: U1&2, 2: U3&4, ... 6: U11&12).
+   문항번호→영역을 실제 시험지에서 직접 확정 (자동 전개 아님).
+   분류 규칙: 의미 기반 빈칸→어휘(voc) / 단어 형태변형·수동태·분사·기능어(전치사·접속사·연결부사·한정사)→문법(grm) /
+   내용일치·문장삽입·주제·세부정보→독해(wk) / [15-18] 영작→작문(comp) */
+const WEEKLY_MAP={
+  1:[ // U1&2 — 독7·어4·문3·작4
+    {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'voc'},
+    {n:6,dom:'voc'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'voc'},{n:10,dom:'wk'},
+    {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+  ],
+  2:[ // U3&4 — 독7·어2·문5·작4
+    {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'grm'},{n:4,dom:'wk'},{n:5,dom:'wk'},
+    {n:6,dom:'wk'},{n:7,dom:'voc'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'grm'},
+    {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'voc'},
+    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+  ],
+  3:[ // U5&6 — 독6·어2·문6·작4
+    {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'wk'},
+    {n:6,dom:'voc'},{n:7,dom:'wk'},{n:8,dom:'grm'},{n:9,dom:'grm'},{n:10,dom:'wk'},
+    {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'grm'},
+    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+  ],
+  4:[ // U7&8 — 독7·어2·문5·작4
+    {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'grm'},
+    {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'wk'},{n:10,dom:'voc'},
+    {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'grm'},
+    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+  ],
+  5:[ // U9&10 — 독7·어3·문3·작4
+    {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'voc'},
+    {n:6,dom:'grm'},{n:7,dom:'wk'},{n:8,dom:'wk'},{n:9,dom:'voc'},{n:10,dom:'grm'},
+    {n:11,dom:'wk'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+  ],
+  6:[ // U11&12 — 독7·어2·문5·작4
+    {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'voc'},
+    {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'wk'},
+    {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+  ]
 };
+/* WEEKLY_MAP에서 라운드별 영역 개수 자동 산출 (집계 코드 호환용) */
+function weeklyDist(round){
+  const d={wk:0,comp:0,voc:0,grm:0};
+  (WEEKLY_MAP[round]||[]).forEach(it=>d[it.dom]++);
+  return d;
+}
+const WEEKLY_ROUND_DIST={};
+for(let r=1;r<=6;r++){WEEKLY_ROUND_DIST[r]=weeklyDist(r);}
 /* ===== Monthly Test 실제 문항별 영역 (시험지 근거 확정) =====
    [1-15] 객관식 O/X (독해·어휘·문법) + [16-20] 영작 3단계(정답/부분/오답).
    round 1 = Unit 1-6, round 2 = Unit 7-12.
@@ -453,12 +585,6 @@ let teacherComment='';
 
 /* unit(1~12) → weekly round(1~6) */
 function unitToRound(u){return Math.ceil(u/2);}
-/* 배치표를 문항배열로 전개: [{n, dom}] */
-function distToItems(dist){
-  const items=[];let n=1;
-  DOM_ORDER.forEach(d=>{for(let i=0;i<(dist[d]||0);i++){items.push({n:n++,dom:d});}});
-  return items;
-}
 
 /* 데이터: scores[unit][testKey] = {raw, max}.
    독해(wk)는 추가로 wrong:{문항번호 Set→배열}, byDom:{영역별 오답수} 저장 */
@@ -466,19 +592,41 @@ let scores={};
 let maxByTest={voc:100, comp:8, wk:18, grm:100};
 let monthly={};         // {round:{wrong:[], byDom:{}, total:18}}
 let wkEditing=null;     // 현재 편집 중인 {unit, items, wrongSet}
+/* ===== 명단(roster) — 학번 중심 데이터 모델 (B 전환 대비) ===== */
+let roster={students:{}, classes:[]};  // students[id]={id,name,currentClass,classHistory,teacher}
+let currentStuId=null;                  // 현재 선택된 학생 학번
 
 /* ===== localStorage ===== */
-function LS(action,key,data){const PFX='b3cum_';if(action==='get')return JSON.parse(localStorage.getItem(PFX+key)||'null');if(action==='set')localStorage.setItem(PFX+key,JSON.stringify(data));}
-function studentKey(){const n=val('stuName').replace(/\s/g,'');const c=val('stuClass').replace(/\s/g,'');return n?`stu_${c}_${n}`:null;}
+function LS(action,key,data){const PFX='b3cum_';if(action==='get')return JSON.parse(localStorage.getItem(PFX+key)||'null');if(action==='set')localStorage.setItem(PFX+key,JSON.stringify(data));if(action==='del')localStorage.removeItem(PFX+key);}
+/* 현재 선택 학생 정보 헬퍼 (옛 val('stuName') 등을 대체) */
+function curStu(){return currentStuId?roster.students[currentStuId]:null;}
+function curName(){const s=curStu();return s?s.name:'';}
+function curClass(){const s=curStu();return s?s.currentClass:'';}
+function studentKey(){return currentStuId?`stu_${currentStuId}`:null;}
 
-function blankScores(){const o={};for(let u=1;u<=TOTAL_UNITS;u++){o[u]={};TESTS.forEach(t=>o[u][t.key]={raw:null,max:maxByTest[t.key]});}return o;}
+/* ===== 명단(roster) 저장·로드 ===== */
+function loadRoster(){const r=LS('get','roster');if(r&&r.students)roster=r;else roster={students:{},classes:[]};}
+function saveRoster(){LS('set','roster',roster);}
+function classList(){
+  // 등록된 반 + 학생들의 현재 반을 합쳐 유니크 정렬
+  const set=new Set(roster.classes||[]);
+  Object.values(roster.students).forEach(s=>{if(s.currentClass)set.add(s.currentClass);});
+  return [...set].sort();
+}
+function studentsInClass(cls){
+  return Object.values(roster.students).filter(s=>s.currentClass===cls).sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+}
+function hasData(id){const d=LS('get',`stu_${id}`);if(!d)return 0;let n=0;if(d.scores){for(let u=1;u<=TOTAL_UNITS;u++)TESTS.forEach(t=>{if(d.scores[u]&&d.scores[u][t.key]&&d.scores[u][t.key].raw!=null)n++;});}return n;}
 
 function loadStudent(){
-  const k=studentKey();if(!k){scores=blankScores();return;}
+  const k=studentKey();
+  if(!k){scores=blankScores();monthly={};selectedKw=new Set();teacherComment='';return;}
   const saved=LS('get',k);
-  if(saved&&saved.scores){scores=saved.scores;maxByTest=saved.maxByTest||maxByTest;monthly=saved.monthly||{};selectedKw=new Set(saved.keywords||[]);teacherComment=saved.comment||'';if(saved.teacher&&!val('teacher'))g('teacher').value=saved.teacher;}
+  if(saved&&saved.scores){scores=saved.scores;maxByTest=saved.maxByTest||maxByTest;monthly=saved.monthly||{};selectedKw=new Set(saved.keywords||[]);teacherComment=saved.comment||'';}
   else {scores=blankScores();monthly={};selectedKw=new Set();teacherComment='';}
 }
+
+function blankScores(){const o={};for(let u=1;u<=TOTAL_UNITS;u++){o[u]={};TESTS.forEach(t=>o[u][t.key]={raw:null,max:maxByTest[t.key]});}return o;}
 
 /* ===== 입력 표 ===== */
 function buildTable(){
@@ -545,11 +693,13 @@ function onMaxChange(key){
 /* ===== Weekly 오답그리드 모달 ===== */
 function openWeekly(u){
   const round=unitToRound(u);
-  const items=distToItems(WEEKLY_ROUND_DIST[round]);
+  const items=WEEKLY_MAP[round];
+  const hasRecord = scores[u]&&scores[u].wk&&scores[u].wk.raw!=null;
   const existing=scores[u]&&scores[u].wk&&scores[u].wk.wrong?scores[u].wk.wrong:[];
   wkEditing={unit:u, items, wrongSet:new Set(existing)};
   g('wkModalTitle').textContent=`Weekly Test 오답 체크 — Unit ${u}`;
-  g('wkModalSub').textContent=`${round}라운드 배치 (Unit ${(round-1)*2+1}&${round*2}) · 18문항`;
+  g('wkModalSub').textContent=`${round}라운드 (Unit ${(round-1)*2+1}&${round*2}) · 18문항 · [1-14] 객관식 + [15-18] 영작`;
+  g('wkClearBtn').style.display = hasRecord ? '' : 'none';
   renderWeeklyGrid();
   g('weeklyModal').classList.add('on');
 }
@@ -577,8 +727,15 @@ function closeWeekly(apply){
   }
   g('weeklyModal').classList.remove('on');wkEditing=null;
 }
-
-/* ===== Monthly Test ===== */
+/* 독해 응시 기록 삭제 → 미응시로 되돌림 (확인 절차 포함) */
+function clearWeekly(){
+  if(!wkEditing)return;
+  const u=wkEditing.unit;
+  if(!confirm(`Unit ${u}의 독해(Weekly) 응시 기록을 삭제하고 미응시로 되돌릴까요?\n\n삭제하면 이 회차의 오답 체크가 모두 지워지며 평균·진단에서 제외됩니다. 이 작업은 되돌릴 수 없습니다.`))return;
+  if(scores[u]&&scores[u].wk)delete scores[u].wk;
+  buildTable();
+  g('weeklyModal').classList.remove('on');wkEditing=null;
+}
 /* monthly[round] = {wrong15:[틀린 객관식 번호], comp:{16:1.0|0.5|0,...}, byDom:{}, raw, max} */
 function renderMonthlyGrid(){
   const round=parseInt(val('monthlyRound')||g('monthlyRound').value);
@@ -644,7 +801,7 @@ function recalcMonthly(round){
   rec.raw=(15-(rec.wrong15||[]).length)+cp.got; rec.max=20;
 }
 function saveMonthly(){
-  const k=studentKey();if(!k){const e=g('savedMsgM');e.style.display='block';e.style.color='#c0392b';e.textContent='학생 이름과 반을 먼저 입력하세요.';return;}
+  const k=studentKey();if(!k){const e=g('savedMsgM');e.style.display='block';e.style.color='#c0392b';e.textContent='학생을 먼저 선택하세요.';return;}
   saveAll(true);
   const e=g('savedMsgM');e.style.display='block';e.style.color='#2d7a4f';e.textContent='Monthly 결과가 저장되었습니다.';
 }
@@ -711,7 +868,7 @@ function isNegKw(k){return KEYWORDS.some(c=>c.neg.includes(k));}
 
 /* ===== 키워드 → 초안 조합 (규칙 기반, API 불필요) ===== */
 function composeDraft(){
-  const nm=val('stuName')||'학생';
+  const nm=curName()||'학생';
   const pos=[],neg=[];
   selectedKw.forEach(k=>{(isNegKw(k)?neg:pos).push(k);});
   if(pos.length===0&&neg.length===0){setAiMsg('먼저 키워드를 선택해주세요.','err');return;}
@@ -741,7 +898,7 @@ async function refineWithAI(){
     if(!pw){setAiMsg('비밀번호가 필요합니다.','err');return;}
     sessionStorage.setItem('sitePw',pw);
   }
-  const nm=val('stuName')||'학생';
+  const nm=curName()||'학생';
   const btn=g('aiBtn');btn.disabled=true;
   setAiMsg('✨ 린쌤 톤으로 다듬는 중입니다...','load');
   // 선택 키워드를 맥락으로 함께 전달 (관찰 키워드는 성장지향 변환 지시)
@@ -777,7 +934,7 @@ function renderReport(){
   const mode=g('reportMode')?g('reportMode').value:'hide';
   const showScore=(mode==='show');     // 점수·백분율 노출
   const showBar=(mode!=='minimal');    // 막대·등급 노출 (minimal이면 숨김)
-  const nm=val('stuName')||'학생';const cls=val('stuClass')||'-';const teacher=val('teacher')||'린쌤';
+  const nm=curName()||'학생';const cls=curClass()||'-';const teacher=val('teacher')||'린쌤';
   const today=new Date().toISOString().slice(0,10);
   const anyData=TESTS.some(t=>domainAvg(t.key).n>0);
   const CHECK='<span style="color:#2d7a4f;font-weight:800">✓</span>';
@@ -816,13 +973,14 @@ function renderReport(){
     html+=`<div class="repsec"><h3>Unit별 학습 기록</h3><table class="reptable"><thead><tr><th>Unit</th>`;
     TESTS.forEach(t=>html+=`<th>${t.label}</th>`);
     html+=`</tr></thead><tbody>${rows}</tbody></table>`;
-    if(!showScore)html+=`<div style="font-size:10.5px;color:#aab;margin-top:6px">✓ 표시는 응시 완료를 의미합니다. 상세 점수는 상담 시 안내드립니다.</div>`;
+    if(!showScore)html+=`<div style="font-size:10.5px;color:#aab;margin-top:6px">✓ 표시는 응시 완료, <b>–</b> 는 해당 회차 미응시를 의미합니다(평가에 반영되지 않음). 상세 점수는 상담 시 안내드립니다.</div>`;
+    else html+=`<div style="font-size:10.5px;color:#aab;margin-top:6px"><b>–</b> 는 해당 회차에 시험을 보지 않은 미응시이며, 평균·진단에 반영되지 않습니다.</div>`;
     html+=`</div>`;
   }
   html+=`<div class="repfoot">본 리포트는 객관적 평가 데이터에 근거하여 작성되었습니다. · 파머스국제어학원 광교브랜치</div></div>`;
   g('reportArea').innerHTML=html;
 }
-function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
 /* ===== 집계 ===== */
 function domainAvg(key){
@@ -853,6 +1011,7 @@ function buildSummary(){
   const totPv=totAvg!=null?Math.round(totAvg*1000)/10:null;
   html+=`<div class="sumbox total"><div class="dl">종합</div><div class="pv">${totPv!=null?totPv:'–'}</div>${totPv!=null?`<span class="gr">${gradeOf(totAvg)}</span>`:''}<div class="cnt">4영역 평균</div></div>`;
   html+='</div>';
+  html+=`<div style="font-size:10.5px;color:#8590ad;background:#f4f6fb;border-radius:7px;padding:7px 11px;margin-top:10px;display:flex;align-items:flex-start;gap:6px"><i class="ti ti-info-circle" style="color:#3f5a85"></i><span>평균과 등급은 <b>응시한 회차만</b>으로 계산됩니다. 시험을 보지 않아 비워둔 칸은 0점이 아니라 집계에서 제외되므로, 응시 횟수가 적어도 평균이 낮아지지 않습니다. (각 카드의 ‘N회 응시’가 실제 반영된 횟수입니다)</span></div>`;
   area.innerHTML=html;
   buildUnitTable();
 }
@@ -886,19 +1045,207 @@ function buildUnitTable(){
 /* ===== 저장 ===== */
 function saveAll(silent){
   const k=studentKey();
-  if(!k){if(!silent)showSaved('학생 이름과 반을 먼저 입력하세요.',true);return;}
+  if(!k){if(!silent)showSaved('학생을 먼저 선택하세요.',true);return;}
   const payload={scores,maxByTest,monthly,keywords:[...selectedKw],comment:teacherComment,teacher:val('teacher'),updated:new Date().toISOString()};
   LS('set',k,payload);
-  if(!silent){const filled=countFilled();showSaved(`${val('stuName')} 학생 저장 완료 · 입력된 점수 ${filled}칸`,false);}
+  // 강사 정보를 roster에도 반영
+  const s=curStu();if(s){s.teacher=val('teacher');saveRoster();}
+  renderStuChips();renderCurStu();
+  if(!silent){const filled=countFilled();showSaved(`${curName()} 학생 저장 완료 · 입력된 점수 ${filled}칸`,false);}
 }
 function countFilled(){let n=0;for(let u=1;u<=TOTAL_UNITS;u++)TESTS.forEach(t=>{if(scores[u]&&scores[u][t.key]&&scores[u][t.key].raw!=null)n++;});return n;}
+/* 학생 전체 초기화: 점수·독해·Monthly·키워드·코멘트 모두 삭제 (학생 이름/반/강사는 유지) */
+function resetStudent(){
+  if(!currentStuId){showSaved('먼저 학생을 선택하세요.',true);return;}
+  const nm=curName()||'이 학생';
+  const filled=countFilled();
+  const mCnt=Object.keys(monthly).length;
+  if(filled===0&&mCnt===0&&selectedKw.size===0&&!teacherComment.trim()){
+    showSaved('초기화할 입력 데이터가 없습니다.',true);return;
+  }
+  if(!confirm(`${nm}의 모든 입력을 초기화할까요?\n\n· 입력된 점수 ${filled}칸, Monthly ${mCnt}회, 관찰 키워드·코멘트가 모두 삭제됩니다.\n· 명단(학번·이름·반) 정보는 유지됩니다.\n· 저장 기록도 함께 지워져 새로고침해도 복구되지 않습니다.\n\n이 작업은 되돌릴 수 없습니다.`))return;
+  // 메모리 상태 초기화
+  scores=blankScores();
+  monthly={};
+  selectedKw=new Set();
+  teacherComment='';
+  // 저장소에서 이 학생 기록 삭제
+  const k=studentKey();if(k)LS('del',k);
+  // 화면 갱신
+  const tc=g('teacherComment');if(tc)tc.value='';
+  buildTable();renderStuChips();renderCurStu();
+  showSaved(`${nm} 학생의 입력을 초기화했습니다.`,false);
+}
 function showSaved(msg,err){const e=g('savedMsg');if(!e)return;e.style.display='block';e.style.color=err?'#c0392b':'#2d7a4f';e.textContent=msg;}
 
-function onStuChange(){
-  loadStudent();buildTable();
-  const k=studentKey();const hint=g('stuHint');
-  if(k){const saved=LS('get',k);if(saved){const filled=countFilled();hint.style.display='block';hint.innerHTML=`<b>${val('stuName')}</b> 저장된 기록 불러옴 · 입력된 점수 ${filled}칸`;}else hint.style.display='none';}
-  else hint.style.display='none';
+/* ===== 반·학생 선택 UI ===== */
+function renderClassSelect(){
+  const sel=g('classSelect');const cur=sel.value;
+  const cls=classList();
+  sel.innerHTML='<option value="">— 반을 선택하세요 —</option>'+cls.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  if(cur&&cls.includes(cur))sel.value=cur;
+  // datalist도 갱신 (반 변경/추가 입력 자동완성)
+  const dl=g('classDatalist');if(dl)dl.innerHTML=cls.map(c=>`<option value="${esc(c)}">`).join('');
+}
+function onClassSelect(){
+  currentStuId=null;
+  renderStuChips();
+  renderCurStu();
+  scores=blankScores();monthly={};selectedKw=new Set();teacherComment='';
+  buildTable();
+}
+function renderStuChips(){
+  const cls=g('classSelect').value;const area=g('stuChipArea');
+  if(!cls){area.innerHTML='';return;}
+  const list=studentsInClass(cls);
+  if(list.length===0){area.innerHTML=`<div class="roster-empty">이 반에 등록된 학생이 없습니다. ‘명단 관리’에서 학생을 추가하세요.</div>`;return;}
+  let html='<div class="stu-chips">';
+  list.forEach(s=>{
+    const filled=hasData(s.id);
+    const on=s.id===currentStuId?'on':'';
+    html+=`<span class="stu-chip ${on}" onclick="selectStudent('${esc(s.id)}')"><span class="sid">${esc(s.id)}</span>${esc(s.name)}${filled?`<span class="filled">${filled}</span>`:''}</span>`;
+  });
+  html+=`<span class="stu-chip addnew" onclick="openRoster('${esc(cls)}')"><i class="ti ti-plus"></i>학생 추가</span>`;
+  html+='</div>';
+  area.innerHTML=html;
+}
+function selectStudent(id){
+  currentStuId=id;
+  loadStudent();
+  renderStuChips();
+  renderCurStu();
+  buildTable();
+  const tc=g('teacherComment');if(tc)tc.value=teacherComment;
+  // 강사 입력란에 학생의 담당강사 반영(있으면)
+  const s=curStu();if(s&&s.teacher&&g('teacher'))g('teacher').value=s.teacher;
+}
+function renderCurStu(){
+  const area=g('curStuArea');const s=curStu();
+  if(!s){area.innerHTML='';g('stuHint').style.display='none';return;}
+  const filled=hasData(s.id);
+  area.innerHTML=`<div class="curstu">
+    <span class="cs-name">${esc(s.name)}</span>
+    <span class="cs-id">학번 ${esc(s.id)}</span>
+    <span class="cs-cls"><i class="ti ti-users"></i> ${esc(s.currentClass)}</span>
+    <span style="font-size:11px;color:#2d7a4f">입력된 점수 ${filled}칸</span>
+    <span class="cs-actions">
+      <button class="mini" onclick="openMove()"><i class="ti ti-switch-horizontal"></i>반 변경</button>
+      <button class="mini danger" onclick="resetStudent()"><i class="ti ti-trash"></i>초기화</button>
+    </span>
+  </div>`;
+  g('stuHint').style.display='none';
+}
+function onTeacherInput(){
+  const s=curStu();if(s){s.teacher=val('teacher');saveRoster();}
+}
+
+/* ===== 명단 관리 모달 ===== */
+function openRoster(prefillClass){
+  renderRosterList();
+  g('rostId').value='';g('rostName').value='';
+  g('rostClass').value=(typeof prefillClass==='string')?prefillClass:(g('classSelect').value||'');
+  g('rostAddMsg').style.display='none';
+  renderClassSelect(); // datalist 갱신
+  g('rosterModal').classList.add('on');
+}
+function closeRoster(){
+  g('rosterModal').classList.remove('on');
+  renderClassSelect();renderStuChips();renderCurStu();
+}
+function renderRosterList(){
+  const ids=Object.keys(roster.students);
+  g('rostCount').textContent=`총 ${ids.length}명 등록`;
+  if(ids.length===0){g('rostList').innerHTML='<div class="roster-empty">등록된 학생이 없습니다.</div>';return;}
+  const sorted=Object.values(roster.students).sort((a,b)=>(a.currentClass||'').localeCompare(b.currentClass||'','ko')||a.name.localeCompare(b.name,'ko'));
+  g('rostList').innerHTML=sorted.map(s=>{
+    const filled=hasData(s.id);
+    return `<div class="rost-item"><span class="ri-id">${esc(s.id)}</span><span class="ri-name">${esc(s.name)}</span><span class="ri-cls">${esc(s.currentClass||'-')}${filled?` · ${filled}칸`:''}</span><i class="ti ti-trash ri-del" onclick="deleteStudent('${esc(s.id)}')"></i></div>`;
+  }).join('');
+}
+function addStudent(){
+  const id=val('rostId').replace(/\s/g,'');const name=val('rostName').trim();const cls=val('rostClass').trim();
+  const msg=g('rostAddMsg');
+  const show=(t,ok)=>{msg.style.display='block';msg.style.color=ok?'#2d7a4f':'#c0392b';msg.textContent=t;};
+  if(!id||!name||!cls){show('학번·이름·반을 모두 입력하세요.',false);return;}
+  if(roster.students[id]){show(`학번 ${id}은 이미 등록되어 있습니다 (${roster.students[id].name}).`,false);return;}
+  roster.students[id]={id,name,currentClass:cls,classHistory:[{class:cls,from:new Date().toISOString().slice(0,10)}],teacher:val('teacher')||''};
+  if(!roster.classes.includes(cls))roster.classes.push(cls);
+  saveRoster();
+  show(`${name}(학번 ${id}) 추가 완료.`,true);
+  g('rostId').value='';g('rostName').value='';  // 반은 연속 입력 위해 유지
+  g('rostId').focus();
+  renderRosterList();renderClassSelect();
+}
+function deleteStudent(id){
+  const s=roster.students[id];if(!s)return;
+  const filled=hasData(id);
+  const warn=filled?`\n\n주의: 이 학생의 입력된 점수 ${filled}칸도 함께 삭제됩니다.`:'';
+  if(!confirm(`${s.name}(학번 ${id})을 명단에서 삭제할까요?${warn}\n\n이 작업은 되돌릴 수 없습니다.`))return;
+  delete roster.students[id];
+  LS('del',`stu_${id}`);
+  if(currentStuId===id){currentStuId=null;scores=blankScores();monthly={};selectedKw=new Set();teacherComment='';buildTable();}
+  saveRoster();
+  renderRosterList();renderClassSelect();renderStuChips();renderCurStu();
+}
+
+/* ===== 반 변경 모달 ===== */
+function openMove(){
+  const s=curStu();if(!s)return;
+  g('moveSub').innerHTML=`<b>${esc(s.name)}</b> (학번 ${esc(s.id)}) · 현재 반: ${esc(s.currentClass)}`;
+  g('moveNewClass').value='';
+  renderClassSelect();
+  // 이력 표시
+  const hist=(s.classHistory||[]).map(h=>`<div style="font-size:11px;color:#667;padding:3px 0">${esc(h.class)} <span style="color:#aab">(${h.from}부터)</span></div>`).join('');
+  g('moveHistory').innerHTML=hist?`<label style="font-size:11px;font-weight:700;color:#445">반 변경 이력</label>${hist}`:'';
+  g('moveModal').classList.add('on');
+}
+function applyMove(){
+  const s=curStu();if(!s)return;
+  const nc=val('moveNewClass').trim();
+  if(!nc){alert('새 반을 입력하세요.');return;}
+  if(nc===s.currentClass){alert('현재 반과 동일합니다.');return;}
+  if(!confirm(`${s.name}의 반을 "${s.currentClass}" → "${nc}"으로 변경할까요?\n\n점수 기록은 그대로 유지되며, 이력이 기록됩니다.`))return;
+  s.currentClass=nc;
+  if(!s.classHistory)s.classHistory=[];
+  s.classHistory.push({class:nc,from:new Date().toISOString().slice(0,10)});
+  if(!roster.classes.includes(nc))roster.classes.push(nc);
+  saveRoster();
+  g('moveModal').classList.remove('on');
+  // 새 반으로 화면 전환
+  g('classSelect').value=nc;
+  renderClassSelect();g('classSelect').value=nc;
+  renderStuChips();renderCurStu();
+}
+
+/* ===== 내보내기 / 가져오기 (B 전환 다리 + 원장 취합) ===== */
+function exportRoster(){
+  const payload={_format:'theclass-b3-cumulative', _version:1, exportedAt:new Date().toISOString(), roster, students:{}};
+  Object.keys(roster.students).forEach(id=>{const d=LS('get',`stu_${id}`);if(d)payload.students[id]=d;});
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`bridge3_export_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
+}
+function importRoster(ev){
+  const file=ev.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.roster||!data.roster.students)throw new Error('형식 오류');
+      let added=0,skipped=0;
+      Object.values(data.roster.students).forEach(s=>{
+        if(roster.students[s.id]){skipped++;return;}
+        roster.students[s.id]=s;added++;
+        if(s.currentClass&&!roster.classes.includes(s.currentClass))roster.classes.push(s.currentClass);
+        if(data.students&&data.students[s.id])LS('set',`stu_${s.id}`,data.students[s.id]);
+      });
+      saveRoster();renderRosterList();renderClassSelect();
+      alert(`가져오기 완료: ${added}명 추가${skipped?`, ${skipped}명 중복 건너뜀(기존 유지)`:''}.`);
+    }catch(err){alert('가져오기 실패: 올바른 내보내기 파일이 아닙니다.');}
+    ev.target.value='';
+  };
+  reader.readAsText(file);
 }
 
 /* ===== 네비게이션 ===== */
@@ -914,6 +1261,8 @@ function go(step){
 /* ===== 초기화 ===== */
 document.addEventListener('DOMContentLoaded',()=>{
   const al=g('appLogo');if(al)al.src=LOGO_DARK;
+  loadRoster();
+  renderClassSelect();
   scores=blankScores();
   buildTable();
   go(0);
