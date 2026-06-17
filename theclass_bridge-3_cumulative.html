@@ -255,6 +255,19 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
 .ov-sumcard .v{font-size:20px;font-weight:900;color:#22365a;line-height:1}
 .ov-sumcard .s{font-size:10px;color:#99a;margin-top:3px}
 .ov-empty{text-align:center;color:#889;padding:36px 10px;font-size:13px}
+
+/* ===== 성장 추이 차트 ===== */
+.trend-chart{background:#fff;border:1px solid #e4e8f1;border-radius:11px;padding:13px 15px;margin-bottom:10px}
+.trend-chart .th{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:6px}
+.trend-chart .tname{font-size:12.5px;font-weight:700;color:#334;display:flex;align-items:center;gap:6px}
+.trend-chart .tstat{font-size:11px;color:#667}
+.trend-chart .tstat b{color:#22365a}
+.trendtag{display:inline-block;font-size:10px;font-weight:800;border-radius:9px;padding:2px 9px;margin-left:4px}
+.trendtag.up{background:#eaf6ee;color:#2d7a4f}
+.trendtag.down{background:#fdeaea;color:#c0392b}
+.trendtag.flat{background:#eef2fb;color:#3f5a85}
+.trend-empty{text-align:center;color:#889;padding:30px 10px;font-size:12.5px}
+.trend-svg-wrap{overflow-x:auto}
 </style>
 </head>
 <body>
@@ -354,6 +367,11 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
   <div class="card">
     <div class="ctitle"><i class="ti ti-chart-bar"></i>영역별 누적 평균 · 등급</div>
     <div id="sumArea"></div>
+  </div>
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-chart-line"></i>성장 추이 <span style="font-weight:600;color:#aab;text-transform:none;letter-spacing:0;margin-left:4px">Unit이 진행되며 영역별 점수가 어떻게 변하는지</span></div>
+    <div id="trendArea"></div>
+    <div class="hint" style="margin-top:8px"><i class="ti ti-info-circle"></i> 가로축은 <b>Unit 진행(1→12)</b>, 세로축은 <b>점수(%)</b>입니다. 점이 2개 이상 있어야 선으로 이어집니다. 미응시 Unit은 건너뜁니다. Unit이 곧 진도 순서이므로, 오른쪽으로 갈수록 최근 학습입니다.</div>
   </div>
   <div class="card">
     <div class="ctitle"><i class="ti ti-microscope"></i>Layer 1 — 오답 기반 전문가 진단 <span style="font-weight:600;color:#aab;text-transform:none;letter-spacing:0;margin-left:4px">Weekly · Monthly 오답 분석</span></div>
@@ -1078,6 +1096,66 @@ function domainAvg(key){
 function gradeOf(ratio){return ratio>=GRADE_CUT.up?'상':ratio>=GRADE_CUT.mid?'중':'하';}
 function gradeCls(ratio){return ratio>=GRADE_CUT.up?'gr-up':ratio>=GRADE_CUT.mid?'gr-mid':'gr-low';}
 
+/* ===== 성장 추이 (Unit축) — group2 lineChart 흡수·적응 ===== */
+/* 영역별로 Unit 1→12 중 응시한 것만 {unit,pct} 시계열 추출 */
+function trendSeries(key){
+  const m=maxByTest[key];const out=[];
+  for(let u=1;u<=TOTAL_UNITS;u++){
+    const c=scores[u]&&scores[u][key];
+    if(c&&c.raw!=null&&m>0)out.push({unit:u,pct:Math.round(c.raw/m*1000)/10});
+  }
+  return out;
+}
+/* 추이 판정: 전·후반 평균 비교 (group2 trend 로직 적응) */
+function trendDir(series){
+  if(series.length<2)return {dir:'flat',delta:0};
+  const pcts=series.map(s=>s.pct);
+  const h=Math.ceil(pcts.length/2);
+  const recent=pcts.slice(-h),prev=pcts.slice(0,pcts.length-h);
+  if(!prev.length)return {dir:'flat',delta:0};
+  const ra=recent.reduce((a,b)=>a+b,0)/recent.length;
+  const pa=prev.reduce((a,b)=>a+b,0)/prev.length;
+  const delta=Math.round((ra-pa)*10)/10;
+  return {dir:delta>=3?'up':delta<=-3?'down':'flat', delta};
+}
+/* Unit축 꺾은선 SVG (x=Unit, y=점수%) */
+function unitLineChart(series,color){
+  const w=460,h=140,padL=30,padR=14,padT=16,padB=24,innerW=w-padL-padR,innerH=h-padT-padB;
+  // x축은 항상 Unit 1~12 기준 위치 (응시 안 한 건 점 없음)
+  const xOf=u=>padL+(u-1)/(TOTAL_UNITS-1)*innerW;
+  const yOf=pct=>padT+(100-pct)/100*innerH;
+  let grid='';[0,50,100].forEach(gv=>{const gy=yOf(gv);grid+=`<line x1="${padL}" y1="${gy}" x2="${w-padR}" y2="${gy}" stroke="#e6e9f2" stroke-width="1"/><text x="${padL-5}" y="${gy+3}" font-size="8" fill="#aab" text-anchor="end">${gv}</text>`;});
+  // x축 Unit 라벨 (1,3,5,7,9,11 정도만)
+  let xlab='';for(let u=1;u<=TOTAL_UNITS;u+=2){xlab+=`<text x="${xOf(u).toFixed(1)}" y="${h-7}" font-size="8" fill="#889" text-anchor="middle">U${u}</text>`;}
+  const pts=series.map(s=>`${xOf(s.unit).toFixed(1)},${yOf(s.pct).toFixed(1)}`).join(' ');
+  const line=series.length>1?`<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>`:'';
+  let dots='';series.forEach(s=>{const cx=xOf(s.unit),cy=yOf(s.pct);dots+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3" fill="${color}"/><text x="${cx.toFixed(1)}" y="${(cy-7).toFixed(1)}" font-size="8.5" fill="${color}" text-anchor="middle" font-weight="700">${s.pct}</text>`;});
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="min-width:${w}px">${grid}${xlab}${line}${dots}</svg>`;
+}
+const TDIR_LABEL={up:'상승세',down:'하락세',flat:'유지'};
+function buildTrend(){
+  const area=g('trendArea');if(!area)return;
+  // 데이터 있는 영역만
+  const anyData=DOM_ORDER.some(k=>trendSeries(k).length>0);
+  if(!anyData){area.innerHTML='<div class="trend-empty">아직 입력된 점수가 없습니다. 점수를 입력하면 Unit 진행에 따른 추이가 그려집니다.</div>';return;}
+  let html='';
+  DOM_ORDER.forEach(key=>{
+    const series=trendSeries(key);
+    const color=DOM_COLOR[key],label=DOM_LABEL[key];
+    if(series.length===0){
+      html+=`<div class="trend-chart"><div class="th"><span class="tname"><span style="width:9px;height:9px;border-radius:50%;background:${color};display:inline-block"></span>${label}</span><span class="tstat" style="color:#bbc">미응시</span></div><div class="trend-empty" style="padding:14px">아직 ${label} 점수가 없습니다.</div></div>`;
+      return;
+    }
+    const t=trendDir(series);
+    const avg=Math.round(series.reduce((a,s)=>a+s.pct,0)/series.length*10)/10;
+    const latest=series[series.length-1].pct;
+    const tag=series.length>=2?`<span class="trendtag ${t.dir}">${TDIR_LABEL[t.dir]}${t.dir!=='flat'?(t.delta>0?' +'+t.delta:' '+t.delta):''}</span>`:'<span class="trendtag flat">기록 1회</span>';
+    const stat=`최근 <b>${latest}%</b> · 평균 <b>${avg}%</b> · ${series.length}회${tag}`;
+    html+=`<div class="trend-chart"><div class="th"><span class="tname"><span style="width:9px;height:9px;border-radius:50%;background:${color};display:inline-block"></span>${label}</span><span class="tstat">${stat}</span></div><div class="trend-svg-wrap">${unitLineChart(series,color)}</div></div>`;
+  });
+  area.innerHTML=html;
+}
+
 function buildSummary(){
   const area=g('sumArea');
   const anyData=TESTS.some(t=>domainAvg(t.key).n>0);
@@ -1482,7 +1560,7 @@ function go(step){
   ['s0','s1','s2','s3','s4'].forEach((id,i)=>{const el=g(id);if(el)el.classList.toggle('hidden',i!==step);});
   ['sb0','sb1','sb2','sb3','sb4'].forEach((id,i)=>{const b=g(id);if(b)b.classList.toggle('active',i===step);});
   if(step===1)renderMonthlyGrid();
-  if(step===2){buildSummary();buildDiagnosis();buildKeywords();}
+  if(step===2){buildSummary();buildTrend();buildDiagnosis();buildKeywords();}
   if(step===3)renderReport();
   if(step===4){renderOverviewSelectors();renderOverview();}
   window.scrollTo(0,0);
