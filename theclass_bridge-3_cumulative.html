@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>The Class Bridge-3 — 누적 성적표</title>
+<title>The Class — 중·고등 누적 성적표</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -275,7 +275,7 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
 
 <div class="tool-header">
   <div>
-    <h1>📊 The Class Bridge-3 — 누적 성적표</h1>
+    <h1>📊 The Class — 중·고등 누적 성적표</h1>
     <p>파머스국제어학원 광교브랜치 · 강사용 · 어휘 / 작문 / 독해 / 문법</p>
   </div>
   <img id="appLogo" alt="PAMUS" style="height:30px;width:auto;margin-left:auto;filter:drop-shadow(0 1px 3px rgba(0,0,0,.3))">
@@ -344,10 +344,7 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
     <div class="ctitle"><i class="ti ti-target"></i>Monthly Test <span style="font-weight:600;color:#aab;text-transform:none;letter-spacing:0;margin-left:4px">[1-15] 객관식 + [16-20] 영작 · 시험지 기준 확정</span></div>
     <div class="hint" style="margin-bottom:12px"><i class="ti ti-circle-check"></i> 문항별 영역은 실제 시험지·답안지 기준으로 확정되었습니다. (듣기 없음)</div>
     <div style="margin-bottom:12px"><label>범위 라운드</label>
-      <select id="monthlyRound" onchange="renderMonthlyGrid()" style="max-width:260px">
-        <option value="1">1차 (Unit 1~6)</option>
-        <option value="2">2차 (Unit 7~12)</option>
-      </select>
+      <select id="monthlyRound" onchange="renderMonthlyGrid()" style="max-width:260px"></select>
     </div>
     <div id="monthlyGridArea"></div>
     <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;gap:8px">
@@ -550,7 +547,17 @@ const TESTS=[
   {key:'wk',  label:'독해', sub:'Weekly Test', cls:'colhd-wk', defMax:100},
   {key:'grm', label:'문법', sub:'Grammar', cls:'colhd-grm', defMax:100}
 ];
-const TOTAL_UNITS=12;
+/* ===== 레벨별 구조 파라미터 (Bridge계열 vs The Class 7계열) =====
+   units: 총 유닛 수 / unitsPerRound: 한 Monthly 라운드가 묶는 유닛 수
+   Bridge: 12유닛, 라운드=2유닛(1&2 묶음) / TC7: 8유닛, 라운드=1유닛(1:1) */
+const LEVEL_STRUCT={
+  'bridge-1':{units:12,unitsPerRound:2}, 'bridge-2':{units:12,unitsPerRound:2}, 'bridge-3':{units:12,unitsPerRound:2},
+  'tc7-1':{units:8,unitsPerRound:1}, 'tc7-2':{units:8,unitsPerRound:1}, 'tc7-3':{units:8,unitsPerRound:1}
+};
+function levelStruct(){return LEVEL_STRUCT[currentLevel]||LEVEL_STRUCT['bridge-3'];}
+/* TOTAL_UNITS는 레벨에 따라 달라지므로 let. 레벨 전환 시 syncLevelStruct()로 갱신 */
+let TOTAL_UNITS=12;
+function syncLevelStruct(){TOTAL_UNITS=levelStruct().units;}
 const GRADE_CUT={up:0.8, mid:0.6}; // 상 0.8↑, 중 0.6↑, 하 그 미만
 
 /* ===== Weekly Test 실제 문항별 영역 (시험지·답안지 근거 확정) =====
@@ -672,6 +679,56 @@ const WEEKLY_MAP_BY_LEVEL={
       {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'wk'},
       {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
       {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+    ]
+  },
+  'tc7-1':{
+    1:[ // U1 북극곰 — 독8·어3·문3·작6
+      {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'grm'},{n:4,dom:'grm'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'voc'},{n:9,dom:'wk'},{n:10,dom:'wk'},
+      {n:11,dom:'voc'},{n:12,dom:'voc'},{n:13,dom:'wk'},{n:14,dom:'grm'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    2:[ // U2 피사탑 — 독7·어3·문4·작6
+      {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'grm'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'voc'},{n:8,dom:'wk'},{n:9,dom:'grm'},{n:10,dom:'voc'},
+      {n:11,dom:'wk'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'grm'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    3:[ // U3 열기구 — 독9·어2·문3·작6
+      {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'wk'},
+      {n:11,dom:'grm'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'voc'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    4:[ // U4 음식장식 — 독9·어1·문4·작6
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'wk'},
+      {n:6,dom:'voc'},{n:7,dom:'grm'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'wk'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    5:[ // U5 선인장 — 독8·어2·문4·작6
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'voc'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'wk'},{n:10,dom:'grm'},
+      {n:11,dom:'voc'},{n:12,dom:'wk'},{n:13,dom:'wk'},{n:14,dom:'grm'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    6:[ // U6 물순환 — 독7·어1·문6·작6
+      {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'grm'},{n:4,dom:'grm'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'voc'},{n:9,dom:'wk'},{n:10,dom:'wk'},
+      {n:11,dom:'grm'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'grm'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    7:[ // U7 피라미드 — 독8·어2·문4·작6
+      {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'grm'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'wk'},{n:10,dom:'voc'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'grm'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    8:[ // U8 무술 — 독8·어3·문3·작6
+      {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'grm'},{n:4,dom:'wk'},{n:5,dom:'grm'},
+      {n:6,dom:'voc'},{n:7,dom:'wk'},{n:8,dom:'voc'},{n:9,dom:'wk'},{n:10,dom:'wk'},
+      {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'wk'},{n:14,dom:'voc'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
     ]
   }
 };
@@ -925,6 +982,18 @@ const MONTHLY_MAP_BY_LEVEL={
       {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'voc'},{n:9,dom:'wk'},{n:10,dom:'grm'},
       {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'wk'},{n:14,dom:'grm'},{n:15,dom:'grm'}
     ]
+  },
+  'tc7-1':{
+    1:[ // Unit 1-4 — 독9·어3·문3
+      {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'wk'},{n:4,dom:'grm'},{n:5,dom:'wk'},
+      {n:6,dom:'grm'},{n:7,dom:'wk'},{n:8,dom:'voc'},{n:9,dom:'grm'},{n:10,dom:'voc'},
+      {n:11,dom:'wk'},{n:12,dom:'wk'},{n:13,dom:'wk'},{n:14,dom:'wk'},{n:15,dom:'voc'}
+    ],
+    2:[ // Unit 5-8 — 독8·어4·문3
+      {n:1,dom:'voc'},{n:2,dom:'wk'},{n:3,dom:'wk'},{n:4,dom:'grm'},{n:5,dom:'grm'},
+      {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'voc'},{n:9,dom:'voc'},{n:10,dom:'wk'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'voc'},{n:14,dom:'wk'},{n:15,dom:'wk'}
+    ]
   }
 };
 /* 현재 레벨의 Monthly 맵 (라운드별). 미정의시 bridge-3 폴백 */
@@ -936,7 +1005,8 @@ function getMonthlyMap(round){
 const MONTHLY_COMP_ITEMS_BY_LEVEL={
   'bridge-1':[16,17,18],
   'bridge-2':[16,17,18],
-  'bridge-3':[16,17,18,19,20]
+  'bridge-3':[16,17,18,19,20],
+  'tc7-1':[16,17,18]
 };
 function getMonthlyCompItems(){
   return MONTHLY_COMP_ITEMS_BY_LEVEL[currentLevel]||MONTHLY_COMP_ITEMS_BY_LEVEL['bridge-3'];
@@ -992,7 +1062,22 @@ let selectedKw=new Set();   // 선택된 키워드
 let teacherComment='';
 
 /* unit(1~12) → weekly round(1~6) */
-function unitToRound(u){return Math.ceil(u/2);}
+function unitToRound(u){return Math.ceil(u/levelStruct().unitsPerRound);}
+/* Monthly 라운드 r이 커버하는 유닛 범위 라벨 (레벨 구조 자동 계산) */
+function monthlyRangeLabel(r){
+  const per=levelStruct().unitsPerRound, total=levelStruct().units;
+  // Monthly는 전체 유닛을 2회차로 균등 분할: 회차당 유닛 수 = total/2
+  const half=Math.ceil(total/2);
+  const a=(r-1)*half+1, b=Math.min(r*half,total);
+  return a===b?`Unit ${a}`:`Unit ${a}~${b}`;
+}
+/* Monthly 라운드 select 옵션을 레벨 구조에 맞게 동적 생성 (항상 2회차, 라벨만 레벨별) */
+function renderMonthlyRoundOptions(){
+  const sel=g('monthlyRound'); if(!sel)return;
+  const cur=sel.value||'1';
+  sel.innerHTML=[1,2].map(r=>`<option value="${r}">${r}차 (${monthlyRangeLabel(r)})</option>`).join('');
+  sel.value=(cur==='2')?'2':'1';
+}
 
 /* 데이터: scores[unit][testKey] = {raw, max}.
    독해(wk)는 추가로 wrong:{문항번호 Set→배열}, byDom:{영역별 오답수} 저장 */
@@ -1008,7 +1093,7 @@ const LEVELS=[
   {key:'bridge-3', label:'The Class Bridge-3', ready:true},
   {key:'bridge-1', label:'The Class Bridge-1', ready:true},
   {key:'bridge-2', label:'The Class Bridge-2', ready:true},
-  {key:'tc7-1', label:'The Class 7-1', ready:false},
+  {key:'tc7-1', label:'The Class 7-1', ready:true},
   {key:'tc7-2', label:'The Class 7-2', ready:false},
   {key:'tc7-3', label:'The Class 7-3', ready:false},
   {key:'tc8', label:'The Class 8', ready:false},
@@ -1273,7 +1358,7 @@ function renderMonthlyGrid(){
   const rec=monthly[round]||{};
   const wrongSet=new Set(rec.wrong15||[]);
   const comp=rec.comp||{};
-  const rng=round===1?'Unit 1~6':'Unit 7~12';
+  const rng=monthlyRangeLabel(round);
   // [1-15] 객관식 O/X
   let html=`<div style="font-size:11px;color:#889;margin-bottom:8px">${rng} · [1-${map.length}] 객관식 + [${compItems[0]}-${compItems[compItems.length-1]}] 영작</div>`;
   html+=`<div style="font-size:10.5px;font-weight:700;color:#556;margin:4px 0 6px">독해·어휘·문법 (O/X)</div><div class="qgrid">`;
@@ -1455,7 +1540,7 @@ async function refineWithAI(){
   // 선택 키워드를 맥락으로 함께 전달 (관찰 키워드는 성장지향 변환 지시)
   const pos=[],neg=[];selectedKw.forEach(k=>{(isNegKw(k)?neg:pos).push(k);});
   const kwCtx=[pos.length?`[강점 관찰] ${pos.join(', ')}`:'',neg.length?`[성장 관찰 — 결핍 표현 금지, 성장지향으로 변환] ${neg.join(', ')}`:''].filter(Boolean).join('\n');
-  const systemPrompt=`당신은 파머스국제어학원 광교브랜치에서 ${nm} 학생을 직접 가르치는 The Class Bridge-3(중등 리딩) 담임 린쌤입니다. 이 글은 학부모님께 직접 쓰는 누적 리포트의 '담당 선생님 코멘트'입니다.
+  const systemPrompt=`당신은 파머스국제어학원 광교브랜치에서 ${nm} 학생을 직접 가르치는 ${levelLabel(currentLevel)}(중·고등 리딩) 담임 린쌤입니다. 이 글은 학부모님께 직접 쓰는 누적 리포트의 '담당 선생님 코멘트'입니다.
 아래 강사 메모와 관찰 키워드를 학부모용 코멘트로 자연스럽게 다듬어 주세요.
 [작성 규칙]
 - 학생 이름(${nm})은 한국어 조사를 자연스럽게 붙여 호칭
@@ -1707,6 +1792,8 @@ function renderLevelNote(){
 }
 function onLevelSelect(){
   currentLevel=g('levelSelect').value;
+  syncLevelStruct();             // 레벨별 TOTAL_UNITS 갱신
+  renderMonthlyRoundOptions();   // Monthly 라운드 라벨 갱신
   renderLevelNote();
   // 레벨이 바뀌면 현재 학생의 해당 레벨 데이터를 다시 로드
   if(currentStuId){loadStudent();buildTable();const tc=g('teacherComment');if(tc)tc.value=teacherComment;}
@@ -2021,6 +2108,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   const al=g('appLogo');if(al)al.src=LOGO_DARK;
   loadRoster();
   renderLevelSelect();
+  syncLevelStruct();             // 초기 레벨 구조 동기화
+  renderMonthlyRoundOptions();   // 초기 Monthly 라운드 옵션 생성
   renderClassSelect();
   scores=blankScores();
   buildTable();
