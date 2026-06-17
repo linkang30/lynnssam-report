@@ -559,44 +559,127 @@ const GRADE_CUT={up:0.8, mid:0.6}; // 상 0.8↑, 중 0.6↑, 하 그 미만
    문항번호→영역을 실제 시험지에서 직접 확정 (자동 전개 아님).
    분류 규칙: 의미 기반 빈칸→어휘(voc) / 단어 형태변형·수동태·분사·기능어(전치사·접속사·연결부사·한정사)→문법(grm) /
    내용일치·문장삽입·주제·세부정보→독해(wk) / [15-18] 영작→작문(comp) */
-const WEEKLY_MAP={
-  1:[ // U1&2 — 독7·어4·문3·작4
-    {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'voc'},
-    {n:6,dom:'voc'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'voc'},{n:10,dom:'wk'},
-    {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
-    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
-  ],
-  2:[ // U3&4 — 독7·어2·문5·작4
-    {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'grm'},{n:4,dom:'wk'},{n:5,dom:'wk'},
-    {n:6,dom:'wk'},{n:7,dom:'voc'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'grm'},
-    {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'voc'},
-    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
-  ],
-  3:[ // U5&6 — 독6·어2·문6·작4
-    {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'wk'},
-    {n:6,dom:'voc'},{n:7,dom:'wk'},{n:8,dom:'grm'},{n:9,dom:'grm'},{n:10,dom:'wk'},
-    {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'grm'},
-    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
-  ],
-  4:[ // U7&8 — 독7·어2·문5·작4
-    {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'grm'},
-    {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'wk'},{n:10,dom:'voc'},
-    {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'grm'},
-    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
-  ],
-  5:[ // U9&10 — 독7·어3·문3·작4
-    {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'voc'},
-    {n:6,dom:'grm'},{n:7,dom:'wk'},{n:8,dom:'wk'},{n:9,dom:'voc'},{n:10,dom:'grm'},
-    {n:11,dom:'wk'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
-    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
-  ],
-  6:[ // U11&12 — 독7·어2·문5·작4
-    {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'voc'},
-    {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'wk'},
-    {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
-    {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
-  ]
+const WEEKLY_MAP_BY_LEVEL={
+  'bridge-1':{
+    1:[ // U1&2 — 독7·어3·문4·작6
+      {n:1,dom:'grm'},{n:2,dom:'wk'},{n:3,dom:'wk'},{n:4,dom:'grm'},{n:5,dom:'grm'},
+      {n:6,dom:'voc'},{n:7,dom:'wk'},{n:8,dom:'wk'},{n:9,dom:'voc'},{n:10,dom:'grm'},
+      {n:11,dom:'wk'},{n:12,dom:'wk'},{n:13,dom:'voc'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    2:[ // U3&4 — 독7·어3·문4·작6
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'voc'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'voc'},{n:9,dom:'grm'},{n:10,dom:'voc'},
+      {n:11,dom:'wk'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    3:[ // U5&6 — 독8·어1·문5·작6
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'grm'},{n:5,dom:'wk'},
+      {n:6,dom:'voc'},{n:7,dom:'wk'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'wk'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    4:[ // U7&8 — 독8·어4·문2·작6
+      {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'grm'},
+      {n:6,dom:'wk'},{n:7,dom:'voc'},{n:8,dom:'wk'},{n:9,dom:'voc'},{n:10,dom:'wk'},
+      {n:11,dom:'wk'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'voc'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    5:[ // U9&10 — 독8·어2·문4·작6
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'wk'},
+      {n:6,dom:'voc'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'grm'},{n:10,dom:'wk'},
+      {n:11,dom:'voc'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    6:[ // U11&12 — 독7·어2·문5·작6
+      {n:1,dom:'grm'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'grm'},
+      {n:6,dom:'wk'},{n:7,dom:'voc'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'wk'},
+      {n:11,dom:'grm'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ]
+  },
+  'bridge-2':{
+    1:[ // U1&2 — 독8·어1·문5·작6
+      {n:1,dom:'grm'},{n:2,dom:'wk'},{n:3,dom:'wk'},{n:4,dom:'grm'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'grm'},{n:10,dom:'voc'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    2:[ // U3&4 — 독7·어1·문6·작6
+      {n:1,dom:'grm'},{n:2,dom:'wk'},{n:3,dom:'grm'},{n:4,dom:'wk'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'voc'},{n:8,dom:'wk'},{n:9,dom:'grm'},{n:10,dom:'grm'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    3:[ // U5&6 — 독6·어3·문5·작6
+      {n:1,dom:'voc'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'grm'},{n:5,dom:'grm'},
+      {n:6,dom:'voc'},{n:7,dom:'wk'},{n:8,dom:'wk'},{n:9,dom:'grm'},{n:10,dom:'wk'},
+      {n:11,dom:'grm'},{n:12,dom:'voc'},{n:13,dom:'wk'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    4:[ // U7&8 — 독7·어2·문5·작6
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'grm'},{n:5,dom:'grm'},
+      {n:6,dom:'voc'},{n:7,dom:'wk'},{n:8,dom:'wk'},{n:9,dom:'wk'},{n:10,dom:'grm'},
+      {n:11,dom:'wk'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'voc'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    5:[ // U9&10 — 독8·어1·문5·작6
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'voc'},{n:5,dom:'wk'},
+      {n:6,dom:'grm'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'wk'},{n:10,dom:'grm'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ],
+    6:[ // U11&12 — 독8·어1·문5·작6
+      {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'grm'},
+      {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'wk'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'},{n:19,dom:'comp'},{n:20,dom:'comp'}
+    ]
+  },
+  'bridge-3':{
+    1:[ // U1&2 — 독7·어3·문4·작4
+      {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'voc'},
+      {n:6,dom:'grm'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'voc'},{n:10,dom:'wk'},
+      {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+    ],
+    2:[ // U3&4 — 독8·어2·문4·작4
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'voc'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'grm'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'voc'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+    ],
+    3:[ // U5&6 — 독8·어2·문4·작4
+      {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'wk'},
+      {n:6,dom:'voc'},{n:7,dom:'wk'},{n:8,dom:'grm'},{n:9,dom:'grm'},{n:10,dom:'wk'},
+      {n:11,dom:'wk'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'grm'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+    ],
+    4:[ // U7&8 — 독8·어2·문4·작4
+      {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'grm'},
+      {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'wk'},{n:10,dom:'voc'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'wk'},{n:14,dom:'grm'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+    ],
+    5:[ // U9&10 — 독8·어3·문3·작4
+      {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'voc'},
+      {n:6,dom:'grm'},{n:7,dom:'wk'},{n:8,dom:'wk'},{n:9,dom:'voc'},{n:10,dom:'grm'},
+      {n:11,dom:'wk'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+    ],
+    6:[ // U11&12 — 독8·어2·문4·작4
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'voc'},
+      {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'wk'},
+      {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'grm'},{n:14,dom:'wk'},
+      {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
+    ]
+  }
 };
+/* 현재 레벨의 Weekly 맵 (라운드별). 레벨 미정의시 bridge-3로 폴백 */
+function getWeeklyMap(round){
+  const lv=WEEKLY_MAP_BY_LEVEL[currentLevel]||WEEKLY_MAP_BY_LEVEL['bridge-3'];
+  return (lv&&lv[round])||[];
+}
 /* ===== Worksheet/Composition: Unit당 8문항 (1-4 배열 / 5-8 영작), 전부 작문 영역 =====
    문항 단위 O/X, 같은 배점(8점 만점). type은 나중 문법 태그 확장 대비 메타데이터. */
 const COMP_ITEMS=[
@@ -798,29 +881,66 @@ function compGrammarWeak(){
 /* WEEKLY_MAP에서 라운드별 영역 개수 자동 산출 (집계 코드 호환용) */
 function weeklyDist(round){
   const d={wk:0,comp:0,voc:0,grm:0};
-  (WEEKLY_MAP[round]||[]).forEach(it=>d[it.dom]++);
+  getWeeklyMap(round).forEach(it=>d[it.dom]++);
   return d;
 }
-const WEEKLY_ROUND_DIST={};
-for(let r=1;r<=6;r++){WEEKLY_ROUND_DIST[r]=weeklyDist(r);}
+/* WEEKLY_ROUND_DIST는 레벨에 따라 달라지므로 정적 캐시 대신 weeklyDist()를 그때그때 호출 */
 /* ===== Monthly Test 실제 문항별 영역 (시험지 근거 확정) =====
    [1-15] 객관식 O/X (독해·어휘·문법) + [16-20] 영작 3단계(정답/부분/오답).
    round 1 = Unit 1-6, round 2 = Unit 7-12.
    문항번호→영역을 시험지에서 직접 확정 (자동 전개 아님). */
-const MONTHLY_MAP={
-  1:[ // Unit 1-6
-    {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'wk'},
-    {n:6,dom:'voc'},{n:7,dom:'grm'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'voc'},
-    {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'voc'},{n:14,dom:'wk'},{n:15,dom:'wk'}
-  ],
-  2:[ // Unit 7-12
-    {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'grm'},
-    {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'voc'},{n:9,dom:'wk'},{n:10,dom:'voc'},
-    {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'wk'},{n:14,dom:'grm'},{n:15,dom:'grm'}
-  ]
+const MONTHLY_MAP_BY_LEVEL={
+  'bridge-1':{
+    1:[ // Unit 1-6 — 독8·어3·문4
+      {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'grm'},{n:4,dom:'wk'},{n:5,dom:'voc'},
+      {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'wk'},{n:9,dom:'wk'},{n:10,dom:'grm'},
+      {n:11,dom:'voc'},{n:12,dom:'wk'},{n:13,dom:'wk'},{n:14,dom:'grm'},{n:15,dom:'voc'}
+    ],
+    2:[ // Unit 7-12 — 독6·어3·문6
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'grm'},{n:4,dom:'wk'},{n:5,dom:'grm'},
+      {n:6,dom:'wk'},{n:7,dom:'grm'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'voc'},
+      {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'voc'},{n:14,dom:'wk'},{n:15,dom:'voc'}
+    ]
+  },
+  'bridge-2':{
+    1:[ // Unit 1-6 — 독8·어3·문4
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'wk'},
+      {n:6,dom:'grm'},{n:7,dom:'wk'},{n:8,dom:'wk'},{n:9,dom:'voc'},{n:10,dom:'grm'},
+      {n:11,dom:'wk'},{n:12,dom:'voc'},{n:13,dom:'wk'},{n:14,dom:'voc'},{n:15,dom:'grm'}
+    ],
+    2:[ // Unit 7-12 — 독8·어3·문4
+      {n:1,dom:'wk'},{n:2,dom:'grm'},{n:3,dom:'wk'},{n:4,dom:'grm'},{n:5,dom:'wk'},
+      {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'voc'},{n:9,dom:'wk'},{n:10,dom:'grm'},
+      {n:11,dom:'wk'},{n:12,dom:'voc'},{n:13,dom:'wk'},{n:14,dom:'voc'},{n:15,dom:'grm'}
+    ]
+  },
+  'bridge-3':{
+    1:[ // Unit 1-6 — 독8·어4·문3
+      {n:1,dom:'wk'},{n:2,dom:'wk'},{n:3,dom:'voc'},{n:4,dom:'wk'},{n:5,dom:'wk'},
+      {n:6,dom:'voc'},{n:7,dom:'grm'},{n:8,dom:'grm'},{n:9,dom:'wk'},{n:10,dom:'voc'},
+      {n:11,dom:'wk'},{n:12,dom:'grm'},{n:13,dom:'voc'},{n:14,dom:'wk'},{n:15,dom:'wk'}
+    ],
+    2:[ // Unit 7-12 — 독8·어2·문5
+      {n:1,dom:'wk'},{n:2,dom:'voc'},{n:3,dom:'wk'},{n:4,dom:'wk'},{n:5,dom:'grm'},
+      {n:6,dom:'wk'},{n:7,dom:'wk'},{n:8,dom:'voc'},{n:9,dom:'wk'},{n:10,dom:'grm'},
+      {n:11,dom:'grm'},{n:12,dom:'wk'},{n:13,dom:'wk'},{n:14,dom:'grm'},{n:15,dom:'grm'}
+    ]
+  }
 };
-/* Monthly 작문 [16-20]: 5문항, 각 3단계(정답1.0/부분0.5/오답0) */
-const MONTHLY_COMP_ITEMS=[16,17,18,19,20];
+/* 현재 레벨의 Monthly 맵 (라운드별). 미정의시 bridge-3 폴백 */
+function getMonthlyMap(round){
+  const lv=MONTHLY_MAP_BY_LEVEL[currentLevel]||MONTHLY_MAP_BY_LEVEL['bridge-3'];
+  return (lv&&lv[round])||[];
+}
+/* Monthly 작문 문항: 레벨별 (B1·2 = 3개[16-18], B3 = 5개[16-20]) */
+const MONTHLY_COMP_ITEMS_BY_LEVEL={
+  'bridge-1':[16,17,18],
+  'bridge-2':[16,17,18],
+  'bridge-3':[16,17,18,19,20]
+};
+function getMonthlyCompItems(){
+  return MONTHLY_COMP_ITEMS_BY_LEVEL[currentLevel]||MONTHLY_COMP_ITEMS_BY_LEVEL['bridge-3'];
+}
 
 /* 영작 채점 가이드 (강사 간 편차 최소화용 · 접이식) */
 const COMP_GUIDE_HTML=`<details class="guidebox"><summary><i class="ti ti-clipboard-text"></i>영작 채점 기준 보기 (Bridge-3 공통)</summary><div class="gbody">
@@ -835,8 +955,8 @@ const COMP_GUIDE_HTML=`<details class="guidebox"><summary><i class="ti ti-clipbo
 /* Monthly [1-15] 영역별 객관식 문항수 (집계용, MONTHLY_MAP에서 산출) */
 function monthlyDist(round){
   const d={wk:0,comp:0,voc:0,grm:0};
-  (MONTHLY_MAP[round]||[]).forEach(it=>d[it.dom]++);
-  d.comp=MONTHLY_COMP_ITEMS.length; // 작문은 [16-20]
+  getMonthlyMap(round).forEach(it=>d[it.dom]++);
+  d.comp=getMonthlyCompItems().length; // 작문은 레벨별 [16-18] 또는 [16-20]
   return d;
 }
 const DOM_ORDER=['wk','comp','voc','grm'];
@@ -991,7 +1111,8 @@ function buildTable(){
   let body=`<tbody><tr class="maxrow"><td class="unitcell">만점</td>`;
   TESTS.forEach(t=>{
     if(t.key==='wk'){
-      body+=`<td colspan="2" style="font-size:11px;color:#778">18 (고정)</td>`;
+      const _wkLen=(getWeeklyMap(1)||[]).length||18;
+      body+=`<td colspan="2" style="font-size:11px;color:#778">${_wkLen} (고정)</td>`;
     }else if(t.key==='comp'){
       body+=`<td colspan="2" style="font-size:11px;color:#778">8 (고정)</td>`;
     }else{
@@ -1053,12 +1174,13 @@ function onMaxChange(key){
 /* ===== Weekly 오답그리드 모달 ===== */
 function openWeekly(u){
   const round=unitToRound(u);
-  const items=WEEKLY_MAP[round];
+  const items=getWeeklyMap(round);
   const hasRecord = scores[u]&&scores[u].wk&&scores[u].wk.raw!=null;
   const existing=scores[u]&&scores[u].wk&&scores[u].wk.wrong?scores[u].wk.wrong:[];
   wkEditing={unit:u, items, wrongSet:new Set(existing)};
   g('wkModalTitle').textContent=`Weekly Test 오답 체크 — Unit ${u}`;
-  g('wkModalSub').textContent=`${round}라운드 (Unit ${(round-1)*2+1}&${round*2}) · 18문항 · [1-14] 객관식 + [15-18] 영작`;
+  const _wkObj=items.filter(it=>it.dom!=='comp').length, _wkComp=items.length-_wkObj;
+  g('wkModalSub').textContent=`${round}라운드 (Unit ${(round-1)*2+1}&${round*2}) · ${items.length}문항 · [1-${_wkObj}] 객관식 + [${_wkObj+1}-${items.length}] 영작`;
   g('wkClearBtn').style.display = hasRecord ? '' : 'none';
   renderWeeklyGrid();
   g('weeklyModal').classList.add('on');
@@ -1073,8 +1195,9 @@ function renderWeeklyGrid(){
 }
 function toggleWk(n){const s=wkEditing.wrongSet;if(s.has(n))s.delete(n);else s.add(n);renderWeeklyGrid();}
 function updateWkScore(){
-  const wrong=wkEditing.wrongSet.size;const correct=18-wrong;
-  g('wkModalScore').innerHTML=`정답 <b>${correct}</b> / 18 · 오답 ${wrong}`;
+  const total=wkEditing.items.length;
+  const wrong=wkEditing.wrongSet.size;const correct=total-wrong;
+  g('wkModalScore').innerHTML=`정답 <b>${correct}</b> / ${total} · 오답 ${wrong}`;
 }
 function closeWeekly(apply){
   if(apply){
@@ -1082,7 +1205,8 @@ function closeWeekly(apply){
     const byDom={wk:0,comp:0,voc:0,grm:0};
     wkEditing.items.forEach(it=>{if(wkEditing.wrongSet.has(it.n))byDom[it.dom]++;});
     if(!scores[u])scores[u]={};
-    scores[u].wk={raw:18-wrong.length, max:18, wrong, byDom};
+    const wkTotal=wkEditing.items.length;
+    scores[u].wk={raw:wkTotal-wrong.length, max:wkTotal, wrong, byDom};
     buildTable();
   }
   g('weeklyModal').classList.remove('on');wkEditing=null;
@@ -1144,22 +1268,23 @@ function clearComp(){
 /* monthly[round] = {wrong15:[틀린 객관식 번호], comp:{16:1.0|0.5|0,...}, byDom:{}, raw, max} */
 function renderMonthlyGrid(){
   const round=parseInt(val('monthlyRound')||g('monthlyRound').value);
-  const map=MONTHLY_MAP[round];
+  const map=getMonthlyMap(round);
+  const compItems=getMonthlyCompItems();
   const rec=monthly[round]||{};
   const wrongSet=new Set(rec.wrong15||[]);
   const comp=rec.comp||{};
   const rng=round===1?'Unit 1~6':'Unit 7~12';
   // [1-15] 객관식 O/X
-  let html=`<div style="font-size:11px;color:#889;margin-bottom:8px">${rng} · [1-15] 객관식 + [16-20] 영작</div>`;
+  let html=`<div style="font-size:11px;color:#889;margin-bottom:8px">${rng} · [1-${map.length}] 객관식 + [${compItems[0]}-${compItems[compItems.length-1]}] 영작</div>`;
   html+=`<div style="font-size:10.5px;font-weight:700;color:#556;margin:4px 0 6px">독해·어휘·문법 (O/X)</div><div class="qgrid">`;
   html+=map.map(it=>{
     const w=wrongSet.has(it.n);
     return `<div class="qbtn dom-${it.dom} ${w?'wrong':''}" onclick="toggleMonthlyOX(${round},${it.n})"><span class="qn" style="color:${DOM_COLOR[it.dom]}">${it.n}</span><span class="qd">${DOM_LABEL[it.dom]}</span><span class="qs">${w?'X':'O'}</span></div>`;
   }).join('')+'</div>';
   // [16-20] 작문 3단계
-  html+=`<div style="font-size:10.5px;font-weight:700;color:#2d7a4f;margin:14px 0 6px">영작 [16-20] · 정답 / 부분 / 오답</div>`;
+  html+=`<div style="font-size:10.5px;font-weight:700;color:#2d7a4f;margin:14px 0 6px">영작 [${compItems[0]}-${compItems[compItems.length-1]}] · 정답 / 부분 / 오답</div>`;
   html+=COMP_GUIDE_HTML;
-  MONTHLY_COMP_ITEMS.forEach(n=>{
+  compItems.forEach(n=>{
     const v = comp[n];
     const cls = v===1?'on-full':v===0.5?'on-half':v===0?'on-zero':'';
     html+=`<div class="comprow"><span class="cn">${n}번 영작</span><div class="comp3">
@@ -1170,10 +1295,11 @@ function renderMonthlyGrid(){
   });
   // 점수 요약
   const ox=monthlyOXScore(round), cp=monthlyCompScore(round);
-  html+=`<div class="modal-score" style="text-align:right;margin-top:10px">객관식 <b>${ox.correct}</b>/15 · 영작 <b>${cp.got}</b>/5</div>`;
+  html+=`<div class="modal-score" style="text-align:right;margin-top:10px">객관식 <b>${ox.correct}</b>/${map.length} · 영작 <b>${cp.got}</b>/${compItems.length}</div>`;
   g('monthlyGridArea').innerHTML=html;
 }
-function ensureMonthly(round){if(!monthly[round])monthly[round]={wrong15:[],comp:{},byDom:{},raw:0,max:20};return monthly[round];}
+function monthlyMax(round){return getMonthlyMap(round).length+getMonthlyCompItems().length;}
+function ensureMonthly(round){if(!monthly[round])monthly[round]={wrong15:[],comp:{},byDom:{},raw:0,max:monthlyMax(round)};return monthly[round];}
 function toggleMonthlyOX(round,n){
   const rec=ensureMonthly(round);const s=new Set(rec.wrong15||[]);
   if(s.has(n))s.delete(n);else s.add(n);
@@ -1187,23 +1313,23 @@ function setMonthlyComp(round,n,v){
   recalcMonthly(round);renderMonthlyGrid();
 }
 function monthlyOXScore(round){
-  const rec=monthly[round]||{};const wrong=(rec.wrong15||[]).length;return {correct:15-wrong, wrong};
+  const rec=monthly[round]||{};const wrong=(rec.wrong15||[]).length;const total=getMonthlyMap(round).length;return {correct:total-wrong, wrong, total};
 }
 function monthlyCompScore(round){
   const rec=monthly[round]||{};const comp=rec.comp||{};
-  let got=0,graded=0;MONTHLY_COMP_ITEMS.forEach(n=>{if(comp[n]!==undefined){got+=comp[n];graded++;}});
+  let got=0,graded=0;getMonthlyCompItems().forEach(n=>{if(comp[n]!==undefined){got+=comp[n];graded++;}});
   return {got:Math.round(got*10)/10, graded};
 }
 function recalcMonthly(round){
-  const rec=ensureMonthly(round);const map=MONTHLY_MAP[round];
+  const rec=ensureMonthly(round);const map=getMonthlyMap(round);
   const wrongSet=new Set(rec.wrong15||[]);
   // byDom: 객관식 영역별 오답 + 작문 오답(1-점수 합)
   const byDom={wk:0,comp:0,voc:0,grm:0};
   map.forEach(it=>{if(wrongSet.has(it.n))byDom[it.dom]++;});
   // 작문 오답량 = 5 - 획득점수 (부분점수 반영)
-  const cp=monthlyCompScore(round);byDom.comp=Math.round((MONTHLY_COMP_ITEMS.length-cp.got)*10)/10;
+  const cp=monthlyCompScore(round);byDom.comp=Math.round((getMonthlyCompItems().length-cp.got)*10)/10;
   rec.byDom=byDom;
-  rec.raw=(15-(rec.wrong15||[]).length)+cp.got; rec.max=20;
+  rec.raw=(map.length-(rec.wrong15||[]).length)+cp.got; rec.max=monthlyMax(round);
 }
 function saveMonthly(){
   const k=studentKey();if(!k){const e=g('savedMsgM');e.style.display='block';e.style.color='#c0392b';e.textContent='학생을 먼저 선택하세요.';return;}
@@ -1218,7 +1344,7 @@ function aggregateWrong(){
   // Weekly
   for(let u=1;u<=TOTAL_UNITS;u++){
     const c=scores[u]&&scores[u].wk;if(!c||!c.byDom)continue;
-    const dist=WEEKLY_ROUND_DIST[unitToRound(u)];
+    const dist=weeklyDist(unitToRound(u));
     DOM_ORDER.forEach(d=>{agg[d].total+=(dist[d]||0);agg[d].wrong+=(c.byDom[d]||0);});
   }
   // Monthly
