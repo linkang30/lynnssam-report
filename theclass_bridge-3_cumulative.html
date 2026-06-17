@@ -279,7 +279,7 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
     <p>파머스국제어학원 광교브랜치 · 강사용 · 어휘 / 작문 / 독해 / 문법</p>
   </div>
   <img id="appLogo" alt="PAMUS" style="height:30px;width:auto;margin-left:auto;filter:drop-shadow(0 1px 3px rgba(0,0,0,.3))">
-  <div class="hbadge">v0.1 · 1단계</div>
+  <div class="hbadge">v0.2 · 작문 문법진단</div>
 </div>
 
 <div class="steps">
@@ -605,6 +605,196 @@ const COMP_ITEMS=[
 ];
 const COMP_TOTAL=8;
 const COMP_TYPE_LABEL={arrange:'배열',fill:'영작'};
+const COMP_TAGS_BY_LEVEL={ // Bridge-1/2/3 작문 문항별 문법 태그 (린쌤 검수 확정 2026-06-18)
+  'bridge-1':{
+    1:{1:'비교급(우등)',2:'최상급',3:'과거진행',4:'과거시제',5:'수동태(과거)',6:'부정문(did not)',7:'현재시제',8:'최상급(부사)'},
+    2:{1:'주어-동사 일치',2:'명령문',3:'명령문',4:'there is/are',5:'의문문(do)',6:'사역동사(make)',7:'접속사(because/while)',8:'부정명령문'},
+    3:{1:'to부정사(목적)',2:'형용사+enough',3:'가주어 it',4:'형용사+enough',5:'one of the 최상급',6:'there is/are',7:'형용사+to부정사',8:'현재진행'},
+    4:{1:'so~that 구문',2:'접속사(when)',3:'동명사(주어)',4:'to부정사(목적)',5:'주어-동사 일치',6:'동명사(목적어)',7:'조동사(will)',8:'조동사(may)'},
+    5:{1:'사역동사(have)',2:'2형식(become)',3:'there is/are',4:'과거시제',5:'형용사+전치사(to)',6:'수동태(현재)',7:'과거시제',8:'주어-동사 일치'},
+    6:{1:'조동사 부정(cannot)',2:'관계사 생략',3:'조동사 should(부정)',4:'관계대명사(that)',5:'부정문(do not)',6:'간접의문문',7:'현재시제',8:'비교급'},
+    7:{1:'사역동사(make)',2:'동명사(주어)',3:'What if 구문',4:'명령문',5:'주어-동사 일치',6:'조동사(can)',7:'by+동명사',8:'비교급(불규칙 better)'},
+    8:{1:'현재시제',2:'2형식',3:'현재시제(3인칭)',4:'현재시제',5:'최상급',6:'주어-동사 일치(each)',7:'mistake A for B',8:'현재시제'},
+    9:{1:'동명사(of+동명사)',2:'주어-동사 일치',3:'명령문',4:'의문문(how)',5:'비교급',6:'접속사(until)',7:'접속사(but)',8:'명령문'},
+    10:{1:'not only A but also B',2:'seem to부정사',3:'조동사(can)',4:'부정문(do not)',5:'현재시제',6:'one of the 최상급',7:'수동태',8:'조동사(may)'},
+    11:{1:'접속사 that(명사절)',2:'현재시제',3:'수동태(현재)',4:'현재시제',5:'현재시제',6:'현재시제',7:'현재시제',8:'현재시제'},
+    12:{1:'접속사 that(명사절)',2:'부분부정(not all)',3:'조동사(can)',4:'관계대명사(that)',5:'접속사(when)',6:'take turns +동명사',7:'현재시제',8:'2형식(become)'}
+  },
+  'bridge-2':{
+    1:{1:'가주어 it+to부정사',2:'현재시제',3:'현재시제',4:'be동사 현재(복수)',5:'재귀대명사',6:'현재시제',7:'부분부정(not all)',8:'현재시제(3인칭)'},
+    2:{1:'비교급(배수)',2:'조동사 부정(cannot)',3:'수동태+to부정사(be expected to)',4:'접속사 that 생략(명사절)',5:'현재시제',6:'접속사 that(명사절)',7:'조동사 can',8:'현재시제(3인칭)'},
+    3:{1:'과거시제',2:'be동사 현재',3:'be동사 현재',4:'비교급(better)',5:'one of the 최상급',6:'현재시제(3인칭)',7:'과거시제',8:'조동사 can'},
+    4:{1:'관계사 생략(목적격)',2:'현재시제',3:'형용사+전치사(to)',4:'수동태(현재)',5:'현재시제(look like)',6:'수동태(현재)',7:'현재시제(3인칭)',8:'조동사 can'},
+    5:{1:'가주어 it+that절',2:'유도부사 here(도치)',3:'최상급+to부정사',4:'조건절 if',5:'현재시제(3인칭)',6:'현재시제',7:'간접의문문(주어)',8:'조동사 will'},
+    6:{1:'동명사(보어)',2:'현재분사 수식(sitting)',3:'수동태(be known as)',4:'take turns+동명사',5:'현재분사 수식(sitting)',6:'주어-동사 일치(each)',7:'관계부사(that is why)',8:'be동사 현재'},
+    7:{1:'관계사 생략',2:'동명사(주어)',3:'사역동사 make(원형부정사)',4:'with 분사구문(부대상황)',5:'there is/are',6:'의문문(how)+5형식',7:'가주어 it+to부정사',8:'조건절 if'},
+    8:{1:'현재시제',2:'4형식(수여동사 give)',3:'수동태(be related to)',4:'조동사 had to(과거 의무)',5:'수동태(현재)',6:'3형식(give A to B)',7:'there was/were(과거)',8:'과거시제(불규칙 brought)'},
+    9:{1:'there is/are',2:'조동사 can',3:'조건절 if',4:'비교급(slower than)',5:'현재시제(look like)',6:'수동태(과거)',7:'현재시제(3인칭)',8:'be동사 현재(2형식)'},
+    10:{1:'조동사 can',2:'help+목적어+원형부정사',3:'가주어 it+to부정사',4:'현재시제',5:'현재시제',6:'수동태+to부정사(be used to V)',7:'수동태(현재)',8:'현재진행(get+형용사)'},
+    11:{1:'부정문(does not)',2:'5형식(find+목적격보어)',3:'과거시제',4:'과거시제',5:'형용사+전치사(with)',6:'가주어+수동태(It is said that)',7:'과거시제',8:'현재시제'},
+    12:{1:'관계대명사(who)',2:'현재시제',3:'관계부사(where)',4:'현재시제(3인칭)',5:'형용사+전치사(for)',6:'5형식(make+목적격보어)',7:'조동사 부정(cannot)',8:'조동사 can'}
+  },
+  'bridge-3':{
+    1:{1:'수동태(현재)',2:'조동사 should',3:'not only A but also B',4:'접속사 that(명사절)',5:'one of the 최상급',6:'현재시제',7:'부분부정(not every)',8:'명령문(and 병렬)'},
+    2:{1:'과거시제',2:'현재시제(3인칭)',3:'현재시제(3인칭)',4:'관계대명사(that)',5:'to부정사(형용사적)',6:'현재시제',7:'최상급',8:'현재진행'},
+    3:{1:'수동태(be born)',2:'수동태(과거)',3:'2형식(become)',4:'과거시제',5:'과거진행',6:'과거시제(be+일반동사)',7:'수동태(과거)',8:'be동사 과거(복수)'},
+    4:{1:'현재시제',2:'It takes 시간 구문',3:'현재시제',4:'현재시제',5:'one of the 최상급',6:'비교급',7:'there is/are',8:'현재시제'},
+    5:{1:'수동태(현재)',2:'과거시제',3:'현재진행',4:'2형식(become)',5:'현재시제',6:'가주어 it+수동태(It is said that)',7:'수동태 부정(과거)',8:'수동태(과거)'},
+    6:{1:'부정문(do not)',2:'현재시제',3:'조동사 can',4:'부분부정(not all)',5:'2형식(remain)',6:'현재시제',7:'현재시제',8:'현재시제'},
+    7:{1:'2형식(become)',2:'to부정사(목적)',3:'부정문(do not)',4:'현재진행',5:'형용사+전치사(for)',6:'one of the 최상급',7:'현재시제',8:'최상급'},
+    8:{1:'간접의문문(where)',2:'현재시제',3:'접속사 that 생략(명사절)',4:'2형식',5:'수동태(과거)',6:'과거시제',7:'과거시제',8:'과거시제(name)'},
+    9:{1:'to부정사(목적)',2:'조건절 if',3:'현재진행',4:'2형식',5:'be동사 부정',6:'수동태(현재)',7:'to부정사(목적어)',8:'there is/are'},
+    10:{1:'to부정사(목적어)',2:'5형식(teach+목적격보어 to부정사)',3:'과거시제',4:'과거시제',5:'과거시제',6:'to부정사(목적어)',7:'수동태 감정동사(be surprised at)',8:'동명사(목적어)'},
+    11:{1:'접속사 that(명사절)',2:'가주어 it+to부정사',3:'명령문',4:'5형식(make+목적격보어)',5:'주어-동사 일치(each)',6:'가주어 it+to부정사',7:'명령문',8:'부정명령문'},
+    12:{1:'현재시제(3인칭)',2:'조동사 can',3:'현재진행(get+형용사)',4:'수동태(현재)',5:'조동사 수동태(can be p.p.)',6:'수동태(현재)',7:'there is/are',8:'수동태(현재)'}
+  }
+};
+const GRAMMAR_FAMILY={ // 세부 태그 → 상위 계열 (린쌤 검수 확정 2026-06-18)
+  '2형식':'문장 형식',
+  '2형식(become)':'문장 형식',
+  '2형식(remain)':'문장 형식',
+  '3형식(give A to B)':'문장 형식',
+  '4형식(수여동사 give)':'문장 형식',
+  '5형식(find+목적격보어)':'문장 형식',
+  '5형식(make+목적격보어)':'문장 형식',
+  '5형식(teach+목적격보어 to부정사)':'문장 형식',
+  'It takes 시간 구문':'주요 구문·표현',
+  'What if 구문':'조건문',
+  'be동사 과거(복수)':'과거시제',
+  'be동사 부정':'부정문',
+  'be동사 현재':'현재시제·수일치',
+  'be동사 현재(2형식)':'현재시제·수일치',
+  'be동사 현재(복수)':'현재시제·수일치',
+  'by+동명사':'동명사',
+  'help+목적어+원형부정사':'사역·지각동사',
+  'mistake A for B':'주요 구문·표현',
+  'not only A but also B':'주요 구문·표현',
+  'one of the 최상급':'비교급·최상급',
+  'seem to부정사':'to부정사',
+  'so~that 구문':'주요 구문·표현',
+  'take turns +동명사':'주요 구문·표현',
+  'take turns+동명사':'주요 구문·표현',
+  'there is/are':'현재시제·수일치',
+  'there was/were(과거)':'과거시제',
+  'to부정사(목적)':'to부정사',
+  'to부정사(목적어)':'to부정사',
+  'to부정사(형용사적)':'to부정사',
+  'with 분사구문(부대상황)':'분사',
+  '가주어 it':'가주어 구문',
+  '가주어 it+that절':'가주어 구문',
+  '가주어 it+to부정사':'가주어 구문',
+  '가주어 it+수동태(It is said that)':'가주어 구문',
+  '가주어+수동태(It is said that)':'가주어 구문',
+  '간접의문문':'간접의문문',
+  '간접의문문(where)':'간접의문문',
+  '간접의문문(주어)':'간접의문문',
+  '과거시제':'과거시제',
+  '과거시제(be+일반동사)':'과거시제',
+  '과거시제(name)':'과거시제',
+  '과거시제(불규칙 brought)':'과거시제',
+  '과거진행':'진행시제',
+  '관계대명사(that)':'관계사',
+  '관계대명사(who)':'관계사',
+  '관계부사(that is why)':'관계사',
+  '관계부사(where)':'관계사',
+  '관계사 생략':'관계사',
+  '관계사 생략(목적격)':'관계사',
+  '동명사(of+동명사)':'동명사',
+  '동명사(목적어)':'동명사',
+  '동명사(보어)':'동명사',
+  '동명사(주어)':'동명사',
+  '명령문':'명령문',
+  '명령문(and 병렬)':'명령문',
+  '부분부정(not all)':'부분부정',
+  '부분부정(not every)':'부분부정',
+  '부정명령문':'명령문',
+  '부정문(did not)':'부정문',
+  '부정문(do not)':'부정문',
+  '부정문(does not)':'부정문',
+  '비교급':'비교급·최상급',
+  '비교급(better)':'비교급·최상급',
+  '비교급(slower than)':'비교급·최상급',
+  '비교급(배수)':'비교급·최상급',
+  '비교급(불규칙 better)':'비교급·최상급',
+  '비교급(우등)':'비교급·최상급',
+  '사역동사 make(원형부정사)':'사역·지각동사',
+  '사역동사(have)':'사역·지각동사',
+  '사역동사(make)':'사역·지각동사',
+  '수동태':'수동태',
+  '수동태 감정동사(be surprised at)':'수동태',
+  '수동태 부정(과거)':'수동태',
+  '수동태(be born)':'수동태',
+  '수동태(be known as)':'수동태',
+  '수동태(be related to)':'수동태',
+  '수동태(과거)':'수동태',
+  '수동태(현재)':'수동태',
+  '수동태+to부정사(be expected to)':'수동태',
+  '수동태+to부정사(be used to V)':'수동태',
+  '유도부사 here(도치)':'주요 구문·표현',
+  '의문문(do)':'의문문',
+  '의문문(how)':'의문문',
+  '의문문(how)+5형식':'의문문',
+  '재귀대명사':'대명사',
+  '접속사 that 생략(명사절)':'접속사',
+  '접속사 that(명사절)':'접속사',
+  '접속사(because/while)':'접속사',
+  '접속사(but)':'접속사',
+  '접속사(until)':'접속사',
+  '접속사(when)':'접속사',
+  '조건절 if':'조건문',
+  '조동사 can':'조동사',
+  '조동사 had to(과거 의무)':'조동사',
+  '조동사 should':'조동사',
+  '조동사 should(부정)':'조동사',
+  '조동사 will':'조동사',
+  '조동사 부정(cannot)':'조동사',
+  '조동사 수동태(can be p.p.)':'조동사',
+  '조동사(can)':'조동사',
+  '조동사(may)':'조동사',
+  '조동사(will)':'조동사',
+  '주어-동사 일치':'현재시제·수일치',
+  '주어-동사 일치(each)':'현재시제·수일치',
+  '최상급':'비교급·최상급',
+  '최상급(부사)':'비교급·최상급',
+  '최상급+to부정사':'비교급·최상급',
+  '현재분사 수식(sitting)':'분사',
+  '현재시제':'현재시제·수일치',
+  '현재시제(3인칭)':'현재시제·수일치',
+  '현재시제(look like)':'현재시제·수일치',
+  '현재진행':'진행시제',
+  '현재진행(get+형용사)':'진행시제',
+  '형용사+enough':'주요 구문·표현',
+  '형용사+to부정사':'to부정사',
+  '형용사+전치사(for)':'형용사+전치사',
+  '형용사+전치사(to)':'형용사+전치사',
+  '형용사+전치사(with)':'형용사+전치사'
+};
+/* 작문 오답에서 문법 약점을 '계열' 단위로 집계.
+   scores[u].comp.wrong(틀린 문항번호) → 현재 레벨 태그 조회 → 계열로 변환 후 집계.
+   반환: families=[{fam, count, details:{세부태그:횟수}}] 내림차순, totalWrong. */
+function compGrammarTagMap(){
+  return (COMP_TAGS_BY_LEVEL[currentLevel])||null;
+}
+function compGrammarWeak(){
+  const map=compGrammarTagMap();
+  const famTally={};let totalWrong=0;
+  if(map){
+    for(let u=1;u<=TOTAL_UNITS;u++){
+      const c=scores[u]&&scores[u].comp;
+      if(!c||c.raw==null||!c.wrong||!map[u])continue;
+      c.wrong.forEach(n=>{
+        const tag=map[u][n];if(!tag)return;
+        const fam=GRAMMAR_FAMILY[tag]||tag;
+        if(!famTally[fam])famTally[fam]={count:0,details:{}};
+        famTally[fam].count++;famTally[fam].details[tag]=(famTally[fam].details[tag]||0)+1;
+        totalWrong++;
+      });
+    }
+  }
+  const families=Object.keys(famTally).map(f=>({fam:f,count:famTally[f].count,details:famTally[f].details}))
+    .sort((a,b)=>b.count-a.count);
+  return {families,totalWrong};
+}
 /* WEEKLY_MAP에서 라운드별 영역 개수 자동 산출 (집계 코드 호환용) */
 function weeklyDist(round){
   const d={wk:0,comp:0,voc:0,grm:0};
@@ -696,8 +886,8 @@ let currentStuId=null;                  // 현재 선택된 학생 학번
 /* ===== 레벨(교재) — 학번×레벨로 점수 분리 보관 ===== */
 const LEVELS=[
   {key:'bridge-3', label:'The Class Bridge-3', ready:true},
-  {key:'bridge-1', label:'The Class Bridge-1', ready:false},
-  {key:'bridge-2', label:'The Class Bridge-2', ready:false},
+  {key:'bridge-1', label:'The Class Bridge-1', ready:true},
+  {key:'bridge-2', label:'The Class Bridge-2', ready:true},
   {key:'tc7-1', label:'The Class 7-1', ready:false},
   {key:'tc7-2', label:'The Class 7-2', ready:false},
   {key:'tc7-3', label:'The Class 7-3', ready:false},
@@ -1065,6 +1255,20 @@ function buildDiagnosis(){
     if(thin)txt=`현재까지 문항 수가 적어(${a.total}문항) 잠정 관찰입니다. `+txt;
     html+=`<div class="diagrow ${lvl}">▸ <b>${DOM_LABEL[d]}</b> 정답률 ${Math.round(rate*100)}% <span style="color:#99a">(오답 ${a.wrong}/${a.total})</span><br>${txt}</div>`;
   });
+  // 작문 내부 문법 약점 — '계열' 단위로 반복(2회+) 판정, 세부 태그 병기
+  const gw=compGrammarWeak();
+  if(gw.families.length){
+    const rep=gw.families.filter(x=>x.count>=2);
+    if(rep.length){
+      const items=rep.slice(0,4).map(x=>{
+        const det=Object.keys(x.details).sort((a,b)=>x.details[b]-x.details[a]).slice(0,3).join(', ');
+        return `<b>${x.fam}</b> <span style="color:#99a">(${x.count}회: ${det})</span>`;
+      }).join(' · ');
+      html+=`<div class="diagrow mid" style="border-color:#7c3aed;background:#f5f0fd">▸ <b>작문 속 문법 포인트</b><br>작문 오답에서 다음 문법 계열이 반복 관찰됩니다: ${items}. 해당 구조를 함께 점검하면 작문 정확도가 안정될 수 있습니다.</div>`;
+    } else if(gw.totalWrong>0){
+      html+=`<div class="diagrow" style="border-color:#7c3aed;background:#f5f0fd">▸ <b>작문 속 문법 포인트</b><br>작문 오답이 특정 문법 계열에 집중되지 않고 고르게 분포합니다. 현재는 특정 약점보다 전반적 정확도를 함께 다지는 단계로 보입니다.</div>`;
+    }
+  }
   g('diagArea').innerHTML=html;
 }
 
