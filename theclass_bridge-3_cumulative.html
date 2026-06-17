@@ -1319,9 +1319,9 @@ let roster={students:{}, classes:[]};  // students[id]={id,name,currentClass,cla
 let currentStuId=null;                  // 현재 선택된 학생 학번
 /* ===== 레벨(교재) — 학번×레벨로 점수 분리 보관 ===== */
 const LEVELS=[
-  {key:'bridge-3', label:'The Class Bridge-3', ready:true},
   {key:'bridge-1', label:'The Class Bridge-1', ready:true},
   {key:'bridge-2', label:'The Class Bridge-2', ready:true},
+  {key:'bridge-3', label:'The Class Bridge-3', ready:true},
   {key:'tc7-1', label:'The Class 7-1', ready:true},
   {key:'tc7-2', label:'The Class 7-2', ready:true},
   {key:'tc7-3', label:'The Class 7-3', ready:true},
@@ -1329,7 +1329,7 @@ const LEVELS=[
   {key:'tc9', label:'The Class 9', ready:false},
   {key:'tc10', label:'The Class 10', ready:false}
 ];
-const DEFAULT_LEVEL='bridge-3';
+const DEFAULT_LEVEL='bridge-1';
 let currentLevel=DEFAULT_LEVEL;       // 현재 선택된 레벨
 function levelLabel(k){const l=LEVELS.find(x=>x.key===k);return l?l.label:k;}
 function levelReady(k){const l=LEVELS.find(x=>x.key===k);return l?l.ready:false;}
