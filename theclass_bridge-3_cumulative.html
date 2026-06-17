@@ -162,8 +162,8 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
 
 /* 학부모 리포트 */
 .report{background:#fff;border:1px solid #e4e8f1;border-radius:14px;padding:30px 34px;box-shadow:0 1px 8px rgba(30,40,80,.07)}
-.rephead{display:flex;align-items:center;gap:14px;border-bottom:2px solid #22365a;padding-bottom:16px;margin-bottom:22px}
-.rephead img{height:38px}
+.rephead{display:flex;align-items:center;gap:13px;border-bottom:1.5px solid #d8e0ee;padding-bottom:16px;margin-bottom:22px}
+.rephead img{height:26px;opacity:.82}
 .rephead .rh-t{font-size:18px;font-weight:800;color:#16243e}
 .rephead .rh-s{font-size:11.5px;color:#8590ad;margin-top:2px}
 .rephead .rh-meta{margin-left:auto;text-align:right;font-size:11.5px;color:#556;line-height:1.7}
@@ -729,6 +729,13 @@ function composeDraft(){
 async function refineWithAI(){
   const orig=g('teacherComment').value.trim();
   if(!orig){setAiMsg('먼저 코멘트를 작성하거나 초안을 조합해주세요.','err');return;}
+  // 강사 인증 비밀번호 확보 (sitePw 없으면 입력받아 저장)
+  let pw=sessionStorage.getItem('sitePw')||'';
+  if(!pw){
+    pw=(prompt('강사 인증 비밀번호를 입력하세요. (한 번만 입력하면 됩니다)')||'').trim();
+    if(!pw){setAiMsg('비밀번호가 필요합니다.','err');return;}
+    sessionStorage.setItem('sitePw',pw);
+  }
   const nm=val('stuName')||'학생';
   const btn=g('aiBtn');btn.disabled=true;
   setAiMsg('✨ 린쌤 톤으로 다듬는 중입니다...','load');
@@ -746,13 +753,15 @@ async function refineWithAI(){
 - 한국어로만, 이모지 금지. 바로 본문부터 시작`;
   const userMsg=`[강사 메모]\n${orig}\n\n[관찰 키워드]\n${kwCtx||'(선택 없음)'}`;
   try{
-    const resp=await fetch('/api/refine',{method:'POST',headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:userMsg}]})});
+    const resp=await fetch('/api/refine',{method:'POST',headers:{'Content-Type':'application/json','x-site-password':pw},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:userMsg}]})});
+    if(resp.status===401){sessionStorage.removeItem('sitePw');throw new Error('AUTH');}
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const data=await resp.json();const out=data.content?.find(c=>c.type==='text')?.text||orig;
     g('teacherComment').value=out;teacherComment=out;
     setAiMsg('✓ 린쌤 톤으로 다듬었습니다. 필요하면 직접 수정하세요.','ok');
   }catch(e){
-    setAiMsg('AI 호출 중 오류가 발생했습니다. (배포 환경에서만 작동합니다)','err');
+    if(e.message==='AUTH')setAiMsg('비밀번호가 올바르지 않습니다. 다시 시도해주세요.','err');
+    else setAiMsg('AI 호출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.','err');
   }finally{btn.disabled=false;}
 }
 function setAiMsg(msg,type){const e=g('aiMsg');if(!e)return;e.className='aimsg show '+type;e.textContent=msg;}
