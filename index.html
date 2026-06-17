@@ -48,6 +48,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .gold .ic{background:#fbf3df;color:#c79a17}
 .gold h2{color:#c79a17}
 .badge-soon{position:absolute;top:14px;right:14px;font-size:9.5px;font-weight:700;color:#fff;background:#c9c7bf;border-radius:20px;padding:2px 9px;letter-spacing:.3px}
+.sectitle{display:flex;align-items:center;gap:10px;margin:30px 0 14px;font-size:13px;font-weight:800;color:#555;letter-spacing:.3px}
+.sectitle::after{content:'';flex:1;height:1px;background:#e0dfd8}
+.sectitle:first-child{margin-top:0}
+.tc .ic{background:#e7eefb;color:#1d3f8a}
+.tc h2{color:#1d3f8a}
+.tc .step{color:#5a7bc4;background:#eef3fc}
 .foot{text-align:center;margin-top:26px;font-size:11px;color:#aaa}
 .hidden{display:none}
 @media(max-width:680px){.cards{grid-template-columns:1fr 1fr}}
@@ -69,6 +75,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="err" id="err">비밀번호가 올바르지 않습니다.</div>
   </div>
   <div id="apps" class="hidden">
+    <div class="sectitle">초등부 · Elementary</div>
     <div class="steplabel"><b>학습 단계</b> &nbsp;Neuro Phonics → Pre Stella → Silver Stella → Inter Bridge → Inter Stella → Gold Stella</div>
     <div class="cards">
       <a class="card neuro" href="/neurophonics.html">
@@ -107,6 +114,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <h2>Gold Stella</h2>
         <div class="sub">Gold 1~5<br>Reading · Listening&amp;Writing 통합</div>
       </a>
+    </div>
+
+    <div class="sectitle">중·고등부 · The Class</div>
+    <div class="steplabel"><b>레벨</b> &nbsp;Bridge → The Class 7 → 8 · 9 · 10 &nbsp;·&nbsp; 레벨 전환은 앱 안에서 선택합니다</div>
+    <div class="cards">
+      <a class="card tc" href="/theclass_bridge-3_cumulative.html">
+        <span class="step">BRIDGE</span>
+        <div class="ic"><i class="ti ti-stairs-up"></i></div>
+        <h2>The Class · Bridge</h2>
+        <div class="sub">Bridge 1 · 2 · 3<br>누적 성적표 · 4영역 진단</div>
+      </a>
+      <div class="card tc soon">
+        <span class="badge-soon">준비중</span>
+        <div class="ic"><i class="ti ti-number-7-small"></i></div>
+        <h2>The Class 7</h2>
+        <div class="sub">7-1 · 7-2 · 7-3<br>매핑 준비 중</div>
+      </div>
+      <div class="card tc soon">
+        <span class="badge-soon">준비중</span>
+        <div class="ic"><i class="ti ti-school"></i></div>
+        <h2>The Class 8 · 9 · 10</h2>
+        <div class="sub">중등 심화 · 고등<br>매핑 준비 중</div>
+      </div>
     </div>
   </div>
   <div class="foot">파머스국제어학원 · 강사 전용 내부 도구</div>
