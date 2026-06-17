@@ -314,13 +314,17 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
       <div class="ctitle" style="margin:0"><i class="ti ti-file-text"></i>학부모 리포트 미리보기</div>
       <div style="display:flex;gap:8px;align-items:center">
-        <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#445;cursor:pointer;margin:0">
-          <input type="checkbox" id="hideScores" onchange="renderReport()" checked style="width:auto;cursor:pointer"> 점수·백분율 숨기기 (학부모용)
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#445;margin:0">표시 모드
+          <select id="reportMode" onchange="renderReport()" style="width:auto;font-size:12px;padding:5px 8px">
+            <option value="hide" selected>막대·등급만 (점수 숨김)</option>
+            <option value="show">점수 공개 (전체 노출)</option>
+            <option value="minimal">응시 여부만 (가장 간략)</option>
+          </select>
         </label>
         <button class="btn bsec" onclick="window.print()"><i class="ti ti-printer"></i>인쇄 / PDF</button>
       </div>
     </div>
-    <div class="hint" style="margin-top:10px"><i class="ti ti-info-circle"></i> 체크를 켜면 정확한 점수·백분율이 가려지고 막대·등급만 보입니다. 이 상태로 인쇄하면 학부모용 리포트가 됩니다.</div>
+    <div class="hint" style="margin-top:10px"><i class="ti ti-info-circle"></i> <b>막대·등급만</b>: 정확한 점수는 가리고 수준(막대·상중하)만 보입니다(학부모용 권장). <b>점수 공개</b>: 점수·백분율 전체 노출. <b>응시 여부만</b>: 막대·등급도 가리고 응시 완료(✓)만 표시.</div>
   </div>
   <div id="reportArea"></div>
   <div class="navrow">
@@ -770,23 +774,28 @@ function setAiMsg(msg,type){const e=g('aiMsg');if(!e)return;e.className='aimsg s
 /* ===== 학부모 리포트 ===== */
 function gradeColor(ratio){return ratio>=GRADE_CUT.up?'#2d7a4f':ratio>=GRADE_CUT.mid?'#b8860b':'#c0392b';}
 function renderReport(){
-  const hide=g('hideScores')?g('hideScores').checked:true;
+  const mode=g('reportMode')?g('reportMode').value:'hide';
+  const showScore=(mode==='show');     // 점수·백분율 노출
+  const showBar=(mode!=='minimal');    // 막대·등급 노출 (minimal이면 숨김)
   const nm=val('stuName')||'학생';const cls=val('stuClass')||'-';const teacher=val('teacher')||'린쌤';
   const today=new Date().toISOString().slice(0,10);
   const anyData=TESTS.some(t=>domainAvg(t.key).n>0);
+  const CHECK='<span style="color:#2d7a4f;font-weight:800">✓</span>';
   // 헤더
   let html=`<div class="report"><div class="rephead"><div class="logochip"><img src="${LOGO_REPORT}" alt="PAMUS"></div><div><div class="rh-t">The Class Bridge-3 학습 리포트</div><div class="rh-s">파머스국제어학원 광교브랜치 · 중등 영어 독해</div></div><div class="rh-meta"><b>${nm}</b> 학생 · ${cls}<br>담당: ${teacher} · ${today}</div></div>`;
   if(!anyData){html+='<div class="emptyhint">아직 입력된 데이터가 없습니다.<br>점수를 입력하면 리포트가 생성됩니다.</div></div>';g('reportArea').innerHTML=html;return;}
-  // 1. 영역별 성취 막대
-  html+=`<div class="repsec"><h3>영역별 성취</h3>`;
-  TESTS.forEach(t=>{
-    const d=domainAvg(t.key);if(d.avg==null)return;
-    const pct=Math.round(d.avg*1000)/10;const grade=gradeOf(d.avg);const col=gradeColor(d.avg);
-    const pctTxt=hide?'':`<span style="color:#889;font-size:11px">${pct}%</span>`;
-    html+=`<div class="repbar"><div class="bl"><span><span class="nm">${t.label}</span><span class="gr" style="background:${col}1f;color:${col}">${grade}</span></span>${pctTxt}</div><div class="track"><div class="fill" style="width:${d.avg*100}%;background:${col}"></div></div></div>`;
-  });
-  html+=`</div>`;
-  // 2. Layer 1 진단 요약 (서술형, 점수 무관)
+  // 1. 영역별 성취 (minimal 모드에선 막대 대신 응시 영역 표시)
+  if(showBar){
+    html+=`<div class="repsec"><h3>영역별 성취</h3>`;
+    TESTS.forEach(t=>{
+      const d=domainAvg(t.key);if(d.avg==null)return;
+      const pct=Math.round(d.avg*1000)/10;const grade=gradeOf(d.avg);const col=gradeColor(d.avg);
+      const pctTxt=showScore?`<span style="color:#889;font-size:11px">${pct}%</span>`:'';
+      html+=`<div class="repbar"><div class="bl"><span><span class="nm">${t.label}</span><span class="gr" style="background:${col}1f;color:${col}">${grade}</span></span>${pctTxt}</div><div class="track"><div class="fill" style="width:${d.avg*100}%;background:${col}"></div></div></div>`;
+    });
+    html+=`</div>`;
+  }
+  // 2. Layer 1 진단 요약 (서술형, 점수 무관 — 모든 모드 공통)
   const agg=aggregateWrong();const diagRows=[];
   DOM_ORDER.forEach(d=>{const a=agg[d];if(a.total===0)return;const rate=(a.total-a.wrong)/a.total;const lvl=rate>=0.8?'strong':rate>=0.6?'mid':'weak';const thin=a.total<4;let txt=DIAG_TEXT[d][lvl];if(thin)txt='현재까지 관찰된 범위에서, '+txt;diagRows.push(`<div class="drow">▸ <b>${DOM_LABEL[d]}</b> — ${txt}</div>`);});
   if(diagRows.length)html+=`<div class="repsec repdiag"><h3>학습 진단</h3>${diagRows.join('')}</div>`;
@@ -799,7 +808,7 @@ function renderReport(){
     rows+=`<tr><td class="ut">${u}</td>`;
     TESTS.forEach(t=>{const c=scores[u]&&scores[u][t.key];
       let cell='–';
-      if(c&&c.raw!=null){cell=hide?'●':c.raw;}
+      if(c&&c.raw!=null){cell=showScore?c.raw:CHECK;}
       rows+=`<td>${cell}</td>`;});
     rows+='</tr>';
   }
@@ -807,7 +816,7 @@ function renderReport(){
     html+=`<div class="repsec"><h3>Unit별 학습 기록</h3><table class="reptable"><thead><tr><th>Unit</th>`;
     TESTS.forEach(t=>html+=`<th>${t.label}</th>`);
     html+=`</tr></thead><tbody>${rows}</tbody></table>`;
-    if(hide)html+=`<div style="font-size:10.5px;color:#aab;margin-top:6px">● 표시는 응시 완료를 의미합니다. 상세 점수는 상담 시 안내드립니다.</div>`;
+    if(!showScore)html+=`<div style="font-size:10.5px;color:#aab;margin-top:6px">✓ 표시는 응시 완료를 의미합니다. 상세 점수는 상담 시 안내드립니다.</div>`;
     html+=`</div>`;
   }
   html+=`<div class="repfoot">본 리포트는 객관적 평가 데이터에 근거하여 작성되었습니다. · 파머스국제어학원 광교브랜치</div></div>`;
