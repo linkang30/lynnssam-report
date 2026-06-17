@@ -324,7 +324,7 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
       <span><i style="background:#7c3aed"></i>문법 (Grammar)</span>
     </div>
     <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;gap:8px">
-      <span style="font-size:11px;color:#889">Tab 키로 칸을 이동하며 빠르게 입력하세요. <b style="color:#2d7a4f">빈 칸은 0점이 아니라 미응시</b>로 처리되어 평균·진단에서 자동 제외됩니다(어휘·작문·독해·문법 모두 동일). 시험을 보지 않은 회차는 비워두세요.</span>
+      <span style="font-size:11px;color:#889"><b style="color:#2d7a4f">어휘·문법</b>은 점수를 직접 입력하고, <b style="color:#2b6cb0">독해·작문</b>은 ‘오답 체크’ 버튼으로 O/X를 표시하면 점수가 자동 계산됩니다. <b style="color:#2d7a4f">빈 칸은 0점이 아니라 미응시</b>로 처리되어 평균·진단에서 자동 제외됩니다(4영역 동일). 시험을 보지 않은 회차는 비워두세요.</span>
       <div style="display:flex;gap:8px">
         <button class="btn bsec" onclick="resetStudent()" style="color:#c0392b;border-color:#f3d4d4"><i class="ti ti-trash"></i>전체 초기화</button>
         <button class="btn bgrn" onclick="saveAll()"><i class="ti ti-device-floppy"></i>전체 저장</button>
@@ -463,6 +463,24 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
   </div>
 </div>
 
+<!-- Worksheet/Composition 오답 체크 모달 -->
+<div class="modal-bg" id="compModal">
+  <div class="modal">
+    <h2 id="compModalTitle">Worksheet 작문 오답 체크</h2>
+    <div class="msub" id="compModalSub"></div>
+    <div class="hint" style="margin-bottom:12px"><i class="ti ti-circle-check"></i> 8문항 전부 작문 영역입니다. <b>[1-4] 배열 + [5-8] 영작</b>, 문장 전체가 맞아야 정답(O)입니다. 틀린 문항을 눌러 X로 표시하세요.</div>
+    <div class="qgrid" id="compGrid"></div>
+    <div class="modal-foot">
+      <div class="modal-score" id="compModalScore"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn bsec" id="compClearBtn" onclick="clearComp()" style="display:none;color:#c0392b;border-color:#f3d4d4"><i class="ti ti-eraser"></i>응시 기록 삭제</button>
+        <button class="btn bsec" onclick="closeComp(false)">취소</button>
+        <button class="btn bgrn" onclick="closeComp(true)"><i class="ti ti-check"></i>적용</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <!-- 명단 관리 모달 -->
@@ -579,6 +597,14 @@ const WEEKLY_MAP={
     {n:15,dom:'comp'},{n:16,dom:'comp'},{n:17,dom:'comp'},{n:18,dom:'comp'}
   ]
 };
+/* ===== Worksheet/Composition: Unit당 8문항 (1-4 배열 / 5-8 영작), 전부 작문 영역 =====
+   문항 단위 O/X, 같은 배점(8점 만점). type은 나중 문법 태그 확장 대비 메타데이터. */
+const COMP_ITEMS=[
+  {n:1,type:'arrange'},{n:2,type:'arrange'},{n:3,type:'arrange'},{n:4,type:'arrange'},
+  {n:5,type:'fill'},{n:6,type:'fill'},{n:7,type:'fill'},{n:8,type:'fill'}
+];
+const COMP_TOTAL=8;
+const COMP_TYPE_LABEL={arrange:'배열',fill:'영작'};
 /* WEEKLY_MAP에서 라운드별 영역 개수 자동 산출 (집계 코드 호환용) */
 function weeklyDist(round){
   const d={wk:0,comp:0,voc:0,grm:0};
@@ -740,6 +766,8 @@ function buildTable(){
   TESTS.forEach(t=>{
     if(t.key==='wk'){
       body+=`<td colspan="2" style="font-size:11px;color:#778">18 (고정)</td>`;
+    }else if(t.key==='comp'){
+      body+=`<td colspan="2" style="font-size:11px;color:#778">8 (고정)</td>`;
     }else{
       body+=`<td class="scorecell" colspan="2"><input class="sc" type="number" min="1" id="max_${t.key}" value="${maxByTest[t.key]}" oninput="onMaxChange('${t.key}')" title="${t.label} 만점"></td>`;
     }
@@ -756,6 +784,11 @@ function buildTable(){
         const done = cell.raw!=null;
         const lbl = done ? `${cell.raw}/18 ✏` : '오답 체크';
         body+=`<td class="scorecell" colspan="2"><button class="wkbtn ${done?'done':''}" id="wkbtn_${u}" onclick="openWeekly(${u})"><i class="ti ti-checklist"></i>${lbl}</button></td>`;
+      }else if(t.key==='comp'){
+        // 작문(Worksheet): 8문항 O/X 버튼
+        const done = cell.raw!=null;
+        const lbl = done ? `${cell.raw}/8 ✏` : '오답 체크';
+        body+=`<td class="scorecell" colspan="2"><button class="wkbtn ${done?'done':''}" id="compbtn_${u}" onclick="openComp(${u})"><i class="ti ti-pencil"></i>${lbl}</button></td>`;
       }else{
         body+=`<td class="scorecell"><input class="sc" type="number" min="0" id="sc_${u}_${t.key}" value="${rawv}" placeholder="–" oninput="onScoreChange(${u},'${t.key}')"></td>`;
         body+=`<td class="pct" id="pct_${u}_${t.key}">${pctText(u,t.key)}</td>`;
@@ -836,6 +869,51 @@ function clearWeekly(){
   if(scores[u]&&scores[u].wk)delete scores[u].wk;
   buildTable();
   g('weeklyModal').classList.remove('on');wkEditing=null;
+}
+/* ===== Worksheet/Composition 모달 ===== */
+let compEditing=null;
+function openComp(u){
+  const hasRecord = scores[u]&&scores[u].comp&&scores[u].comp.raw!=null;
+  const existing=scores[u]&&scores[u].comp&&scores[u].comp.wrong?scores[u].comp.wrong:[];
+  compEditing={unit:u, wrongSet:new Set(existing)};
+  g('compModalTitle').textContent=`Worksheet 작문 오답 체크 — Unit ${u}`;
+  g('compModalSub').textContent=`Unit ${u} · 8문항 · [1-4] 배열 + [5-8] 영작 · 문장 전체 정답 기준`;
+  g('compClearBtn').style.display = hasRecord ? '' : 'none';
+  renderCompGrid();
+  g('compModal').classList.add('on');
+}
+function renderCompGrid(){
+  const {wrongSet}=compEditing;
+  g('compGrid').innerHTML=COMP_ITEMS.map(it=>{
+    const w=wrongSet.has(it.n);
+    return `<div class="qbtn dom-comp ${w?'wrong':''}" onclick="toggleComp(${it.n})"><span class="qn" style="color:${DOM_COLOR.comp}">${it.n}</span><span class="qd">${COMP_TYPE_LABEL[it.type]}</span><span class="qs">${w?'X':'O'}</span></div>`;
+  }).join('');
+  updateCompScore();
+}
+function toggleComp(n){const s=compEditing.wrongSet;if(s.has(n))s.delete(n);else s.add(n);renderCompGrid();}
+function updateCompScore(){
+  const wrong=compEditing.wrongSet.size;const correct=COMP_TOTAL-wrong;
+  g('compModalScore').innerHTML=`정답 <b>${correct}</b> / ${COMP_TOTAL} · 오답 ${wrong}`;
+}
+function closeComp(apply){
+  if(apply){
+    const u=compEditing.unit;const wrong=[...compEditing.wrongSet].sort((a,b)=>a-b);
+    // 배열/영작 유형별 오답 수도 메타로 저장 (나중 태그 확장 대비)
+    const byType={arrange:0,fill:0};
+    COMP_ITEMS.forEach(it=>{if(compEditing.wrongSet.has(it.n))byType[it.type]++;});
+    if(!scores[u])scores[u]={};
+    scores[u].comp={raw:COMP_TOTAL-wrong.length, max:COMP_TOTAL, wrong, byType};
+    buildTable();
+  }
+  g('compModal').classList.remove('on');compEditing=null;
+}
+function clearComp(){
+  if(!compEditing)return;
+  const u=compEditing.unit;
+  if(!confirm(`Unit ${u}의 작문(Worksheet) 응시 기록을 삭제하고 미응시로 되돌릴까요?\n\n삭제하면 이 회차의 오답 체크가 모두 지워지며 평균·진단에서 제외됩니다. 이 작업은 되돌릴 수 없습니다.`))return;
+  if(scores[u]&&scores[u].comp)delete scores[u].comp;
+  buildTable();
+  g('compModal').classList.remove('on');compEditing=null;
 }
 /* monthly[round] = {wrong15:[틀린 객관식 번호], comp:{16:1.0|0.5|0,...}, byDom:{}, raw, max} */
 function renderMonthlyGrid(){
@@ -923,6 +1001,12 @@ function aggregateWrong(){
     const dist=monthlyDist(parseInt(r));
     DOM_ORDER.forEach(d=>{agg[d].total+=(dist[d]||0);agg[d].wrong+=(m.byDom[d]||0);});
   });
+  // Worksheet/Composition (작문 영역에 합산)
+  for(let u=1;u<=TOTAL_UNITS;u++){
+    const c=scores[u]&&scores[u].comp;if(!c||c.raw==null||!c.wrong)continue;
+    agg.comp.total+=COMP_TOTAL;
+    agg.comp.wrong+=c.wrong.length;
+  }
   return agg;
 }
 const DIAG_TEXT={
