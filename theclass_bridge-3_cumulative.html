@@ -225,6 +225,7 @@ table.score td.weekly{font-size:10px;color:#c0392b;cursor:default}
 .rost-item .ri-id{font-size:11px;font-weight:700;color:#3f5a85;background:#eef2fb;border-radius:6px;padding:2px 8px;min-width:48px;text-align:center}
 .rost-item .ri-name{font-weight:700;color:#1a2238}
 .rost-item .ri-cls{font-size:11px;color:#889;margin-left:auto}
+.rost-item .ri-edit{color:#3f5a85;cursor:pointer;font-size:15px;padding:2px}
 .rost-item .ri-del{color:#c0392b;cursor:pointer;font-size:15px;padding:2px}
 .rost-hint{font-size:11px;color:#3f5a85;background:#eef2fb;border-radius:8px;padding:8px 12px;margin-bottom:12px}
 
@@ -284,8 +285,8 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
 
 <div class="steps">
   <button id="sb4" class="sbtn" onclick="go(4)"><i class="ti ti-layout-grid"></i>반 현황</button>
-  <button id="sb5" class="sbtn" onclick="go(5)"><i class="ti ti-vocabulary"></i>Daily Vocab</button>
-  <button id="sb0" class="sbtn active" onclick="go(0)"><i class="ti ti-table"></i>누적 점수 입력</button>
+  <button id="sb5" class="sbtn" onclick="go(5)"><i class="ti ti-vocabulary"></i><span style="display:flex;flex-direction:column;line-height:1.15;text-align:center"><span>Daily Vocab</span><span style="font-size:9.5px;font-weight:600;opacity:.75">능률보카 · 워드맥스</span></span></button>
+  <button id="sb0" class="sbtn active" onclick="go(0)"><i class="ti ti-table"></i><span style="display:flex;flex-direction:column;line-height:1.15;text-align:center"><span>시험 점수 입력</span><span style="font-size:9.5px;font-weight:600;opacity:.75">독해 · 어휘 · 문법 · 작문</span></span></button>
   <button id="sb1" class="sbtn" onclick="go(1)"><i class="ti ti-target"></i>Monthly Test</button>
   <button id="sb2" class="sbtn" onclick="go(2)"><i class="ti ti-chart-bar"></i>집계 · 진단</button>
   <button id="sb3" class="sbtn" onclick="go(3)"><i class="ti ti-file-text"></i>학부모 리포트</button>
@@ -445,10 +446,23 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
 
 <!-- STEP 5: Daily Vocab -->
 <div id="s5" class="hidden">
-  <div class="card" id="vocabNoStu" style="text-align:center;color:#889;padding:30px;display:none">
-    <i class="ti ti-user-question" style="font-size:28px;color:#cbd0dd"></i>
-    <div style="margin-top:8px">먼저 <b>누적 점수 입력</b> 탭에서 학생을 선택해주세요.</div>
-    <button class="btn bsec" style="margin-top:12px" onclick="go(0)"><i class="ti ti-arrow-left"></i> 학생 선택하러 가기</button>
+  <div class="card">
+    <div class="fldrow" style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+      <div class="fld" style="flex:1;min-width:180px"><label>반 선택</label>
+        <select id="vocabClassSelect" onchange="onVocabClassSelect()"><option value="">— 반을 선택하세요 —</option></select>
+      </div>
+      <div class="fld" style="flex:1;min-width:180px"><label>레벨 (교재)</label>
+        <select id="vocabLevelSelect" onchange="onVocabLevelSelect()"></select>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="btn bsec" onclick="openRoster()"><i class="ti ti-list-check"></i>명단 관리</button>
+      </div>
+    </div>
+    <div id="vocabStuChipArea" style="margin-top:10px"></div>
+  </div>
+  <div id="vocabNoStu" style="text-align:center;color:#889;padding:24px;display:none">
+    <i class="ti ti-arrow-up" style="font-size:22px;color:#cbd0dd"></i>
+    <div style="margin-top:6px">위에서 반과 학생을 선택하면 단어 입력 화면이 나타납니다.</div>
   </div>
   <div id="vocabBody" style="display:none">
     <div class="card" style="padding:13px 18px;display:flex;align-items:center;gap:10px">
@@ -550,6 +564,11 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
       </div>
       <div id="rostAddMsg" style="font-size:11px;margin-top:4px;display:none"></div>
     </div>
+    <div style="position:relative;margin-bottom:8px">
+      <i class="ti ti-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#aab;font-size:14px"></i>
+      <input type="text" id="rostSearch" placeholder="학번·이름·반·학교로 검색" oninput="renderRosterList()" style="width:100%;padding:7px 10px 7px 30px;border:1px solid #cdd5e6;border-radius:8px;font-size:13px">
+      <i class="ti ti-x" id="rostSearchClear" onclick="g('rostSearch').value='';renderRosterList();g('rostSearch').focus()" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#aab;font-size:15px;cursor:pointer"></i>
+    </div>
     <div class="rost-list" id="rostList"></div>
     <div class="modal-foot">
       <div style="font-size:11px;color:#889" id="rostCount"></div>
@@ -578,6 +597,32 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
       <div style="display:flex;gap:8px">
         <button class="btn bsec" onclick="g('moveModal').classList.remove('on')">취소</button>
         <button class="btn bgrn" onclick="applyMove()"><i class="ti ti-check"></i>변경</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- 학생 수정 모달 (명단 관리용) -->
+<div class="modal-bg" id="editStuModal" style="z-index:60">
+  <div class="modal" style="max-width:420px">
+    <h2>학생 정보 수정</h2>
+    <div class="msub" id="editStuSub"></div>
+    <input type="hidden" id="editStuId">
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+      <div><label style="font-size:11px;font-weight:700;color:#445">이름</label><input type="text" id="editStuName" style="width:100%"></div>
+      <div><label style="font-size:11px;font-weight:700;color:#445">반</label>
+        <select id="editStuClassSel" onchange="onEditClassSel()" style="width:100%"></select>
+        <input type="text" id="editStuClass" placeholder="새 반 이름 입력" style="width:100%;margin-top:6px;display:none"></div>
+      <div><label style="font-size:11px;font-weight:700;color:#445">학교·학년 (선택)</label><input type="text" id="editStuSchool" style="width:100%"></div>
+      <div id="editStuHist"></div>
+    </div>
+    <div class="modal-foot" style="margin-top:16px">
+      <div style="font-size:11px;color:#889">학번은 변경할 수 없습니다</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn bsec" onclick="g('editStuModal').classList.remove('on')">취소</button>
+        <button class="btn bgrn" onclick="applyEditStu()"><i class="ti ti-check"></i>저장</button>
       </div>
     </div>
   </div>
@@ -2112,6 +2157,10 @@ function renderStuChips(){
   html+=`<span class="stu-chip addnew" onclick="openRoster('${esc(cls)}')"><i class="ti ti-plus"></i>학생 추가</span>`;
   html+='</div>';
   area.innerHTML=html;
+  if(g('vocabStuChipArea')&&typeof renderVocabStuChips==='function'){
+    const vc=g('vocabClassSelect');
+    if(vc&&vc.value)renderVocabStuChips();
+  }
 }
 /* ===== Daily Vocab (정규 Reading Vocab + 외부교재) ===== */
 // 레벨 라인별 정규 구조: bridge=12 lessons/20, tc(7~10)=8 lessons/30
@@ -2138,7 +2187,57 @@ function switchVTab(t){
   });
 }
 
+/* Daily Vocab 탭 전용 반·레벨·학생 선택 (시험점수 탭과 currentStuId/currentLevel 공유) */
+function renderVocabSelectors(){
+  // 레벨 드롭다운 (시험점수 탭과 동일 목록)
+  const lvSel=g('vocabLevelSelect');
+  if(lvSel){lvSel.innerHTML=LEVELS.map(l=>`<option value="${l.key}">${esc(l.label)}${l.ready?'':' (준비 중)'}</option>`).join('');lvSel.value=currentLevel;}
+  // 반 드롭다운
+  const clSel=g('vocabClassSelect');
+  if(clSel){
+    const cur=clSel.value;
+    clSel.innerHTML='<option value="">— 반을 선택하세요 —</option>'+classList().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    // 현재 선택 학생의 반을 자동 반영
+    const s=curStu();
+    if(s&&s.currentClass)clSel.value=s.currentClass;
+    else if(cur)clSel.value=cur;
+  }
+  renderVocabStuChips();
+}
+function onVocabLevelSelect(){
+  currentLevel=g('vocabLevelSelect').value;
+  syncLevelStruct();
+  // 시험점수 탭 레벨 드롭다운도 동기화
+  const ls=g('levelSelect');if(ls)ls.value=currentLevel;
+  renderVocabStuChips();
+  renderVocabTab();
+}
+function onVocabClassSelect(){
+  renderVocabStuChips();
+}
+function renderVocabStuChips(){
+  const area=g('vocabStuChipArea');if(!area)return;
+  const cls=g('vocabClassSelect')?g('vocabClassSelect').value:'';
+  if(!cls){area.innerHTML='<div style="font-size:12px;color:#aab;padding:4px 2px">반을 선택하면 학생 목록이 나타납니다.</div>';return;}
+  const list=studentsInClass(cls);
+  if(list.length===0){area.innerHTML='<div class="roster-empty">이 반에 등록된 학생이 없습니다. 시험 점수 입력 탭의 ‘명단 관리’에서 추가하세요.</div>';return;}
+  let html='<div class="stu-chips">';
+  list.forEach(s=>{
+    const on=s.id===currentStuId?'on':'';
+    html+=`<span class="stu-chip ${on}" onclick="selectVocabStudent('${esc(s.id)}')"><span class="sid">${esc(s.id)}</span>${esc(s.name)}</span>`;
+  });
+  html+='</div>';
+  area.innerHTML=html;
+}
+function selectVocabStudent(id){
+  currentStuId=id;
+  loadStudent();           // 시험점수 탭과 동일하게 학생 데이터 로드(공유 상태 유지)
+  renderVocabStuChips();   // 칩 선택 표시 갱신
+  renderVocabTab();        // 단어 입력 화면 렌더
+}
+
 function renderVocabTab(){
+  renderVocabSelectors();
   const noStu=g('vocabNoStu'),body=g('vocabBody');
   if(!currentStuId||!roster.students[currentStuId]){if(noStu)noStu.style.display='block';if(body)body.style.display='none';return;}
   if(noStu)noStu.style.display='none';if(body)body.style.display='block';
@@ -2273,13 +2372,20 @@ function closeRoster(){
 }
 function renderRosterList(){
   const ids=Object.keys(roster.students);
-  g('rostCount').textContent=`총 ${ids.length}명 등록`;
-  if(ids.length===0){g('rostList').innerHTML='<div class="roster-empty">등록된 학생이 없습니다.</div>';return;}
-  const sorted=Object.values(roster.students).sort((a,b)=>(a.currentClass||'').localeCompare(b.currentClass||'','ko')||a.name.localeCompare(b.name,'ko'));
+  const q=(g('rostSearch')?g('rostSearch').value:'').trim().toLowerCase();
+  const clr=g('rostSearchClear');if(clr)clr.style.display=q?'block':'none';
+  if(ids.length===0){g('rostCount').textContent='총 0명 등록';g('rostList').innerHTML='<div class="roster-empty">등록된 학생이 없습니다.</div>';return;}
+  let arr=Object.values(roster.students);
+  if(q){
+    arr=arr.filter(s=>[s.id,s.name,s.currentClass,s.school].some(v=>(v||'').toLowerCase().includes(q)));
+  }
+  g('rostCount').textContent= q ? `검색 ${arr.length}명 / 전체 ${ids.length}명` : `총 ${ids.length}명 등록`;
+  if(arr.length===0){g('rostList').innerHTML='<div class="roster-empty">검색 결과가 없습니다.</div>';return;}
+  const sorted=arr.sort((a,b)=>(a.currentClass||'').localeCompare(b.currentClass||'','ko')||a.name.localeCompare(b.name,'ko'));
   g('rostList').innerHTML=sorted.map(s=>{
     const filled=hasData(s.id);
     const sc=s.school?` <span style="color:#aab">·</span> ${esc(s.school)}`:'';
-    return `<div class="rost-item"><span class="ri-id">${esc(s.id)}</span><span class="ri-name">${esc(s.name)}</span>${sc}<span class="ri-cls">${esc(s.currentClass||'-')}${filled?` · ${filled}칸`:''}</span><i class="ti ti-trash ri-del" onclick="deleteStudent('${esc(s.id)}')"></i></div>`;
+    return `<div class="rost-item"><span class="ri-id">${esc(s.id)}</span><span class="ri-name">${esc(s.name)}</span>${sc}<span class="ri-cls">${esc(s.currentClass||'-')}${filled?` · ${filled}칸`:''}</span><i class="ti ti-edit ri-edit" onclick="openEditStu('${esc(s.id)}')" title="수정·반이동"></i><i class="ti ti-trash ri-del" onclick="deleteStudent('${esc(s.id)}')" title="삭제"></i></div>`;
   }).join('');
 }
 function addStudent(){
@@ -2295,6 +2401,7 @@ function addStudent(){
   g('rostId').value='';g('rostName').value='';g('rostSchool').value='';  // 반은 연속 입력 위해 유지
   g('rostId').focus();
   renderRosterList();renderClassSelect();
+  if(g('vocabClassSelect')&&g('vocabClassSelect').value&&typeof renderVocabSelectors==='function')renderVocabSelectors();
 }
 function deleteStudent(id){
   const s=roster.students[id];if(!s)return;
@@ -2307,6 +2414,58 @@ function deleteStudent(id){
   if(currentStuId===id){currentStuId=null;scores=blankScores();monthly={};selectedKw=new Set();teacherComment='';buildTable();}
   saveRoster();
   renderRosterList();renderClassSelect();renderStuChips();renderCurStu();
+  if(g('vocabClassSelect')&&g('vocabClassSelect').value&&typeof renderVocabSelectors==='function')renderVocabSelectors();
+}
+
+function openEditStu(id){
+  const s=roster.students[id];if(!s)return;
+  g('editStuId').value=id;
+  g('editStuSub').innerHTML=`학번 <b>${esc(id)}</b>`;
+  g('editStuName').value=s.name||'';
+  g('editStuSchool').value=s.school||'';
+  // 반 드롭다운 채우기 (등록된 반 + 새 반 입력 옵션)
+  const sel=g('editStuClassSel');const cls=s.currentClass||'';
+  const opts=classList();
+  let oh=opts.map(c=>`<option value="${esc(c)}"${c===cls?' selected':''}>${esc(c)}</option>`).join('');
+  oh+=`<option value="__NEW__">+ 새 반 직접 입력</option>`;
+  sel.innerHTML=oh;
+  sel.value=cls;
+  g('editStuClass').style.display='none';
+  g('editStuClass').value='';
+  // 반 변경 이력
+  const hist=(s.classHistory||[]).map(hh=>`<div style="font-size:11px;color:#667;padding:2px 0">${esc(hh.class)} <span style="color:#aab">(${hh.from}부터)</span></div>`).join('');
+  g('editStuHist').innerHTML=hist?`<label style="font-size:11px;font-weight:700;color:#445">반 변경 이력</label>${hist}`:'';
+  renderClassSelect();
+  g('editStuModal').classList.add('on');
+}
+function onEditClassSel(){
+  const sel=g('editStuClassSel');const inp=g('editStuClass');
+  if(sel.value==='__NEW__'){inp.style.display='block';inp.focus();}
+  else{inp.style.display='none';inp.value='';}
+}
+function applyEditStu(){
+  const id=val('editStuId');const s=roster.students[id];if(!s)return;
+  const name=val('editStuName').trim();
+  const selV=val('editStuClassSel');
+  const cls=(selV==='__NEW__')?val('editStuClass').trim():selV;
+  const school=val('editStuSchool').trim();
+  if(!name){alert('이름을 입력하세요.');return;}
+  if(!cls){alert('반을 입력하세요.');return;}
+  const classChanged=(cls!==s.currentClass);
+  // 적용
+  s.name=name;
+  s.school=school;
+  if(classChanged){
+    s.currentClass=cls;
+    if(!s.classHistory)s.classHistory=[];
+    s.classHistory.push({class:cls,from:new Date().toISOString().slice(0,10)});
+    if(!roster.classes.includes(cls))roster.classes.push(cls);
+  }
+  saveRoster();
+  g('editStuModal').classList.remove('on');
+  // 화면 갱신
+  renderRosterList();renderClassSelect();renderStuChips();renderCurStu();
+  if(g('vocabClassSelect')&&g('vocabClassSelect').value&&typeof renderVocabSelectors==='function')renderVocabSelectors();
 }
 
 /* ===== 반 변경 모달 ===== */
