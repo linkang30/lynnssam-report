@@ -123,11 +123,11 @@ textarea{resize:vertical}
     <div class="row3">
       <div><label>학생 이름</label><input type="text" id="stuName" placeholder="예: 강코니" oninput="onNameInput()"></div>
       <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 광교초" oninput="onNameInput()"></div>
-      <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 4학년"></div>
+      <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 4학년" onchange="saveStuField('grade',this.value)"></div>
     </div>
     <div class="row3">
-      <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: Lynn T."></div>
-      <div><label>보고서 월</label><input type="text" id="repMonth" placeholder="예: 2026년 6월"></div>
+      <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: Lynn T." onchange="saveStuField('teacher',this.value)"></div>
+      <div><label>보고서 월</label><input type="text" id="repMonth" placeholder="예: 2026년 6월" onchange="saveReportMonth(this.value)"></div>
     </div>
     <div style="margin-bottom:10px">
       <label>과정 선택</label>
@@ -397,9 +397,19 @@ function selectStudent(id){
   curStuId=id;
   if(g('stuName'))g('stuName').value=st.name||'';
   if(g('stuSchool'))g('stuSchool').value=st.school||'';
-  if(g('teacher')&&st.teacher)g('teacher').value=st.teacher;
+  if(g('stuGrade'))g('stuGrade').value=st.grade||'';
+  if(g('teacher'))g('teacher').value=st.teacher||'';
+  if(g('repMonth')){var __m=_rosterGet('reportMonth');if(__m)g('repMonth').value=__m;}
   renderStuChips();
   if(typeof onNameInput==='function')onNameInput();
+}
+function saveStuField(field,value){
+  if(!curStuId||!roster.students[curStuId])return;
+  roster.students[curStuId][field]=(value||'').trim();
+  saveRoster();
+}
+function saveReportMonth(value){
+  _rosterSet('reportMonth',(value||'').trim());
 }
 function openClassManage(){ if(g('newClassName'))g('newClassName').value=''; renderClassManageList(); g('classManageModal').classList.add('on'); }
 function addClass(){
@@ -413,6 +423,23 @@ function addClass(){
 }
 function renderClassManageList(){
   const box=g('classManageList'); if(!box)return;
+  var __q=(g('cmSearch')?g('cmSearch').value:'').trim().toLowerCase();
+  var __clr=g('cmSearchClear'); if(__clr)__clr.style.display=__q?'block':'none';
+  if(__q){
+    var __all=Object.values(roster.students).filter(function(st){return st.status!=='inactive';});
+    var __hit=__all.filter(function(st){return [st.name,st.id,st.currentClass,st.school].some(function(v){return (v||'').toLowerCase().includes(__q);});})
+      .sort(function(a,b){return (a.currentClass||'').localeCompare(b.currentClass||'','ko')||a.name.localeCompare(b.name,'ko');});
+    if(!__hit.length){box.innerHTML='<div style="padding:12px;color:#aaa;font-size:12px">검색 결과가 없습니다.</div>';if(typeof renderSuspendedList==='function')renderSuspendedList();return;}
+    box.innerHTML='<div style="font-size:11px;color:#889;margin-bottom:6px">검색 '+__hit.length+'명 / 전체 '+__all.length+'명</div>'+__hit.map(function(st){return '<div style="display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid #f0ece0">'+
+      '<span style="font-size:10.5px;font-weight:700;color:#3f5a85;background:#eef2fb;border-radius:5px;padding:2px 6px;min-width:42px;text-align:center">'+escR(st.id)+'</span>'+
+      '<span style="flex:1;font-size:12.5px"><b>'+escR(st.name)+'</b> <span style="color:#bbb;font-size:10.5px">'+escR(st.school||'')+'</span><div style="font-size:10.5px;color:#9aa">'+escR(st.currentClass||'-')+'</div></span>'+
+      '<button class="cm-btn sec" style="font-size:10px;padding:3px 7px" onclick="openStuEdit(\'edit\',\''+escR(st.id)+'\')" title="수정·반이동"><i class="ti ti-pencil"></i></button>'+
+      '<button class="cm-btn sec" style="font-size:10px;padding:3px 7px" onclick="suspendStudent(\''+escR(st.id)+'\')" title="휴원">휴원</button>'+
+      '<button class="cm-btn del" style="font-size:10px;padding:3px 7px" onclick="withdrawStudent(\''+escR(st.id)+'\')" title="퇴원">퇴원</button>'+
+      '</div>';}).join('');
+    if(typeof renderSuspendedList==='function')renderSuspendedList();
+    return;
+  }
   const cls=classList();
   if(!cls.length){box.innerHTML='<div style="padding:10px;color:#aaa;font-size:12px">등록된 반이 없습니다.</div>';return;}
   box.innerHTML=cls.map(c=>{
@@ -810,7 +837,12 @@ function downloadPDF(){
       </div>
     </div>
     <div style="margin-top:16px"><label style="font-size:11px;font-weight:700;color:#665">기존 반 (이름 클릭 → 수정 후 저장)</label>
-      <div id="classManageList" style="margin-top:6px"></div>
+      <div style="position:relative;margin-bottom:10px">
+      <i class="ti ti-search" style="position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#aab;font-size:13px"></i>
+      <input type="text" id="cmSearch" placeholder="학생 검색 (이름·학번·반·학교)" oninput="renderClassManageList()" style="width:100%;padding:6px 9px 6px 28px;font-size:12.5px;box-sizing:border-box">
+      <i class="ti ti-x" id="cmSearchClear" onclick="g('cmSearch').value='';renderClassManageList();g('cmSearch').focus()" style="display:none;position:absolute;right:9px;top:50%;transform:translateY(-50%);color:#aab;font-size:14px;cursor:pointer"></i>
+    </div>
+    <div id="classManageList" style="margin-top:6px"></div>
     </div>
     <div style="margin-top:18px;border-top:1px solid #eee;padding-top:12px"><label style="font-size:11px;font-weight:700;color:#665"><i class="ti ti-archive"></i> 휴원 보관함 (복귀 가능)</label>
       <div id="suspendedList" style="margin-top:6px"></div>
