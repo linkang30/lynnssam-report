@@ -284,6 +284,7 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
 
 <div class="steps">
   <button id="sb4" class="sbtn" onclick="go(4)"><i class="ti ti-layout-grid"></i>반 현황</button>
+  <button id="sb5" class="sbtn" onclick="go(5)"><i class="ti ti-vocabulary"></i>Daily Vocab</button>
   <button id="sb0" class="sbtn active" onclick="go(0)"><i class="ti ti-table"></i>누적 점수 입력</button>
   <button id="sb1" class="sbtn" onclick="go(1)"><i class="ti ti-target"></i>Monthly Test</button>
   <button id="sb2" class="sbtn" onclick="go(2)"><i class="ti ti-chart-bar"></i>집계 · 진단</button>
@@ -440,6 +441,59 @@ table.ovtable td.ov-total-pv{font-size:14px;font-weight:900;color:#22365a}
     · <b>학생 이름을 클릭</b>하면 그 학생 점수 입력 화면으로 바로 이동합니다.</div>
   </div>
   <div id="overviewArea"></div>
+</div>
+
+<!-- STEP 5: Daily Vocab -->
+<div id="s5" class="hidden">
+  <div class="card" id="vocabNoStu" style="text-align:center;color:#889;padding:30px;display:none">
+    <i class="ti ti-user-question" style="font-size:28px;color:#cbd0dd"></i>
+    <div style="margin-top:8px">먼저 <b>누적 점수 입력</b> 탭에서 학생을 선택해주세요.</div>
+    <button class="btn bsec" style="margin-top:12px" onclick="go(0)"><i class="ti ti-arrow-left"></i> 학생 선택하러 가기</button>
+  </div>
+  <div id="vocabBody" style="display:none">
+    <div class="card" style="padding:13px 18px;display:flex;align-items:center;gap:10px">
+      <i class="ti ti-user" style="font-size:18px;color:#3f5a85"></i>
+      <span id="vocabStuName" style="font-size:15px;font-weight:700;color:#22365a"></span>
+      <span id="vocabStuMeta" style="font-size:11px;color:#889"></span>
+    </div>
+    <div class="vtabs" style="display:flex;gap:6px;margin-bottom:14px">
+      <div class="vtab on" data-vt="regular" onclick="switchVTab('regular')" style="padding:8px 18px;border-radius:9px 9px 0 0;border:1px solid #e4e8f1;border-bottom:none;background:#fff;color:#22365a;font-size:13px;font-weight:600;cursor:pointer"><i class="ti ti-book"></i> 정규 Reading Vocab</div>
+      <div class="vtab" data-vt="external" onclick="switchVTab('external')" style="padding:8px 18px;border-radius:9px 9px 0 0;border:1px solid #e4e8f1;border-bottom:none;background:#eef1f7;color:#8590ad;font-size:13px;font-weight:600;cursor:pointer"><i class="ti ti-vocabulary"></i> 외부교재 (능률보카/워드맥스)</div>
+    </div>
+    <!-- 정규 Reading Vocab -->
+    <div id="vtab_regular">
+      <div class="card">
+        <div class="ctitle"><i class="ti ti-chart-line"></i><span id="vregWho">정규 Reading Vocab 누적</span></div>
+        <div class="vsum" id="vregSummary" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px"></div>
+        <div class="trend" id="vregTrend" style="display:flex;align-items:flex-end;gap:4px;height:90px;padding:8px 4px;background:#f7f9fc;border:1px solid #e4e8f1;border-radius:9px;overflow-x:auto"></div>
+        <div class="hint" style="margin-top:8px"><i class="ti ti-info-circle"></i> 막대는 lesson별 정답률입니다. 빈칸은 미응시로 평균에서 제외됩니다.</div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><i class="ti ti-pencil"></i>Lesson별 점수 입력 <span style="font-weight:600;color:#aab;text-transform:none;letter-spacing:0;margin-left:4px" id="vregPerLabel"></span></div>
+        <div id="vregGridWrap"></div>
+      </div>
+    </div>
+    <!-- 외부교재 -->
+    <div id="vtab_external" style="display:none">
+      <div class="card">
+        <div class="ctitle"><i class="ti ti-chart-line"></i><span id="vextWho">외부교재 단어 누적</span></div>
+        <div class="vsum" id="vextSummary" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px"></div>
+        <div class="trend" id="vextTrend" style="display:flex;align-items:flex-end;gap:4px;height:90px;padding:8px 4px;background:#f7f9fc;border:1px solid #e4e8f1;border-radius:9px;overflow-x:auto"></div>
+        <div class="hint" style="margin-top:8px"><i class="ti ti-info-circle"></i> 능률보카/워드맥스 등 외부교재. 통과컷 미달 시 재시험 점수를 함께 기록합니다.</div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><i class="ti ti-pencil"></i>외부교재 점수 입력 <span style="font-weight:600;color:#aab;text-transform:none;letter-spacing:0;margin-left:4px">날짜별 · 점수/만점/통과컷</span></div>
+        <div class="itembox" style="border:1px solid #e4e8f1;border-radius:11px;padding:14px 16px;background:#fafbff">
+          <div class="row2" style="margin-bottom:9px"><div><label>시험 날짜</label><input type="date" id="vext_date"></div><div><label>교재명 (선택)</label><input type="text" id="vext_book" placeholder="예: 능률보카 / 워드맥스"></div></div>
+          <div class="scoreIn" style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><input type="number" id="vext_raw" min="0" placeholder="점수" style="width:66px;text-align:center" oninput="vextJudge()"><span class="slash" style="color:#aab;font-weight:700">/</span><input type="number" id="vext_max" min="1" placeholder="만점" value="40" style="width:66px;text-align:center" oninput="vextJudge()"><span style="font-size:11px;color:#889">점</span><span class="cutwrap" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#667;margin-left:6px;padding-left:9px;border-left:1px solid #e2e6f0">통과 최하점 <input type="number" id="vext_cut" min="0" placeholder="예:36" style="width:54px;text-align:center" oninput="vextJudge()"><span style="font-size:11px;color:#889">점</span></span></div>
+          <div class="passrow" id="vext_passrow" style="margin-top:8px;font-size:12px;font-weight:700;min-height:18px"></div>
+          <div class="retakerow" id="vext_retakerow" style="display:none;margin-top:8px;align-items:center;gap:7px;background:#fdf3f3;border:1px solid #f3d4d4;border-radius:8px;padding:7px 10px"><span style="font-size:11px;color:#c0392b;font-weight:600">재시험 후 점수</span> <input type="number" id="vext_retake" min="0" placeholder="재시험 점수" style="width:74px;text-align:center;border-color:#e8b4b4" oninput="vextJudge()"><span style="font-size:11px;color:#889">/ <span id="vext_retakemax">40</span>점</span></div>
+          <div style="margin-top:12px;text-align:right"><button class="btn bgrn" onclick="vextSave()"><i class="ti ti-device-floppy"></i> 이 회차 저장</button></div>
+          <div id="vextSaved" style="font-size:12px;color:#2d7a4f;margin-top:8px;display:none"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Weekly 오답그리드 모달 -->
@@ -2059,6 +2113,114 @@ function renderStuChips(){
   html+='</div>';
   area.innerHTML=html;
 }
+/* ===== Daily Vocab (정규 Reading Vocab + 외부교재) ===== */
+// 레벨 라인별 정규 구조: bridge=12 lessons/20, tc(7~10)=8 lessons/30
+function vocabRegCfg(){
+  const lv=currentLevel||'';
+  if(lv.indexOf('bridge')===0)return {lessons:12,perTest:20};
+  return {lessons:8,perTest:30}; // tc7-1..tc10
+}
+function vregGet(id){return LS('get',`stu_${id}_vreg_${currentLevel}`)||{};}
+function vregSet(id,d){LS('set',`stu_${id}_vreg_${currentLevel}`,d);}
+function vextGet(id){return LS('get',`stu_${id}_vext_${currentLevel}`)||[];}
+function vextSet(id,a){LS('set',`stu_${id}_vext_${currentLevel}`,a);}
+
+let curVTab='regular';
+function switchVTab(t){
+  curVTab=t;
+  g('vtab_regular').style.display=(t==='regular')?'block':'none';
+  g('vtab_external').style.display=(t==='external')?'block':'none';
+  document.querySelectorAll('#s5 .vtab').forEach(x=>{
+    const on=x.dataset.vt===t;
+    x.classList.toggle('on',on);
+    x.style.background=on?'#fff':'#eef1f7';
+    x.style.color=on?'#22365a':'#8590ad';
+  });
+}
+
+function renderVocabTab(){
+  const noStu=g('vocabNoStu'),body=g('vocabBody');
+  if(!currentStuId||!roster.students[currentStuId]){if(noStu)noStu.style.display='block';if(body)body.style.display='none';return;}
+  if(noStu)noStu.style.display='none';if(body)body.style.display='block';
+  const s=roster.students[currentStuId];
+  g('vocabStuName').textContent=s.name;
+  g('vocabStuMeta').textContent=`${levelLabel(currentLevel)}${s.school?' · '+s.school:''}`;
+  const cfg=vocabRegCfg();
+  g('vregWho').textContent=`${s.name} — 정규 Reading Vocab 누적`;
+  g('vregPerLabel').textContent=`총 ${cfg.lessons} lessons · 회당 ${cfg.perTest}단어`;
+  renderVReg(currentStuId);
+  g('vextWho').textContent=`${s.name} — 외부교재 단어 누적`;
+  renderVExt(currentStuId);
+  g('vext_date').value=new Date().toISOString().slice(0,10);
+  // 직전 교재명 자동 채움 (학생별 마지막 입력값 기억)
+  const vextArr=vextGet(currentStuId);
+  const lastBook=vextArr.length?(vextArr[vextArr.length-1].book||''):'';
+  if(g('vext_book'))g('vext_book').value=lastBook;
+}
+
+/* 정규 Reading Vocab — lesson 그리드 */
+function renderVReg(id){
+  const cfg=vocabRegCfg();const data=vregGet(id);const per=cfg.perTest;
+  let cells='';
+  for(let i=1;i<=cfg.lessons;i++){
+    const key='L'+i;const v=data[key];const has=(v!=null&&v!=='');const pct=has?Math.round(v/per*100):null;
+    cells+=`<div class="vday${has?' done':''}" style="background:${has?'#f0faf4':'#f7f9fc'};border:1px solid ${has?'#bfe3cd':'#e4e8f1'};border-radius:9px;padding:9px 10px"><div class="vday-h" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span class="vday-n" style="font-size:11px;font-weight:700;color:#22365a">Lesson ${i}</span>${has?`<span style="font-size:10px;font-weight:700;color:#2d7a4f">${pct}%</span>`:''}</div><div class="vday-in" style="display:flex;align-items:center;gap:4px"><input type="number" min="0" max="${per}" value="${has?v:''}" onchange="onVRegInput('${id}','${key}',this.value)" placeholder="–" style="width:48px;text-align:center;padding:5px 4px;font-size:13px;font-weight:600"><span style="font-size:11px;color:#999;white-space:nowrap">/ ${per}</span></div></div>`;
+  }
+  g('vregGridWrap').innerHTML=`<div class="vgrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">${cells}</div>`;
+  renderVRegSummary(id,data,cfg);
+}
+function onVRegInput(id,key,raw){
+  const cfg=vocabRegCfg();const data=vregGet(id);let v=(raw+'').trim();
+  if(v===''){delete data[key];}else{let n=parseInt(v,10);if(isNaN(n)||n<0)n=0;if(n>cfg.perTest)n=cfg.perTest;data[key]=n;}
+  vregSet(id,data);setTimeout(function(){renderVReg(id);},0);
+}
+function renderVRegSummary(id,data,cfg){
+  const per=cfg.perTest;let n=0,got=0,max=0;
+  for(let i=1;i<=cfg.lessons;i++){const v=data['L'+i];if(v!=null){n++;got+=v;max+=per;}}
+  const avg=max?Math.round(got/max*100):0;
+  g('vregSummary').innerHTML=`<div class="vstat" style="flex:1;min-width:130px;background:#f7f9fc;border:1px solid #e4e8f1;border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:10px;color:#888;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">응시 lesson</div><div style="font-size:22px;font-weight:800;color:#22365a">${n}<small style="font-size:12px;color:#999;font-weight:600"> / ${cfg.lessons}</small></div></div><div class="vstat" style="flex:1;min-width:130px;background:#f7f9fc;border:1px solid #e4e8f1;border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:10px;color:#888;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">누적 정답</div><div style="font-size:22px;font-weight:800;color:#22365a">${got}<small style="font-size:12px;color:#999;font-weight:600"> / ${max}</small></div></div><div class="vstat" style="flex:1;min-width:130px;background:#f7f9fc;border:1px solid #e4e8f1;border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:10px;color:#888;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">누적 정답률</div><div style="font-size:22px;font-weight:800;color:#22365a">${avg}<small style="font-size:12px;color:#999;font-weight:600">%</small></div></div>`;
+  let bars='';
+  for(let i=1;i<=cfg.lessons;i++){const v=data['L'+i];if(v==null){bars+=`<div class="tbar-wrap" style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:26px;flex:1"><div style="width:16px;border-radius:3px 3px 0 0;height:2px;background:#dde2ec"></div><div style="font-size:8.5px;color:#999">${i}</div></div>`;continue;}const pct=Math.round(v/per*100);const col=pct>=80?'#27ae60':pct>=60?'#f39c12':'#e24b4a';bars+=`<div class="tbar-wrap" style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:26px;flex:1"><div style="width:16px;border-radius:3px 3px 0 0;min-height:2px;height:${Math.max(pct*0.7,3)}px;background:${col}" title="Lesson ${i}: ${v}/${per} (${pct}%)"></div><div style="font-size:8.5px;color:#999">${i}</div></div>`;}
+  g('vregTrend').innerHTML=bars;
+}
+
+/* 외부교재 — Bridge-3 그룹2 방식 */
+function vextJudge(){
+  const raw=parseFloat(val('vext_raw')),max=parseFloat(val('vext_max')),cut=parseFloat(val('vext_cut'));
+  const pr=g('vext_passrow'),rr=g('vext_retakerow'),rm=g('vext_retakemax');
+  if(rm&&!isNaN(max))rm.textContent=max;
+  if(isNaN(raw)||isNaN(max)||isNaN(cut)||max<=0){pr.innerHTML='';rr.style.display='none';return;}
+  if(raw>=cut){pr.innerHTML='<span style="border-radius:10px;padding:2px 10px;font-size:11px;background:#eaf6ee;color:#2d7a4f"><i class="ti ti-circle-check"></i> 한 번에 통과</span>';rr.style.display='none';}
+  else{pr.innerHTML=`<span style="border-radius:10px;padding:2px 10px;font-size:11px;background:#fdeaea;color:#c0392b"><i class="ti ti-refresh"></i> 재시험 대상 (컷 ${cut}점 미달)</span>`;rr.style.display='flex';}
+}
+function vextSave(){
+  const id=currentStuId;if(!id)return;
+  const raw=parseFloat(val('vext_raw')),max=parseFloat(val('vext_max')),cut=parseFloat(val('vext_cut'));
+  if(isNaN(raw)||isNaN(max)||max<=0){vextMsg('점수와 만점을 입력하세요.',true);return;}
+  const date=val('vext_date')||new Date().toISOString().slice(0,10);
+  const pct=Math.round(raw/max*1000)/10;
+  const rec={date,book:val('vext_book'),raw,max,pct};
+  if(!isNaN(cut)){rec.cut=cut;rec.passed=raw>=cut;const rt=parseFloat(val('vext_retake'));rec.finalPct=isNaN(rt)?pct:Math.round(rt/max*1000)/10;}
+  else rec.finalPct=pct;
+  const arr=vextGet(id);const ix=arr.findIndex(e=>e.date===date);
+  if(ix>=0)arr[ix]=rec;else arr.push(rec);
+  arr.sort((a,b)=>a.date<b.date?-1:1);vextSet(id,arr);
+  vextMsg(`${date} · ${raw}/${max} 저장 완료.`,false);
+  ['vext_raw','vext_retake','vext_book'].forEach(x=>{if(g(x))g(x).value='';});g('vext_passrow').innerHTML='';g('vext_retakerow').style.display='none';
+  renderVExt(id);
+}
+function vextMsg(m,err){const e=g('vextSaved');if(!e)return;e.style.display='block';e.style.color=err?'#c0392b':'#2d7a4f';e.textContent=m;}
+function renderVExt(id){
+  const arr=vextGet(id);
+  if(!arr.length){g('vextSummary').innerHTML='<div class="vstat" style="flex:1;background:#f7f9fc;border:1px solid #e4e8f1;border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:10px;color:#888;font-weight:700;text-transform:uppercase;margin-bottom:4px">기록</div><div style="font-size:22px;font-weight:800;color:#22365a">0<small style="font-size:12px;color:#999">회</small></div></div>';g('vextTrend').innerHTML='<div style="color:#bbb;font-size:12px;padding:18px">아직 외부교재 기록이 없습니다.</div>';return;}
+  const finals=arr.map(r=>r.finalPct!=null?r.finalPct:r.pct);
+  const favg=Math.round(finals.reduce((a,b)=>a+b,0)/finals.length*10)/10;
+  const wp=arr.filter(r=>r.passed!=null);const once=wp.filter(r=>r.passed).length;
+  g('vextSummary').innerHTML=`<div class="vstat" style="flex:1;min-width:130px;background:#f7f9fc;border:1px solid #e4e8f1;border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:10px;color:#888;font-weight:700;text-transform:uppercase;margin-bottom:4px">시험 횟수</div><div style="font-size:22px;font-weight:800;color:#22365a">${arr.length}<small style="font-size:12px;color:#999">회</small></div></div><div class="vstat" style="flex:1;min-width:130px;background:#f7f9fc;border:1px solid #e4e8f1;border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:10px;color:#888;font-weight:700;text-transform:uppercase;margin-bottom:4px">최종 평균</div><div style="font-size:22px;font-weight:800;color:#22365a">${favg}<small style="font-size:12px;color:#999">%</small></div></div><div class="vstat" style="flex:1;min-width:130px;background:#f7f9fc;border:1px solid #e4e8f1;border-radius:10px;padding:12px 14px;text-align:center"><div style="font-size:10px;color:#888;font-weight:700;text-transform:uppercase;margin-bottom:4px">한번에 통과</div><div style="font-size:22px;font-weight:800;color:#22365a">${wp.length?Math.round(once/wp.length*100):'–'}<small style="font-size:12px;color:#999">${wp.length?'%':''}</small></div></div>`;
+  let bars='';arr.slice(-16).forEach(r=>{const pct=r.finalPct!=null?r.finalPct:r.pct;const col=pct>=80?'#27ae60':pct>=60?'#f39c12':'#e24b4a';bars+=`<div class="tbar-wrap" style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:30px;flex:1"><div style="width:16px;border-radius:3px 3px 0 0;min-height:2px;height:${Math.max(pct*0.7,3)}px;background:${col}" title="${r.date}: ${r.raw}/${r.max} (${pct}%)"></div><div style="font-size:8.5px;color:#999">${r.date.slice(5)}</div></div>`;});
+  g('vextTrend').innerHTML=bars;
+}
+
 function selectStudent(id){
   currentStuId=id;
   loadStudent();
@@ -2068,6 +2230,7 @@ function selectStudent(id){
   const tc=g('teacherComment');if(tc)tc.value=teacherComment;
   // 강사 입력란에 학생의 담당강사 반영(있으면)
   const s=curStu();if(s&&s.teacher&&g('teacher'))g('teacher').value=s.teacher;
+  if(g('s5')&&!g('s5').classList.contains('hidden'))renderVocabTab();
 }
 function renderCurStu(){
   const area=g('curStuArea');const s=curStu();
@@ -2323,12 +2486,13 @@ function jumpToStudent(id,cls,lv){
 
 /* ===== 네비게이션 ===== */
 function go(step){
-  ['s0','s1','s2','s3','s4'].forEach((id,i)=>{const el=g(id);if(el)el.classList.toggle('hidden',i!==step);});
-  ['sb0','sb1','sb2','sb3','sb4'].forEach((id,i)=>{const b=g(id);if(b)b.classList.toggle('active',i===step);});
+  ['s0','s1','s2','s3','s4','s5'].forEach((id,i)=>{const el=g(id);if(el)el.classList.toggle('hidden',i!==step);});
+  ['sb0','sb1','sb2','sb3','sb4','sb5'].forEach((id,i)=>{const b=g(id);if(b)b.classList.toggle('active',i===step);});
   if(step===1)renderMonthlyGrid();
   if(step===2){buildSummary();buildTrend();buildDiagnosis();buildKeywords();}
   if(step===3)renderReport();
   if(step===4){renderOverviewSelectors();renderOverview();}
+  if(step===5)renderVocabTab();
   window.scrollTo(0,0);
 }
 
