@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[PAMUS] Silver Stella — Daily Vocab</title>
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.30.0/tabler-icons.min.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;color:#1a1a1a;font-size:14px;line-height:1.6;padding-bottom:60px}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px}
+.topbar{background:#1e3a5f;color:#fff;padding:14px 0;margin-bottom:18px}
+.topbar .wrap{display:flex;align-items:center;gap:12px}
+.topbar h1{font-size:17px;font-weight:700;letter-spacing:.3px}
+.topbar .sub{font-size:11px;color:#aac4e4;font-weight:500}
+.topbar img{height:28px;width:auto;margin-left:auto;filter:drop-shadow(0 1px 3px rgba(0,0,0,.3))}
+.card{background:#fff;border:1px solid #e8e6df;border-radius:12px;padding:16px 18px;margin-bottom:16px}
+.ctitle{font-size:13px;font-weight:700;color:#1e3a5f;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.ctitle i{font-size:16px}
+label{font-size:11px;color:#665;font-weight:600;display:block;margin-bottom:4px}
+input[type=text],input[type=number],input[type=date],select{width:100%;border:1px solid #ddd;border-radius:8px;padding:7px 10px;font-size:13px;font-family:inherit;color:#1a1a1a;background:#fff;outline:none}
+input:focus,select:focus{border-color:#1e3a5f}
+.row{display:flex;gap:14px;flex-wrap:wrap}.row>div{flex:1;min-width:180px}
+.stu-chip-area{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.stu-chip{display:inline-flex;align-items:center;gap:5px;background:#eef3f9;border:1px solid #d4e0ee;color:#1e3a5f;border-radius:20px;padding:5px 13px;font-size:12.5px;cursor:pointer;transition:.12s}
+.stu-chip:hover{background:#dde9f6}.stu-chip.sel{background:#1e3a5f;color:#fff;border-color:#1e3a5f}
+.stu-chip.addnew{background:#f0f7f0;border:1px dashed #9cc59c;color:#2d7a4f}.stu-chip.addnew:hover{background:#e3f0e3}
+/* 탭 */
+.vtabs{display:flex;gap:6px;margin-bottom:14px}
+.vtab{padding:8px 18px;border-radius:9px 9px 0 0;border:1px solid #e8e6df;border-bottom:none;background:#efeee9;color:#888;font-size:13px;font-weight:600;cursor:pointer}
+.vtab.on{background:#fff;color:#1e3a5f;border-color:#d4e0ee}
+.vtab i{font-size:14px;margin-right:4px}
+/* Vocab grid */
+.vgroup-label{font-size:12px;font-weight:700;color:#2d7a4f;margin:6px 0 8px;display:flex;align-items:center;gap:5px}
+.vgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.vday{background:#faf9f6;border:1px solid #e8e6df;border-radius:9px;padding:9px 10px}
+.vday.done{background:#f0faf4;border-color:#bfe3cd}
+.vday-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.vday-n{font-size:11px;font-weight:700;color:#1e3a5f}.vday-pct{font-size:10px;font-weight:700;color:#2d7a4f}
+.vday-in{display:flex;align-items:center;gap:4px}
+.vday-in input{width:46px;text-align:center;padding:5px 4px;font-size:13px;font-weight:600}
+.vday-in .max{font-size:11px;color:#999;white-space:nowrap}
+.vsum{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.vstat{flex:1;min-width:130px;background:#f8f7f4;border:1px solid #e8e6df;border-radius:10px;padding:12px 14px;text-align:center}
+.vstat .k{font-size:10px;color:#888;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.vstat .v{font-size:22px;font-weight:800;color:#1e3a5f}.vstat .v small{font-size:12px;color:#999;font-weight:600}
+.trend{display:flex;align-items:flex-end;gap:4px;height:90px;padding:8px 4px;background:#faf9f6;border:1px solid #e8e6df;border-radius:9px;overflow-x:auto;margin-bottom:6px}
+.tbar-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:26px;flex:1}
+.tbar{width:16px;border-radius:3px 3px 0 0;background:#1e3a5f;min-height:2px}
+.tbar.low{background:#e24b4a}.tbar.mid{background:#f39c12}.tbar.high{background:#27ae60}
+.tbar-lbl{font-size:8.5px;color:#999}
+.hint{font-size:11px;color:#888;margin-top:8px;display:flex;align-items:center;gap:5px}
+/* 외부교재 (Bridge-3 그룹2 방식) */
+.extbox{border:1px solid #e8e6df;border-radius:11px;padding:14px 16px;margin-bottom:11px;background:#fafbff}
+.exthd{font-size:13px;font-weight:700;color:#b8860b;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.scoreIn{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.scoreIn input{width:66px;text-align:center}.scoreIn .slash{color:#aab;font-weight:700}
+.cutwrap{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#667;margin-left:6px;padding-left:9px;border-left:1px solid #e2e6f0}
+.cutwrap input{width:54px;text-align:center}
+.passrow{margin-top:8px;font-size:12px;font-weight:700;min-height:18px}
+.passrow .badge{border-radius:10px;padding:2px 10px;font-size:11px}
+.passrow .badge.pass{background:#eaf6ee;color:#2d7a4f}.passrow .badge.retake{background:#fdeaea;color:#c0392b}
+.retakerow{margin-top:8px;display:flex;align-items:center;gap:7px;background:#fdf3f3;border:1px solid #f3d4d4;border-radius:8px;padding:7px 10px}
+.retakerow input{width:74px;text-align:center;border-color:#e8b4b4}
+.cm-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center}
+.cm-bg.on{display:flex}
+.cm-modal{background:#fff;border-radius:14px;padding:22px;max-width:480px;width:92%;max-height:88vh;overflow-y:auto}
+.cm-modal h2{font-size:16px;color:#1e3a5f;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.cm-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.cm-btn{border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.cm-btn.sec{background:#eee;color:#555}.cm-btn.grn{background:#2d7a4f;color:#fff}.cm-btn.del{background:#fdeaea;color:#c0392b}
+.saved{font-size:12px;color:#2d7a4f;margin-top:8px;display:none}
+@media(max-width:640px){.vgrid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap">
+  <div><h1>Daily Vocab Test</h1><div class="sub">Silver Stella · 단어 시험 누적 관리</div></div>
+  <img src="data:image/png;base64,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" alt="PAMUS">
+</div></div>
+<div class="wrap">
+  <div class="card">
+    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택
+      <button onclick="openClassManage()" style="margin-left:auto;background:#eef3f9;border:1px solid #d4e0ee;color:#1e3a5f;border-radius:7px;padding:5px 11px;font-size:12px;font-weight:600;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button>
+    </div>
+    <div class="row"><div><label>반 선택</label><select id="classSelect" onchange="renderStuChips()"></select></div></div>
+    <div style="margin-top:12px"><label>학생 선택 <span style="color:#aaa;font-weight:400">(클릭 시 단어 기록 표시)</span></label>
+      <div class="stu-chip-area" id="stuChipArea"></div>
+    </div>
+  </div>
+
+  <div id="vocabPanel" style="display:none">
+    <div class="vtabs" id="vtabs">
+      <div class="vtab on" data-tab="regular" onclick="switchTab('regular')"><i class="ti ti-book"></i>정규 Daily Vocab</div>
+      <div class="vtab" data-tab="external" onclick="switchTab('external')" id="extTab" style="display:none"><i class="ti ti-vocabulary"></i>외부교재 (능률보카/워드맥스)</div>
+    </div>
+
+    <!-- 정규 탭 -->
+    <div id="tab_regular">
+      <div class="card">
+        <div class="ctitle"><i class="ti ti-chart-line"></i><span id="regWho">정규 단어 누적 현황</span></div>
+        <div class="vsum" id="regSummary"></div>
+        <div class="trend" id="regTrend"></div>
+        <div class="hint"><i class="ti ti-info-circle"></i>막대는 회차별 정답률입니다. 빈칸은 미응시로 평균에서 제외됩니다.</div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><i class="ti ti-pencil"></i>회차별 점수 입력 <span style="font-weight:600;color:#aab;text-transform:none;letter-spacing:0;margin-left:4px" id="regPerLabel"></span></div>
+        <div id="regGridWrap"></div>
+      </div>
+    </div>
+
+    <!-- 외부교재 탭 -->
+    <div id="tab_external" style="display:none">
+      <div class="card">
+        <div class="ctitle"><i class="ti ti-chart-line"></i><span id="extWho">외부교재 단어 누적 현황</span></div>
+        <div class="vsum" id="extSummary"></div>
+        <div class="trend" id="extTrend"></div>
+        <div class="hint"><i class="ti ti-info-circle"></i>능률보카/워드맥스 등 외부교재 단어 시험. 통과컷 미달 시 재시험 점수를 함께 기록합니다.</div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><i class="ti ti-pencil"></i>외부교재 점수 입력 <span style="font-weight:600;color:#aab;text-transform:none;letter-spacing:0;margin-left:4px">날짜별 · 점수/만점/통과컷</span></div>
+        <div class="extbox">
+          <div class="exthd"><i class="ti ti-vocabulary"></i>오늘 외부교재 단어시험</div>
+          <div class="row" style="margin-bottom:9px"><div style="max-width:180px"><label>시험 날짜</label><input type="date" id="extDate"></div>
+            <div style="max-width:200px"><label>교재명 (선택)</label><input type="text" id="extBook" placeholder="예: 능률보카 / 워드맥스"></div></div>
+          <div class="scoreIn"><input type="number" id="ext_raw" min="0" placeholder="점수" oninput="extJudge()"><span class="slash">/</span><input type="number" id="ext_max" min="1" placeholder="만점" value="40" oninput="extJudge()"><span style="font-size:11px;color:#889">점</span>
+            <span class="cutwrap">통과 최하점 <input type="number" id="ext_cut" min="0" placeholder="예:36" oninput="extJudge()"><span style="font-size:11px;color:#889">점</span></span></div>
+          <div class="passrow" id="ext_passrow"></div>
+          <div class="retakerow" id="ext_retakerow" style="display:none"><span style="font-size:11px;color:#c0392b;font-weight:600">재시험 후 점수</span> <input type="number" id="ext_retake" min="0" placeholder="재시험 점수" oninput="extJudge()"><span style="font-size:11px;color:#889">/ <span id="ext_retakemax">40</span>점</span></div>
+          <div style="margin-top:12px;text-align:right"><button class="cm-btn grn" onclick="extSave()"><i class="ti ti-device-floppy"></i> 이 회차 저장</button></div>
+          <div class="saved" id="extSaved"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cm-bg" id="classManageModal"><div class="cm-modal">
+  <h2><i class="ti ti-settings"></i>반 관리</h2>
+  <div style="display:flex;gap:8px;margin:12px 0"><input type="text" id="newClassName" placeholder="새 반 이름" style="flex:1"><button class="cm-btn grn" onclick="addClass()"><i class="ti ti-plus"></i> 추가</button></div>
+  <div style="position:relative;margin-bottom:10px">
+    <i class="ti ti-search" style="position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#aab;font-size:13px"></i>
+    <input type="text" id="cmSearch" placeholder="학생 검색 (이름·학번·반·학교)" oninput="renderClassManageList()" style="width:100%;padding:6px 9px 6px 28px;font-size:12.5px">
+    <i class="ti ti-x" id="cmSearchClear" onclick="g('cmSearch').value='';renderClassManageList();g('cmSearch').focus()" style="display:none;position:absolute;right:9px;top:50%;transform:translateY(-50%);color:#aab;font-size:14px;cursor:pointer"></i>
+  </div>
+  <div id="classManageList"></div>
+  <div style="margin-top:18px;border-top:1px solid #eee;padding-top:12px"><label style="font-size:11px;font-weight:700;color:#665"><i class="ti ti-archive"></i> 휴원 보관함</label><div id="suspendedList" style="margin-top:6px"></div></div>
+  <div class="cm-foot"><button class="cm-btn sec" onclick="g('classManageModal').classList.remove('on')">닫기</button></div>
+</div></div>
+<datalist id="classDatalist"></datalist>
+<div class="cm-bg" id="stuEditModal"><div class="cm-modal" style="max-width:420px">
+  <h2 id="seTitle"><i class="ti ti-user-edit"></i> 학생 추가</h2>
+  <input type="hidden" id="seMode"><input type="hidden" id="seId">
+  <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+    <div><label>학생 이름</label><input type="text" id="seName"></div>
+    <div><label>학교</label><input type="text" id="seSchool"></div>
+    <div><label>학번 (직접 입력)</label><input type="text" id="seSid" placeholder="예: pm1234"></div>
+    <div><label>반</label><select id="seClass"></select></div>
+  </div>
+  <div class="cm-foot"><button class="cm-btn sec" onclick="closeStuEdit()">취소</button><button class="cm-btn grn" onclick="saveStuEdit()"><i class="ti ti-device-floppy"></i> 저장</button></div>
+</div></div>
+
+<script>
+const LEVEL='silver';
+const CFG={"label": "Silver Stella", "regular": {"mode": "days", "count": 16, "perTest": 8}, "external": false};
+const ROSTER_SEED={"students":{"pm3529":{"id":"pm3529","name":"손지민","currentClass":"Silver Stella A2(Kaya) 3:00 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 3:00 M/T/W/Th/F","from":"2026-06-18"},{"class":"Silver Stella A2(Kaya) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm44851":{"id":"pm44851","name":"이은우","currentClass":"Silver Stella A2(Kaya) 3:00 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 3:00 M/T/W/Th/F","from":"2026-06-18"},{"class":"Silver Stella A2(Kaya) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm8575":{"id":"pm8575","name":"정지원","currentClass":"Silver Stella A2(Kaya) 3:00 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 3:00 M/T/W/Th/F","from":"2026-06-18"},{"class":"Silver Stella A2(Kaya) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm5421":{"id":"pm5421","name":"최리민","currentClass":"Silver Stella A2(Kaya) 3:00 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 3:00 M/T/W/Th/F","from":"2026-06-18"},{"class":"Silver Stella A2(Kaya) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm4207":{"id":"pm4207","name":"김시후(Si-Hu)","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm02671":{"id":"pm02671","name":"김재현(Jae-Hyun)","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm2386":{"id":"pm2386","name":"성시연","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"소화초등학교"},"pm2177":{"id":"pm2177","name":"성현준","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm9387":{"id":"pm9387","name":"안나율","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm4633":{"id":"pm4633","name":"이수진","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"원일초등학교"},"pm4934":{"id":"pm4934","name":"전호윤","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm76051":{"id":"pm76051","name":"정은우","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm0478":{"id":"pm0478","name":"조민하","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm1820":{"id":"pm1820","name":"허지현","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"원천초등학교"},"pm1546":{"id":"pm1546","name":"홍예나","currentClass":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2434":{"id":"pm2434","name":"조아진","currentClass":"Inter Stella 4(Annie) 5:30 M/W/F","classHistory":[{"class":"Citrine #5(Kaya) 5:30 M/W/F","from":"2026-06-18"},{"class":"Inter Stella 4(Annie) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm8227":{"id":"pm8227","name":"김동주","currentClass":"Silver Stella A4(Kaya) 5:30 T/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A4(Kaya) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"이의초등학교"},"pm69571":{"id":"pm69571","name":"김지완","currentClass":"Silver Stella A4(Kaya) 5:30 T/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A4(Kaya) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm83741":{"id":"pm83741","name":"박나은","currentClass":"Silver Stella A4(Kaya) 5:30 T/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A4(Kaya) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm9079":{"id":"pm9079","name":"박소담","currentClass":"Silver Stella A4(Kaya) 5:30 T/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A4(Kaya) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3917":{"id":"pm3917","name":"신원준","currentClass":"Silver Stella A4(Kaya) 5:30 T/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A4(Kaya) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm7159":{"id":"pm7159","name":"이소연","currentClass":"Silver Stella A4(Kaya) 5:30 T/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A4(Kaya) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"소화초등학교"},"pm0028":{"id":"pm0028","name":"이지우","currentClass":"Silver Stella A4(Kaya) 5:30 T/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A4(Kaya) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"원천초등학교"},"pm6735":{"id":"pm6735","name":"한영서","currentClass":"Silver Stella A4(Kaya) 5:30 T/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A4(Kaya) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm37421":{"id":"pm37421","name":"한온규","currentClass":"Silver Stella A4(Kaya) 5:30 T/Th/F","classHistory":[{"class":"Citrine #5(Kaya) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A4(Kaya) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm7344":{"id":"pm7344","name":"김하운(Ha Woon)","currentClass":"Sound Doctor 2(Annie) 2:10 M/W/F","classHistory":[{"class":"Emerald #2(Annie) 2:10 M/W/F","from":"2026-06-18"},{"class":"Sound Doctor 2(Annie) 2:10 M/W/F","from":"2026-07-01"}],"teacher":"","school":"유치부"},"pm2382":{"id":"pm2382","name":"송지우","currentClass":"Sound Doctor 2(Annie) 2:10 M/W/F","classHistory":[{"class":"Emerald #2(Annie) 2:10 M/W/F","from":"2026-06-18"},{"class":"Sound Doctor 2(Annie) 2:10 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm28975":{"id":"pm28975","name":"이재현","currentClass":"Sound Doctor 2(Annie) 2:10 M/W/F","classHistory":[{"class":"Emerald #2(Annie) 2:10 M/W/F","from":"2026-06-18"},{"class":"Sound Doctor 2(Annie) 2:10 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm1949":{"id":"pm1949","name":"박시후","currentClass":"Silver Stella A3(Annie) 3:20 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A3(Annie) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2616":{"id":"pm2616","name":"반유진","currentClass":"Silver Stella A3(Annie) 3:20 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A3(Annie) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2235":{"id":"pm2235","name":"백지아","currentClass":"Silver Stella A3(Annie) 3:20 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A3(Annie) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm6516":{"id":"pm6516","name":"서재이","currentClass":"Silver Stella A3(Annie) 3:20 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A3(Annie) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2106":{"id":"pm2106","name":"윤희찬","currentClass":"Silver Stella A3(Annie) 3:20 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A3(Annie) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm5014":{"id":"pm5014","name":"이승아","currentClass":"Silver Stella A3(Annie) 3:20 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A3(Annie) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3028":{"id":"pm3028","name":"강하윤(Eunice)","currentClass":"Inter Stella 4(Annie) 5:30 M/W/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 M/W/F","from":"2026-06-18"},{"class":"Inter Stella 4(Annie) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm9967":{"id":"pm9967","name":"신동윤","currentClass":"Inter Stella 4(Annie) 5:30 M/W/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 M/W/F","from":"2026-06-18"},{"class":"Inter Stella 4(Annie) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3067":{"id":"pm3067","name":"이서우","currentClass":"Inter Stella 4(Annie) 5:30 M/W/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 M/W/F","from":"2026-06-18"},{"class":"Inter Stella 4(Annie) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm5606":{"id":"pm5606","name":"조온유","currentClass":"Inter Stella 4(Annie) 5:30 M/W/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 M/W/F","from":"2026-06-18"},{"class":"Inter Stella 4(Annie) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초"},"pm5671":{"id":"pm5671","name":"김승범","currentClass":"Silver Stella B1(Annie) 5:30 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella B1(Annie) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm3576":{"id":"pm3576","name":"김은호","currentClass":"Silver Stella B1(Annie) 5:30 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella B1(Annie) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm4661":{"id":"pm4661","name":"박하도","currentClass":"Silver Stella B1(Annie) 5:30 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella B1(Annie) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm0902":{"id":"pm0902","name":"서이연","currentClass":"Silver Stella B1(Annie) 5:30 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella B1(Annie) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"소화초등학교"},"pm7991":{"id":"pm7991","name":"이라원","currentClass":"Silver Stella B1(Annie) 5:30 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella B1(Annie) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm0518":{"id":"pm0518","name":"조우현","currentClass":"Silver Stella B1(Annie) 5:30 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella B1(Annie) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"산남초등학교"},"pm3611":{"id":"pm3611","name":"진예준","currentClass":"Silver Stella B1(Annie) 5:30 T/Th/F","classHistory":[{"class":"Emerald #2(Annie) 5:30 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella B1(Annie) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"원일초등학교"},"pm4060":{"id":"pm4060","name":"박서하","currentClass":"Sound Doctor 2(Annie) 4:20 M/W/F","classHistory":[{"class":"Emerald #3(Annie) 4:20 M/W/F","from":"2026-06-18"},{"class":"Sound Doctor 2(Annie) 4:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"소화초등학교"},"pm2261":{"id":"pm2261","name":"최우준","currentClass":"Sound Doctor 2(Annie) 4:20 M/W/F","classHistory":[{"class":"Emerald #3(Annie) 4:20 M/W/F","from":"2026-06-18"},{"class":"Sound Doctor 2(Annie) 4:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm7935":{"id":"pm7935","name":"배지한","currentClass":"Pre Stella A1(Angela) 2:10 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 2:00 M/W/F","from":"2026-06-18"},{"class":"Pre Stella A1(Angela) 2:10 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm5982":{"id":"pm5982","name":"이지유","currentClass":"Pre Stella A1(Angela) 2:10 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 2:00 M/W/F","from":"2026-06-18"},{"class":"Pre Stella A1(Angela) 2:10 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm89751":{"id":"pm89751","name":"이하율","currentClass":"Pre Stella A1(Angela) 2:10 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 2:00 M/W/F","from":"2026-06-18"},{"class":"Pre Stella A1(Angela) 2:10 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm9926":{"id":"pm9926","name":"남그린(Green)","currentClass":"Inter Bridge 1(Angela) 3:20 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 M/W/F","from":"2026-06-18"},{"class":"Inter Bridge 1(Angela) 3:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"원일초등학교"},"pm4888":{"id":"pm4888","name":"박서현(Seohyun)","currentClass":"Inter Bridge 1(Angela) 3:20 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 M/W/F","from":"2026-06-18"},{"class":"Inter Bridge 1(Angela) 3:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm7975":{"id":"pm7975","name":"배서원","currentClass":"Inter Bridge 1(Angela) 3:20 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 M/W/F","from":"2026-06-18"},{"class":"Inter Bridge 1(Angela) 3:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm7422":{"id":"pm7422","name":"안재원","currentClass":"Inter Bridge 1(Angela) 3:20 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 M/W/F","from":"2026-06-18"},{"class":"Inter Bridge 1(Angela) 3:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm3501":{"id":"pm3501","name":"양서진","currentClass":"Inter Bridge 1(Angela) 3:20 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 M/W/F","from":"2026-06-18"},{"class":"Inter Bridge 1(Angela) 3:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3080":{"id":"pm3080","name":"이주아","currentClass":"Inter Bridge 1(Angela) 3:20 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 M/W/F","from":"2026-06-18"},{"class":"Inter Bridge 1(Angela) 3:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm69572":{"id":"pm69572","name":"전시연","currentClass":"Inter Bridge 1(Angela) 3:20 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 M/W/F","from":"2026-06-18"},{"class":"Inter Bridge 1(Angela) 3:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm9634":{"id":"pm9634","name":"차주원","currentClass":"Inter Bridge 1(Angela) 3:20 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 M/W/F","from":"2026-06-18"},{"class":"Inter Bridge 1(Angela) 3:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm5464":{"id":"pm5464","name":"최선우","currentClass":"Inter Bridge 1(Angela) 3:20 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 M/W/F","from":"2026-06-18"},{"class":"Inter Bridge 1(Angela) 3:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3742":{"id":"pm3742","name":"한수아","currentClass":"Inter Bridge 1(Angela) 3:20 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 M/W/F","from":"2026-06-18"},{"class":"Inter Bridge 1(Angela) 3:20 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm4442":{"id":"pm4442","name":"김시율(Si-Yeul)","currentClass":"Silver Stella A5(Angela) 3:20 T/Th/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A5(Angela) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm2163":{"id":"pm2163","name":"김용재(Yong-Jae)","currentClass":"Silver Stella A5(Angela) 3:20 T/Th/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A5(Angela) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm5851":{"id":"pm5851","name":"신현우","currentClass":"Silver Stella A5(Angela) 3:20 T/Th/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A5(Angela) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"원일초등학교"},"pm9431":{"id":"pm9431","name":"홍진오","currentClass":"Silver Stella A5(Angela) 3:20 T/Th/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A5(Angela) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm5123":{"id":"pm5123","name":"황원","currentClass":"Silver Stella A5(Angela) 3:20 T/Th/F","classHistory":[{"class":"Peridot #Lab(Angela) 3:20 T/Th/F","from":"2026-06-18"},{"class":"Silver Stella A5(Angela) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"원일초등학교"},"pm3896":{"id":"pm3896","name":"김라인","currentClass":"Silver Stella B3(Angela) 5:30 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 5:30 M/W/F","from":"2026-06-18"},{"class":"Silver Stella B3(Angela) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3240":{"id":"pm3240","name":"김아윤","currentClass":"Silver Stella B3(Angela) 5:30 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 5:30 M/W/F","from":"2026-06-18"},{"class":"Silver Stella B3(Angela) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm8886":{"id":"pm8886","name":"김주은(Joo-Eun)","currentClass":"Silver Stella B3(Angela) 5:30 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 5:30 M/W/F","from":"2026-06-18"},{"class":"Silver Stella B3(Angela) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm8264":{"id":"pm8264","name":"이선호","currentClass":"Silver Stella B3(Angela) 5:30 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 5:30 M/W/F","from":"2026-06-18"},{"class":"Silver Stella B3(Angela) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm4485":{"id":"pm4485","name":"이세인","currentClass":"Silver Stella B3(Angela) 5:30 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 5:30 M/W/F","from":"2026-06-18"},{"class":"Silver Stella B3(Angela) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm6551":{"id":"pm6551","name":"주은서","currentClass":"Silver Stella B3(Angela) 5:30 M/W/F","classHistory":[{"class":"Peridot #Lab(Angela) 5:30 M/W/F","from":"2026-06-18"},{"class":"Silver Stella B3(Angela) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"원일초등학교"},"pm0129":{"id":"pm0129","name":"권도하","currentClass":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 3:20 T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3357":{"id":"pm3357","name":"김선우","currentClass":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 3:20 T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3345":{"id":"pm3345","name":"김채아B","currentClass":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 3:20 T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm9178":{"id":"pm9178","name":"문주안","currentClass":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 3:20 T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm66231":{"id":"pm66231","name":"문지호","currentClass":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 3:20 T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm0821":{"id":"pm0821","name":"신채민","currentClass":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 3:20 T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm08211":{"id":"pm08211","name":"신채원","currentClass":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 3:20 T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm0888":{"id":"pm0888","name":"이서준B","currentClass":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 3:20 T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 3(Clare) 3:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm6738":{"id":"pm6738","name":"강주아(Jua)","currentClass":"Pre Stella A3(Clare) 4:30 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 4:30 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A3(Clare) 4:30 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm8457":{"id":"pm8457","name":"김나원(Na-Won)","currentClass":"Pre Stella A3(Clare) 4:30 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 4:30 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A3(Clare) 4:30 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"원천초등학교"},"pm0613":{"id":"pm0613","name":"이규담","currentClass":"Pre Stella A3(Clare) 4:30 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 4:30 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A3(Clare) 4:30 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm6723":{"id":"pm6723","name":"진아리","currentClass":"Pre Stella A3(Clare) 4:30 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 4:30 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A3(Clare) 4:30 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"소화초등학교"},"pm2303":{"id":"pm2303","name":"최인우","currentClass":"Pre Stella A3(Clare) 4:30 M/T/W/Th","classHistory":[{"class":"Sapphire #3(Clare) 4:30 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A3(Clare) 4:30 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm0267":{"id":"pm0267","name":"김재민(Jae-Min)","currentClass":"Silver Stella B4(Clare) 5:30 T/Th/F","classHistory":[{"class":"Sapphire #3(Clare) 5:30 T/Th","from":"2026-06-18"},{"class":"Silver Stella B4(Clare) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2922":{"id":"pm2922","name":"박서한(James)","currentClass":"Silver Stella B4(Clare) 5:30 T/Th/F","classHistory":[{"class":"Sapphire #3(Clare) 5:30 T/Th","from":"2026-06-18"},{"class":"Silver Stella B4(Clare) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"원일초등학교"},"pm8374":{"id":"pm8374","name":"박세은","currentClass":"Silver Stella B4(Clare) 5:30 T/Th/F","classHistory":[{"class":"Sapphire #3(Clare) 5:30 T/Th","from":"2026-06-18"},{"class":"Silver Stella B4(Clare) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3798":{"id":"pm3798","name":"안서진","currentClass":"Silver Stella B4(Clare) 5:30 T/Th/F","classHistory":[{"class":"Sapphire #3(Clare) 5:30 T/Th","from":"2026-06-18"},{"class":"Silver Stella B4(Clare) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm58931":{"id":"pm58931","name":"이하준","currentClass":"Silver Stella B4(Clare) 5:30 T/Th/F","classHistory":[{"class":"Sapphire #3(Clare) 5:30 T/Th","from":"2026-06-18"},{"class":"Silver Stella B4(Clare) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm8318":{"id":"pm8318","name":"최우담","currentClass":"Silver Stella B4(Clare) 5:30 T/Th/F","classHistory":[{"class":"Sapphire #3(Clare) 5:30 T/Th","from":"2026-06-18"},{"class":"Silver Stella B4(Clare) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm7226":{"id":"pm7226","name":"김현(Hyun)","currentClass":"Pre Stella A6(Clare) 2:10 M/T/W/Th","classHistory":[{"class":"Sapphire 2:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A6(Clare) 2:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"광교호수초등학교"},"pm2304":{"id":"pm2304","name":"배서윤","currentClass":"Pre Stella A6(Clare) 2:10 M/T/W/Th","classHistory":[{"class":"Sapphire 2:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A6(Clare) 2:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm7044":{"id":"pm7044","name":"최가온","currentClass":"Pre Stella A6(Clare) 2:10 M/T/W/Th","classHistory":[{"class":"Sapphire 2:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A6(Clare) 2:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"흥덕초등학교"},"pm9809":{"id":"pm9809","name":"최은우","currentClass":"Pre Stella A6(Clare) 2:10 M/T/W/Th","classHistory":[{"class":"Sapphire 2:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella A6(Clare) 2:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm33571":{"id":"pm33571","name":"김선율(Sun-Yul)","currentClass":"Silver Stella A3(Annie) 3:20 T/Th/F","classHistory":[{"class":"Topaz #1(Jinny) 3:00 M/T/W/Th","from":"2026-06-18"},{"class":"Silver Stella A3(Annie) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"흥덕초등학교"},"pm6064":{"id":"pm6064","name":"김정우(Vincent)","currentClass":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 3:00 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2201":{"id":"pm2201","name":"박서후","currentClass":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 3:00 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"석현초등학교"},"pm9345":{"id":"pm9345","name":"박시은","currentClass":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 3:00 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm1981":{"id":"pm1981","name":"양다온","currentClass":"Silver Stella A3(Annie) 3:20 T/Th/F","classHistory":[{"class":"Topaz #1(Jinny) 3:00 M/T/W/Th","from":"2026-06-18"},{"class":"Silver Stella A3(Annie) 3:20 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm1330":{"id":"pm1330","name":"윤동현","currentClass":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 3:00 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm9017":{"id":"pm9017","name":"이서윤","currentClass":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 3:00 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm0105":{"id":"pm0105","name":"최시윤","currentClass":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 3:00 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 3:00 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm8285":{"id":"pm8285","name":"기소율","currentClass":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm5150":{"id":"pm5150","name":"김서율(Seo-Yul)","currentClass":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3304":{"id":"pm3304","name":"김용훈(Yong-Hoon)","currentClass":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm8372":{"id":"pm8372","name":"김하루(Haru)","currentClass":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm5428":{"id":"pm5428","name":"문지예(Sandra)","currentClass":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3373":{"id":"pm3373","name":"이윤건","currentClass":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm7605":{"id":"pm7605","name":"정현우","currentClass":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm1542":{"id":"pm1542","name":"최은호","currentClass":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 4:10 M/T/W/Th","from":"2026-06-18"},{"class":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3905":{"id":"pm3905","name":"권이삭(Issac)","currentClass":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 5:20 M/T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm0826":{"id":"pm0826","name":"김우주(Woo-Ju)","currentClass":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 5:20 M/T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2930":{"id":"pm2930","name":"양소은","currentClass":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 5:20 M/T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"소화초등학교"},"pm0425":{"id":"pm0425","name":"임세아","currentClass":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 5:20 M/T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm6802":{"id":"pm6802","name":"전다온","currentClass":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 5:20 M/T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3851":{"id":"pm3851","name":"한수민","currentClass":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 5:20 M/T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3514":{"id":"pm3514","name":"황지환","currentClass":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","classHistory":[{"class":"Topaz #1(Jinny) 5:20 M/T/W/Th","from":"2026-06-18"},{"class":"Sound Doctor 6(Jinny) 5:20 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm4808":{"id":"pm4808","name":"이은오","currentClass":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","classHistory":[{"class":"Pre Stella B1(Jinny) 4:10 M/T/W/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm5221":{"id":"pm5221","name":"윤지아","currentClass":"The Class Bridge 1(Kaya) 5:30 M/W/F","classHistory":[{"class":"The Class Bridge 1(Kaya) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm4727":{"id":"pm4727","name":"김태호","currentClass":"The Class Bridge 1(Kaya) 5:30 M/W/F","classHistory":[{"class":"The Class Bridge 1(Kaya) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2433":{"id":"pm2433","name":"배선우(eie)","currentClass":"The Class 7-1(Billie) 5:00 T/Th","classHistory":[{"class":"The Class 7-1(Billie) 5:00 T/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2955":{"id":"pm2955","name":"안소현","currentClass":"The Class Bridge 1(Kaya) 5:30 M/W/F","classHistory":[{"class":"The Class Bridge 1(Kaya) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"소화초등학교"},"pm0281":{"id":"pm0281","name":"윤은서","currentClass":"The Class Bridge 1(Kaya) 5:30 M/W/F","classHistory":[{"class":"The Class Bridge 1(Kaya) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"소화초등학교"},"pm5779":{"id":"pm5779","name":"장유라","currentClass":"The Class Bridge 1(Kaya) 5:30 M/W/F","classHistory":[{"class":"The Class Bridge 1(Kaya) 5:30 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm0304":{"id":"pm0304","name":"권민서","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2476":{"id":"pm2476","name":"기호윤","currentClass":"The Class 7-1(Billie) 5:00 T/Th","classHistory":[{"class":"The Class 7-1(Billie) 5:00 T/Th","from":"2026-07-01"}],"teacher":"","school":"원일초등학교"},"pm6282":{"id":"pm6282","name":"김다솔","currentClass":"The Class 7-1(Heejeong) 4:00 M/W/F","classHistory":[{"class":"The Class 7-1(Heejeong) 4:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm12801":{"id":"pm12801","name":"김도윤","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3260":{"id":"pm3260","name":"김도현(eie)","currentClass":"The Class 7-1(Billie) 5:00 T/Th","classHistory":[{"class":"The Class 7-1(Billie) 5:00 T/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm6623":{"id":"pm6623","name":"문정원","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm4364":{"id":"pm4364","name":"박도윤(eie)","currentClass":"The Class 7-1(Billie) 5:00 T/Th","classHistory":[{"class":"The Class 7-1(Billie) 5:00 T/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm2272":{"id":"pm2272","name":"박제현(eie)","currentClass":"The Class 7-1(Heejeong) 4:00 M/W/F","classHistory":[{"class":"The Class 7-1(Heejeong) 4:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"원일초등학교"},"pm4028":{"id":"pm4028","name":"박준서(eie)","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm0323":{"id":"pm0323","name":"박하람","currentClass":"The Class 7-1(Heejeong) 4:00 M/W/F","classHistory":[{"class":"The Class 7-1(Heejeong) 4:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm48881":{"id":"pm48881","name":"박현서","currentClass":"The Class 7-1(Billie) 5:00 T/Th","classHistory":[{"class":"The Class 7-1(Billie) 5:00 T/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm4501":{"id":"pm4501","name":"반예진(eie)","currentClass":"The Class 7-1(Billie) 5:00 T/Th","classHistory":[{"class":"The Class 7-1(Billie) 5:00 T/Th","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm9705":{"id":"pm9705","name":"송지아","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm7496":{"id":"pm7496","name":"송진우","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"원일초등학교"},"pm5836":{"id":"pm5836","name":"이무연","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm92552":{"id":"pm92552","name":"이윤아","currentClass":"The Class 7-1(Heejeong) 4:00 M/W/F","classHistory":[{"class":"The Class 7-1(Heejeong) 4:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"중앙기독초등학교"},"pm3657":{"id":"pm3657","name":"이재운","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm7248":{"id":"pm7248","name":"이주하","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm3116":{"id":"pm3116","name":"정수현","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm9724":{"id":"pm9724","name":"정찬율","currentClass":"The Class 7-1(Heejeong) 4:00 M/W/F","classHistory":[{"class":"The Class 7-1(Heejeong) 4:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"},"pm4009":{"id":"pm4009","name":"최민우","currentClass":"The Class Bridge 2(Billie) 6:00 M/W/F","classHistory":[{"class":"The Class Bridge 2(Billie) 6:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"매원초등학교"}},"classes":["Inter Bridge 1(Angela) 3:20 M/W/F","Inter Stella 4(Annie) 5:30 M/W/F","Pre Stella A1(Angela) 2:10 M/W/F","Pre Stella A3(Clare) 4:30 M/T/W/Th","Pre Stella A5(Kaya) 4:10 M/T/W/Th/F","Pre Stella A6(Clare) 2:10 M/T/W/Th","Pre Stella B1(Jinny) 3:00 M/T/W/Th","Pre Stella B1(Jinny) 4:10 M/T/W/Th","Silver Stella A2(Kaya) 3:00 M/T/W/Th/F","Silver Stella A3(Annie) 3:20 T/Th/F","Silver Stella A4(Kaya) 5:30 T/Th/F","Silver Stella A5(Angela) 3:20 T/Th/F","Silver Stella B1(Annie) 5:30 T/Th/F","Silver Stella B3(Angela) 5:30 M/W/F","Silver Stella B4(Clare) 5:30 T/Th/F","Sound Doctor 2(Annie) 2:10 M/W/F","Sound Doctor 2(Annie) 4:20 M/W/F","Sound Doctor 3(Clare) 3:20 M/T/W/Th","Sound Doctor 6(Jinny) 5:20 M/T/W/Th","The Class 7-1(Billie) 5:00 T/Th","The Class 7-1(Heejeong) 4:00 M/W/F","The Class Bridge 1(Kaya) 5:30 M/W/F","The Class Bridge 2(Billie) 6:00 M/W/F"]};
+const SEED_VERSION='pamus-2026-07-01';
+const LS={get(k){try{const v=localStorage.getItem(k);return v?{value:v}:null;}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}},remove(k){try{localStorage.removeItem(k);}catch(e){}}};
+function g(id){return document.getElementById(id);}
+function val(id){const e=g(id);return e?e.value:'';}
+let roster={students:{},classes:[]};
+function _rosterGet(key){const r=LS.get('pamus:'+key);if(!r)return null;try{return JSON.parse(r.value);}catch(e){return null;}}
+function _rosterSet(key,val){LS.set('pamus:'+key,JSON.stringify(val));}
+function loadRoster(){
+  const r=_rosterGet('roster');
+  const ver=_rosterGet('rosterSeedVer');
+  if(r&&r.students&&Object.keys(r.students).length>0){
+    roster=r;
+    if(ver!==SEED_VERSION){ mergeSeedUpdate(); _rosterSet('roster',roster); _rosterSet('rosterSeedVer',SEED_VERSION); }
+  }else{
+    roster=JSON.parse(JSON.stringify(ROSTER_SEED));
+    _rosterSet('roster',roster); _rosterSet('rosterSeedVer',SEED_VERSION);
+    _rosterSet('prevSeedIds',Object.keys(ROSTER_SEED.students));
+  }
+}
+function mergeSeedUpdate(){
+  const seed=ROSTER_SEED.students, cur=roster.students;
+  // 시드에 있는 학생: 이름·반배정(currentClass)·이력을 시드 기준으로 갱신 (명단 재편 반영)
+  Object.keys(seed).forEach(id=>{
+    if(cur[id]){
+      cur[id].name=seed[id].name;
+      cur[id].currentClass=seed[id].currentClass;
+      cur[id].classHistory=JSON.parse(JSON.stringify(seed[id].classHistory||[]));
+      if(seed[id].school)cur[id].school=seed[id].school;
+    } else {
+      cur[id]=JSON.parse(JSON.stringify(seed[id]));
+    }
+  });
+  // 직전 시드에 있었으나 이번 시드에서 빠진 학생 제거 (퇴원·승급)
+  const prev=new Set(_rosterGet('prevSeedIds')||[]);
+  Object.keys(cur).forEach(id=>{ if(!seed[id]&&prev.has(id)) delete cur[id]; });
+  // 반 목록: 시드 반 + 사용자가 직접 추가해 학생이 있는 반만 보존
+  const seedClasses=(ROSTER_SEED.classes||[]);
+  const userClasses=(roster.classes||[]).filter(c=>!seedClasses.includes(c) && Object.values(cur).some(s=>s.currentClass===c));
+  roster.classes=[...seedClasses, ...userClasses];
+  _rosterSet('prevSeedIds',Object.keys(seed));
+}
+function saveRoster(){_rosterSet('roster',roster);}
+function classList(){
+  const set=new Set(roster.classes||[]);
+  Object.values(roster.students).forEach(s=>{if(s.currentClass)set.add(s.currentClass);});
+  return [...set].sort((a,b)=>a.localeCompare(b,'ko'));
+}
+function studentsInClass(cls){
+  return Object.values(roster.students).filter(s=>s.currentClass===cls&&s.status!=='inactive').sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+}
+function escR(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+let curStuId=null;
+function renderClassSelect(){
+  const sel=g('classSelect'); if(!sel)return;
+  const prev=sel.value;
+  const cls=classList();
+  sel.innerHTML='<option value="">— 반을 선택하세요 —</option>'+cls.map(c=>`<option value="${escR(c)}">${escR(c)}</option>`).join('');
+  if(prev&&cls.includes(prev))sel.value=prev;
+  const dl=g('classDatalist'); if(dl)dl.innerHTML=cls.map(c=>`<option value="${escR(c)}">`).join('');
+}
+function renderStuChips(){
+  const area=g('stuChipArea'); if(!area)return;
+  const cls=g('classSelect').value;
+  if(!cls){area.innerHTML='<span style="color:#bbb;font-size:11px">반을 먼저 선택하세요</span>';return;}
+  const studs=studentsInClass(cls);
+  let html=studs.map(st=>`<span class="stu-chip${curStuId===st.id?' on':''}" onclick="selectStudent('${escR(st.id)}')">${escR(st.name)}</span>`).join('');
+  html+=`<span class="stu-chip addnew" onclick="openStuEdit('add')"><i class="ti ti-user-plus"></i> 학생 추가</span>`;
+  html+=`<span class="stu-chip addnew" onclick="openClassManage()"><i class="ti ti-settings"></i> 반 관리</span>`;
+  area.innerHTML = html;
+}
+
+function openClassManage(){ if(g('newClassName'))g('newClassName').value=''; renderClassManageList(); g('classManageModal').classList.add('on'); }
+function addClass(){
+  const name=(g('newClassName').value||'').trim();
+  if(!name){alert('반 이름을 입력하세요.');return;}
+  if(classList().includes(name)){alert('이미 존재하는 반입니다.');return;}
+  if(!roster.classes)roster.classes=[];
+  roster.classes.push(name); saveRoster();
+  renderClassManageList(); renderClassSelect();
+  g('newClassName').value='';
+}
+function renderClassManageList(){
+  const box=g('classManageList'); if(!box)return;
+  // 통합 검색: 검색어 있으면 매칭 학생 평면 목록, 없으면 반별 아코디언
+  const q=(g('cmSearch')?g('cmSearch').value:'').trim().toLowerCase();
+  const clr=g('cmSearchClear'); if(clr)clr.style.display=q?'block':'none';
+  if(q){
+    const all=Object.values(roster.students).filter(st=>st.status!=='inactive');
+    const hit=all.filter(st=>[st.name,st.id,st.currentClass,st.school].some(v=>(v||'').toLowerCase().includes(q)))
+                 .sort((a,b)=>(a.currentClass||'').localeCompare(b.currentClass||'','ko')||a.name.localeCompare(b.name,'ko'));
+    if(!hit.length){box.innerHTML='<div style="padding:12px;color:#aaa;font-size:12px">검색 결과가 없습니다.</div>';renderSuspendedList();return;}
+    box.innerHTML='<div style="font-size:11px;color:#889;margin-bottom:6px">검색 '+hit.length+'명 / 전체 '+all.length+'명</div>'+hit.map(st=>`<div style="display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid #f0ece0">
+      <span style="font-size:10.5px;font-weight:700;color:#3f5a85;background:#eef2fb;border-radius:5px;padding:2px 6px;min-width:42px;text-align:center">${escR(st.id)}</span>
+      <span style="flex:1;font-size:12.5px"><b>${escR(st.name)}</b> <span style="color:#bbb;font-size:10.5px">${escR(st.school||'')}</span><div style="font-size:10.5px;color:#9aa">${escR(st.currentClass||'-')}</div></span>
+      <button class="cm-btn sec" style="font-size:10px;padding:3px 7px" onclick="openStuEdit('edit','${escR(st.id)}')" title="수정·반이동"><i class="ti ti-pencil"></i></button>
+      <button class="cm-btn sec" style="font-size:10px;padding:3px 7px" onclick="suspendStudent('${escR(st.id)}')" title="휴원">휴원</button>
+      <button class="cm-btn del" style="font-size:10px;padding:3px 7px" onclick="withdrawStudent('${escR(st.id)}')" title="퇴원">퇴원</button>
+    </div>`).join('');
+    renderSuspendedList();
+    return;
+  }
+  const cls=classList();
+  if(!cls.length){box.innerHTML='<div style="padding:10px;color:#aaa;font-size:12px">등록된 반이 없습니다.</div>';return;}
+  box.innerHTML=cls.map(c=>{
+    const n=studentsInClass(c).length;
+    return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #f0ece0">
+      <div style="flex:1"><input type="text" value="${escR(c)}" data-orig="${escR(c)}" style="width:100%;font-size:13px;padding:5px 7px" onkeydown="if(event.key==='Enter')renameClass(this)"><div style="font-size:10.5px;color:#aaa;margin-top:2px;cursor:pointer" onclick="var x=this.parentNode.parentNode.querySelector('.cls-stus');x.style.display=x.style.display==='none'?'block':'none';if(x.style.display==='block'&&!x.dataset.loaded){x.innerHTML=renderClassStudents(this.parentNode.querySelector('input').getAttribute('data-orig'));x.dataset.loaded='1';}">학생 ${n}명 ▾</div></div><div class="cls-stus" style="display:none;width:100%" data-loaded=""></div>
+      <button class="cm-btn sec" style="font-size:11px;padding:5px 9px" onclick="renameClass(this.parentNode.querySelector('input'))"><i class="ti ti-check"></i> 저장</button>
+      ${n===0?`<button class="cm-btn del" style="font-size:11px;padding:5px 9px" onclick="deleteClass('${escR(c)}')"><i class="ti ti-trash"></i> 삭제</button>`:`<button class="cm-btn sec" style="font-size:11px;padding:5px 9px;opacity:.4;cursor:not-allowed" title="학생이 있는 반은 삭제할 수 없습니다. 먼저 학생을 옮기세요." disabled><i class="ti ti-trash"></i> 삭제</button>`}
+    </div>`;
+  }).join('');
+  renderSuspendedList();
+}
+function renderClassStudents(cls){
+  const arr=studentsInClass(cls);
+  if(!arr.length)return '<div style="padding:4px 0 8px 4px;color:#bbb;font-size:11px">학생 없음</div>';
+  return '<div style="padding:2px 0 8px 4px">'+arr.map(st=>`<div style="display:flex;align-items:center;gap:6px;padding:3px 0">
+    <span style="flex:1;font-size:12px">${escR(st.name)} <span style="color:#bbb;font-size:10px">${escR(st.school||'')}</span></span>
+    <button class="cm-btn sec" style="font-size:10px;padding:3px 7px" onclick="openStuEdit('edit','${escR(st.id)}')"><i class="ti ti-pencil"></i></button>
+    <button class="cm-btn sec" style="font-size:10px;padding:3px 7px" onclick="suspendStudent('${escR(st.id)}')" title="휴원">휴원</button>
+    <button class="cm-btn del" style="font-size:10px;padding:3px 7px" onclick="withdrawStudent('${escR(st.id)}')" title="퇴원">퇴원</button>
+  </div>`).join('')+'</div>';
+}
+function deleteClass(cls){
+  const n=studentsInClass(cls).length;
+  if(n>0){alert(`'${cls}' 반에는 학생이 ${n}명 있습니다.\n먼저 학생을 다른 반으로 옮긴 뒤 삭제할 수 있습니다.`);return;}
+  if(!confirm(`'${cls}' 반을 삭제하시겠습니까?\n(빈 반이므로 학생 데이터에는 영향이 없습니다.)`))return;
+  if(roster.classes)roster.classes=roster.classes.filter(c=>c!==cls);
+  saveRoster(); renderClassManageList(); renderClassSelect();
+  if(g('classSelect')&&g('classSelect').value===cls){g('classSelect').value='';if(typeof renderStuChips==='function')renderStuChips();}
+}
+function renameClass(input){
+  const orig=input.getAttribute('data-orig'), next=(input.value||'').trim();
+  if(!next){alert('반 이름은 비울 수 없습니다.');input.value=orig;return;}
+  if(next===orig)return;
+  if(classList().includes(next)){alert('이미 존재하는 반 이름입니다.');input.value=orig;return;}
+  if(!roster.classes)roster.classes=[];
+  roster.classes=roster.classes.map(c=>c===orig?next:c);
+  if(!roster.classes.includes(next))roster.classes.push(next);
+  Object.values(roster.students).forEach(st=>{
+    if(st.currentClass===orig)st.currentClass=next;
+    if(Array.isArray(st.classHistory))st.classHistory.forEach(h=>{if(h&&h.class===orig)h.class=next;});
+  });
+  saveRoster(); renderClassManageList(); renderClassSelect();
+  if(g('classSelect').value===orig)g('classSelect').value=next;
+  if(g('sClass')&&g('sClass').value===orig)g('sClass').value=next;
+  renderStuChips();
+}
+function activeStudents(){return Object.values(roster.students).filter(s=>s.status!=='inactive');}
+function inactiveStudents(){return Object.values(roster.students).filter(s=>s.status==='inactive');}
+function genStuId(){return 'stu'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);}
+function _stuHistKey(st){const n=(st.name||'').replace(/\s/g,'');const s=(st.school||'').replace(/\s/g,'');const pre=[s,n].filter(Boolean).join('_');return pre;}
+function openStuEdit(mode,id){
+  const m=g('stuEditModal'); if(!m)return;
+  g('seMode').value=mode; g('seId').value=id||'';
+  // 반 드롭다운 채우기
+  const sel=g('seClass'); const cls=classList();
+  sel.innerHTML=cls.map(c=>`<option value="${escR(c)}">${escR(c)}</option>`).join('');
+  if(mode==='edit'&&id&&roster.students[id]){
+    const st=roster.students[id];
+    g('seName').value=st.name||''; g('seSchool').value=st.school||''; g('seSid').value=st.id||'';
+    g('seSid').disabled=true; sel.value=st.currentClass||cls[0]||'';
+    g('seTitle').textContent='학생 정보 수정';
+  }else{
+    g('seName').value=''; g('seSchool').value=''; g('seSid').value=''; g('seSid').disabled=false;
+    const curCls=g('classSelect')?g('classSelect').value:''; if(curCls)sel.value=curCls;
+    g('seTitle').textContent='학생 추가';
+  }
+  m.classList.add('on');
+}
+function closeStuEdit(){const m=g('stuEditModal');if(m)m.classList.remove('on');}
+function saveStuEdit(){
+  const mode=g('seMode').value, id=g('seId').value;
+  const name=(g('seName').value||'').trim(), school=(g('seSchool').value||'').trim();
+  const sid=(g('seSid').value||'').trim(), cls=g('seClass').value;
+  if(!name){alert('학생 이름을 입력하세요.');return;}
+  if(!sid){alert('학번을 입력하세요.');return;}
+  if(mode==='add'){
+    if(roster.students[sid]){
+      const ex=roster.students[sid];
+      if(!confirm(`학번 ${sid}는 이미 등록된 학생(${ex.name})입니다.
+이 학생을 '${cls}' 반으로 이동할까요?`)){return;}
+      ex.name=name||ex.name; ex.school=school||ex.school;
+      if(ex.status==='inactive'){ex.status='active';delete ex.suspendedAt;}
+      if(ex.currentClass!==cls){ex.currentClass=cls;(ex.classHistory=ex.classHistory||[]).push({class:cls,from:new Date().toISOString().slice(0,10)});}
+      saveRoster(); closeStuEdit(); renderClassSelect(); renderStuChips(); renderClassManageList(); return;
+    }
+    roster.students[sid]={id:sid,name,school,currentClass:cls,classHistory:cls?[{class:cls,from:new Date().toISOString().slice(0,10)}]:[],teacher:'',status:'active'};
+  }else{
+    const st=roster.students[id]; if(!st)return;
+    st.name=name; st.school=school;
+    if(st.currentClass!==cls){ st.currentClass=cls; (st.classHistory=st.classHistory||[]).push({class:cls,from:new Date().toISOString().slice(0,10)}); }
+  }
+  saveRoster(); closeStuEdit(); renderClassSelect(); renderStuChips(); renderClassManageList();
+}
+function suspendStudent(id){
+  const st=roster.students[id]; if(!st)return;
+  if(!confirm(`'${st.name}' 학생을 휴원 처리할까요?\n명단에서 숨겨지지만 점수·이력은 보관되며, 보관함에서 복귀할 수 있습니다.`))return;
+  st.status='inactive'; st.suspendedAt=new Date().toISOString().slice(0,10);
+  saveRoster(); renderStuChips(); renderClassManageList();
+}
+function restoreStudent(id){
+  const st=roster.students[id]; if(!st)return;
+  st.status='active'; delete st.suspendedAt;
+  saveRoster(); renderStuChips(); renderClassManageList();
+}
+function withdrawStudent(id){
+  const st=roster.students[id]; if(!st)return;
+  if(!confirm(`'${st.name}' 학생을 퇴원(완전 삭제) 처리할까요?\n이 학생의 점수·리포트 이력도 함께 삭제되며 복구할 수 없습니다.`))return;
+  if(!confirm(`정말 삭제하시겠습니까? 되돌릴 수 없습니다.`))return;
+  // 점수/이력 localStorage 키 삭제 (이름+학교 기반)
+  const pre=_stuHistKey(st);
+  if(pre){ try{ Object.keys(localStorage).forEach(k=>{ if(k.includes('history:'+pre+':')||k.includes('report:history:'+pre+':')||k.startsWith('report:'+pre)||k.includes(':'+pre+':')) localStorage.removeItem(k); }); }catch(e){} }
+  delete roster.students[id];
+  saveRoster(); renderClassSelect(); renderStuChips(); renderClassManageList();
+}
+function renderSuspendedList(){
+  const box=g('suspendedList'); if(!box)return;
+  const arr=inactiveStudents().sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+  if(!arr.length){box.innerHTML='<div style="padding:8px;color:#aaa;font-size:11px">휴원 중인 학생이 없습니다.</div>';return;}
+  box.innerHTML=arr.map(st=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0ece0">
+    <div style="flex:1;font-size:12px">${escR(st.name)} <span style="color:#aaa;font-size:10px">${escR(st.school||'')} · ${escR(st.currentClass||'')}</span></div>
+    <button class="cm-btn grn" style="font-size:11px;padding:4px 9px" onclick="restoreStudent('${escR(st.id)}')"><i class="ti ti-arrow-back-up"></i> 복귀</button>
+    <button class="cm-btn del" style="font-size:11px;padding:4px 9px" onclick="withdrawStudent('${escR(st.id)}')"><i class="ti ti-trash"></i> 퇴원</button>
+  </div>`).join('');
+}
+
+/* ===== 정규 Daily Vocab ===== */
+// 회차 정의: days 모드 → [1..count], lessons 모드 → Reading 1~6 + Listening 1~6
+function regSlots(){
+  if(CFG.regular.mode==='days'){
+    return Array.from({length:CFG.regular.count},(_,i)=>({key:'D'+(i+1),label:'Day '+(i+1),group:null}));
+  }else{
+    const r=Array.from({length:6},(_,i)=>({key:'R'+(i+1),label:'R-Lesson '+(i+1),group:'Reading'}));
+    const l=Array.from({length:6},(_,i)=>({key:'L'+(i+1),label:'L-Lesson '+(i+1),group:'Listening'}));
+    return r.concat(l);
+  }
+}
+function regGet(id){return _rosterGet('vreg_'+LEVEL+'_'+id)||{};}
+function regSet(id,d){_rosterSet('vreg_'+LEVEL+'_'+id,d);}
+function extGet(id){return _rosterGet('vext_'+LEVEL+'_'+id)||[];}
+function extSet(id,a){_rosterSet('vext_'+LEVEL+'_'+id,a);}
+
+function selectStudent(id){curStuId=id;renderStuChips();renderVocab(id);}
+let curTab='regular';
+function switchTab(t){curTab=t;g('tab_regular').style.display=(t==='regular')?'block':'none';g('tab_external').style.display=(t==='external')?'block':'none';document.querySelectorAll('.vtab').forEach(x=>x.classList.toggle('on',x.dataset.tab===t));}
+
+function renderVocab(id){
+  const st=roster.students[id];if(!st){g('vocabPanel').style.display='none';return;}
+  g('vocabPanel').style.display='block';
+  // 외부교재 탭 표시 여부
+  g('extTab').style.display=CFG.external?'block':'none';
+  if(!CFG.external&&curTab==='external')switchTab('regular');
+  g('regWho').textContent=st.name+' — 정규 단어 누적';
+  g('regPerLabel').textContent='회당 '+CFG.regular.perTest+'단어';
+  renderRegular(id);
+  if(CFG.external){g('extWho').textContent=st.name+' — 외부교재 단어 누적';renderExternal(id);g('extDate').value=new Date().toISOString().slice(0,10);
+    var _ea=extGet(id);var _lb=_ea.length?(_ea[_ea.length-1].book||''):'';if(g('extBook'))g('extBook').value=_lb;}
+}
+
+function renderRegular(id){
+  const data=regGet(id);const slots=regSlots();const per=CFG.regular.perTest;
+  // 그리드 (lessons 모드는 그룹 헤더)
+  let wrap='';
+  if(CFG.regular.mode==='lessons'){
+    ['Reading','Listening'].forEach(grp=>{
+      wrap+='<div class="vgroup-label"><i class="ti ti-'+(grp==='Reading'?'book-2':'headphones')+'"></i>'+grp+' (6 lessons)</div><div class="vgrid">';
+      slots.filter(s=>s.group===grp).forEach(s=>{wrap+=cellHTML(id,s,data,per);});
+      wrap+='</div>';
+    });
+  }else{
+    wrap+='<div class="vgrid">';
+    slots.forEach(s=>{wrap+=cellHTML(id,s,data,per);});
+    wrap+='</div>';
+  }
+  g('regGridWrap').innerHTML=wrap;
+  renderRegSummary(id,data,slots,per);
+}
+function cellHTML(id,s,data,per){
+  const v=data[s.key];const has=(v!=null&&v!=='');const pct=has?Math.round(v/per*100):null;
+  return '<div class="vday'+(has?' done':'')+'"><div class="vday-h"><span class="vday-n">'+s.label+'</span>'+(has?'<span class="vday-pct">'+pct+'%</span>':'')+'</div><div class="vday-in"><input type="number" min="0" max="'+per+'" value="'+(has?v:'')+'" onchange="onRegInput(\''+id+'\',\''+s.key+'\',this.value)" placeholder="–"><span class="max">/ '+per+'</span></div></div>';
+}
+function onRegInput(id,key,raw){
+  const data=regGet(id);let v=(raw+'').trim();const per=CFG.regular.perTest;
+  if(v===''){delete data[key];}else{let n=parseInt(v,10);if(isNaN(n)||n<0)n=0;if(n>per)n=per;data[key]=n;}
+  regSet(id,data);setTimeout(function(){renderRegular(id);},0);
+}
+function renderRegSummary(id,data,slots,per){
+  const taken=slots.filter(s=>data[s.key]!=null);
+  const n=taken.length;let got=0,max=0;taken.forEach(s=>{got+=data[s.key];max+=per;});
+  const avg=max?Math.round(got/max*100):0;
+  g('regSummary').innerHTML='<div class="vstat"><div class="k">응시 회차</div><div class="v">'+n+'<small> / '+slots.length+'</small></div></div><div class="vstat"><div class="k">누적 정답</div><div class="v">'+got+'<small> / '+max+'</small></div></div><div class="vstat"><div class="k">누적 정답률</div><div class="v">'+avg+'<small>%</small></div></div>';
+  let bars='';slots.forEach(s=>{const v=data[s.key];if(v==null){bars+='<div class="tbar-wrap"><div class="tbar" style="height:2px;background:#e0ddd5"></div><div class="tbar-lbl">'+s.label.replace(/[^0-9RL]/g,'')+'</div></div>';return;}const pct=Math.round(v/per*100);const cls=pct>=80?'high':pct>=60?'mid':'low';bars+='<div class="tbar-wrap"><div class="tbar '+cls+'" style="height:'+Math.max(pct*0.7,3)+'px" title="'+s.label+': '+v+'/'+per+' ('+pct+'%)"></div><div class="tbar-lbl">'+s.label.replace(/[^0-9RL]/g,'')+'</div></div>';});
+  g('regTrend').innerHTML=bars;
+}
+
+/* ===== 외부교재 (Bridge-3 그룹2 방식) ===== */
+function extJudge(){
+  const raw=parseFloat(val('ext_raw')),max=parseFloat(val('ext_max')),cut=parseFloat(val('ext_cut'));
+  const pr=g('ext_passrow'),rr=g('ext_retakerow'),rm=g('ext_retakemax');
+  if(rm&&!isNaN(max))rm.textContent=max;
+  if(isNaN(raw)||isNaN(max)||isNaN(cut)||max<=0){pr.innerHTML='';rr.style.display='none';return;}
+  const passed=raw>=cut;
+  if(passed){pr.innerHTML='<span class="badge pass"><i class="ti ti-circle-check"></i> 한 번에 통과</span>';rr.style.display='none';}
+  else{pr.innerHTML='<span class="badge retake"><i class="ti ti-refresh"></i> 재시험 대상 (컷 '+cut+'점 미달)</span>';rr.style.display='flex';}
+}
+function extSave(){
+  const id=curStuId;if(!id)return;
+  const raw=parseFloat(val('ext_raw')),max=parseFloat(val('ext_max')),cut=parseFloat(val('ext_cut'));
+  if(isNaN(raw)||isNaN(max)||max<=0){extMsg('점수와 만점을 입력하세요.',true);return;}
+  const date=val('extDate')||new Date().toISOString().slice(0,10);
+  const pct=Math.round(raw/max*1000)/10;
+  const rec={date,book:val('extBook'),raw,max,pct};
+  if(!isNaN(cut)){rec.cut=cut;rec.passed=raw>=cut;const rt=parseFloat(val('ext_retake'));rec.finalPct=isNaN(rt)?pct:Math.round(rt/max*1000)/10;}
+  else rec.finalPct=pct;
+  const arr=extGet(id);const ix=arr.findIndex(e=>e.date===date);
+  if(ix>=0)arr[ix]=rec;else arr.push(rec);
+  arr.sort((a,b)=>a.date<b.date?-1:1);extSet(id,arr);
+  extMsg(date+' · '+raw+'/'+max+' 저장 완료.',false);
+  ['ext_raw','ext_retake','ext_book'].forEach(x=>{if(g(x))g(x).value='';});g('ext_passrow').innerHTML='';g('ext_retakerow').style.display='none';
+  renderExternal(id);
+}
+function extMsg(m,err){const e=g('extSaved');e.style.display='block';e.style.color=err?'#c0392b':'#2d7a4f';e.textContent=m;}
+function renderExternal(id){
+  const arr=extGet(id);
+  if(!arr.length){g('extSummary').innerHTML='<div class="vstat" style="flex:1"><div class="k">기록</div><div class="v">0<small>회</small></div></div>';g('extTrend').innerHTML='<div style="color:#bbb;font-size:12px;padding:18px">아직 외부교재 기록이 없습니다.</div>';return;}
+  const finals=arr.map(r=>r.finalPct!=null?r.finalPct:r.pct);
+  const firsts=arr.map(r=>r.pct);
+  const favg=Math.round(finals.reduce((a,b)=>a+b,0)/finals.length*10)/10;
+  const wp=arr.filter(r=>r.passed!=null);const once=wp.filter(r=>r.passed).length;
+  g('extSummary').innerHTML='<div class="vstat"><div class="k">시험 횟수</div><div class="v">'+arr.length+'<small>회</small></div></div><div class="vstat"><div class="k">최종 평균</div><div class="v">'+favg+'<small>%</small></div></div><div class="vstat"><div class="k">한번에 통과</div><div class="v">'+(wp.length?Math.round(once/wp.length*100):'–')+'<small>'+(wp.length?'%':'')+'</small></div></div>';
+  let bars='';arr.slice(-16).forEach(r=>{const pct=r.finalPct!=null?r.finalPct:r.pct;const cls=pct>=80?'high':pct>=60?'mid':'low';const rt=(r.passed===false)?' ⟳':'';bars+='<div class="tbar-wrap"><div class="tbar '+cls+'" style="height:'+Math.max(pct*0.7,3)+'px" title="'+r.date+': '+r.raw+'/'+r.max+' ('+pct+'%)'+rt+'"></div><div class="tbar-lbl">'+r.date.slice(5)+'</div></div>';});
+  g('extTrend').innerHTML=bars;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{loadRoster();renderClassSelect();});
+</script>
+</body>
+</html>
