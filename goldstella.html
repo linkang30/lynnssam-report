@@ -976,7 +976,6 @@ function copyRpt(){
   const d=levelData();const nm=val('stuName')||'';const sc=[val('stuSchool'),val('stuGrade')].filter(t=>t).join(' ');
   const tot=integratedTotal();const dm=integratedDomains();
   const parts=[];
-  const sl=[nm,sc,d?d.label+' '+d.name:''].filter(t=>t).join(' | ');if(sl)parts.push(sl);
   const rawDisp=Number.isInteger(tot.got)?tot.got:tot.got.toFixed(1);
   parts.push(`[통합 점수 RD+LW] ${tot.pct}점 (${rawDisp}/${tot.max}) · 등급 ${gradeOf(tot.pct)}`);
   const st=g('rpt-score-text');if(st)parts.push('▪ 영역별 점수\n'+st.innerText.trim());
