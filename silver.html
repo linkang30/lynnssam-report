@@ -1683,8 +1683,6 @@ function copyRpt(){
   const stuSchool2 = [val('stuSchool'), val('stuGrade')].filter(t=>t).join(' ');
   const stuClass2 = val('sClass');
   const stuLv = val('lvSel') ? (LV[val('lvSel')]?.label + ' ' + LV[val('lvSel')]?.name) : '';
-  const studentLine = [stuName2, stuSchool2, stuClass2, stuLv].filter(t=>t).join(' | ');
-  if(studentLine) parts.push(studentLine);
   const lv2 = val('lvSel');
   const d2 = LV[lv2];
   if(d2){
