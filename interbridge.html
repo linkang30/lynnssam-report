@@ -320,8 +320,8 @@ const g = id => document.getElementById(id);
 const val = id => { const el=g(id); return el ? el.value.trim() : ''; };
 
 function LS(action,key,data){const PFX='ib_';if(action==='get')return JSON.parse(localStorage.getItem(PFX+key)||'null');if(action==='set')localStorage.setItem(PFX+key,JSON.stringify(data));}
-const ROSTER_SEED={"students":{"demo1":{"id":"demo1","name":"강코니","currentClass":"월수금 3:00","classHistory":[{"class":"월수금 3:00","from":"2026-01-01"}],"teacher":"Sarah T","school":"광교초"},"demo2":{"id":"demo2","name":"이하늘","currentClass":"월수금 3:00","classHistory":[{"class":"월수금 3:00","from":"2026-01-01"}],"teacher":"Sarah T","school":"광교초"},"demo3":{"id":"demo3","name":"박서준","currentClass":"월수금 3:00","classHistory":[{"class":"월수금 3:00","from":"2026-01-01"}],"teacher":"Sarah T","school":"광교초"}},"classes":["월수금 3:00"]};
-const SEED_VERSION='demo-2026-01-01';
+const ROSTER_SEED={"students":{"pm0001":{"id":"pm0001","name":"강코니","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0002":{"id":"pm0002","name":"김아름","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0003":{"id":"pm0003","name":"한하늘","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0004":{"id":"pm0004","name":"이루나","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0005":{"id":"pm0005","name":"박소율","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0006":{"id":"pm0006","name":"정시우","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0007":{"id":"pm0007","name":"최서아","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0008":{"id":"pm0008","name":"윤도현","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0009":{"id":"pm0009","name":"임하진","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0010":{"id":"pm0010","name":"김단우","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0011":{"id":"pm0011","name":"오예린","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0012":{"id":"pm0012","name":"장윤서","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"}},"classes":["Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","Pre Stella A1(Sarah) 3:00 M/W/F","Silver Stella A1(Amy) 3:00 M/W/F","Inter Stella 3(Ben) 5:30 T/Th/F"]};
+const SEED_VERSION='public-sample-2026-07-01';
 let roster={students:{},classes:[]};
 function _rosterGet(key){return LS('get',key);}
 function _rosterSet(key,val){LS('set',key,val);}
@@ -360,11 +360,12 @@ function mergeSeedUpdate(){
   _rosterSet('prevSeedIds',Object.keys(seed));
 }
 function saveRoster(){_rosterSet('roster',roster);}
+const CURRICULUM_ORDER=["Sound Doctor","Tooth Phonics","Pre Stella","Silver Stella","Inter Bridge","Inter Stella","Gold Stella","The Class"];
+function _curRank(c){const i=CURRICULUM_ORDER.findIndex(k=>String(c).startsWith(k));return i<0?CURRICULUM_ORDER.length:i;}
 function classList(){
   const set=new Set(roster.classes||[]);
   Object.values(roster.students).forEach(s=>{if(s.currentClass)set.add(s.currentClass);});
-  return [...set].sort((a,b)=>a.localeCompare(b,'ko'));
-}
+  return [...set].sort((a,b)=>(_curRank(a)-_curRank(b))||a.localeCompare(b,'ko'));}
 function studentsInClass(cls){
   return Object.values(roster.students).filter(s=>s.currentClass===cls&&s.status!=='inactive').sort((a,b)=>a.name.localeCompare(b.name,'ko'));
 }
