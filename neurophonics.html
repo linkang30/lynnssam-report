@@ -1594,8 +1594,6 @@ function copyReport(){
   const uBlock=d.summary?['[이번 단계 학습 내용]',d.summary].join('\n'):'';
   const teacher=val('teacher')||'선생님';
   const parts=[
-    `${d.label} Monthly Report`,
-    stu,
     uBlock,
     '영역별 · '+(LV[curLv].areas||[]).map(a=>`${a.name.replace(/^PART \d+ · /,'')} ${sc.byId[a.id]||0}/${areaMaxOf(LV[curLv],a)}`).join(' · '),
     sBlock, iBlock, nBlock,
