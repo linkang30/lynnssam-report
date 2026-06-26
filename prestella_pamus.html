@@ -396,6 +396,141 @@ const QM_A=[
 
 // ═══ QM — A3 전용 (실제 시험지·답안지 기준) ═══
 // 18~21 Look, choose, and circle (그림 보고 어휘·표현 선택) / 22~25 Unscramble (평서문 어순 배열)
+const QM_A1=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"SP",skill:"be동사 단수 (What is)",norm:"is/are 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"VC",skill:"의문사·어휘 선택 (shape)",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"SP",skill:"지시어 복수 (those)",norm:"that/those 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"FC",skill:"주어-동사 수일치 의문문 (Do/Does)",norm:"Do/Does 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"부정 평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적어 수식)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"There are 구문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"인용문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+const QM_A4=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"VC",skill:"의문사 선택 (What/Who 직업)",norm:"의문사 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"VC",skill:"전치사·어휘 선택 (in the morning)",norm:"전치사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"SP",skill:"현재진행 의문문 (do/are)",norm:"do/are 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"SP",skill:"현재진행 동사형 (eat/eating)",norm:"동사형 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (3인칭 brings)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"There are 구문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적어+전치사구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (동사+부사구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+const QM_A5=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"VC",skill:"소유격 의문사·소유대명사 (Whose/his)",norm:"의문사 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"VC",skill:"전치사·빈도부사 (on the bus/always)",norm:"빈도부사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"VC",skill:"과거 시간표현·어휘 (last Friday)",norm:"next/last 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"SP",skill:"의문사 be과거·장소 (Where were)",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (장소 전치사구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적어 병렬)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적 전치사구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (across 전치사구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+const QM_A6=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"VC",skill:"과거 시간표현·전치사 (last weekend/at)",norm:"next/last 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"SP",skill:"can+동사원형·접속사 (water/so)",norm:"동사형 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"VC",skill:"의문사·소유격 (What/doctor's)",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"VC",skill:"의문사·수단 전치사 (How/by)",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적어구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (장소+보어)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (동사구+목적어)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (복합주어)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+const QM_A2=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"VC",skill:"인칭 의문문·가족 어휘 (Who is he)",norm:"인칭 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"SP",skill:"현재진행·감정 (feeling/excited)",norm:"동사형 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"VC",skill:"의문사 선택 (How/What)",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"SP",skill:"be동사 단수·날씨 (How is)",norm:"is/are 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (구동사+전치사)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적어)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (시간부사 도치)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"의문문 어순 배열 (How be)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
 const QM_A3=[
   {n:1,dom:"Vocabulary",code:"VR",skill:"위치 표현 어휘",norm:"유사 표현 혼동 — 정상",warn:"기초 어휘 반복 오답"},
   {n:2,dom:"Vocabulary",code:"VR",skill:"의류 어휘 인식",norm:"유사 단어 혼동 — 정상",warn:"기초 명사 반복 오답"},
@@ -449,14 +584,14 @@ const QM_B1=[
   {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
   // Structure — B1 핵심 4패턴 + 문장 배열
-  {n:18,dom:"Structure",code:"IQ",skill:"Is it / Is this~ 패턴",norm:"is/this 혼동 — 정상",warn:"패턴 자체 미이해 → 개별 점검 필요"},
-  {n:19,dom:"Structure",code:"DH",skill:"Do you have~ 패턴",norm:"do/does 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"CL",skill:"색깔 묘사 패턴 (Is it~색깔?)",norm:"색깔 어휘 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"FL",skill:"감정 표현 (How are you feeling?)",norm:"감정어 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"IQ",skill:"be동사 의문문·대명사 (Is it/they)",norm:"is/this 혼동 — 정상",warn:"패턴 자체 미이해 → 개별 점검 필요"},
+  {n:19,dom:"Structure",code:"DH",skill:"Do you have 의문문·수량",norm:"do/does 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"CL",skill:"be동사 단수·색깔 (Is/Are it)",norm:"색깔 어휘 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"FL",skill:"의문사·현재진행 감정 (How/feeling)",norm:"감정어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (전치사구 puts into)",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"부정 평서문 어순 배열 (don't like)",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (3인칭 brings)",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (전치사구 sits around)",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"}
 ];
 
 // QM 레벨별 매핑
@@ -479,14 +614,14 @@ const QM_B2=[
   {n:15,dom:"Listening",code:"QR",skill:"선호 표현 듣기",norm:"반응 지연 — 정상",warn:"반응 없음"},
   {n:16,dom:"Listening",code:"QR",skill:"선호 표현 듣기",norm:"유사 발음 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
-  {n:18,dom:"Structure",code:"RX",skill:"Who is~ 관계 패턴",norm:"인칭 혼동 — 정상",warn:"패턴 자체 미이해"},
-  {n:19,dom:"Structure",code:"PF",skill:"Do you like~ 선호 패턴",norm:"do/does 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"RQ",skill:"Can I~ 요청 패턴",norm:"can/could 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"HM",skill:"How much~ 가격 패턴",norm:"수량 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"RX",skill:"의문사·관계 (Who/Where is)",norm:"인칭 혼동 — 정상",warn:"패턴 자체 미이해"},
+  {n:19,dom:"Structure",code:"PF",skill:"Do you like 의문문·동사 수일치",norm:"do/does 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"RQ",skill:"Can I 요청·동사원형 (have)",norm:"can/could 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"HM",skill:"How much/many·수일치 (가격)",norm:"수량 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (현재진행 wagging)",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"청유 인용문 어순 배열 (Let's)",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (4형식 shows them)",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (지각동사 hear)",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"}
 ];
 // ═══ QM_B3 — 정보 전달 (시간·직업·장소·음식) ═══
 const QM_B3=[
@@ -507,14 +642,14 @@ const QM_B3=[
   {n:15,dom:"Listening",code:"TM",skill:"시간 표현 듣기",norm:"숫자 혼동 — 정상",warn:"반응 없음"},
   {n:16,dom:"Listening",code:"JB",skill:"직업 표현 듣기",norm:"직업어 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
-  {n:18,dom:"Structure",code:"TM",skill:"What time is it~ 패턴",norm:"숫자 혼동 — 정상",warn:"패턴 자체 미이해"},
-  {n:19,dom:"Structure",code:"JB",skill:"What do you do~ 직업 패턴",norm:"do/does 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"PL",skill:"Where is~ 장소 패턴",norm:"전치사 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"FD",skill:"What do you eat for~ 식사 패턴",norm:"음식어 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"TM",skill:"의문사·시각 (What/How time)",norm:"숫자 혼동 — 정상",warn:"패턴 자체 미이해"},
+  {n:19,dom:"Structure",code:"JB",skill:"3인칭 의문문·직업 (does/do)",norm:"do/does 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"PL",skill:"위치 의문문 (Where is/does)",norm:"전치사 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"FD",skill:"전치사·식사 (for lunch)",norm:"음식어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (전치사구 waves at)",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"부정 to부정사 어순 배열 (doesn't want to)",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"미래 평서문 어순 배열 (will do)",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (be+형용사 proud of)",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"}
 ];
 // ═══ QM_B4 — 자기 경험 (과거·습관·비교) ═══
 const QM_B4=[
@@ -535,14 +670,14 @@ const QM_B4=[
   {n:15,dom:"Listening",code:"PT",skill:"과거 표현 듣기",norm:"시제 혼동 — 정상",warn:"반응 없음"},
   {n:16,dom:"Listening",code:"PT",skill:"과거 표현 듣기",norm:"동사 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"CP",skill:"비교 표현 듣기",norm:"비교급 혼동 — 정상",warn:"반응 없음"},
-  {n:18,dom:"Structure",code:"PT",skill:"Where did you go~ 과거 패턴",norm:"시제 혼동 — 정상",warn:"과거시제 미이해"},
-  {n:19,dom:"Structure",code:"HB",skill:"요일 습관 패턴 (What do you do on~)",norm:"빈도부사 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"PT",skill:"과거시제 문장 완성",norm:"불규칙 과거형 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"CN",skill:"수량 단위 표현 (a can of~)",norm:"단위명사 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"PT",skill:"의문사·과거·장소 (When/Where did)",norm:"시제 혼동 — 정상",warn:"과거시제 미이해"},
+  {n:19,dom:"Structure",code:"HB",skill:"전치사·요일 습관 (on Sundays)",norm:"빈도부사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"PT",skill:"과거시제 (did/were·동사 과거형)",norm:"불규칙 과거형 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"CN",skill:"3인칭 의문문·수량단위 (need)",norm:"단위명사 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (빈도 on Saturdays)",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (복합주어 Puppy and I)",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"부정 to부정사 어순 배열 (don't like to)",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"to부정사 어순 배열 (can't wait to)",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"}
 ];
 // ═══ QM_B5 — 계획/상황 (현재진행·수량·미래) ═══
 const QM_B5=[
@@ -563,14 +698,14 @@ const QM_B5=[
   {n:15,dom:"Listening",code:"PT",skill:"과거 표현 듣기",norm:"시제 혼동 — 정상",warn:"반응 없음"},
   {n:16,dom:"Listening",code:"QT",skill:"수량 표현 듣기",norm:"수량어 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"CA",skill:"능력 표현 듣기 (can)",norm:"can/can't 혼동 — 정상",warn:"반응 없음"},
-  {n:18,dom:"Structure",code:"PG",skill:"현재진행 패턴 (What are you doing?)",norm:"be동사 혼동 — 정상",warn:"진행형 미이해"},
-  {n:19,dom:"Structure",code:"BH",skill:"신체 증상 표현 (I have a~)",norm:"신체어 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"FT",skill:"be going to 미래 패턴",norm:"going to 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"TR",skill:"교통수단 표현",norm:"교통어 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"PG",skill:"의문사·현재진행 (How/taking)",norm:"be동사 혼동 — 정상",warn:"진행형 미이해"},
+  {n:19,dom:"Structure",code:"BH",skill:"의문사·증상 (What's wrong)",norm:"신체어 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"FT",skill:"be going to 미래 (going to)",norm:"going to 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"TR",skill:"동사·교통수단 (take/fly)",norm:"교통어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (can+목적어 buy with)",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"There are 구문 어순 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (4형식 gives Mom)",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (전치사구 sets for)",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"}
 ];
 // ═══ QM_B6 — 독립 표현 (출신·계획·빈도·의무) ═══
 const QM_B6=[
@@ -591,16 +726,16 @@ const QM_B6=[
   {n:15,dom:"Listening",code:"WL",skill:"여행·도시 정보 듣기",norm:"도시명 혼동 — 정상",warn:"반응 없음"},
   {n:16,dom:"Listening",code:"SL",skill:"상황 표현 듣기",norm:"상황어 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"CA",skill:"능력 표현 듣기 (can)",norm:"can/can't 혼동 — 정상",warn:"반응 없음"},
-  {n:18,dom:"Structure",code:"OR",skill:"Where are you from~ 출신 패턴",norm:"전치사 혼동 — 정상",warn:"패턴 자체 미이해"},
-  {n:19,dom:"Structure",code:"FT",skill:"be going to 계획 패턴",norm:"going to 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"OB",skill:"have to 의무 패턴",norm:"have to 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"SN",skill:"감각 표현 (How does it~)",norm:"감각어 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"OR",skill:"전치사·출신 (from)",norm:"전치사 혼동 — 정상",warn:"패턴 자체 미이해"},
+  {n:19,dom:"Structure",code:"FT",skill:"be going to 의문문 (are/start)",norm:"going to 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"OB",skill:"have to 의무 (do/동사원형)",norm:"have to 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"SN",skill:"의문사·감각동사 (How/look)",norm:"감각어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"to부정사 어순 배열 (4형식 show you)",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"부정 to부정사 어순 배열 (don't want to)",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"동명사 주어 어순 배열 (playing is)",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"분사구문 어순 배열 (holding)",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"}
 ];
-const QM_MAP={A1:QM_A,A2:QM_A,A3:QM_A3,A4:QM_A,A5:QM_A,A6:QM_A,B1:QM_B1,B2:QM_B2,B3:QM_B3,B4:QM_B4,B5:QM_B5,B6:QM_B6};
+const QM_MAP={A1:QM_A1,A2:QM_A2,A3:QM_A3,A4:QM_A4,A5:QM_A5,A6:QM_A6,B1:QM_B1,B2:QM_B2,B3:QM_B3,B4:QM_B4,B5:QM_B5,B6:QM_B6};
 
 // CODELAB — A + B1 통합
 const CODELAB={
