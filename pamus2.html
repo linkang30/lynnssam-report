@@ -207,14 +207,14 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
       <div><label>새김 학생 ID</label><input type="text" id="stuSaegimId" placeholder="예: SK1234" oninput="saveStuField('saegimId',this.value)"></div>
     </div>
     <div class="row3">
-      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="학생 이름" oninput="onNameInput()"></div>
-      <div><label>학교</label><input type="text" id="stuSchool" list="schoolHistList" placeholder="" oninput="onNameInput()"></div>
-      <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 3학년" onchange="saveStuField('grade',this.value)"></div>
+      <div><label>학생 이름</label><input type="text" id="stuName" autocomplete="off" placeholder="학생 이름" oninput="onNameInput()"></div>
+      <div><label>학교</label><input type="text" id="stuSchool" autocomplete="off" list="schoolHistList" placeholder="" oninput="onNameInput()"></div>
+      <div><label>학년</label><input type="text" id="stuGrade" autocomplete="off" placeholder="예: 3학년" onchange="saveStuField('grade',this.value)"></div>
     </div>
     <div class="row3">
-      <div><label>학원 반</label><input type="text" id="sClass" list="classHistList" placeholder="예: Silver Stella A1 (담당 T) 월수금 3시반"></div>
-      <div><label>담임선생님</label><input type="text" id="teacher" list="teacherHistList" placeholder="" onchange="saveStuField('teacher',this.value)"></div>
-      <div><label>보고서 월</label><input type="text" id="repMonth" placeholder="예: 2026년 6월" onchange="saveReportMonth(this.value)"></div>
+      <div><label>학원 반</label><input type="text" id="sClass" autocomplete="off" list="classHistList" placeholder="예: Silver Stella A1 (담당 T) 월수금 3시반"></div>
+      <div><label>담임선생님</label><input type="text" id="teacher" autocomplete="off" list="teacherHistList" placeholder="" onchange="saveStuField('teacher',this.value)"></div>
+      <div><label>보고서 월</label><input type="text" id="repMonth" autocomplete="off" placeholder="예: 2026년 6월" onchange="saveReportMonth(this.value)"></div>
     </div>
     <datalist id="schoolHistList"></datalist>
     <datalist id="teacherHistList"></datalist>
@@ -1613,12 +1613,19 @@ function onClassSelect(){
 }
 function renderStuChips(){
   const area=g('stuChipArea'); if(!area)return;
-  const cls=g('classSelect').value;
-  if(!cls){area.innerHTML='<span style="color:#bbb;font-size:11px">반을 먼저 선택하세요</span>';return;}
+  const cls=g('classSelect')?g('classSelect').value:'';
+  // 반 관리 / 학생 추가 버튼은 항상 표시 (빈 상태에서도 반을 만들 수 있게)
+  const manageChips =
+    `<span class="stu-chip addnew" onclick="openStuEdit('add')"><i class="ti ti-user-plus"></i> 학생 추가</span>`+
+    `<span class="stu-chip addnew" onclick="openClassManage()"><i class="ti ti-settings"></i> 반 관리</span>`;
+  if(!cls){
+    // 반 미선택: 안내 + 관리 버튼
+    area.innerHTML='<span style="color:#bbb;font-size:11px;margin-right:8px">반을 먼저 선택하거나 새로 만드세요</span>'+manageChips;
+    return;
+  }
   const studs=studentsInClass(cls);
-  let html=studs.map(st=>`<span class="stu-chip${curStuId===st.id?' on':''}" onclick="selectStudent('${escR(st.id)}')">${escR(st.name)}</span>`).join('');
-  html+=`<span class="stu-chip addnew" onclick="openStuEdit('add')"><i class="ti ti-user-plus"></i> 학생 추가</span>`;
-  html+=`<span class="stu-chip addnew" onclick="openClassManage()"><i class="ti ti-settings"></i> 반 관리</span>`;
+  let html=studs.map(st=>`<span class="stu-chip${curStuId===st.id?' on':''}" onclick="selectStudent('${escR(st.id)}')">${st.name||'(이름없음)'}</span>`).join('');
+  html+=manageChips;
   area.innerHTML = html;
 }
 function selectStudent(id){
@@ -2916,6 +2923,7 @@ document.addEventListener('DOMContentLoaded', ()=>{const _al=document.getElement
   g('lvSel')?.addEventListener('change', onLvChange);
   g('stuName')?.addEventListener('input', onNameInput);
   go(0); loadRoster(); renderClassSelect();
+  try{ if(typeof renderStuChips==='function') renderStuChips(); }catch(e){}
   try{ _histRenderAll(); _bindHistInputs(); }catch(e){}
 });
 
