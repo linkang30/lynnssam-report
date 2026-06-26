@@ -385,7 +385,7 @@ const LV={
       {id:"spkSound",name:"PART 4 · Speaking (음가)",type:"grid",source:"spkSound",cols:7,sub:"음가 인식 (알파벳·소리) · 음가 분석의 핵심 근거"},
       {id:"spkWord",name:"PART 4 · Speaking (단어)",type:"grid",source:"spkWord",cols:9,sub:"단어 읽기 / CVC 블렌딩 · 음가 분석의 핵심 근거"}
     ],
-    bonus:{total:18,per:3}
+    bonus:{total:48,per:6}
   },
   "SD2":{
     line:"Sound Doctor",
@@ -685,8 +685,8 @@ function LS(action,key,data){
   if(action==='get')return JSON.parse(localStorage.getItem(PFX+key)||'null');
   if(action==='set')localStorage.setItem(PFX+key,JSON.stringify(data));
 }
-const ROSTER_SEED={"students":{"pm0001":{"id":"pm0001","name":"강코니","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0002":{"id":"pm0002","name":"김아름","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0003":{"id":"pm0003","name":"한하늘","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0004":{"id":"pm0004","name":"이루나","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0005":{"id":"pm0005","name":"박소율","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0006":{"id":"pm0006","name":"정시우","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0007":{"id":"pm0007","name":"최서아","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0008":{"id":"pm0008","name":"윤도현","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0009":{"id":"pm0009","name":"임하진","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0010":{"id":"pm0010","name":"김단우","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0011":{"id":"pm0011","name":"오예린","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0012":{"id":"pm0012","name":"장윤서","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"}},"classes":["Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","Pre Stella A1(Sarah) 3:00 M/W/F","Silver Stella A1(Amy) 3:00 M/W/F","Inter Stella 3(Ben) 5:30 T/Th/F"]};
-const SEED_VERSION='public-sample-2026-07-01';
+const ROSTER_SEED={"students": {"sd_1": {"id": "sd_1", "name": "김민준", "currentClass": "Sound Doctor 1(Sarah) 3:00 M/T/W/Th/F", "classHistory": [{"class": "Sound Doctor 1(Sarah) 3:00 M/T/W/Th/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}, "sd_2": {"id": "sd_2", "name": "이서아", "currentClass": "Sound Doctor 1(Sarah) 3:00 M/T/W/Th/F", "classHistory": [{"class": "Sound Doctor 1(Sarah) 3:00 M/T/W/Th/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}, "sd_3": {"id": "sd_3", "name": "박도윤", "currentClass": "Sound Doctor 1(Sarah) 3:00 M/T/W/Th/F", "classHistory": [{"class": "Sound Doctor 1(Sarah) 3:00 M/T/W/Th/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}, "tp_1": {"id": "tp_1", "name": "최하준", "currentClass": "Tooth Phonics 1(Amy) 3:00 M/T/W/Th/F", "classHistory": [{"class": "Tooth Phonics 1(Amy) 3:00 M/T/W/Th/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}, "tp_2": {"id": "tp_2", "name": "정지우", "currentClass": "Tooth Phonics 1(Amy) 3:00 M/T/W/Th/F", "classHistory": [{"class": "Tooth Phonics 1(Amy) 3:00 M/T/W/Th/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}, "tp_3": {"id": "tp_3", "name": "강수빈", "currentClass": "Tooth Phonics 1(Amy) 3:00 M/T/W/Th/F", "classHistory": [{"class": "Tooth Phonics 1(Amy) 3:00 M/T/W/Th/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}}, "classes": ["Sound Doctor 1(Sarah) 3:00 M/T/W/Th/F", "Tooth Phonics 1(Amy) 3:00 M/T/W/Th/F"]};
+const SEED_VERSION='public-sample-2026-07-01b';
 let roster={students:{},classes:[]};
 function _rosterGet(key){return LS('get',key);}
 function _rosterSet(key,val){LS('set',key,val);}
@@ -1750,7 +1750,9 @@ ${nameRule}
 - 화자: 글쓴이는 담임 선생님 본인. 자신을 가리킬 때 1인칭("저","제가")을 쓴다
 - 분량: 2~3문장. 간결하고 쉽게
 - 절대 금지 표현: "부족","미흡","못하다","아쉽다", 그리고 "분명히/반드시/꼭" 같은 단정적 표현
+- "정말, 너무, 너무너무, 대단히, 충분히, 매우" 같은 과장으로 느껴질 수 있는 수식어는 쓰지 않는다
 - 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 식으로 긍정적으로
+- [측정 범위] 이 평가는 음가 인식과 소리 내어 읽기를 봅니다. 시험에서 직접 확인하지 않은 능력(자유로운 말하기·작문 등)을 "할 수 있다"고 단정하지 말고, 관찰된 사실로만 서술하세요. 교재에 표기된 레벨·지수는 교재 단계의 기준선일 뿐 학생 개인이 도달한 수준이 아니므로, 그 표기를 근거로 아이의 능력을 단정하지 마세요
 - 한국어로만 작성, 이모지 사용 금지
 - 바로 본문 내용부터 시작할 것`;
   try{
