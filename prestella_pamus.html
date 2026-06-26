@@ -389,6 +389,36 @@ const QM_A=[
   {n:25,dom:"Structure",code:"SO",skill:"yes/no automation",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
 ];
 
+// ═══ QM — A3 전용 (실제 시험지·답안지 기준) ═══
+// 18~21 Look, choose, and circle (그림 보고 어휘·표현 선택) / 22~25 Unscramble (평서문 어순 배열)
+const QM_A3=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"위치 표현 어휘",norm:"유사 표현 혼동 — 정상",warn:"기초 어휘 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"의류 어휘 인식",norm:"유사 단어 혼동 — 정상",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"VC",skill:"그림-단어 연결 (구동사)",norm:"유사 표현 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:4,dom:"Vocabulary",code:"VC",skill:"그림-단어 연결 (구동사)",norm:"유사 표현 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:5,dom:"Vocabulary",code:"PR",skill:"스펠링 완성 (모음)",norm:"모음 혼동 — 정상",warn:"음가 인식 실패 → 파닉스 재점검"},
+  {n:6,dom:"Vocabulary",code:"PR",skill:"스펠링 완성 (모음)",norm:"모음 혼동 — 정상",warn:"음가 인식 실패 → 파닉스 재점검"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"유사 표현 혼동 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"유사 표현 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 장소 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"VC",skill:"위치 전치사 선택",norm:"전치사 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"VC",skill:"의문사·요일 선택",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"VC",skill:"날씨 형용사 선택",norm:"반대 의미어 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"VC",skill:"현재진행·장소 선택",norm:"동사형 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+
 // ═══ QM — B1 전용 ═══
 // B1 Monthly Test 구조: Vocabulary 1~6 / Reading 7~12 / Listening 13~17 / Structure 18~25
 // 출처: B1 데이터 패키지 (Answer Key + 문항 구조 분석)
@@ -565,7 +595,7 @@ const QM_B6=[
   {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
   {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"}
 ];
-const QM_MAP={A1:QM_A,A2:QM_A,A3:QM_A,A4:QM_A,A5:QM_A,A6:QM_A,B1:QM_B1,B2:QM_B2,B3:QM_B3,B4:QM_B4,B5:QM_B5,B6:QM_B6};
+const QM_MAP={A1:QM_A,A2:QM_A,A3:QM_A3,A4:QM_A,A5:QM_A,A6:QM_A,B1:QM_B1,B2:QM_B2,B3:QM_B3,B4:QM_B4,B5:QM_B5,B6:QM_B6};
 
 // CODELAB — A + B1 통합
 const CODELAB={
@@ -859,10 +889,12 @@ function renderSuspendedList(){
 }
 
 function saveRoster(){_rosterSet('roster',roster);}
+const CURRICULUM_ORDER=["Sound Doctor","Tooth Phonics","Pre Stella","Silver Stella","Inter Bridge","Inter Stella","Gold Stella","The Class"];
+function _curRank(c){const i=CURRICULUM_ORDER.findIndex(k=>String(c).startsWith(k));return i<0?CURRICULUM_ORDER.length:i;}
 function classList(){
   const set=new Set(roster.classes||[]);
   Object.values(roster.students).forEach(s=>{if(s.currentClass)set.add(s.currentClass);});
-  return [...set].sort((a,b)=>a.localeCompare(b,'ko'));
+  return [...set].sort((a,b)=>(_curRank(a)-_curRank(b))||a.localeCompare(b,'ko'));
 }
 function studentsInClass(cls){
   return Object.values(roster.students).filter(s=>s.currentClass===cls&&s.status!=='inactive').sort((a,b)=>a.name.localeCompare(b.name,'ko'));
@@ -1180,7 +1212,7 @@ async function refineText(taId,type){
   if(statusEl){statusEl.style.display="block";statusEl.style.color="#888";statusEl.textContent="린쌤 톤으로 다듬고 있습니다...";}
   const name=val("sName")||"학생",lv=val("sLevel");
   const sectionLabel=type==="strength"?"이달의 강점":type==="improve"?"파악된 보완점":type==="next"?"다음 달 지도 방안":"역량 분석 피드백";
-  const tone=type==="strength"?"수업에서 실제로 관찰한 성장을 구체적으로 짚어주되, 과장하거나 감탄사를 남발하지 않는다. 칭찬은 사실에 근거해 절제되게":type==="improve"?"문제를 지적하되 단정 짓지 않는다. 학부모가 불안해하지 않도록 현재 상태를 있는 그대로 설명하고, 교사가 이미 방향을 잡고 있다는 인상을 준다":type==="next"?"막연한 다짐이 아닌 수업에서 실제로 할 구체적인 활동·접근 방식을 서술한다. 학원이 체계적으로 준비하고 있다는 신뢰감을 준다":"시험 점수보다 영어 성장 과정에 초점을 맞추고, 강사가 이 아이를 정확히 파악하고 있다는 인상을 준다. [강사 참고 — 주의 신호] 내용은 제거할 것";
+  const tone=type==="strength"?"수업에서 실제로 관찰한 성장을 구체적으로 짚어주되, 과장하거나 감탄사를 남발하지 않는다. 칭찬은 사실에 근거해 절제되게 한다. 특히 어휘·문법 점수가 높더라도 시험이 측정한 '기억·이해·문제풀이 활용' 범위 안에서 서술하고, 말하기·작문 같은 산출 능력으로 비약하지 않는다":type==="improve"?"문제를 지적하되 단정 짓지 않는다. 학부모가 불안해하지 않도록 현재 상태를 있는 그대로 설명하고, 교사가 이미 방향을 잡고 있다는 인상을 준다":type==="next"?"막연한 다짐이 아닌 수업에서 실제로 할 구체적인 활동·접근 방식을 서술한다. 학원이 체계적으로 준비하고 있다는 신뢰감을 준다":"시험 점수보다 영어 성장 과정에 초점을 맞추고, 강사가 이 아이를 정확히 파악하고 있다는 인상을 준다. [강사 참고 — 주의 신호] 내용은 제거할 것";
   const prompt=`당신은 린쌤파머스 국제어학원의 원장 선생님입니다. 20년 경력의 영어교육 전문가로, 아이들을 진심으로 아끼지만 기준이 명확하고 책임감 있는 지도자입니다.
 
 Pre Stella ${lv} 과정 ${name} 학생의 월말보고서 "${sectionLabel}" 초안을 아래 조건에 맞게 하나의 자연스러운 단락으로 다듬어 주세요.
@@ -1191,6 +1223,12 @@ Pre Stella ${lv} 과정 ${name} 학생의 월말보고서 "${sectionLabel}" 초�
 - "분명히, 반드시, 꼭, 틀림없이" 같은 확정적 단어는 사용하지 않는다
 - "정말, 너무너무, 대단히" 같은 과잉 수식어는 쓰지 않는다
 - ${tone}
+
+[측정 범위 — 매우 중요]
+- 이 Monthly Test는 듣기·읽기 중심으로, 학생이 배운 내용을 "인식·이해하고 문제 상황에서 활용하는" 능력을 측정합니다. 말하기·자유 작문 같은 산출(productive) 능력은 직접 측정하지 않습니다.
+- 따라서 시험에서 직접 측정하지 않은 능력을 "할 수 있다"고 단정하지 마세요. 예: 어휘 점수가 높아도 "배운 어휘를 말하기에 사용할 수 있어요"처럼 산출 능력으로 비약하지 않습니다.
+- 어휘·읽기·듣기 강점은 측정된 범위 안에서 사실대로 서술하세요. 예: "배운 단어를 정확히 기억하고 문제 상황에서 안정적으로 활용해요", "들은 정보를 정확히 골라내요" 같이 관찰된 능력으로 표현합니다.
+- "~할 수 있어요"처럼 능력을 완성형으로 단정하기보다, 관찰된 사실("정확히 기억해 활용해요", "안정적으로 골라내요")로 서술하세요.
 
 [형식]
 - 현재 관찰 → 교사의 해석 → 앞으로의 방향 흐름으로
@@ -1283,7 +1321,7 @@ function copyRpt(){
     listening=lW===0?"질문을 듣고 반응하는 힘이 매우 안정적이며, 영어 귀가 잘 열려 있는 상태입니다.":lW<=2?"질문 패턴을 듣고 반응하는 힘을 키워가고 있습니다.":"질문을 듣고 반응하는 연습이 조금 더 필요합니다.";
     pattern=(patW===0&&chunkW===0)?`"${d.pattern.split("/")[0].trim()}" 같은 질문 패턴에 안정적으로 반응하고 있습니다.`:"단수·복수 질문 패턴에 반응하는 힘을 키워가고 있습니다.";
   }
-  const lines=[`[린쌤파머스 Monthly Report]`,`${name} · Pre Stella ${lv} (${d.course} 과정) · ${month}`,`학교: ${school} · 학년: ${grade} · 반: ${cls} · 담임: ${teacher}`,``,`━━ 1. 학습 내용 ━━`,`PRE STELLA ${lv} — ${d.book}`,``];
+  const lines=[`━━ 1. 학습 내용 ━━`,`PRE STELLA ${lv} — ${d.book}`,``];
   if(isB())lines.push(`[ 영어 성장 단계 ]`,`${d.funcFlow} — ${d.msg}`,``);
   lines.push(`[ READER STORY ]`,`스토리 기반 영어 노출을 통해 ${d.growth}하는 연습을 진행했습니다.`,``,`[ 말이 되는 패턴 ]`,...d.pattern.split("/").map(p=>`· ${p.trim()}`),``,`[ 핵심 표현 영역 ]`,d.mainTheme,``,`[ 국제 영어 성장 단계 ]`,`CEFR ${d.cefr}`,``,`[ 영어 리딩 성장 단계 ]`,`Lexile ${d.lexile}`,``,`[ 학습 요약 ]`,d.summary,``,`━━ 2. Monthly Test 결과 ━━`,`총점: ${tot}/25 (${pct}%)`,`Vocabulary ${v}/6 · Reading ${r}/6 · Listening ${l}/5 · Structure ${s}/8`,``,`━━ 3. 영어 성장 분석 ━━`,`어휘 인식 · ${vocab}`,`스토리 이해 · ${story}`,`듣고 반응하기 · ${listening}`,`패턴 & 문장 구조 · ${pattern}`,``,`━━ 4. 담임선생님 코멘트 ━━`);
   if(strengthA||strength)lines.push(`[이달의 강점]\n${[strengthA,strength].filter(Boolean).join("\n")}`);
