@@ -2308,9 +2308,18 @@ ${typeGuide}
 - 절대 금지 문구: '아래와 같이', '다음과 같이', '다듬어 보았습니다', '작성해 보았습니다' 등 AI 전형 표현 금지
 - 바로 본문 내용부터 시작할 것`;
   try {
+    // Supabase 로그인 토큰 가져오기 (서버가 이걸로 인증)
+    let _authToken = '';
+    try{
+      if(sb){ const { data } = await sb.auth.getSession(); _authToken = (data && data.session && data.session.access_token) || ''; }
+    }catch(e){}
     const resp = await fetch('/api/ai', {
       method:'POST',
-      headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},
+      headers:{
+        'Content-Type':'application/json',
+        'x-site-password':(sessionStorage.getItem('sitePw')||''),
+        'Authorization': _authToken ? ('Bearer '+_authToken) : ''
+      },
       body: JSON.stringify({
         model:'claude-sonnet-4-6',
         max_tokens:1000,
