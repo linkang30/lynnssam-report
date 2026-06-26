@@ -480,7 +480,7 @@ function _initSupabase(){
   if(typeof supabase==='undefined' || !supabase.createClient){
     console.error('Supabase 라이브러리 로드 실패'); return null;
   }
-  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { storageKey: 'pamus2-auth' } });
   return sb;
 }
 
