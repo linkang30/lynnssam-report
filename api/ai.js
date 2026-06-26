@@ -1,5 +1,7 @@
-// /api/refine — 린쌤 톤으로 AI 중계 백엔드 (실버·프리스텔라 공용)
+// /api/ai — AI 중계 백엔드 (자사용 앱 + 검증 앱 공용)
 // API 키는 Vercel 환경변수(ANTHROPIC_API_KEY)에 저장되어 외부에 노출되지 않습니다.
+// 인증: (1) 기존 사이트 비밀번호(SITE_PASSWORD) — 자사용 앱(우리 강사들)
+//       (2) Supabase 로그인 토큰 — 검증 앱(pamus). 둘 중 하나만 통과하면 됨.
 // fetch 대신 Node 기본 https 모듈을 사용 (모든 Vercel 환경에서 안정 작동)
 
 const https = require('https');
@@ -33,6 +35,41 @@ function callAnthropic(apiKey, payload) {
   });
 }
 
+// Supabase 토큰이 유효한 로그인인지 확인 (Supabase /auth/v1/user 에 물어봄)
+function verifySupabaseToken(supabaseUrl, anonKey, token) {
+  return new Promise((resolve) => {
+    try {
+      const u = new URL(supabaseUrl);
+      const options = {
+        hostname: u.hostname,
+        path: '/auth/v1/user',
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'apikey': anonKey,
+        },
+      };
+      const req = https.request(options, (resp) => {
+        let raw = '';
+        resp.on('data', (c) => { raw += c; });
+        resp.on('end', () => {
+          // 200이고 user id가 있으면 유효한 로그인
+          if (resp.statusCode === 200) {
+            try {
+              const u2 = JSON.parse(raw);
+              resolve(!!(u2 && u2.id));
+            } catch (e) { resolve(false); }
+          } else {
+            resolve(false);
+          }
+        });
+      });
+      req.on('error', () => resolve(false));
+      req.end();
+    } catch (e) { resolve(false); }
+  });
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
@@ -45,14 +82,33 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // 비밀번호 확인 (SITE_PASSWORD가 설정된 경우에만)
+  // ── 인증: 둘 중 하나만 통과하면 됨 ──────────────────────
+  let authed = false;
+
+  // (1) 기존 사이트 비밀번호 경로 (자사용 앱 — 우리 강사들). 동작 그대로 보존.
   const sitePw = process.env.SITE_PASSWORD;
   if (sitePw) {
     const given = req.headers['x-site-password'];
-    if (given !== sitePw) {
-      res.status(401).json({ error: '인증이 필요합니다.' });
-      return;
+    if (given && given === sitePw) authed = true;
+  } else {
+    // SITE_PASSWORD가 설정 안 됐으면 비번 체크 자체가 없던 기존 동작 유지
+    authed = true;
+  }
+
+  // (2) Supabase 토큰 경로 (검증 앱 — pamus). 비번이 안 맞아도 토큰이 유효하면 통과.
+  if (!authed) {
+    const authHeader = req.headers['authorization'] || '';
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+    const supaUrl = process.env.SUPABASE_URL || 'https://bkgvmkbwxmfrocjsmshq.supabase.co';
+    const supaAnon = process.env.SUPABASE_ANON_KEY || 'sb_publishable_lzkStKN2FmQCBfGStKEl4Q_-NbC5GdV';
+    if (token) {
+      authed = await verifySupabaseToken(supaUrl, supaAnon, token);
     }
+  }
+
+  if (!authed) {
+    res.status(401).json({ error: '인증이 필요합니다.' });
+    return;
   }
 
   try {
