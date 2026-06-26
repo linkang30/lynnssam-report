@@ -160,11 +160,12 @@ textarea{resize:vertical}
 <!-- S0 -->
 <div id="s0">
   <div class="card">
-    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openClassManage()" style="margin-left:auto;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button></div>
+    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openDashboard()" style="margin-left:auto;background:#e6f1fb;color:#185fa5;border:1px solid #aacdf0;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-clipboard-list"></i> 작성 현황 · 다시 보기</button><button onclick="openClassManage()" style="margin-left:8px;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button></div>
     <div class="row3">
       <div style="grid-column:1/2"><label>반 선택</label><select id="classSelect" onchange="onClassSelect()"><option value="">— 반을 선택하세요 —</option></select></div>
       <div style="grid-column:2/4"><label>학생 선택 <span style="color:#aaa;font-weight:400;font-size:10px">(선택 시 이름·학교·반 자동 입력)</span></label><div id="stuChipArea" class="stu-chip-area"><span style="color:#bbb;font-size:11px">반을 먼저 선택하세요</span></div></div>
     </div>
+    <div id="draftAlert" style="display:none;background:#fff3df;border:1px solid #f0cd8a;border-radius:8px;padding:10px 13px;margin-top:10px;font-size:12px;color:#8a6d1f"></div>
   </div>
   <div class="card">
     <div class="ctitle"><i class="ti ti-user"></i>학생 기본 정보</div>
@@ -274,7 +275,7 @@ textarea{resize:vertical}
       <div style="font-size:10.5px;font-weight:700;color:#1a6640;margin-bottom:7px">👀 Layer 2 — 수업 태도·관찰 <span style="font-weight:400;color:#666">(키워드 선택 후 작성)</span></div>
       <div class="chips" id="strengthChips" style="margin-bottom:8px"></div>
       <div style="position:relative">
-        <textarea id="cmtStrength" rows="4" placeholder="키워드를 선택하면 자동으로 채워집니다." oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+        <textarea id="cmtStrength" rows="4" placeholder="키워드를 선택하면 자동으로 채워집니다." oninput="this.dataset.edited='1';if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
         <button onclick="refineText('cmtStrength','strength')" style="position:absolute;bottom:8px;right:8px;background:#2d7a4f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
       </div>
       <div id="refineStatus_strength" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -289,7 +290,7 @@ textarea{resize:vertical}
       <div style="font-size:10.5px;font-weight:700;color:#854f0b;margin-bottom:7px">👀 Layer 2 — 수업 태도·관찰 <span style="font-weight:400;color:#666">(키워드 선택 후 작성)</span></div>
       <div class="chips" id="attitudeChips" style="margin-bottom:8px"></div>
       <div style="position:relative">
-        <textarea id="cmtImprove" rows="4" placeholder="키워드를 선택하면 자동으로 채워집니다." oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+        <textarea id="cmtImprove" rows="4" placeholder="키워드를 선택하면 자동으로 채워집니다." oninput="this.dataset.edited='1';if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
         <button onclick="refineText('cmtImprove','improve')" style="position:absolute;bottom:8px;right:8px;background:#854f0b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
       </div>
       <div id="refineStatus_improve" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -299,7 +300,7 @@ textarea{resize:vertical}
       <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:6px">추가 관찰 메모 <span style="font-weight:400;color:#aaa">(선택)</span></div>
       <div style="background:#f0ede6;border-radius:8px;padding:9px 12px;margin-bottom:7px"><div id="promptQs" style="font-size:11px;color:#666;line-height:2"></div></div>
       <div style="position:relative">
-        <textarea id="cmtExtra" rows="3" placeholder="예: ○○는 Storytelling 활동에서 처음으로 손을 들고 영어로 문장을 말했습니다." style="font-size:12px;padding-right:110px"></textarea>
+        <textarea id="cmtExtra" rows="3" placeholder="예: ○○는 Storytelling 활동에서 처음으로 손을 들고 영어로 문장을 말했습니다." oninput="if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
         <button onclick="refineText('cmtExtra','extra')" style="position:absolute;bottom:8px;right:8px;background:#666;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
       </div>
       <div id="refineStatus_extra" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -309,7 +310,7 @@ textarea{resize:vertical}
     <div class="ctitle"><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</div>
     <div class="chips" id="nextChips" style="margin-bottom:10px"></div>
     <div style="position:relative">
-      <textarea id="cmtNext" rows="3" placeholder="키워드를 선택하거나 직접 입력하세요." style="font-size:12px;padding-right:110px"></textarea>
+      <textarea id="cmtNext" rows="3" placeholder="키워드를 선택하거나 직접 입력하세요." oninput="if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
       <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#1e3a5f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
     </div>
     <div id="refineStatus_next" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -930,6 +931,9 @@ function renderStuChips(){
 }
 function selectStudent(id){
   const st=roster.students[id]; if(!st)return;
+  const prevId=curStuId;
+  // 학생이 바뀌면 이전 작업 입력란을 비운다(오답·코멘트 등 잔존 방지)
+  if(prevId&&prevId!==id&&typeof clearWorkInputs==='function')clearWorkInputs();
   curStuId=id;
   if(g('sName'))g('sName').value=st.name||'';
   if(g('sSchool'))g('sSchool').value=st.school||'';
@@ -938,6 +942,14 @@ function selectStudent(id){
   if(g('sTeacher'))g('sTeacher').value=st.teacher||'';
   // 보고서 월: 전체 공통 저장값 자동 채움
   if(g('sMonth')){var __m=_rosterGet('reportMonth');if(__m)g('sMonth').value=__m;}
+  // 레벨이 정해져 있으면 이 학생의 임시저장(draft)이 있는지 보고, 있으면 이어하기 안내
+  if(typeof loadDraftIfExists==='function'){
+    var _hadDraft=loadDraftIfExists();
+    if(_hadDraft){
+      var _dn=g('draftAlert');
+      if(_dn){_dn.style.display='block';_dn.innerHTML='<div style="display:flex;gap:6px;align-items:center"><i class="ti ti-edit" style="color:#a8730a"></i><span><strong>'+escR(st.name)+'</strong> 학생의 작성 중이던 내용을 불러왔습니다. 이어서 작성하세요.</span></div>';}
+    }else{var _dn2=g('draftAlert');if(_dn2)_dn2.style.display='none';}
+  }
   renderStuChips();
   if(typeof onNameInput==='function')onNameInput();
 }
@@ -1058,7 +1070,7 @@ function calcTotal(){const tot=scoreTot();const el=g("totNum");if(el)el.textCont
 
 function buildQGrid(){
   const QM=getQM(),el=g("qgrid");el.innerHTML="";
-  QM.forEach(q=>{const b=document.createElement("div");b.className="qbtn"+(wrongQs.has(q.n)?" wrong":"");b.id="qb"+q.n;b.style.display=(domFilter==="all"||domFilter===q.dom)?"":"none";b.innerHTML=`<span class="qn">Q${q.n}</span><span class="qt">${q.code}</span><span class="qd">${q.skill}</span>`;b.onclick=()=>{if(wrongQs.has(q.n)){wrongQs.delete(q.n);b.classList.remove("wrong");}else{wrongQs.add(q.n);b.classList.add("wrong");}updWC();calcTotal();};el.appendChild(b);});updWC();calcTotal();
+  QM.forEach(q=>{const b=document.createElement("div");b.className="qbtn"+(wrongQs.has(q.n)?" wrong":"");b.id="qb"+q.n;b.style.display=(domFilter==="all"||domFilter===q.dom)?"":"none";b.innerHTML=`<span class="qn">Q${q.n}</span><span class="qt">${q.code}</span><span class="qd">${q.skill}</span>`;b.onclick=()=>{if(wrongQs.has(q.n)){wrongQs.delete(q.n);b.classList.remove("wrong");}else{wrongQs.add(q.n);b.classList.add("wrong");}updWC();calcTotal();if(typeof saveDraftDebounced==='function')saveDraftDebounced();};el.appendChild(b);});updWC();calcTotal();
 }
 function filterDom(d,el){domFilter=d;document.querySelectorAll(".qtab").forEach(t=>t.classList.remove("on"));el.classList.add("on");getQM().forEach(q=>{const b=g("qb"+q.n);if(b)b.style.display=(d==="all"||d===q.dom)?"":"none";});}
 function updWC(){g("wrongCount").textContent=`오답: ${wrongQs.size}문항${wrongQs.size>0?" ("+[...wrongQs].sort((a,b)=>a-b).map(n=>"Q"+n).join(", ")+")":""}`;}
@@ -1378,6 +1390,7 @@ function saveReport(){
     const reportKey=`report:${getStudentKey()}:${(month||"").replace(/\s/g,"")}`;
     const reportData={name,month,level:val("sLevel"),school:val("sSchool"),grade:val("sGrade"),cls:val("sClass"),teacher:val("sTeacher"),scores:getDS(),wrongQs:[...wrongQs],cmtStrength:val("cmtStrength"),cmtImprove:val("cmtImprove"),cmtExtra:val("cmtExtra"),cmtNext:val("cmtNext"),savedAt:new Date().toISOString()};
     LS.set(reportKey,JSON.stringify(reportData));
+    if(typeof clearDraft==='function')clearDraft();
     if(statusEl){statusEl.style.display="block";statusEl.style.color="#2d7a4f";statusEl.textContent=`✓ ${name} 학생 (${month}) 이력이 저장되었습니다.`;}
     btn.disabled=false;btn.innerHTML=`<i class="ti ti-device-floppy"></i>이력 저장`;
     const rcb=g("resetConfirmBox"),rcm=g("resetConfirmMsg");
@@ -1386,6 +1399,160 @@ function saveReport(){
     btn.disabled=false;btn.innerHTML=`<i class="ti ti-device-floppy"></i>이력 저장`;
     if(statusEl){statusEl.style.display="block";statusEl.style.color="#e24b4a";statusEl.textContent="저장 중 오류가 발생했습니다.";}
   }
+}
+
+
+/* ===== 임시저장(Draft) · 이어하기 · 다시보기 · 반별 현황판 ===== */
+// 현재 입력 상태로 draft 키 생성 (리포트 키와 동일 식별자, 접두사만 draft:)
+function _draftKey(){
+  const name=val("sName").trim(),school=val("sSchool").trim(),grade=val("sGrade").trim(),lv=val("sLevel"),month=val("sMonth").trim();
+  if(!name||!lv)return null;
+  const prefix=[school,grade,name].filter(Boolean).join("_");
+  return `draft:${prefix}:${lv}:${(month||"").replace(/\s/g,"")}`;
+}
+// 현재 작업 상태를 draft로 저장 (입력이 바뀔 때마다 호출)
+let _draftTimer=null;
+function saveDraft(){
+  const k=_draftKey(); if(!k)return;
+  const d={name:val("sName"),school:val("sSchool"),grade:val("sGrade"),cls:val("sClass"),teacher:val("sTeacher"),month:val("sMonth"),level:val("sLevel"),
+    wrongQs:[...wrongQs],selStrength:[...selStrength],selAttitude:[...selAttitude],selNext:[...selNext],
+    cmtStrength:val("cmtStrength"),cmtImprove:val("cmtImprove"),cmtExtra:val("cmtExtra"),cmtNext:val("cmtNext"),
+    curStep:curStep,savedAt:new Date().toISOString()};
+  LS.set(k,JSON.stringify(d));
+}
+function saveDraftDebounced(){clearTimeout(_draftTimer);_draftTimer=setTimeout(saveDraft,500);}
+// draft 삭제 (완료 저장 시 호출)
+function clearDraft(){const k=_draftKey();if(k)LS.remove(k);}
+// 현재 학생에 해당하는 draft 가 있으면 복원
+function loadDraftIfExists(){
+  const k=_draftKey(); if(!k)return false;
+  const r=LS.get(k); if(!r)return false;
+  let d; try{d=JSON.parse(r.value);}catch(e){return false;}
+  if(!d)return false;
+  // 입력란 복원
+  if(g("sClass")&&d.cls)g("sClass").value=d.cls;
+  if(g("sTeacher")&&d.teacher)g("sTeacher").value=d.teacher;
+  if(g("cmtStrength"))g("cmtStrength").value=d.cmtStrength||"";
+  if(g("cmtImprove"))g("cmtImprove").value=d.cmtImprove||"";
+  if(g("cmtExtra"))g("cmtExtra").value=d.cmtExtra||"";
+  if(g("cmtNext"))g("cmtNext").value=d.cmtNext||"";
+  // 상태 복원
+  wrongQs=new Set(d.wrongQs||[]);
+  selStrength=new Set(d.selStrength||[]);
+  selAttitude=new Set(d.selAttitude||[]);
+  selNext=new Set(d.selNext||[]);
+  return true;
+}
+// 입력란만 비우기 (학생 전환 시 — draft 는 건드리지 않음)
+function clearWorkInputs(){
+  ["sMonth","autoFb","cmtStrength","cmtImprove","cmtExtra","cmtNext"].forEach(id=>{const el=g(id);if(el){el.value="";delete el.dataset.edited;}});
+  wrongQs.clear();selNext.clear();selAttitude.clear();selStrength.clear();domFilter="all";
+  const _sa=g("strengthAnalysis");if(_sa)_sa.textContent="";
+  const _ia=g("improveAnalysis");if(_ia)_ia.textContent="";
+  const ro=g("reportOut");if(ro)ro.innerHTML="";
+  const ss=g("saveStatus");if(ss)ss.style.display="none";
+  const rcb=g("resetConfirmBox");if(rcb)rcb.style.display="none";
+}
+// 학생의 상태 판정: 'done' | 'draft' | 'none'
+function studentStatus(st,lv,month){
+  const mk=(month||"").replace(/\s/g,"");
+  const rk=`report:history:${[st.school,st.grade,st.name].filter(Boolean).join("_")}:${lv}:${mk}`;
+  if(LS.get(rk))return"done";
+  // draft 는 레벨/월 미상일 수 있으니 접두사 매칭
+  const dpre=`draft:${[st.school,st.grade,st.name].filter(Boolean).join("_")}:`;
+  try{for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key&&key.startsWith(dpre))return"draft";}}catch(e){}
+  return"none";
+}
+// 반별 현황판 열기
+function openDashboard(){
+  const modal=g("dashModal"); if(!modal)return;
+  // 반 드롭다운 채우기
+  const csel=g("dashClass");
+  if(csel){
+    const cur=csel.value;
+    csel.innerHTML='<option value="">— 반 선택 —</option>'+(roster.classes||[]).map(c=>`<option value="${escR(c)}">${escR(c)}</option>`).join("");
+    if(cur)csel.value=cur;
+  }
+  // 월 기본값: 현재 입력된 월 또는 저장된 공통월
+  const msel=g("dashMonth");
+  if(msel&&!msel.value){const m=val("sMonth")||_rosterGet("reportMonth")||"";msel.value=m;}
+  renderDashboard();
+  modal.classList.add("on");
+}
+function closeDashboard(){const m=g("dashModal");if(m)m.classList.remove("on");}
+function renderDashboard(){
+  const box=g("dashBody"); if(!box)return;
+  const cls=g("dashClass")?g("dashClass").value:"";
+  const month=g("dashMonth")?g("dashMonth").value.trim():"";
+  if(!cls){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">반을 선택하면 학생별 작성 현황이 표시됩니다.</div>';return;}
+  const studs=Object.values(roster.students||{}).filter(s=>s.currentClass===cls);
+  if(studs.length===0){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">이 반에 등록된 학생이 없습니다.</div>';return;}
+  let done=0,draft=0,none=0;
+  const rows=studs.map(st=>{
+    const lv=_classToLevel(cls);
+    const stt=studentStatus(st,lv,month);
+    if(stt==="done")done++;else if(stt==="draft")draft++;else none++;
+    const badge=stt==="done"?'<span style="background:#e3f3e9;color:#2d7a4f;border:1px solid #b5dcc4;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">완료</span>'
+      :stt==="draft"?'<span style="background:#fff3df;color:#a8730a;border:1px solid #f0cd8a;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">작성 중</span>'
+      :'<span style="background:#f2f2ef;color:#999;border:1px solid #ddd;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">미작성</span>';
+    const action=stt==="done"?"다시 보기":stt==="draft"?"이어 하기":"새로 작성";
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #f0efe9">
+      <div style="display:flex;align-items:center;gap:10px"><span style="font-weight:600;font-size:13px">${escR(st.name)}</span>${badge}</div>
+      <button onclick="dashOpenStudent('${escR(st.id)}','${stt}')" style="background:#f8f7f4;border:1px solid #d0d0cc;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;color:#555;font-weight:600">${action}</button>
+    </div>`;
+  }).join("");
+  box.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:10px;font-size:11px">
+    <span style="color:#2d7a4f">완료 ${done}</span><span style="color:#a8730a">작성 중 ${draft}</span><span style="color:#999">미작성 ${none}</span>
+    <span style="margin-left:auto;color:#aaa">총 ${studs.length}명</span></div>${rows}`;
+}
+// 반 이름에서 레벨 추정 (예: "Pre Stella A3(Clare) ..." → "A3")
+function _classToLevel(cls){
+  const m=cls.match(/Pre Stella\s+([AB]\d)/i);
+  return m?m[1].toUpperCase():val("sLevel");
+}
+// 현황판에서 학생 선택 → 상태별 동작
+function dashOpenStudent(id,stt){
+  closeDashboard();
+  const month=g("dashMonth")?g("dashMonth").value.trim():"";
+  // 먼저 전체 초기화 후 그 학생 로드
+  resetAll();
+  const st=roster.students[id]; if(!st)return;
+  // 반 선택 동기화
+  if(g("classSelect")){g("classSelect").value=st.currentClass||"";if(typeof renderStuChips==="function")renderStuChips();}
+  selectStudent(id);
+  if(month&&g("sMonth"))g("sMonth").value=month;
+  // 레벨 자동 설정
+  const lv=_classToLevel(st.currentClass||"");
+  if(lv&&g("sLevel")){g("sLevel").value=lv;onLvChange();}
+  if(stt==="done"){
+    // 저장된 리포트 복원 → 리포트 화면으로
+    _restoreReport(st,lv,month);
+  }else if(stt==="draft"){
+    // draft 복원 → 마지막 단계로 이동
+    if(loadDraftIfExists()){
+      const r=LS.get(_draftKey());let step=1;try{step=(JSON.parse(r.value).curStep)||1;}catch(e){}
+      go(Math.max(1,step));
+    }else{go(1);}
+  }else{
+    go(1);
+  }
+}
+// 저장된 리포트 데이터로 입력 상태 복원 후 리포트 출력
+function _restoreReport(st,lv,month){
+  const mk=(month||"").replace(/\s/g,"");
+  const rk=`report:history:${[st.school,st.grade,st.name].filter(Boolean).join("_")}:${lv}:${mk}`;
+  const r=LS.get(rk); if(!r){go(1);return;}
+  let d; try{d=JSON.parse(r.value);}catch(e){go(1);return;}
+  if(g("sMonth"))g("sMonth").value=d.month||month||"";
+  if(g("sClass"))g("sClass").value=d.cls||st.currentClass||"";
+  if(g("sTeacher"))g("sTeacher").value=d.teacher||"";
+  if(g("cmtStrength"))g("cmtStrength").value=d.cmtStrength||"";
+  if(g("cmtImprove"))g("cmtImprove").value=d.cmtImprove||"";
+  if(g("cmtExtra"))g("cmtExtra").value=d.cmtExtra||"";
+  if(g("cmtNext"))g("cmtNext").value=d.cmtNext||"";
+  wrongQs=new Set(d.wrongQs||[]);
+  if(g("sLevel")&&d.level){g("sLevel").value=d.level;onLvChange();}
+  go(4); // 리포트 화면
 }
 
 function go(n){
@@ -1398,6 +1565,7 @@ function go(n){
   curStep=n;
   g("s"+n).classList.remove("hidden");
   g("sb"+n).classList.add("active");
+  if(typeof saveDraftDebounced==='function')saveDraftDebounced();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -1468,6 +1636,22 @@ function downloadPDF(){
 (function(){var _al=document.getElementById('appLogo');if(_al)_al.src=LOGO_LIGHT;})();
 </script>
 
+<div class="cm-bg" id="dashModal">
+  <div class="cm-modal" style="max-width:560px">
+    <h2 style="color:#185fa5"><i class="ti ti-clipboard-list"></i> 반별 작성 현황 · 다시 보기</h2>
+    <div style="font-size:11px;color:#888;margin-bottom:12px">반과 월을 선택하면 학생별로 <b style="color:#2d7a4f">완료</b> / <b style="color:#a8730a">작성 중</b> / <b style="color:#999">미작성</b> 상태가 표시됩니다. 항목을 눌러 다시 보거나 이어서 작성하세요.</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <div style="flex:1"><label style="font-size:11px;font-weight:700;color:#555">반</label>
+        <select id="dashClass" onchange="renderDashboard()" style="width:100%;margin-top:3px"><option value="">— 반 선택 —</option></select></div>
+      <div style="width:130px"><label style="font-size:11px;font-weight:700;color:#555">월</label>
+        <input type="text" id="dashMonth" placeholder="예: 2025년 5월" oninput="renderDashboard()" style="width:100%;margin-top:3px"></div>
+    </div>
+    <div id="dashBody" style="border:1px solid #eee;border-radius:8px;max-height:50vh;overflow:auto"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:14px">
+      <button onclick="closeDashboard()" style="background:#f0f0ec;border:1px solid #ddd;border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer;color:#555">닫기</button>
+    </div>
+  </div>
+</div>
 <div class="cm-bg" id="classManageModal">
   <div class="cm-modal">
     <h2><i class="ti ti-layout-grid"></i> 반 관리</h2>
