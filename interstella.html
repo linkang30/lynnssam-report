@@ -310,58 +310,6 @@ for(let i=1;i<=20;i++)Q_META[i]={part:'P1',domain:'VOC',label:'어휘'+i,desc:i<
 for(let i=21;i<=30;i++)Q_META[i]={part:'P2',domain:'LIS',label:'듣기'+(i-20),desc:'듣고 답하기'};
 for(let i=31;i<=40;i++)Q_META[i]={part:'P3',domain:'RDG',label:'독해'+(i-30),desc:'지문 이해'};
 for(let i=41;i<=45;i++)Q_META[i]={part:'P4',domain:'GRM',label:'문법'+(i-40),desc:'문법·영작'};
-
-// === Inter Stella 레벨별 문법(41~45) 메타 — 시험지 기준 ===
-const GRAM_BY_LV = {
- "1": {
-  "41": {part:"P4",domain:"GRM",label:"간접의문문",desc:"간접의문문 어순"},
-  "42": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"일반동사 과거형 전환"},
-  "43": {part:"P4",domain:"GRM",label:"과거 부정",desc:"일반동사 과거 부정문"},
-  "44": {part:"P4",domain:"GRM",label:"의문사+to부정사",desc:"how to 영작"},
-  "45": {part:"P4",domain:"GRM",label:"의문사+to부정사",desc:"where to 영작"}
- },
- "2": {
-  "41": {part:"P4",domain:"GRM",label:"문형 전환",desc:"4형식→3형식 전환"},
-  "42": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"일반동사 과거형 전환"},
-  "43": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"불규칙 과거형 go→went"},
-  "44": {part:"P4",domain:"GRM",label:"동명사",desc:"look forward to+동명사 영작"},
-  "45": {part:"P4",domain:"GRM",label:"동명사·to부정사",desc:"목적어 동명사/to부정사 영작"}
- },
- "3": {
-  "41": {part:"P4",domain:"GRM",label:"가주어 It",desc:"진주어 to부정사 가주어 전환"},
-  "42": {part:"P4",domain:"GRM",label:"가주어 It",desc:"진주어 to부정사 가주어 전환"},
-  "43": {part:"P4",domain:"GRM",label:"가주어 It",desc:"진주어 to부정사 가주어 전환"},
-  "44": {part:"P4",domain:"GRM",label:"동명사",desc:"전치사 for+동명사 영작"},
-  "45": {part:"P4",domain:"GRM",label:"동명사",desc:"목적어 동명사 영작"}
- },
- "4": {
-  "41": {part:"P4",domain:"GRM",label:"미래형",desc:"be going to 미래형 전환"},
-  "42": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"일반동사 과거형 전환"},
-  "43": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"일반동사 과거형 전환"},
-  "44": {part:"P4",domain:"GRM",label:"현재완료",desc:"have+p.p 영작"},
-  "45": {part:"P4",domain:"GRM",label:"현재완료",desc:"have+p.p 영작"}
- },
- "5": {
-  "41": {part:"P4",domain:"GRM",label:"간접의문문",desc:"두 문장 간접의문문 결합"},
-  "42": {part:"P4",domain:"GRM",label:"to부정사",desc:"want+목적어+to부정사"},
-  "43": {part:"P4",domain:"GRM",label:"동명사",desc:"Thanks for+동명사"},
-  "44": {part:"P4",domain:"GRM",label:"현재완료 수동",desc:"has/have been p.p 영작"},
-  "45": {part:"P4",domain:"GRM",label:"현재완료 수동",desc:"has/have been p.p 영작"}
- },
- "6": {
-  "41": {part:"P4",domain:"GRM",label:"간접의문문",desc:"두 문장 간접의문문 결합"},
-  "42": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"3인칭 일반동사 과거형"},
-  "43": {part:"P4",domain:"GRM",label:"to부정사",desc:"need+to부정사"},
-  "44": {part:"P4",domain:"GRM",label:"현재완료 수동",desc:"has/have been p.p 영작"},
-  "45": {part:"P4",domain:"GRM",label:"현재완료 수동",desc:"has/have been p.p 영작"}
- }
-};
-function applyGramMeta(lv){
- const gm=GRAM_BY_LV[String(lv)];
- if(!gm)return;
- for(let n=41;n<=45;n++){ if(gm[n]) Q_META[n]=gm[n]; }
-}
-
 const DOM_MAX={VOC:20,LIS:10,RDG:10,GRM:5};
 const DOM_LABEL={VOC:"어휘(VOC)",LIS:"듣기(LIS)",RDG:"읽기(RDG)",GRM:"문법(GRM)"};
 const DOM_COLOR={VOC:"#e0b94d",LIS:"#5aa9e6",RDG:"#6cc06c",GRM:"#b07de0"};
@@ -376,8 +324,8 @@ const g=id=>document.getElementById(id);
 const val=id=>{const el=g(id);return el?el.value.trim():'';};
 
 function LS(action,key,data){const PFX='is_';if(action==='get')return JSON.parse(localStorage.getItem(PFX+key)||'null');if(action==='set')localStorage.setItem(PFX+key,JSON.stringify(data));}
-const ROSTER_SEED={"students":{"pm0001":{"id":"pm0001","name":"강코니","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0002":{"id":"pm0002","name":"김아름","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0003":{"id":"pm0003","name":"한하늘","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0004":{"id":"pm0004","name":"이루나","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0005":{"id":"pm0005","name":"박소율","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0006":{"id":"pm0006","name":"정시우","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0007":{"id":"pm0007","name":"최서아","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0008":{"id":"pm0008","name":"윤도현","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0009":{"id":"pm0009","name":"임하진","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0010":{"id":"pm0010","name":"김단우","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0011":{"id":"pm0011","name":"오예린","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0012":{"id":"pm0012","name":"장윤서","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"}},"classes":["Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","Pre Stella A1(Sarah) 3:00 M/W/F","Silver Stella A1(Amy) 3:00 M/W/F","Inter Stella 3(Ben) 5:30 T/Th/F"]};
-const SEED_VERSION='public-sample-2026-07-01';
+const ROSTER_SEED={"students": {"isa_1": {"id": "isa_1", "name": "김민준", "currentClass": "Inter Stella 1(Sarah) 3:00 M/W/F", "classHistory": [{"class": "Inter Stella 1(Sarah) 3:00 M/W/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}, "isa_2": {"id": "isa_2", "name": "이서아", "currentClass": "Inter Stella 1(Sarah) 3:00 M/W/F", "classHistory": [{"class": "Inter Stella 1(Sarah) 3:00 M/W/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}, "isa_3": {"id": "isa_3", "name": "박도윤", "currentClass": "Inter Stella 1(Sarah) 3:00 M/W/F", "classHistory": [{"class": "Inter Stella 1(Sarah) 3:00 M/W/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}, "isb_1": {"id": "isb_1", "name": "최하준", "currentClass": "Inter Stella 2(Amy) 3:00 T/Th/F", "classHistory": [{"class": "Inter Stella 2(Amy) 3:00 T/Th/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}, "isb_2": {"id": "isb_2", "name": "정지우", "currentClass": "Inter Stella 2(Amy) 3:00 T/Th/F", "classHistory": [{"class": "Inter Stella 2(Amy) 3:00 T/Th/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}, "isb_3": {"id": "isb_3", "name": "강수빈", "currentClass": "Inter Stella 2(Amy) 3:00 T/Th/F", "classHistory": [{"class": "Inter Stella 2(Amy) 3:00 T/Th/F", "from": "2026-07-01"}], "teacher": "", "school": "샘플초등학교"}}, "classes": ["Inter Stella 1(Sarah) 3:00 M/W/F", "Inter Stella 2(Amy) 3:00 T/Th/F"]};
+const SEED_VERSION='public-sample-2026-07-01b';
 let roster={students:{},classes:[]};
 function _rosterGet(key){return LS('get',key);}
 function _rosterSet(key,val){LS('set',key,val);}
@@ -627,7 +575,7 @@ function toggleHistoryPanel(){const b=g('historyAlertBody'),ic=g('histToggleIcon
 function showHistoryAlert(){const k=getStudentKey();if(!k)return;const data=LS('get',k+'_kw');const box=g('historyAlert'),head=g('historyAlertHead'),body=g('historyAlertBody');if(!box||!data){if(box)box.style.display='none';return;}const months=Object.keys(data).sort().reverse().slice(0,3);if(!months.length){box.style.display='none';return;}const name=val('stuName')||'학생';head.innerHTML=`<i class="ti ti-history" style="font-size:14px;color:#e0b94d"></i><div style="flex:1"><strong>${name}</strong> 학생의 최근 ${months.length}개월 이력이 있습니다. <span style="color:#b07de0;margin-left:5px">${months.join(' · ')}</span></div><i id="histToggleIcon" class="ti ti-chevron-down" style="color:#e0b94d"></i>`;body.innerHTML=months.map((m,i)=>{const r=data[m]||{};const sC=(r.strength&&r.strength.length)?r.strength.map(x=>`<span style="background:#eaf6ee;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#666;font-size:10px">없음</span>';const aC=(r.improve&&r.improve.length)?r.improve.map(x=>`<span style="background:#fdf6e3;color:#b8860b;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#666;font-size:10px">없음</span>';return `<div style="padding-top:11px"><div style="font-size:11px;font-weight:700;color:#8c7bff;margin-bottom:5px">${m}</div><div style="margin-bottom:4px"><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">강점</span>${sC}</div><div><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">보완점</span>${aC}</div></div>`;}).join('');box.style.display='block';}
 function showHistory(){const k=getStudentKey();const box=g('historyBox');if(!box)return;if(!k){box.innerHTML='<div style="font-size:12px;color:#888">학생 이름과 학교를 먼저 입력해주세요.</div>';box.style.display='block';return;}const data=LS('get',k+'_kw');if(!data){box.innerHTML='<div style="font-size:12px;color:#888">이전 리포트 기록이 없습니다.</div>';box.style.display='block';return;}const months=Object.keys(data).sort().reverse().slice(0,3);box.style.display='block';box.innerHTML=`<div style="font-size:11px;font-weight:700;color:#b8860b;margin-bottom:8px"><i class="ti ti-history"></i> 최근 ${months.length}개월 키워드 이력</div>`+months.map(m=>{const r=data[m]||{};const lvTag=r.level?` <span style="color:#8c7bff;font-weight:700">[S${r.level}]</span>`:'';return `<div style="font-size:11px;margin-bottom:5px;padding:6px 9px;background:#f3f0fb;border-radius:6px"><b style="color:#8c7bff">${m}</b>${lvTag} — 강점: ${(r.strength||[]).join(', ')||'-'} / 보완: ${(r.improve||[]).join(', ')||'-'}</div>`;}).join('');}
 
-function onLvChange(){const lv=val('lvSel');if(!lv)return;const d=LV[lv];if(!d)return;const box=g('lvInfo');box.style.display='block';box.innerHTML=`<span style="font-weight:700;color:#8c7bff">Inter Stella ${lv}</span> &mdash; ${d.name} <span style="color:#888">| ${d.grammar}</span><br><span style="font-size:11px;color:#888">테마: ${d.theme} · CEFR ${d.cefr} · Lexile ${d.lexile}</span>`;applyGramMeta(lv);buildWrongGrid();}
+function onLvChange(){const lv=val('lvSel');if(!lv)return;const d=LV[lv];if(!d)return;const box=g('lvInfo');box.style.display='block';box.innerHTML=`<span style="font-weight:700;color:#8c7bff">Inter Stella ${lv}</span> &mdash; ${d.name} <span style="color:#888">| ${d.grammar}</span><br><span style="font-size:11px;color:#888">테마: ${d.theme} · CEFR ${d.cefr} · Lexile ${d.lexile}</span>`;}
 
 function initScoreInputs(){let h='';for(let i=1;i<=45;i++)h+=`<input type="hidden" id="q${i}" value="1">`;g('scoreInputs').innerHTML=h;}
 function syncWrongFromScores(){for(let i=1;i<=45;i++){const s=parseFloat(g('q'+i)?.value);if(s<1)wrongSet.add(i);else wrongSet.delete(i);}}
@@ -724,8 +672,10 @@ async function refineText(taId,type){const orig=g(taId).value.trim();if(!orig){a
 - 학생 이름(${name})을 호칭할 때: "이름 학생이" 또는 "이름이" 형태로 자연스럽게
 - 문체: 담임 선생님이 직접 쓴 듯한 따뜻하고 구체적인 어투. AI 느낌 금지
 - 화자: 글쓴이는 담임 선생님 본인. 자신을 가리킬 때 반드시 1인칭("저","제가")을 쓴다
-- 분량: 3~4문장. 간결하게
+- 분량: 2~3문장으로 간결하게. 이전보다 한 문장가량 짧게, 군더더기 없이 핵심만
 - 절대 금지 표현: "부족", "미흡", "못하다", "아쉽다"
+- "정말, 너무, 너무너무, 대단히, 충분히, 매우" 같은 과장으로 느껴질 수 있는 수식어는 쓰지 않는다
+- [측정 범위] 이 시험은 듣기·읽기 중심으로 배운 내용을 인식·이해하고 문제 상황에서 활용하는 능력을 측정합니다. 말하기·자유 작문 같은 산출(productive) 능력은 직접 측정하지 않으므로, 측정하지 않은 능력을 "할 수 있다"고 단정하지 말고(예: 어휘 점수가 높아도 "배운 어휘를 말하기에 활용할 수 있어요"처럼 비약 금지) 관찰된 사실로만 서술하세요. 교재에 표기된 CEFR·Lexile 지수는 교재 단계의 국제 기준선일 뿐 학생 개인이 도달한 수준이 아니므로, 그 표기 숫자를 근거로 학생의 영어 역량을 단정하지 마세요
 - 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 식으로 긍정적으로
 - 한국어로만 작성, 이모지 사용 금지
 - 바로 본문 내용부터 시작할 것`;
