@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -161,11 +160,12 @@ textarea{resize:vertical}
 <!-- S0 -->
 <div id="s0">
   <div class="card">
-    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openClassManage()" style="margin-left:auto;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button></div>
+    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openDashboard()" style="margin-left:auto;background:#e6f1fb;color:#185fa5;border:1px solid #aacdf0;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-clipboard-list"></i> 작성 현황 · 다시 보기</button><button onclick="openClassManage()" style="margin-left:8px;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button></div>
     <div class="row3">
       <div style="grid-column:1/2"><label>반 선택</label><select id="classSelect" onchange="onClassSelect()"><option value="">— 반을 선택하세요 —</option></select></div>
       <div style="grid-column:2/4"><label>학생 선택 <span style="color:#aaa;font-weight:400;font-size:10px">(선택 시 이름·학교·반 자동 입력)</span></label><div id="stuChipArea" class="stu-chip-area"><span style="color:#bbb;font-size:11px">반을 먼저 선택하세요</span></div></div>
     </div>
+    <div id="draftAlert" style="display:none;background:#fff3df;border:1px solid #f0cd8a;border-radius:8px;padding:10px 13px;margin-top:10px;font-size:12px;color:#8a6d1f"></div>
   </div>
   <div class="card">
     <div class="ctitle"><i class="ti ti-user"></i>학생 기본 정보</div>
@@ -275,7 +275,7 @@ textarea{resize:vertical}
       <div style="font-size:10.5px;font-weight:700;color:#1a6640;margin-bottom:7px">👀 Layer 2 — 수업 태도·관찰 <span style="font-weight:400;color:#666">(키워드 선택 후 작성)</span></div>
       <div class="chips" id="strengthChips" style="margin-bottom:8px"></div>
       <div style="position:relative">
-        <textarea id="cmtStrength" rows="4" placeholder="키워드를 선택하면 자동으로 채워집니다." oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+        <textarea id="cmtStrength" rows="4" placeholder="키워드를 선택하면 자동으로 채워집니다." oninput="this.dataset.edited='1';if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
         <button onclick="refineText('cmtStrength','strength')" style="position:absolute;bottom:8px;right:8px;background:#2d7a4f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
       </div>
       <div id="refineStatus_strength" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -290,7 +290,7 @@ textarea{resize:vertical}
       <div style="font-size:10.5px;font-weight:700;color:#854f0b;margin-bottom:7px">👀 Layer 2 — 수업 태도·관찰 <span style="font-weight:400;color:#666">(키워드 선택 후 작성)</span></div>
       <div class="chips" id="attitudeChips" style="margin-bottom:8px"></div>
       <div style="position:relative">
-        <textarea id="cmtImprove" rows="4" placeholder="키워드를 선택하면 자동으로 채워집니다." oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+        <textarea id="cmtImprove" rows="4" placeholder="키워드를 선택하면 자동으로 채워집니다." oninput="this.dataset.edited='1';if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
         <button onclick="refineText('cmtImprove','improve')" style="position:absolute;bottom:8px;right:8px;background:#854f0b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
       </div>
       <div id="refineStatus_improve" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -299,14 +299,18 @@ textarea{resize:vertical}
     <div>
       <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:6px">추가 관찰 메모 <span style="font-weight:400;color:#aaa">(선택)</span></div>
       <div style="background:#f0ede6;border-radius:8px;padding:9px 12px;margin-bottom:7px"><div id="promptQs" style="font-size:11px;color:#666;line-height:2"></div></div>
-      <textarea id="cmtExtra" rows="3" placeholder="예: ○○는 Storytelling 활동에서 처음으로 손을 들고 영어로 문장을 말했습니다." style="font-size:12px"></textarea>
+      <div style="position:relative">
+        <textarea id="cmtExtra" rows="3" placeholder="예: ○○는 Storytelling 활동에서 처음으로 손을 들고 영어로 문장을 말했습니다." oninput="if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
+        <button onclick="refineText('cmtExtra','extra')" style="position:absolute;bottom:8px;right:8px;background:#666;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+      </div>
+      <div id="refineStatus_extra" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
     </div>
   </div>
   <div class="card">
     <div class="ctitle"><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</div>
     <div class="chips" id="nextChips" style="margin-bottom:10px"></div>
     <div style="position:relative">
-      <textarea id="cmtNext" rows="3" placeholder="키워드를 선택하거나 직접 입력하세요." style="font-size:12px;padding-right:110px"></textarea>
+      <textarea id="cmtNext" rows="3" placeholder="키워드를 선택하거나 직접 입력하세요." oninput="if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
       <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#1e3a5f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
     </div>
     <div id="refineStatus_next" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -390,6 +394,171 @@ const QM_A=[
   {n:25,dom:"Structure",code:"SO",skill:"yes/no automation",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
 ];
 
+// ═══ QM — A3 전용 (실제 시험지·답안지 기준) ═══
+// 18~21 Look, choose, and circle (그림 보고 어휘·표현 선택) / 22~25 Unscramble (평서문 어순 배열)
+const QM_A1=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"SP",skill:"be동사 단수 (What is)",norm:"is/are 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"VC",skill:"의문사·어휘 선택 (shape)",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"SP",skill:"지시어 복수 (those)",norm:"that/those 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"FC",skill:"주어-동사 수일치 의문문 (Do/Does)",norm:"Do/Does 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"부정 평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적어 수식)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"There are 구문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"인용문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+const QM_A4=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"VC",skill:"의문사 선택 (What/Who 직업)",norm:"의문사 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"VC",skill:"전치사·어휘 선택 (in the morning)",norm:"전치사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"SP",skill:"현재진행 의문문 (do/are)",norm:"do/are 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"SP",skill:"현재진행 동사형 (eat/eating)",norm:"동사형 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (3인칭 brings)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"There are 구문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적어+전치사구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (동사+부사구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+const QM_A5=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"VC",skill:"소유격 의문사·소유대명사 (Whose/his)",norm:"의문사 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"VC",skill:"전치사·빈도부사 (on the bus/always)",norm:"빈도부사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"VC",skill:"과거 시간표현·어휘 (last Friday)",norm:"next/last 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"SP",skill:"의문사 be과거·장소 (Where were)",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (장소 전치사구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적어 병렬)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적 전치사구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (across 전치사구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+const QM_A6=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"VC",skill:"과거 시간표현·전치사 (last weekend/at)",norm:"next/last 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"SP",skill:"can+동사원형·접속사 (water/so)",norm:"동사형 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"VC",skill:"의문사·소유격 (What/doctor's)",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"VC",skill:"의문사·수단 전치사 (How/by)",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적어구)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (장소+보어)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (동사구+목적어)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (복합주어)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+const QM_A2=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:4,dom:"Vocabulary",code:"PR",skill:"음가 Decoding",norm:"모음 혼동 — 정상",warn:"자음 인식 실패 → 파닉스 재점검"},
+  {n:5,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:6,dom:"Vocabulary",code:"VR",skill:"Sight word + 의미",norm:"유사 단어 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"반응 지연 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"VC",skill:"인칭 의문문·가족 어휘 (Who is he)",norm:"인칭 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"SP",skill:"현재진행·감정 (feeling/excited)",norm:"동사형 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"VC",skill:"의문사 선택 (How/What)",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"SP",skill:"be동사 단수·날씨 (How is)",norm:"is/are 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (구동사+전치사)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (목적어)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열 (시간부사 도치)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"의문문 어순 배열 (How be)",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+const QM_A3=[
+  {n:1,dom:"Vocabulary",code:"VR",skill:"위치 표현 어휘",norm:"유사 표현 혼동 — 정상",warn:"기초 어휘 반복 오답"},
+  {n:2,dom:"Vocabulary",code:"VR",skill:"의류 어휘 인식",norm:"유사 단어 혼동 — 정상",warn:"기초 명사 반복 오답"},
+  {n:3,dom:"Vocabulary",code:"VC",skill:"그림-단어 연결 (구동사)",norm:"유사 표현 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:4,dom:"Vocabulary",code:"VC",skill:"그림-단어 연결 (구동사)",norm:"유사 표현 혼동 — 정상",warn:"그림-의미 연결 불가"},
+  {n:5,dom:"Vocabulary",code:"PR",skill:"스펠링 완성 (모음)",norm:"모음 혼동 — 정상",warn:"음가 인식 실패 → 파닉스 재점검"},
+  {n:6,dom:"Vocabulary",code:"PR",skill:"스펠링 완성 (모음)",norm:"모음 혼동 — 정상",warn:"음가 인식 실패 → 파닉스 재점검"},
+  {n:7,dom:"Reading",code:"PC",skill:"Story 주제 파악",norm:"—",warn:"주제 파악 불가"},
+  {n:8,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:9,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:10,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:11,dom:"Reading",code:"PC",skill:"세부 정보 이해",norm:"세부 정보 혼동 — 정상",warn:"—"},
+  {n:12,dom:"Reading",code:"PC",skill:"Story 내용 이해",norm:"—",warn:"—"},
+  {n:13,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:14,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"유사 발음 혼동 — 정상",warn:"질문 자체 미인식"},
+  {n:15,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"유사 표현 혼동 — 정상",warn:"반응 없음 / 질문 회피"},
+  {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"유사 표현 혼동 — 정상",warn:"반응 없음"},
+  {n:17,dom:"Listening",code:"LS",skill:"듣고 장소 선택",norm:"—",warn:"반응 없음"},
+  {n:18,dom:"Structure",code:"VC",skill:"위치 전치사 선택",norm:"전치사 혼동 — 정상",warn:"의미 자체 미이해"},
+  {n:19,dom:"Structure",code:"VC",skill:"의문사·요일 선택",norm:"의문사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"VC",skill:"날씨 형용사 선택",norm:"반대 의미어 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"VC",skill:"현재진행·장소 선택",norm:"동사형 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SO",skill:"평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SO",skill:"평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SO",skill:"평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
+];
+
 // ═══ QM — B1 전용 ═══
 // B1 Monthly Test 구조: Vocabulary 1~6 / Reading 7~12 / Listening 13~17 / Structure 18~25
 // 출처: B1 데이터 패키지 (Answer Key + 문항 구조 분석)
@@ -415,14 +584,14 @@ const QM_B1=[
   {n:16,dom:"Listening",code:"QR",skill:"듣고 문장 선택",norm:"색·형태 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
   // Structure — B1 핵심 4패턴 + 문장 배열
-  {n:18,dom:"Structure",code:"IQ",skill:"Is it / Is this~ 패턴",norm:"is/this 혼동 — 정상",warn:"패턴 자체 미이해 → 개별 점검 필요"},
-  {n:19,dom:"Structure",code:"DH",skill:"Do you have~ 패턴",norm:"do/does 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"CL",skill:"색깔 묘사 패턴 (Is it~색깔?)",norm:"색깔 어휘 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"FL",skill:"감정 표현 (How are you feeling?)",norm:"감정어 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"IQ",skill:"be동사 의문문·대명사 (Is it/they)",norm:"is/this 혼동 — 정상",warn:"패턴 자체 미이해 → 개별 점검 필요"},
+  {n:19,dom:"Structure",code:"DH",skill:"Do you have 의문문·수량",norm:"do/does 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"CL",skill:"be동사 단수·색깔 (Is/Are it)",norm:"색깔 어휘 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"FL",skill:"의문사·현재진행 감정 (How/feeling)",norm:"감정어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (전치사구 puts into)",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"부정 평서문 어순 배열 (don't like)",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (3인칭 brings)",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (전치사구 sits around)",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"}
 ];
 
 // QM 레벨별 매핑
@@ -445,14 +614,14 @@ const QM_B2=[
   {n:15,dom:"Listening",code:"QR",skill:"선호 표현 듣기",norm:"반응 지연 — 정상",warn:"반응 없음"},
   {n:16,dom:"Listening",code:"QR",skill:"선호 표현 듣기",norm:"유사 발음 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
-  {n:18,dom:"Structure",code:"RX",skill:"Who is~ 관계 패턴",norm:"인칭 혼동 — 정상",warn:"패턴 자체 미이해"},
-  {n:19,dom:"Structure",code:"PF",skill:"Do you like~ 선호 패턴",norm:"do/does 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"RQ",skill:"Can I~ 요청 패턴",norm:"can/could 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"HM",skill:"How much~ 가격 패턴",norm:"수량 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"RX",skill:"의문사·관계 (Who/Where is)",norm:"인칭 혼동 — 정상",warn:"패턴 자체 미이해"},
+  {n:19,dom:"Structure",code:"PF",skill:"Do you like 의문문·동사 수일치",norm:"do/does 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"RQ",skill:"Can I 요청·동사원형 (have)",norm:"can/could 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"HM",skill:"How much/many·수일치 (가격)",norm:"수량 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (현재진행 wagging)",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"청유 인용문 어순 배열 (Let's)",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (4형식 shows them)",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (지각동사 hear)",norm:"어순 혼동 — B2 정상",warn:"단어 하나도 못 씀"}
 ];
 // ═══ QM_B3 — 정보 전달 (시간·직업·장소·음식) ═══
 const QM_B3=[
@@ -473,14 +642,14 @@ const QM_B3=[
   {n:15,dom:"Listening",code:"TM",skill:"시간 표현 듣기",norm:"숫자 혼동 — 정상",warn:"반응 없음"},
   {n:16,dom:"Listening",code:"JB",skill:"직업 표현 듣기",norm:"직업어 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"LS",skill:"듣고 그림 선택",norm:"—",warn:"반응 없음"},
-  {n:18,dom:"Structure",code:"TM",skill:"What time is it~ 패턴",norm:"숫자 혼동 — 정상",warn:"패턴 자체 미이해"},
-  {n:19,dom:"Structure",code:"JB",skill:"What do you do~ 직업 패턴",norm:"do/does 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"PL",skill:"Where is~ 장소 패턴",norm:"전치사 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"FD",skill:"What do you eat for~ 식사 패턴",norm:"음식어 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"TM",skill:"의문사·시각 (What/How time)",norm:"숫자 혼동 — 정상",warn:"패턴 자체 미이해"},
+  {n:19,dom:"Structure",code:"JB",skill:"3인칭 의문문·직업 (does/do)",norm:"do/does 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"PL",skill:"위치 의문문 (Where is/does)",norm:"전치사 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"FD",skill:"전치사·식사 (for lunch)",norm:"음식어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (전치사구 waves at)",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"부정 to부정사 어순 배열 (doesn't want to)",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"미래 평서문 어순 배열 (will do)",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (be+형용사 proud of)",norm:"어순 혼동 — B3 정상",warn:"단어 하나도 못 씀"}
 ];
 // ═══ QM_B4 — 자기 경험 (과거·습관·비교) ═══
 const QM_B4=[
@@ -501,14 +670,14 @@ const QM_B4=[
   {n:15,dom:"Listening",code:"PT",skill:"과거 표현 듣기",norm:"시제 혼동 — 정상",warn:"반응 없음"},
   {n:16,dom:"Listening",code:"PT",skill:"과거 표현 듣기",norm:"동사 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"CP",skill:"비교 표현 듣기",norm:"비교급 혼동 — 정상",warn:"반응 없음"},
-  {n:18,dom:"Structure",code:"PT",skill:"Where did you go~ 과거 패턴",norm:"시제 혼동 — 정상",warn:"과거시제 미이해"},
-  {n:19,dom:"Structure",code:"HB",skill:"요일 습관 패턴 (What do you do on~)",norm:"빈도부사 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"PT",skill:"과거시제 문장 완성",norm:"불규칙 과거형 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"CN",skill:"수량 단위 표현 (a can of~)",norm:"단위명사 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"PT",skill:"의문사·과거·장소 (When/Where did)",norm:"시제 혼동 — 정상",warn:"과거시제 미이해"},
+  {n:19,dom:"Structure",code:"HB",skill:"전치사·요일 습관 (on Sundays)",norm:"빈도부사 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"PT",skill:"과거시제 (did/were·동사 과거형)",norm:"불규칙 과거형 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"CN",skill:"3인칭 의문문·수량단위 (need)",norm:"단위명사 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (빈도 on Saturdays)",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (복합주어 Puppy and I)",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"부정 to부정사 어순 배열 (don't like to)",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"to부정사 어순 배열 (can't wait to)",norm:"어순 혼동 — B4 정상",warn:"단어 하나도 못 씀"}
 ];
 // ═══ QM_B5 — 계획/상황 (현재진행·수량·미래) ═══
 const QM_B5=[
@@ -529,14 +698,14 @@ const QM_B5=[
   {n:15,dom:"Listening",code:"PT",skill:"과거 표현 듣기",norm:"시제 혼동 — 정상",warn:"반응 없음"},
   {n:16,dom:"Listening",code:"QT",skill:"수량 표현 듣기",norm:"수량어 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"CA",skill:"능력 표현 듣기 (can)",norm:"can/can't 혼동 — 정상",warn:"반응 없음"},
-  {n:18,dom:"Structure",code:"PG",skill:"현재진행 패턴 (What are you doing?)",norm:"be동사 혼동 — 정상",warn:"진행형 미이해"},
-  {n:19,dom:"Structure",code:"BH",skill:"신체 증상 표현 (I have a~)",norm:"신체어 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"FT",skill:"be going to 미래 패턴",norm:"going to 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"TR",skill:"교통수단 표현",norm:"교통어 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"PG",skill:"의문사·현재진행 (How/taking)",norm:"be동사 혼동 — 정상",warn:"진행형 미이해"},
+  {n:19,dom:"Structure",code:"BH",skill:"의문사·증상 (What's wrong)",norm:"신체어 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"FT",skill:"be going to 미래 (going to)",norm:"going to 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"TR",skill:"동사·교통수단 (take/fly)",norm:"교통어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (can+목적어 buy with)",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"There are 구문 어순 배열",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (4형식 gives Mom)",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (전치사구 sets for)",norm:"어순 혼동 — B5 정상",warn:"단어 하나도 못 씀"}
 ];
 // ═══ QM_B6 — 독립 표현 (출신·계획·빈도·의무) ═══
 const QM_B6=[
@@ -557,16 +726,16 @@ const QM_B6=[
   {n:15,dom:"Listening",code:"WL",skill:"여행·도시 정보 듣기",norm:"도시명 혼동 — 정상",warn:"반응 없음"},
   {n:16,dom:"Listening",code:"SL",skill:"상황 표현 듣기",norm:"상황어 혼동 — 정상",warn:"반응 없음"},
   {n:17,dom:"Listening",code:"CA",skill:"능력 표현 듣기 (can)",norm:"can/can't 혼동 — 정상",warn:"반응 없음"},
-  {n:18,dom:"Structure",code:"OR",skill:"Where are you from~ 출신 패턴",norm:"전치사 혼동 — 정상",warn:"패턴 자체 미이해"},
-  {n:19,dom:"Structure",code:"FT",skill:"be going to 계획 패턴",norm:"going to 혼동 — 정상",warn:"—"},
-  {n:20,dom:"Structure",code:"OB",skill:"have to 의무 패턴",norm:"have to 혼동 — 정상",warn:"—"},
-  {n:21,dom:"Structure",code:"SN",skill:"감각 표현 (How does it~)",norm:"감각어 혼동 — 정상",warn:"—"},
-  {n:22,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
-  {n:23,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
-  {n:24,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
-  {n:25,dom:"Structure",code:"SC",skill:"sentence chunk 배열",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"}
+  {n:18,dom:"Structure",code:"OR",skill:"전치사·출신 (from)",norm:"전치사 혼동 — 정상",warn:"패턴 자체 미이해"},
+  {n:19,dom:"Structure",code:"FT",skill:"be going to 의문문 (are/start)",norm:"going to 혼동 — 정상",warn:"—"},
+  {n:20,dom:"Structure",code:"OB",skill:"have to 의무 (do/동사원형)",norm:"have to 혼동 — 정상",warn:"—"},
+  {n:21,dom:"Structure",code:"SN",skill:"의문사·감각동사 (How/look)",norm:"감각어 혼동 — 정상",warn:"—"},
+  {n:22,dom:"Structure",code:"SC",skill:"to부정사 어순 배열 (4형식 show you)",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
+  {n:23,dom:"Structure",code:"SC",skill:"부정 to부정사 어순 배열 (don't want to)",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
+  {n:24,dom:"Structure",code:"SC",skill:"동명사 주어 어순 배열 (playing is)",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"},
+  {n:25,dom:"Structure",code:"SC",skill:"분사구문 어순 배열 (holding)",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"}
 ];
-const QM_MAP={A1:QM_A,A2:QM_A,A3:QM_A,A4:QM_A,A5:QM_A,A6:QM_A,B1:QM_B1,B2:QM_B2,B3:QM_B3,B4:QM_B4,B5:QM_B5,B6:QM_B6};
+const QM_MAP={A1:QM_A1,A2:QM_A2,A3:QM_A3,A4:QM_A4,A5:QM_A5,A6:QM_A6,B1:QM_B1,B2:QM_B2,B3:QM_B3,B4:QM_B4,B5:QM_B5,B6:QM_B6};
 
 // CODELAB — A + B1 통합
 const CODELAB={
@@ -736,8 +905,8 @@ const DOM_FULL={Vocabulary:6,Reading:6,Listening:5,Structure:8};
 function getDS(){const dw=getDW();return {v:Math.max(0,DOM_FULL.Vocabulary-dw.Vocabulary),r:Math.max(0,DOM_FULL.Reading-dw.Reading),l:Math.max(0,DOM_FULL.Listening-dw.Listening),s:Math.max(0,DOM_FULL.Structure-dw.Structure)};}
 function scoreTot(){const ds=getDS();return ds.v+ds.r+ds.l+ds.s;}
 /* ===== 반·학생 명단 시스템 (초등부) ===== */
-const ROSTER_SEED={"students":{"pm0001":{"id":"pm0001","name":"강코니","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0002":{"id":"pm0002","name":"김아름","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0003":{"id":"pm0003","name":"한하늘","currentClass":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","classHistory":[{"class":"Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0004":{"id":"pm0004","name":"이루나","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0005":{"id":"pm0005","name":"박소율","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0006":{"id":"pm0006","name":"정시우","currentClass":"Pre Stella A1(Sarah) 3:00 M/W/F","classHistory":[{"class":"Pre Stella A1(Sarah) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0007":{"id":"pm0007","name":"최서아","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0008":{"id":"pm0008","name":"윤도현","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0009":{"id":"pm0009","name":"임하진","currentClass":"Silver Stella A1(Amy) 3:00 M/W/F","classHistory":[{"class":"Silver Stella A1(Amy) 3:00 M/W/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0010":{"id":"pm0010","name":"김단우","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0011":{"id":"pm0011","name":"오예린","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"},"pm0012":{"id":"pm0012","name":"장윤서","currentClass":"Inter Stella 3(Ben) 5:30 T/Th/F","classHistory":[{"class":"Inter Stella 3(Ben) 5:30 T/Th/F","from":"2026-07-01"}],"teacher":"","school":"광교초등학교"}},"classes":["Sound Doctor 3(Claire) 3:00 M/T/W/Th/F","Pre Stella A1(Sarah) 3:00 M/W/F","Silver Stella A1(Amy) 3:00 M/W/F","Inter Stella 3(Ben) 5:30 T/Th/F"]};
-const SEED_VERSION='pamus-2026-07-01';
+const ROSTER_SEED={"students": {}, "classes": ["Pre Stella A1 샘플반", "Pre Stella B1 샘플반", "Silver Stella A1 샘플반", "Inter Bridge 1 샘플반"]};
+const SEED_VERSION='public-sample-2026-07-01';
 let roster={students:{},classes:[]};
 function _rosterGet(key){const r=LS.get('pamus:'+key);if(!r)return null;try{return JSON.parse(r.value);}catch(e){return null;}}
 function _rosterSet(key,val){LS.set('pamus:'+key,JSON.stringify(val));}
@@ -897,6 +1066,9 @@ function renderStuChips(){
 }
 function selectStudent(id){
   const st=roster.students[id]; if(!st)return;
+  const prevId=curStuId;
+  // 학생이 바뀌면 이전 작업 입력란을 비운다(오답·코멘트 등 잔존 방지)
+  if(prevId&&prevId!==id&&typeof clearWorkInputs==='function')clearWorkInputs();
   curStuId=id;
   if(g('sName'))g('sName').value=st.name||'';
   if(g('sSchool'))g('sSchool').value=st.school||'';
@@ -905,6 +1077,14 @@ function selectStudent(id){
   if(g('sTeacher'))g('sTeacher').value=st.teacher||'';
   // 보고서 월: 전체 공통 저장값 자동 채움
   if(g('sMonth')){var __m=_rosterGet('reportMonth');if(__m)g('sMonth').value=__m;}
+  // 레벨이 정해져 있으면 이 학생의 임시저장(draft)이 있는지 보고, 있으면 이어하기 안내
+  if(typeof loadDraftIfExists==='function'){
+    var _hadDraft=loadDraftIfExists();
+    if(_hadDraft){
+      var _dn=g('draftAlert');
+      if(_dn){_dn.style.display='block';_dn.innerHTML='<div style="display:flex;gap:6px;align-items:center"><i class="ti ti-edit" style="color:#a8730a"></i><span><strong>'+escR(st.name)+'</strong> 학생의 작성 중이던 내용을 불러왔습니다. 이어서 작성하세요.</span></div>';}
+    }else{var _dn2=g('draftAlert');if(_dn2)_dn2.style.display='none';}
+  }
   renderStuChips();
   if(typeof onNameInput==='function')onNameInput();
 }
@@ -1025,7 +1205,7 @@ function calcTotal(){const tot=scoreTot();const el=g("totNum");if(el)el.textCont
 
 function buildQGrid(){
   const QM=getQM(),el=g("qgrid");el.innerHTML="";
-  QM.forEach(q=>{const b=document.createElement("div");b.className="qbtn"+(wrongQs.has(q.n)?" wrong":"");b.id="qb"+q.n;b.style.display=(domFilter==="all"||domFilter===q.dom)?"":"none";b.innerHTML=`<span class="qn">Q${q.n}</span><span class="qt">${q.code}</span><span class="qd">${q.skill}</span>`;b.onclick=()=>{if(wrongQs.has(q.n)){wrongQs.delete(q.n);b.classList.remove("wrong");}else{wrongQs.add(q.n);b.classList.add("wrong");}updWC();calcTotal();};el.appendChild(b);});updWC();calcTotal();
+  QM.forEach(q=>{const b=document.createElement("div");b.className="qbtn"+(wrongQs.has(q.n)?" wrong":"");b.id="qb"+q.n;b.style.display=(domFilter==="all"||domFilter===q.dom)?"":"none";b.innerHTML=`<span class="qn">Q${q.n}</span><span class="qt">${q.code}</span><span class="qd">${q.skill}</span>`;b.onclick=()=>{if(wrongQs.has(q.n)){wrongQs.delete(q.n);b.classList.remove("wrong");}else{wrongQs.add(q.n);b.classList.add("wrong");}updWC();calcTotal();if(typeof saveDraftDebounced==='function')saveDraftDebounced();};el.appendChild(b);});updWC();calcTotal();
 }
 function filterDom(d,el){domFilter=d;document.querySelectorAll(".qtab").forEach(t=>t.classList.remove("on"));el.classList.add("on");getQM().forEach(q=>{const b=g("qb"+q.n);if(b)b.style.display=(d==="all"||d===q.dom)?"":"none";});}
 function updWC(){g("wrongCount").textContent=`오답: ${wrongQs.size}문항${wrongQs.size>0?" ("+[...wrongQs].sort((a,b)=>a-b).map(n=>"Q"+n).join(", ")+")":""}`;}
@@ -1182,8 +1362,8 @@ async function refineText(taId,type){
   if(btn){btn.disabled=true;btn.innerHTML=`<i class="ti ti-loader" style="font-size:12px;animation:spin 1s linear infinite"></i> 다듬는 중...`;}
   if(statusEl){statusEl.style.display="block";statusEl.style.color="#888";statusEl.textContent="린쌤 톤으로 다듬고 있습니다...";}
   const name=val("sName")||"학생",lv=val("sLevel");
-  const sectionLabel=type==="strength"?"이달의 강점":type==="improve"?"파악된 보완점":type==="next"?"다음 달 지도 방안":"역량 분석 피드백";
-  const tone=type==="strength"?"수업에서 실제로 관찰한 성장을 구체적으로 짚어주되, 과장하거나 감탄사를 남발하지 않는다. 칭찬은 사실에 근거해 절제되게":type==="improve"?"문제를 지적하되 단정 짓지 않는다. 학부모가 불안해하지 않도록 현재 상태를 있는 그대로 설명하고, 교사가 이미 방향을 잡고 있다는 인상을 준다":type==="next"?"막연한 다짐이 아닌 수업에서 실제로 할 구체적인 활동·접근 방식을 서술한다. 학원이 체계적으로 준비하고 있다는 신뢰감을 준다":"시험 점수보다 영어 성장 과정에 초점을 맞추고, 강사가 이 아이를 정확히 파악하고 있다는 인상을 준다. [강사 참고 — 주의 신호] 내용은 제거할 것";
+  const sectionLabel=type==="strength"?"이달의 강점":type==="improve"?"파악된 보완점":type==="next"?"다음 달 지도 방안":type==="extra"?"담임 관찰 메모":"역량 분석 피드백";
+  const tone=type==="strength"?"수업에서 실제로 관찰한 성장을 구체적으로 짚어주되, 과장하거나 감탄사를 남발하지 않는다. 칭찬은 사실에 근거해 절제되게 한다. 특히 어휘·문법 점수가 높더라도 시험이 측정한 '기억·이해·문제풀이 활용' 범위 안에서 서술하고, 말하기·작문 같은 산출 능력으로 비약하지 않는다":type==="improve"?"문제를 지적하되 단정 짓지 않는다. 학부모가 불안해하지 않도록 현재 상태를 있는 그대로 설명하고, 교사가 이미 방향을 잡고 있다는 인상을 준다":type==="next"?"막연한 다짐이 아닌 수업에서 실제로 할 구체적인 활동·접근 방식을 서술한다. 학원이 체계적으로 준비하고 있다는 신뢰감을 준다":type==="extra"?"강사가 수업 중 실제로 관찰한 장면이나 일화를 생생하고 따뜻하게 다듬는다. 관찰한 사실 자체는 살리되 새로운 사실을 지어내지 않으며, 측정하지 않은 능력으로 비약하지 않는다":"시험 점수보다 영어 성장 과정에 초점을 맞추고, 강사가 이 아이를 정확히 파악하고 있다는 인상을 준다. [강사 참고 — 주의 신호] 내용은 제거할 것";
   const prompt=`당신은 린쌤파머스 국제어학원의 원장 선생님입니다. 20년 경력의 영어교육 전문가로, 아이들을 진심으로 아끼지만 기준이 명확하고 책임감 있는 지도자입니다.
 
 Pre Stella ${lv} 과정 ${name} 학생의 월말보고서 "${sectionLabel}" 초안을 아래 조건에 맞게 하나의 자연스러운 단락으로 다듬어 주세요.
@@ -1192,12 +1372,19 @@ Pre Stella ${lv} 과정 ${name} 학생의 월말보고서 "${sectionLabel}" 초�
 - 전문적이고 차분하다. 과장된 감탄이나 손발이 오그라드는 표현은 쓰지 않는다
 - 따뜻하되 나긋나긋하지 않다. 교사로서의 의지와 판단이 느껴지는 문장을 쓴다
 - "분명히, 반드시, 꼭, 틀림없이" 같은 확정적 단어는 사용하지 않는다
-- "정말, 너무너무, 대단히" 같은 과잉 수식어는 쓰지 않는다
+- "정말, 너무, 너무너무, 대단히, 충분히, 매우" 같은 과장으로 느껴질 수 있는 수식어는 쓰지 않는다
 - ${tone}
+
+[측정 범위 — 매우 중요]
+- 이 Monthly Test는 듣기·읽기 중심으로, 학생이 배운 내용을 "인식·이해하고 문제 상황에서 활용하는" 능력을 측정합니다. 말하기·자유 작문 같은 산출(productive) 능력은 직접 측정하지 않습니다.
+- 따라서 시험에서 직접 측정하지 않은 능력을 "할 수 있다"고 단정하지 마세요. 예: 어휘 점수가 높아도 "배운 어휘를 말하기에 사용할 수 있어요"처럼 산출 능력으로 비약하지 않습니다.
+- 어휘·읽기·듣기 강점은 측정된 범위 안에서 사실대로 서술하세요. 예: "배운 단어를 정확히 기억하고 문제 상황에서 안정적으로 활용해요", "들은 정보를 정확히 골라내요" 같이 관찰된 능력으로 표현합니다.
+- "~할 수 있어요"처럼 능력을 완성형으로 단정하기보다, 관찰된 사실("정확히 기억해 활용해요", "안정적으로 골라내요")로 서술하세요.
+- 교재에 표기된 렉사일(Lexile)·CEFR 지수는 "이 단계 교재의 국제 기준선"일 뿐, 학생 개인이 도달한 수준이 아닙니다. 이 표기 숫자를 근거로 학생의 영어 역량을 단정하지 마세요. 예: 어휘 점수가 높아도 "이 학생은 B1 수준을 읽어요" / "○○○L 수준에 도달했어요"처럼 표기 지수를 개인 성취로 옮겨 말하지 않습니다. 학생의 읽기·어휘·듣기 역량은 오직 이번 시험에서 실제로 관찰된 사실로만 서술합니다.
 
 [형식]
 - 현재 관찰 → 교사의 해석 → 앞으로의 방향 흐름으로
-- 2~4문장, 자연스러운 한국어 존댓말
+- 2~3문장으로 간결하게, 자연스러운 한국어 존댓말. 이전보다 한 문장가량 짧게, 군더더기 없이 핵심만 담는다
 - 학생 이름(${name})을 한 번 자연스럽게 포함
 - 결과 단락만 출력 (설명, 제목, 부연 없이)
 
@@ -1338,6 +1525,7 @@ function saveReport(){
     const reportKey=`report:${getStudentKey()}:${(month||"").replace(/\s/g,"")}`;
     const reportData={name,month,level:val("sLevel"),school:val("sSchool"),grade:val("sGrade"),cls:val("sClass"),teacher:val("sTeacher"),scores:getDS(),wrongQs:[...wrongQs],cmtStrength:val("cmtStrength"),cmtImprove:val("cmtImprove"),cmtExtra:val("cmtExtra"),cmtNext:val("cmtNext"),savedAt:new Date().toISOString()};
     LS.set(reportKey,JSON.stringify(reportData));
+    if(typeof clearDraft==='function')clearDraft();
     if(statusEl){statusEl.style.display="block";statusEl.style.color="#2d7a4f";statusEl.textContent=`✓ ${name} 학생 (${month}) 이력이 저장되었습니다.`;}
     btn.disabled=false;btn.innerHTML=`<i class="ti ti-device-floppy"></i>이력 저장`;
     const rcb=g("resetConfirmBox"),rcm=g("resetConfirmMsg");
@@ -1346,6 +1534,160 @@ function saveReport(){
     btn.disabled=false;btn.innerHTML=`<i class="ti ti-device-floppy"></i>이력 저장`;
     if(statusEl){statusEl.style.display="block";statusEl.style.color="#e24b4a";statusEl.textContent="저장 중 오류가 발생했습니다.";}
   }
+}
+
+
+/* ===== 임시저장(Draft) · 이어하기 · 다시보기 · 반별 현황판 ===== */
+// 현재 입력 상태로 draft 키 생성 (리포트 키와 동일 식별자, 접두사만 draft:)
+function _draftKey(){
+  const name=val("sName").trim(),school=val("sSchool").trim(),grade=val("sGrade").trim(),lv=val("sLevel"),month=val("sMonth").trim();
+  if(!name||!lv)return null;
+  const prefix=[school,grade,name].filter(Boolean).join("_");
+  return `draft:${prefix}:${lv}:${(month||"").replace(/\s/g,"")}`;
+}
+// 현재 작업 상태를 draft로 저장 (입력이 바뀔 때마다 호출)
+let _draftTimer=null;
+function saveDraft(){
+  const k=_draftKey(); if(!k)return;
+  const d={name:val("sName"),school:val("sSchool"),grade:val("sGrade"),cls:val("sClass"),teacher:val("sTeacher"),month:val("sMonth"),level:val("sLevel"),
+    wrongQs:[...wrongQs],selStrength:[...selStrength],selAttitude:[...selAttitude],selNext:[...selNext],
+    cmtStrength:val("cmtStrength"),cmtImprove:val("cmtImprove"),cmtExtra:val("cmtExtra"),cmtNext:val("cmtNext"),
+    curStep:curStep,savedAt:new Date().toISOString()};
+  LS.set(k,JSON.stringify(d));
+}
+function saveDraftDebounced(){clearTimeout(_draftTimer);_draftTimer=setTimeout(saveDraft,500);}
+// draft 삭제 (완료 저장 시 호출)
+function clearDraft(){const k=_draftKey();if(k)LS.remove(k);}
+// 현재 학생에 해당하는 draft 가 있으면 복원
+function loadDraftIfExists(){
+  const k=_draftKey(); if(!k)return false;
+  const r=LS.get(k); if(!r)return false;
+  let d; try{d=JSON.parse(r.value);}catch(e){return false;}
+  if(!d)return false;
+  // 입력란 복원
+  if(g("sClass")&&d.cls)g("sClass").value=d.cls;
+  if(g("sTeacher")&&d.teacher)g("sTeacher").value=d.teacher;
+  if(g("cmtStrength"))g("cmtStrength").value=d.cmtStrength||"";
+  if(g("cmtImprove"))g("cmtImprove").value=d.cmtImprove||"";
+  if(g("cmtExtra"))g("cmtExtra").value=d.cmtExtra||"";
+  if(g("cmtNext"))g("cmtNext").value=d.cmtNext||"";
+  // 상태 복원
+  wrongQs=new Set(d.wrongQs||[]);
+  selStrength=new Set(d.selStrength||[]);
+  selAttitude=new Set(d.selAttitude||[]);
+  selNext=new Set(d.selNext||[]);
+  return true;
+}
+// 입력란만 비우기 (학생 전환 시 — draft 는 건드리지 않음)
+function clearWorkInputs(){
+  ["sMonth","autoFb","cmtStrength","cmtImprove","cmtExtra","cmtNext"].forEach(id=>{const el=g(id);if(el){el.value="";delete el.dataset.edited;}});
+  wrongQs.clear();selNext.clear();selAttitude.clear();selStrength.clear();domFilter="all";
+  const _sa=g("strengthAnalysis");if(_sa)_sa.textContent="";
+  const _ia=g("improveAnalysis");if(_ia)_ia.textContent="";
+  const ro=g("reportOut");if(ro)ro.innerHTML="";
+  const ss=g("saveStatus");if(ss)ss.style.display="none";
+  const rcb=g("resetConfirmBox");if(rcb)rcb.style.display="none";
+}
+// 학생의 상태 판정: 'done' | 'draft' | 'none'
+function studentStatus(st,lv,month){
+  const mk=(month||"").replace(/\s/g,"");
+  const rk=`report:history:${[st.school,st.grade,st.name].filter(Boolean).join("_")}:${lv}:${mk}`;
+  if(LS.get(rk))return"done";
+  // draft 는 레벨/월 미상일 수 있으니 접두사 매칭
+  const dpre=`draft:${[st.school,st.grade,st.name].filter(Boolean).join("_")}:`;
+  try{for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key&&key.startsWith(dpre))return"draft";}}catch(e){}
+  return"none";
+}
+// 반별 현황판 열기
+function openDashboard(){
+  const modal=g("dashModal"); if(!modal)return;
+  // 반 드롭다운 채우기
+  const csel=g("dashClass");
+  if(csel){
+    const cur=csel.value;
+    csel.innerHTML='<option value="">— 반 선택 —</option>'+(roster.classes||[]).map(c=>`<option value="${escR(c)}">${escR(c)}</option>`).join("");
+    if(cur)csel.value=cur;
+  }
+  // 월 기본값: 현재 입력된 월 또는 저장된 공통월
+  const msel=g("dashMonth");
+  if(msel&&!msel.value){const m=val("sMonth")||_rosterGet("reportMonth")||"";msel.value=m;}
+  renderDashboard();
+  modal.classList.add("on");
+}
+function closeDashboard(){const m=g("dashModal");if(m)m.classList.remove("on");}
+function renderDashboard(){
+  const box=g("dashBody"); if(!box)return;
+  const cls=g("dashClass")?g("dashClass").value:"";
+  const month=g("dashMonth")?g("dashMonth").value.trim():"";
+  if(!cls){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">반을 선택하면 학생별 작성 현황이 표시됩니다.</div>';return;}
+  const studs=Object.values(roster.students||{}).filter(s=>s.currentClass===cls);
+  if(studs.length===0){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">이 반에 등록된 학생이 없습니다.</div>';return;}
+  let done=0,draft=0,none=0;
+  const rows=studs.map(st=>{
+    const lv=_classToLevel(cls);
+    const stt=studentStatus(st,lv,month);
+    if(stt==="done")done++;else if(stt==="draft")draft++;else none++;
+    const badge=stt==="done"?'<span style="background:#e3f3e9;color:#2d7a4f;border:1px solid #b5dcc4;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">완료</span>'
+      :stt==="draft"?'<span style="background:#fff3df;color:#a8730a;border:1px solid #f0cd8a;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">작성 중</span>'
+      :'<span style="background:#f2f2ef;color:#999;border:1px solid #ddd;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">미작성</span>';
+    const action=stt==="done"?"다시 보기":stt==="draft"?"이어 하기":"새로 작성";
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #f0efe9">
+      <div style="display:flex;align-items:center;gap:10px"><span style="font-weight:600;font-size:13px">${escR(st.name)}</span>${badge}</div>
+      <button onclick="dashOpenStudent('${escR(st.id)}','${stt}')" style="background:#f8f7f4;border:1px solid #d0d0cc;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;color:#555;font-weight:600">${action}</button>
+    </div>`;
+  }).join("");
+  box.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:10px;font-size:11px">
+    <span style="color:#2d7a4f">완료 ${done}</span><span style="color:#a8730a">작성 중 ${draft}</span><span style="color:#999">미작성 ${none}</span>
+    <span style="margin-left:auto;color:#aaa">총 ${studs.length}명</span></div>${rows}`;
+}
+// 반 이름에서 레벨 추정 (예: "Pre Stella A3(샘플) ..." → "A3")
+function _classToLevel(cls){
+  const m=cls.match(/Pre Stella\s+([AB]\d)/i);
+  return m?m[1].toUpperCase():val("sLevel");
+}
+// 현황판에서 학생 선택 → 상태별 동작
+function dashOpenStudent(id,stt){
+  closeDashboard();
+  const month=g("dashMonth")?g("dashMonth").value.trim():"";
+  // 먼저 전체 초기화 후 그 학생 로드
+  resetAll();
+  const st=roster.students[id]; if(!st)return;
+  // 반 선택 동기화
+  if(g("classSelect")){g("classSelect").value=st.currentClass||"";if(typeof renderStuChips==="function")renderStuChips();}
+  selectStudent(id);
+  if(month&&g("sMonth"))g("sMonth").value=month;
+  // 레벨 자동 설정
+  const lv=_classToLevel(st.currentClass||"");
+  if(lv&&g("sLevel")){g("sLevel").value=lv;onLvChange();}
+  if(stt==="done"){
+    // 저장된 리포트 복원 → 리포트 화면으로
+    _restoreReport(st,lv,month);
+  }else if(stt==="draft"){
+    // draft 복원 → 마지막 단계로 이동
+    if(loadDraftIfExists()){
+      const r=LS.get(_draftKey());let step=1;try{step=(JSON.parse(r.value).curStep)||1;}catch(e){}
+      go(Math.max(1,step));
+    }else{go(1);}
+  }else{
+    go(1);
+  }
+}
+// 저장된 리포트 데이터로 입력 상태 복원 후 리포트 출력
+function _restoreReport(st,lv,month){
+  const mk=(month||"").replace(/\s/g,"");
+  const rk=`report:history:${[st.school,st.grade,st.name].filter(Boolean).join("_")}:${lv}:${mk}`;
+  const r=LS.get(rk); if(!r){go(1);return;}
+  let d; try{d=JSON.parse(r.value);}catch(e){go(1);return;}
+  if(g("sMonth"))g("sMonth").value=d.month||month||"";
+  if(g("sClass"))g("sClass").value=d.cls||st.currentClass||"";
+  if(g("sTeacher"))g("sTeacher").value=d.teacher||"";
+  if(g("cmtStrength"))g("cmtStrength").value=d.cmtStrength||"";
+  if(g("cmtImprove"))g("cmtImprove").value=d.cmtImprove||"";
+  if(g("cmtExtra"))g("cmtExtra").value=d.cmtExtra||"";
+  if(g("cmtNext"))g("cmtNext").value=d.cmtNext||"";
+  wrongQs=new Set(d.wrongQs||[]);
+  if(g("sLevel")&&d.level){g("sLevel").value=d.level;onLvChange();}
+  go(4); // 리포트 화면
 }
 
 function go(n){
@@ -1358,6 +1700,7 @@ function go(n){
   curStep=n;
   g("s"+n).classList.remove("hidden");
   g("sb"+n).classList.add("active");
+  if(typeof saveDraftDebounced==='function')saveDraftDebounced();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -1428,13 +1771,29 @@ function downloadPDF(){
 (function(){var _al=document.getElementById('appLogo');if(_al)_al.src=LOGO_LIGHT;})();
 </script>
 
+<div class="cm-bg" id="dashModal">
+  <div class="cm-modal" style="max-width:560px">
+    <h2 style="color:#185fa5"><i class="ti ti-clipboard-list"></i> 반별 작성 현황 · 다시 보기</h2>
+    <div style="font-size:11px;color:#888;margin-bottom:12px">반과 월을 선택하면 학생별로 <b style="color:#2d7a4f">완료</b> / <b style="color:#a8730a">작성 중</b> / <b style="color:#999">미작성</b> 상태가 표시됩니다. 항목을 눌러 다시 보거나 이어서 작성하세요.</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <div style="flex:1"><label style="font-size:11px;font-weight:700;color:#555">반</label>
+        <select id="dashClass" onchange="renderDashboard()" style="width:100%;margin-top:3px"><option value="">— 반 선택 —</option></select></div>
+      <div style="width:130px"><label style="font-size:11px;font-weight:700;color:#555">월</label>
+        <input type="text" id="dashMonth" placeholder="예: 2025년 5월" oninput="renderDashboard()" style="width:100%;margin-top:3px"></div>
+    </div>
+    <div id="dashBody" style="border:1px solid #eee;border-radius:8px;max-height:50vh;overflow:auto"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:14px">
+      <button onclick="closeDashboard()" style="background:#f0f0ec;border:1px solid #ddd;border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer;color:#555">닫기</button>
+    </div>
+  </div>
+</div>
 <div class="cm-bg" id="classManageModal">
   <div class="cm-modal">
     <h2><i class="ti ti-layout-grid"></i> 반 관리</h2>
     <div class="cm-hint"><i class="ti ti-info-circle"></i> <b>반 이름을 수정하면</b> 그 반 학생들의 소속도 함께 바뀝니다. 학생 리포트 이력(이름+학교 기준)은 영향받지 않습니다.</div>
     <div style="margin:12px 0 6px"><label style="font-size:11px;font-weight:700;color:#665">새 반 만들기</label>
       <div style="display:flex;gap:8px;margin-top:4px">
-        <input type="text" id="newClassName" placeholder="예: Topaz #1(Jinny) 6:30 M/W/F" style="flex:1">
+        <input type="text" id="newClassName" placeholder="예: Pre Stella A1(샘플) 3:00 M/W/F" style="flex:1">
         <button class="cm-btn grn" onclick="addClass()" style="white-space:nowrap"><i class="ti ti-plus"></i> 추가</button>
       </div>
     </div>
