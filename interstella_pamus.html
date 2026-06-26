@@ -310,6 +310,58 @@ for(let i=1;i<=20;i++)Q_META[i]={part:'P1',domain:'VOC',label:'어휘'+i,desc:i<
 for(let i=21;i<=30;i++)Q_META[i]={part:'P2',domain:'LIS',label:'듣기'+(i-20),desc:'듣고 답하기'};
 for(let i=31;i<=40;i++)Q_META[i]={part:'P3',domain:'RDG',label:'독해'+(i-30),desc:'지문 이해'};
 for(let i=41;i<=45;i++)Q_META[i]={part:'P4',domain:'GRM',label:'문법'+(i-40),desc:'문법·영작'};
+
+// === Inter Stella 레벨별 문법(41~45) 메타 — 시험지 기준 ===
+const GRAM_BY_LV = {
+ "1": {
+  "41": {part:"P4",domain:"GRM",label:"간접의문문",desc:"간접의문문 어순"},
+  "42": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"일반동사 과거형 전환"},
+  "43": {part:"P4",domain:"GRM",label:"과거 부정",desc:"일반동사 과거 부정문"},
+  "44": {part:"P4",domain:"GRM",label:"의문사+to부정사",desc:"how to 영작"},
+  "45": {part:"P4",domain:"GRM",label:"의문사+to부정사",desc:"where to 영작"}
+ },
+ "2": {
+  "41": {part:"P4",domain:"GRM",label:"문형 전환",desc:"4형식→3형식 전환"},
+  "42": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"일반동사 과거형 전환"},
+  "43": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"불규칙 과거형 go→went"},
+  "44": {part:"P4",domain:"GRM",label:"동명사",desc:"look forward to+동명사 영작"},
+  "45": {part:"P4",domain:"GRM",label:"동명사·to부정사",desc:"목적어 동명사/to부정사 영작"}
+ },
+ "3": {
+  "41": {part:"P4",domain:"GRM",label:"가주어 It",desc:"진주어 to부정사 가주어 전환"},
+  "42": {part:"P4",domain:"GRM",label:"가주어 It",desc:"진주어 to부정사 가주어 전환"},
+  "43": {part:"P4",domain:"GRM",label:"가주어 It",desc:"진주어 to부정사 가주어 전환"},
+  "44": {part:"P4",domain:"GRM",label:"동명사",desc:"전치사 for+동명사 영작"},
+  "45": {part:"P4",domain:"GRM",label:"동명사",desc:"목적어 동명사 영작"}
+ },
+ "4": {
+  "41": {part:"P4",domain:"GRM",label:"미래형",desc:"be going to 미래형 전환"},
+  "42": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"일반동사 과거형 전환"},
+  "43": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"일반동사 과거형 전환"},
+  "44": {part:"P4",domain:"GRM",label:"현재완료",desc:"have+p.p 영작"},
+  "45": {part:"P4",domain:"GRM",label:"현재완료",desc:"have+p.p 영작"}
+ },
+ "5": {
+  "41": {part:"P4",domain:"GRM",label:"간접의문문",desc:"두 문장 간접의문문 결합"},
+  "42": {part:"P4",domain:"GRM",label:"to부정사",desc:"want+목적어+to부정사"},
+  "43": {part:"P4",domain:"GRM",label:"동명사",desc:"Thanks for+동명사"},
+  "44": {part:"P4",domain:"GRM",label:"현재완료 수동",desc:"has/have been p.p 영작"},
+  "45": {part:"P4",domain:"GRM",label:"현재완료 수동",desc:"has/have been p.p 영작"}
+ },
+ "6": {
+  "41": {part:"P4",domain:"GRM",label:"간접의문문",desc:"두 문장 간접의문문 결합"},
+  "42": {part:"P4",domain:"GRM",label:"동사 과거형",desc:"3인칭 일반동사 과거형"},
+  "43": {part:"P4",domain:"GRM",label:"to부정사",desc:"need+to부정사"},
+  "44": {part:"P4",domain:"GRM",label:"현재완료 수동",desc:"has/have been p.p 영작"},
+  "45": {part:"P4",domain:"GRM",label:"현재완료 수동",desc:"has/have been p.p 영작"}
+ }
+};
+function applyGramMeta(lv){
+ const gm=GRAM_BY_LV[String(lv)];
+ if(!gm)return;
+ for(let n=41;n<=45;n++){ if(gm[n]) Q_META[n]=gm[n]; }
+}
+
 const DOM_MAX={VOC:20,LIS:10,RDG:10,GRM:5};
 const DOM_LABEL={VOC:"어휘(VOC)",LIS:"듣기(LIS)",RDG:"읽기(RDG)",GRM:"문법(GRM)"};
 const DOM_COLOR={VOC:"#e0b94d",LIS:"#5aa9e6",RDG:"#6cc06c",GRM:"#b07de0"};
@@ -574,7 +626,7 @@ function toggleHistoryPanel(){const b=g('historyAlertBody'),ic=g('histToggleIcon
 function showHistoryAlert(){const k=getStudentKey();if(!k)return;const data=LS('get',k+'_kw');const box=g('historyAlert'),head=g('historyAlertHead'),body=g('historyAlertBody');if(!box||!data){if(box)box.style.display='none';return;}const months=Object.keys(data).sort().reverse().slice(0,3);if(!months.length){box.style.display='none';return;}const name=val('stuName')||'학생';head.innerHTML=`<i class="ti ti-history" style="font-size:14px;color:#e0b94d"></i><div style="flex:1"><strong>${name}</strong> 학생의 최근 ${months.length}개월 이력이 있습니다. <span style="color:#b07de0;margin-left:5px">${months.join(' · ')}</span></div><i id="histToggleIcon" class="ti ti-chevron-down" style="color:#e0b94d"></i>`;body.innerHTML=months.map((m,i)=>{const r=data[m]||{};const sC=(r.strength&&r.strength.length)?r.strength.map(x=>`<span style="background:#eaf6ee;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#666;font-size:10px">없음</span>';const aC=(r.improve&&r.improve.length)?r.improve.map(x=>`<span style="background:#fdf6e3;color:#b8860b;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#666;font-size:10px">없음</span>';return `<div style="padding-top:11px"><div style="font-size:11px;font-weight:700;color:#8c7bff;margin-bottom:5px">${m}</div><div style="margin-bottom:4px"><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">강점</span>${sC}</div><div><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">보완점</span>${aC}</div></div>`;}).join('');box.style.display='block';}
 function showHistory(){const k=getStudentKey();const box=g('historyBox');if(!box)return;if(!k){box.innerHTML='<div style="font-size:12px;color:#888">학생 이름과 학교를 먼저 입력해주세요.</div>';box.style.display='block';return;}const data=LS('get',k+'_kw');if(!data){box.innerHTML='<div style="font-size:12px;color:#888">이전 리포트 기록이 없습니다.</div>';box.style.display='block';return;}const months=Object.keys(data).sort().reverse().slice(0,3);box.style.display='block';box.innerHTML=`<div style="font-size:11px;font-weight:700;color:#b8860b;margin-bottom:8px"><i class="ti ti-history"></i> 최근 ${months.length}개월 키워드 이력</div>`+months.map(m=>{const r=data[m]||{};const lvTag=r.level?` <span style="color:#8c7bff;font-weight:700">[S${r.level}]</span>`:'';return `<div style="font-size:11px;margin-bottom:5px;padding:6px 9px;background:#f3f0fb;border-radius:6px"><b style="color:#8c7bff">${m}</b>${lvTag} — 강점: ${(r.strength||[]).join(', ')||'-'} / 보완: ${(r.improve||[]).join(', ')||'-'}</div>`;}).join('');}
 
-function onLvChange(){const lv=val('lvSel');if(!lv)return;const d=LV[lv];if(!d)return;const box=g('lvInfo');box.style.display='block';box.innerHTML=`<span style="font-weight:700;color:#8c7bff">Inter Stella ${lv}</span> &mdash; ${d.name} <span style="color:#888">| ${d.grammar}</span><br><span style="font-size:11px;color:#888">테마: ${d.theme} · CEFR ${d.cefr} · Lexile ${d.lexile}</span>`;}
+function onLvChange(){const lv=val('lvSel');if(!lv)return;const d=LV[lv];if(!d)return;const box=g('lvInfo');box.style.display='block';box.innerHTML=`<span style="font-weight:700;color:#8c7bff">Inter Stella ${lv}</span> &mdash; ${d.name} <span style="color:#888">| ${d.grammar}</span><br><span style="font-size:11px;color:#888">테마: ${d.theme} · CEFR ${d.cefr} · Lexile ${d.lexile}</span>`;applyGramMeta(lv);buildWrongGrid();}
 
 function initScoreInputs(){let h='';for(let i=1;i<=45;i++)h+=`<input type="hidden" id="q${i}" value="1">`;g('scoreInputs').innerHTML=h;}
 function syncWrongFromScores(){for(let i=1;i<=45;i++){const s=parseFloat(g('q'+i)?.value);if(s<1)wrongSet.add(i);else wrongSet.delete(i);}}
