@@ -191,9 +191,9 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
 <!-- STEP 0: 학생 정보 -->
 <div id="s0">
   <div class="card">
-    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openDashboard()" style="margin-left:auto;background:#e6f1fb;color:#185fa5;border:1px solid #aacdf0;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-clipboard-list"></i> 작성 현황 · 다시 보기</button><button onclick="openClassManage()" style="margin-left:8px;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button></div>
+    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openDashboard()" style="margin-left:auto;background:#e6f1fb;color:#185fa5;border:1px solid #aacdf0;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-clipboard-list"></i> 리포트 현황 · 다시 보기</button></div>
     <div class="row3">
-      <div style="grid-column:1/2"><label>반 선택</label><select id="classSelect" onchange="onClassSelect()"><option value="">— 반을 선택하세요 —</option></select></div>
+      <div style="grid-column:1/2"><label>반 선택</label><div style="display:flex;gap:6px;align-items:center"><select id="classSelect" onchange="onClassSelect()" style="flex:1"><option value="">— 반을 선택하세요 —</option></select><button onclick="openClassManage()" style="white-space:nowrap;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:6px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button></div></div>
       <div style="grid-column:2/4"><label>학생 선택 <span style="color:#aaa;font-weight:400;font-size:10px">(선택 시 이름·학교·반 자동 입력)</span></label><div id="stuChipArea" class="stu-chip-area"><span style="color:#bbb;font-size:11px">반을 먼저 선택하세요</span></div></div>
     </div>
     <div id="draftAlert" style="display:none;background:#fff3df;border:1px solid #f0cd8a;border-radius:8px;padding:10px 13px;margin-top:10px;font-size:12px;color:#8a6d1f"></div>
@@ -1614,18 +1614,15 @@ function onClassSelect(){
 function renderStuChips(){
   const area=g('stuChipArea'); if(!area)return;
   const cls=g('classSelect')?g('classSelect').value:'';
-  // 반 관리 / 학생 추가 버튼은 항상 표시 (빈 상태에서도 반을 만들 수 있게)
-  const manageChips =
-    `<span class="stu-chip addnew" onclick="openStuEdit('add')"><i class="ti ti-user-plus"></i> 학생 추가</span>`+
-    `<span class="stu-chip addnew" onclick="openClassManage()"><i class="ti ti-settings"></i> 반 관리</span>`;
+  // 학생 추가 버튼만 (반 관리는 반 선택 영역으로 이동)
+  const addChip = `<span class="stu-chip addnew" onclick="openStuEdit('add')"><i class="ti ti-user-plus"></i> 학생 추가</span>`;
   if(!cls){
-    // 반 미선택: 안내 + 관리 버튼
-    area.innerHTML='<span style="color:#bbb;font-size:11px;margin-right:8px">반을 먼저 선택하거나 새로 만드세요</span>'+manageChips;
+    area.innerHTML='<span style="color:#bbb;font-size:11px;margin-right:8px">반을 먼저 선택하거나 반 관리에서 반을 새로 만드세요</span>'+addChip;
     return;
   }
   const studs=studentsInClass(cls);
   let html=studs.map(st=>`<span class="stu-chip${curStuId===st.id?' on':''}" onclick="selectStudent('${escR(st.id)}')">${st.name||'(이름없음)'}</span>`).join('');
-  html+=manageChips;
+  html+=addChip;
   area.innerHTML = html;
 }
 function selectStudent(id){
@@ -2804,7 +2801,7 @@ function renderDashboard(){
   const box=g("dashBody"); if(!box)return;
   const cls=g("dashClass")?g("dashClass").value:"";
   const month=g("dashMonth")?g("dashMonth").value.trim():"";
-  if(!cls){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">반을 선택하면 학생별 작성 현황이 표시됩니다.</div>';return;}
+  if(!cls){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">반을 선택하면 학생별 리포트 현황이 표시됩니다.</div>';return;}
   const studs=Object.values(roster.students||{}).filter(s=>s.currentClass===cls);
   if(studs.length===0){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">이 반에 등록된 학생이 없습니다.</div>';return;}
   let done=0,draft=0,none=0;
@@ -2990,7 +2987,7 @@ function downloadPDF(){
 </script>
 <div class="cm-bg" id="dashModal">
   <div class="cm-modal" style="max-width:560px">
-    <h2 style="color:#185fa5"><i class="ti ti-clipboard-list"></i> 반별 작성 현황 · 다시 보기</h2>
+    <h2 style="color:#185fa5"><i class="ti ti-clipboard-list"></i> 반별 리포트 현황 · 다시 보기</h2>
     <div style="font-size:11px;color:#888;margin-bottom:12px">반과 월을 선택하면 학생별로 <b style="color:#2d7a4f">완료</b> / <b style="color:#a8730a">작성 중</b> / <b style="color:#999">미작성</b> 상태가 표시됩니다. 항목을 눌러 다시 보거나 이어서 작성하세요.</div>
     <div style="display:flex;gap:8px;margin-bottom:12px">
       <div style="flex:1"><label style="font-size:11px;font-weight:700;color:#555">반</label>
