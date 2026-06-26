@@ -207,15 +207,18 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
       <div><label>새김 학생 ID</label><input type="text" id="stuSaegimId" placeholder="예: SK1234" oninput="saveStuField('saegimId',this.value)"></div>
     </div>
     <div class="row3">
-      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="예: 강코니" oninput="onNameInput()"></div>
-      <div><label>학교</label><input type="text" id="stuSchool" placeholder="예: 한빛초" oninput="onNameInput()"></div>
+      <div><label>학생 이름</label><input type="text" id="stuName" placeholder="학생 이름" oninput="onNameInput()"></div>
+      <div><label>학교</label><input type="text" id="stuSchool" list="schoolHistList" placeholder="" oninput="onNameInput()"></div>
       <div><label>학년</label><input type="text" id="stuGrade" placeholder="예: 3학년" onchange="saveStuField('grade',this.value)"></div>
     </div>
     <div class="row3">
-      <div><label>학원 반</label><input type="text" id="sClass" placeholder="예: 월수금 3:00"></div>
-      <div><label>담임선생님</label><input type="text" id="teacher" placeholder="예: Lynn T." onchange="saveStuField('teacher',this.value)"></div>
+      <div><label>학원 반</label><input type="text" id="sClass" list="classHistList" placeholder="예: Silver Stella A1 (담당 T) 월수금 3시반"></div>
+      <div><label>담임선생님</label><input type="text" id="teacher" list="teacherHistList" placeholder="" onchange="saveStuField('teacher',this.value)"></div>
       <div><label>보고서 월</label><input type="text" id="repMonth" placeholder="예: 2026년 6월" onchange="saveReportMonth(this.value)"></div>
     </div>
+    <datalist id="schoolHistList"></datalist>
+    <datalist id="teacherHistList"></datalist>
+    <datalist id="classHistList"></datalist>
     <div style="margin-bottom:10px">
       <label>과정 선택</label>
       <select id="lvSel" onchange="onLvChange()">
@@ -523,6 +526,20 @@ async function _showApp(){
   try{ if(typeof renderClassSelect==='function') renderClassSelect(); }catch(e){}
   try{ if(typeof renderStuChips==='function') renderStuChips(); }catch(e){}
   try{ if(typeof renderClassManageList==='function') renderClassManageList(); }catch(e){}
+  // 자동완성 이력 렌더 + 입력 이벤트 연결
+  try{ _histRenderAll(); _bindHistInputs(); }catch(e){}
+  // 로그인 시작 시 모든 입력란을 빈 값으로 (이전 잔존 데이터 제거)
+  try{ _clearAllStudentInputs(); }catch(e){}
+}
+
+// 모든 학생 입력란을 빈 값으로 초기화 (시작 시 null 상태 보장)
+function _clearAllStudentInputs(){
+  ['stuName','stuSchool','stuGrade','sClass','teacher','repMonth'].forEach(id=>{
+    const el=g(id); if(el) el.value='';
+  });
+  // 저장된 보고서 월도 비워 시작 시 null 보장 (작업 중 입력하면 그때부터 유지됨)
+  try{ _rosterSet('reportMonth',''); }catch(e){}
+  if(typeof curStuId!=='undefined') curStuId=null;
 }
 
 // 페이지 열릴 때: 이미 로그인된 세션이 있으면 자동 통과
@@ -1536,7 +1553,7 @@ function LS(action, key, data){
 }
 
 // 학생 식별 키: 학교_이름 (레벨·담임 제외 — 월반/담임변경에도 이력 연결)
-const ROSTER_SEED={"students": {}, "classes": ["Silver Stella A1(담당) 월말평가반", "Silver Stella A2(담당) 월말평가반", "Silver Stella A3(담당) 월말평가반"]};
+const ROSTER_SEED={"students": {}, "classes": []};
 const SEED_VERSION='pamus2-2026-07-01';
 let roster={students:{},classes:[]};
 function _rosterGet(key){return LS('get',key);}
@@ -1630,7 +1647,19 @@ function saveStuField(field,value){
   saveRoster();
 }
 function saveReportMonth(value){
-  _rosterSet('reportMonth',(value||'').trim());
+  const v=(value||'').trim();
+  // 월이 실제로 바뀌고, 이전 시험 데이터가 있으면 확인 후 리셋
+  if(_lastMonth && _lastMonth!==v){
+    if(_hasExamData()){
+      if(!confirm('보고서 월이 바뀌었습니다. 이전에 입력한 시험 오답·코멘트가 모두 지워집니다.\n계속하시겠습니까?')){
+        const el=g('repMonth'); if(el) el.value=_lastMonth;
+        return;
+      }
+    }
+    resetExamAndBelow();
+  }
+  _lastMonth = v;
+  _rosterSet('reportMonth', v);
 }
 function openClassManage(){ if(g('newClassName'))g('newClassName').value=''; renderClassManageList(); g('classManageModal').classList.add('on'); }
 function addClass(){
@@ -1855,9 +1884,80 @@ function showHistory(){
     }).join('');
 }
 
+// ============================================================
+// 입력 이력 자동완성 (학교·담임·반) — 브라우저(localStorage)에 저장
+// 한 번 입력한 값이 다음부터 드롭다운 후보로 남음
+// ============================================================
+const _HIST_KEYS = { school:'hist_school', teacher:'hist_teacher', class:'hist_class' };
+function _histGet(kind){
+  try{ return JSON.parse(localStorage.getItem(_HIST_KEYS[kind])||'[]'); }catch(e){ return []; }
+}
+function _histAdd(kind, value){
+  const v=(value||'').trim();
+  if(!v) return;
+  let list=_histGet(kind);
+  // 중복 제거 후 맨 앞에 추가(최근 우선), 최대 50개
+  list = list.filter(x=>x!==v);
+  list.unshift(v);
+  if(list.length>50) list=list.slice(0,50);
+  try{ localStorage.setItem(_HIST_KEYS[kind], JSON.stringify(list)); }catch(e){}
+  _histRenderOne(kind);
+}
+function _histRenderOne(kind){
+  const mapId = { school:'schoolHistList', teacher:'teacherHistList', class:'classHistList' };
+  const dl=g(mapId[kind]); if(!dl) return;
+  dl.innerHTML = _histGet(kind).map(v=>`<option value="${(v||'').replace(/"/g,'&quot;')}"></option>`).join('');
+}
+function _histRenderAll(){ ['school','teacher','class'].forEach(_histRenderOne); }
+
+// 입력란에 이력 저장 이벤트 연결
+function _bindHistInputs(){
+  const sc=g('stuSchool'); if(sc && !sc._histBound){ sc._histBound=1; sc.addEventListener('change', ()=>_histAdd('school', sc.value)); }
+  const tc=g('teacher');   if(tc && !tc._histBound){ tc._histBound=1; tc.addEventListener('change', ()=>_histAdd('teacher', tc.value)); }
+  const cl=g('sClass');    if(cl && !cl._histBound){ cl._histBound=1; cl.addEventListener('change', ()=>_histAdd('class', cl.value)); }
+}
+
+// 시험 오답 입력란 이하(오답·문항점수·분석·코멘트·리포트)를 초기화
+// 레벨(과정)이나 보고서 월이 바뀌면 호출 — 이전 시험 데이터가 섞이지 않게.
+function resetExamAndBelow(){
+  // 문항 점수를 만점(2.5)으로 되돌림 — 빈 값으로 두면 0점 처리되어 전부 오답으로 잡히는 문제 방지
+  for(let i=1;i<=40;i++){ const el=g('q'+i); if(el) el.value='2.5'; }
+  // 오답 데이터 비우기
+  try{ wrongSet = new Set(); }catch(e){}
+  // 격자 다시 그리기(만점 상태 → 오답 0개)
+  try{ if(typeof buildWrongGrid==='function' && g('wrongGrid')) buildWrongGrid(); }catch(e){}
+  // buildWrongGrid 내부 sync로 혹시 채워졌으면 다시 비움
+  try{ wrongSet = new Set(); if(typeof updateWrongCount==='function') updateWrongCount(); }catch(e){}
+  try{ if(typeof calcTotal==='function') calcTotal(); }catch(e){}
+  ['autoFb','cmtStrength','cmtImprove','cmtExtra','cmtNext'].forEach(id=>{
+    const el=g(id); if(el){ el.value=''; if(el.dataset) delete el.dataset.edited; }
+  });
+  try{ if(g('analysisBox')) g('analysisBox').innerHTML=''; }catch(e){}
+  try{ if(g('reportBox')) g('reportBox').innerHTML=''; }catch(e){}
+}
+
+let _lastLevel = '';
+let _lastMonth = '';
+function _hasExamData(){
+  if(wrongSet && wrongSet.size>0) return true;
+  // q값 기본은 2.5(만점). 2.5가 아닌(=틀림 표시된) 문항이 있으면 데이터 있음
+  for(let i=1;i<=40;i++){ const el=g('q'+i); if(el && el.value!=='' && parseFloat(el.value)<2.5) return true; }
+  return false;
+}
+
 function onLvChange(){
   const lv = val('lvSel');
   if(!lv) return;
+  if(_lastLevel && _lastLevel!==lv){
+    if(_hasExamData()){
+      if(!confirm('과정이 바뀌었습니다. 이전 과정에서 입력한 시험 오답·코멘트가 모두 지워집니다.\n계속하시겠습니까?')){
+        const sel=g('lvSel'); if(sel) sel.value=_lastLevel;
+        return;
+      }
+    }
+    resetExamAndBelow();
+  }
+  _lastLevel = lv;
   if(typeof QMETA_MAP!=='undefined' && QMETA_MAP[lv]) Q_META = QMETA_MAP[lv];
   if(typeof buildWrongGrid==='function' && g('wrongGrid') && g('wrongGrid').innerHTML.trim()) buildWrongGrid();
   const d = LV[lv];
@@ -2653,6 +2753,8 @@ function _applyDraftData(d){
   if(g("cmtNext"))g("cmtNext").value=d.cmtNext||"";
   wrongSet=new Set(d.wrongSet||[]);
   if(d.qvals){for(const i in d.qvals){const el=g('q'+i);if(el)el.value=d.qvals[i];}}
+  _lastLevel = (g('lvSel')&&g('lvSel').value)||d.level||'';
+  _lastMonth = (g('repMonth')&&g('repMonth').value.trim())||d.month||'';
   if(typeof calcTotal==='function')calcTotal();
 }
 function loadDraftIfExists(){
@@ -2751,7 +2853,8 @@ function _restoreReport(st,lv,month){
   if(g("cmtNext"))g("cmtNext").value=d.cmtNext||"";
   wrongSet=new Set(d.wrongSet||[]);
   if(d.qvals){for(const i in d.qvals){const el=g('q'+i);if(el)el.value=d.qvals[i];}}
-  if(g("lvSel")&&d.level){g("lvSel").value=d.level;onLvChange();}
+  _lastMonth = (g('repMonth')&&g('repMonth').value.trim())||d.month||'';
+  if(g("lvSel")&&d.level){g("lvSel").value=d.level;_lastLevel=d.level;onLvChange();}
   if(typeof calcTotal==='function')calcTotal();
   go(4);
 }
@@ -2813,6 +2916,7 @@ document.addEventListener('DOMContentLoaded', ()=>{const _al=document.getElement
   g('lvSel')?.addEventListener('change', onLvChange);
   g('stuName')?.addEventListener('input', onNameInput);
   go(0); loadRoster(); renderClassSelect();
+  try{ _histRenderAll(); _bindHistInputs(); }catch(e){}
 });
 
 function fileBaseName(){
