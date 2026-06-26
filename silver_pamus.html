@@ -154,10 +154,13 @@ textarea{resize:vertical}
 <!-- STEP 0: 학생 정보 -->
 <div id="s0">
   <div class="card">
-    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openClassManage()" style="margin-left:auto;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button></div>
+    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openDashboard()" style="margin-left:auto;background:#e6f1fb;color:#185fa5;border:1px solid #aacdf0;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-clipboard-list"></i> 작성 현황 · 다시 보기</button><button onclick="openClassManage()" style="margin-left:8px;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button></div>
     <div class="row3">
       <div style="grid-column:1/2"><label>반 선택</label><select id="classSelect" onchange="onClassSelect()"><option value="">— 반을 선택하세요 —</option></select></div>
       <div style="grid-column:2/4"><label>학생 선택 <span style="color:#aaa;font-weight:400;font-size:10px">(선택 시 이름·학교·반 자동 입력)</span></label><div id="stuChipArea" class="stu-chip-area"><span style="color:#bbb;font-size:11px">반을 먼저 선택하세요</span></div></div>
+    </div>
+    <div id="draftAlert" style="display:none;background:#fff3df;border:1px solid #f0cd8a;border-radius:8px;padding:10px 13px;margin-top:10px;font-size:12px;color:#8a6d1f"></div>
+    <div style="display:none">
     </div>
   </div>
   
@@ -290,7 +293,7 @@ textarea{resize:vertical}
         </div>
         <div class="chips" id="strengthChips" style="margin-bottom:8px"></div>
         <div style="position:relative">
-          <textarea id="cmtStrength" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+          <textarea id="cmtStrength" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1';if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
           <button onclick="refineText('cmtStrength','strength')" style="position:absolute;bottom:8px;right:8px;background:#2d7a4f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
         </div>
         <div id="refineStatus_strength" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -318,7 +321,7 @@ textarea{resize:vertical}
         </div>
         <div class="chips" id="attitudeChips" style="margin-bottom:8px"></div>
         <div style="position:relative">
-          <textarea id="cmtImprove" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
+          <textarea id="cmtImprove" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1';if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
           <button onclick="refineText('cmtImprove','improve')" style="position:absolute;bottom:8px;right:8px;background:#854f0b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
         </div>
         <div id="refineStatus_improve" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -332,7 +335,7 @@ textarea{resize:vertical}
       <div style="background:#f9f0f0;border-radius:8px;padding:9px 12px;margin-bottom:7px">
         <div id="promptQs" style="font-size:11px;color:#666;line-height:2.1"></div>
       </div>
-      <textarea id="cmtExtra" rows="3" style="font-size:12px"></textarea>
+      <textarea id="cmtExtra" rows="3" oninput="if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px"></textarea>
     </div>
   </div>
 
@@ -345,7 +348,7 @@ textarea{resize:vertical}
     <div style="font-size:10px;font-weight:700;color:#c0392b;margin-bottom:7px;display:flex;align-items:center;gap:5px"><i class="ti ti-hand-click" style="font-size:13px"></i>STEP 2. 지도 키워드 선택 <span style="font-weight:500;color:#bfa6a2">— 클릭하면 아래 문장이 채워집니다</span></div>
     <div class="chips" id="nextChips"></div>
     <div style="position:relative">
-      <textarea id="cmtNext" rows="3" style="font-size:12px;padding-right:110px"></textarea>
+      <textarea id="cmtNext" rows="3" oninput="if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
       <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#c0392b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
     </div>
     <div id="refineStatus_next" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
@@ -594,7 +597,49 @@ const LV = {
 };
 
 // ── 40문항 메타 정보 ──────────────────────────────────────────
-const Q_META = {
+const QM_SA1 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"주어동사일치①",desc:"want/wants 선택"},
+  19:{part:"P4A",domain:"GRM",label:"대명사①",desc:"it/he 인칭 선택"},
+  20:{part:"P4A",domain:"GRM",label:"소유격①",desc:"his/her 선택"},
+  21:{part:"P4A",domain:"GRM",label:"be의문문①",desc:"Can/Are·am not 선택"},
+  22:{part:"P4B",domain:"WRT",label:"관사쓰기①",desc:"a/an/x 관사 쓰기"},
+  23:{part:"P4B",domain:"WRT",label:"관사쓰기②",desc:"a/an/x 관사 쓰기"},
+  24:{part:"P4B",domain:"WRT",label:"관사쓰기③",desc:"a/an/x 관사 쓰기"},
+  25:{part:"P4B",domain:"WRT",label:"관사쓰기④",desc:"a/an/x 관사 쓰기"},
+  26:{part:"P4B",domain:"WRT",label:"관사쓰기⑤",desc:"a/an/x 관사 쓰기"},
+  27:{part:"P4B",domain:"WRT",label:"관사쓰기⑥",desc:"a/an/x 관사 쓰기"},
+  28:{part:"P4C",domain:"GRM",label:"대명사선택①",desc:"주격·소유격 대명사"},
+  29:{part:"P4C",domain:"GRM",label:"대명사선택②",desc:"주격·소유격 대명사"},
+  30:{part:"P4C",domain:"GRM",label:"대명사선택③",desc:"주격·소유격 대명사"},
+  31:{part:"P4C",domain:"GRM",label:"대명사선택④",desc:"주격·소유격 대명사"},
+  32:{part:"P4D",domain:"WRT",label:"대명사쓰기①",desc:"명사→대명사 전환 쓰기"},
+  33:{part:"P4D",domain:"WRT",label:"대명사쓰기②",desc:"명사→대명사 전환 쓰기"},
+  34:{part:"P4D",domain:"WRT",label:"대명사쓰기③",desc:"명사→대명사 전환 쓰기"},
+  35:{part:"P4E",domain:"GRM",label:"be동사①",desc:"am/are/is 수일치"},
+  36:{part:"P4E",domain:"GRM",label:"be동사②",desc:"am/are/is 수일치"},
+  37:{part:"P4E",domain:"GRM",label:"be동사③",desc:"am/are/is 수일치"},
+  38:{part:"P4E",domain:"GRM",label:"be동사④",desc:"am/are/is 수일치"},
+  39:{part:"P4E",domain:"GRM",label:"be동사⑤",desc:"am/are/is 수일치"},
+  40:{part:"P4E",domain:"GRM",label:"be동사⑥",desc:"am/are/is 수일치"}
+};
+const QM_SA2 = {
   1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
   2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
   3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
@@ -616,26 +661,540 @@ const Q_META = {
   19:{part:"P4A",domain:"GRM",label:"문법선택②",desc:"문법 형태 선택"},
   20:{part:"P4A",domain:"GRM",label:"문법선택③",desc:"문법 형태 선택"},
   21:{part:"P4A",domain:"GRM",label:"문법선택④",desc:"문법 형태 선택"},
-  22:{part:"P4B",domain:"WRT",label:"문장쓰기①",desc:"어순 배열 쓰기"},
-  23:{part:"P4B",domain:"WRT",label:"문장쓰기②",desc:"어순 배열 쓰기"},
-  24:{part:"P4B",domain:"WRT",label:"문장쓰기③",desc:"문장 완성 쓰기"},
-  25:{part:"P4B",domain:"WRT",label:"문장쓰기④",desc:"문장 완성 쓰기"},
-  26:{part:"P4C",domain:"GRM",label:"문법응용①",desc:"문법 규칙 적용"},
-  27:{part:"P4C",domain:"GRM",label:"문법응용②",desc:"문법 규칙 적용"},
-  28:{part:"P4C",domain:"GRM",label:"문법응용③",desc:"문법 규칙 적용"},
-  29:{part:"P4C",domain:"GRM",label:"문법응용④",desc:"문법 규칙 적용"},
-  30:{part:"P4C",domain:"GRM",label:"문법응용⑤",desc:"문법 규칙 적용"},
-  31:{part:"P4C",domain:"GRM",label:"답쓰기①",desc:"주관식 문장 작성"},
-  32:{part:"P4C",domain:"GRM",label:"답쓰기②",desc:"주관식 문장 작성"},
-  33:{part:"P4C",domain:"GRM",label:"답쓰기③",desc:"주관식 문장 작성"},
-  34:{part:"P4C",domain:"GRM",label:"답쓰기④",desc:"주관식 문장 작성"},
-  35:{part:"P4D",domain:"GRM",label:"심화문법①",desc:"고급 문법 적용"},
-  36:{part:"P4D",domain:"GRM",label:"심화문법②",desc:"고급 문법 적용"},
-  37:{part:"P4D",domain:"GRM",label:"심화문법③",desc:"고급 문법 적용"},
-  38:{part:"P4D",domain:"GRM",label:"심화문법④",desc:"고급 문법 적용"},
-  39:{part:"P4D",domain:"GRM",label:"심화문법⑤",desc:"고급 문법 적용"},
-  40:{part:"P4D",domain:"GRM",label:"심화문법⑥",desc:"고급 문법 적용"}
+  22:{part:"P4B",domain:"GRM",label:"대명사①",desc:"대명사 격 선택"},
+  23:{part:"P4B",domain:"GRM",label:"대명사②",desc:"대명사 격 선택"},
+  24:{part:"P4B",domain:"GRM",label:"대명사③",desc:"대명사 격 선택"},
+  25:{part:"P4B",domain:"GRM",label:"대명사④",desc:"대명사 격 선택"},
+  26:{part:"P4B",domain:"GRM",label:"대명사⑤",desc:"대명사 격 선택"},
+  27:{part:"P4C",domain:"GRM",label:"지시·be①",desc:"지시어·be동사 선택"},
+  28:{part:"P4C",domain:"GRM",label:"지시·be②",desc:"지시어·be동사 선택"},
+  29:{part:"P4C",domain:"GRM",label:"지시·be③",desc:"지시어·be동사 선택"},
+  30:{part:"P4C",domain:"GRM",label:"지시·be④",desc:"지시어·be동사 선택"},
+  31:{part:"P4C",domain:"GRM",label:"지시·be⑤",desc:"지시어·be동사 선택"},
+  32:{part:"P4D",domain:"WRT",label:"답쓰기①",desc:"의문문 주관식 답"},
+  33:{part:"P4D",domain:"WRT",label:"답쓰기②",desc:"의문문 주관식 답"},
+  34:{part:"P4D",domain:"WRT",label:"답쓰기③",desc:"의문문 주관식 답"},
+  35:{part:"P4D",domain:"WRT",label:"답쓰기④",desc:"의문문 주관식 답"},
+  36:{part:"P4E",domain:"GRM",label:"수일치①",desc:"There is/are 수일치"},
+  37:{part:"P4E",domain:"GRM",label:"수일치②",desc:"There is/are 수일치"},
+  38:{part:"P4E",domain:"GRM",label:"수일치③",desc:"단복수 명사 선택"},
+  39:{part:"P4E",domain:"GRM",label:"수일치④",desc:"단복수 명사 선택"},
+  40:{part:"P4E",domain:"GRM",label:"수일치⑤",desc:"단복수 명사 선택"}
 };
+const GROUPS_SA1 = [
+    {label:"Part 1 — Vocabulary",qs:[1,2,3,4,5,6]},
+    {label:"Part 2 — Reading",qs:[7,8,9,10,11,12]},
+    {label:"Part 3 — Listening & Speaking",qs:[13,14,15,16,17]},
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 관사 쓰기 (a/an/x)",qs:[22,23,24,25,26,27]},
+    {label:"Part 4-C — 대명사 선택",qs:[28,29,30,31]},
+    {label:"Part 4-D — 대명사 쓰기",qs:[32,33,34]},
+    {label:"Part 4-E — be동사 수일치",qs:[35,36,37,38,39,40]}
+  ];
+const GROUPS_SA2 = [
+    {label:"Part 1 — Vocabulary",qs:[1,2,3,4,5,6]},
+    {label:"Part 2 — Reading",qs:[7,8,9,10,11,12]},
+    {label:"Part 3 — Listening & Speaking",qs:[13,14,15,16,17]},
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — Grammar 대명사",qs:[22,23,24,25,26]},
+    {label:"Part 4-C — Grammar 지시·be동사",qs:[27,28,29,30,31]},
+    {label:"Part 4-D — 주관식 답쓰기",qs:[32,33,34,35]},
+    {label:"Part 4-E — Grammar 수일치",qs:[36,37,38,39,40]}
+  ];
+const GROUPS_DEFAULT = GROUPS_SA2;
+function _curLevel(){ return (typeof g==='function' && g('lvSel')) ? g('lvSel').value : ''; }
+const QM_SA3 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"주어선택①",desc:"you/they 대명사"},
+  19:{part:"P4A",domain:"GRM",label:"전치사·동사①",desc:"on/at·동사"},
+  20:{part:"P4A",domain:"GRM",label:"수일치①",desc:"need 3인칭"},
+  21:{part:"P4A",domain:"GRM",label:"Do의문문①",desc:"Do/Are 선택"},
+  22:{part:"P4B",domain:"GRM",label:"3인칭단수①",desc:"3인칭 단수 동사형"},
+  23:{part:"P4B",domain:"GRM",label:"3인칭단수②",desc:"3인칭 단수 동사형"},
+  24:{part:"P4B",domain:"GRM",label:"3인칭단수③",desc:"3인칭 단수 동사형"},
+  25:{part:"P4B",domain:"GRM",label:"3인칭단수④",desc:"3인칭 단수 동사형"},
+  26:{part:"P4B",domain:"GRM",label:"3인칭단수⑤",desc:"3인칭 단수 동사형"},
+  27:{part:"P4B",domain:"GRM",label:"3인칭단수⑥",desc:"3인칭 단수 동사형"},
+  28:{part:"P4C",domain:"GRM",label:"부정문①",desc:"don't/doesn't 부정문"},
+  29:{part:"P4C",domain:"GRM",label:"부정문②",desc:"don't/doesn't 부정문"},
+  30:{part:"P4C",domain:"GRM",label:"부정문③",desc:"don't/doesn't 부정문"},
+  31:{part:"P4C",domain:"GRM",label:"부정문④",desc:"don't/doesn't 부정문"},
+  32:{part:"P4C",domain:"GRM",label:"부정문⑤",desc:"don't/doesn't 부정문"},
+  33:{part:"P4C",domain:"GRM",label:"부정문⑥",desc:"don't/doesn't 부정문"},
+  34:{part:"P4C",domain:"GRM",label:"부정문⑦",desc:"don't/doesn't 부정문"},
+  35:{part:"P4C",domain:"GRM",label:"부정문⑧",desc:"don't/doesn't 부정문"},
+  36:{part:"P4D",domain:"GRM",label:"Do의문문①",desc:"Do/Does 의문문 수일치"},
+  37:{part:"P4D",domain:"GRM",label:"Do의문문②",desc:"Do/Does 의문문 수일치"},
+  38:{part:"P4D",domain:"GRM",label:"Do의문문③",desc:"Do/Does 의문문 수일치"},
+  39:{part:"P4D",domain:"GRM",label:"Do의문문④",desc:"Do/Does 의문문 수일치"},
+  40:{part:"P4D",domain:"GRM",label:"Do의문문⑤",desc:"Do/Does 의문문 수일치"}
+};
+const QM_SA4 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"to부정사①",desc:"like+to do"},
+  19:{part:"P4A",domain:"GRM",label:"의문사·수일치①",desc:"Who/mow"},
+  20:{part:"P4A",domain:"GRM",label:"의문사·전치사①",desc:"How/by foot"},
+  21:{part:"P4A",domain:"GRM",label:"의문사·어휘①",desc:"What snack"},
+  22:{part:"P4B",domain:"WRT",label:"어순배열①",desc:"평서문 어순 (to부정사)"},
+  23:{part:"P4B",domain:"WRT",label:"어순배열②",desc:"There are 구문 어순"},
+  24:{part:"P4B",domain:"WRT",label:"어순배열③",desc:"평서문 어순 (전치사구)"},
+  25:{part:"P4B",domain:"WRT",label:"어순배열④",desc:"cannot wait 어순"},
+  26:{part:"P4C",domain:"GRM",label:"장소전치사①",desc:"on/in 장소 전치사"},
+  27:{part:"P4C",domain:"GRM",label:"장소전치사②",desc:"on/in 장소 전치사"},
+  28:{part:"P4C",domain:"GRM",label:"장소전치사③",desc:"on/in 장소 전치사"},
+  29:{part:"P4C",domain:"GRM",label:"장소전치사④",desc:"on/in 장소 전치사"},
+  30:{part:"P4C",domain:"GRM",label:"장소전치사⑤",desc:"on/in 장소 전치사"},
+  31:{part:"P4D",domain:"WRT",label:"When답쓰기①",desc:"When 의문문 주관식 답"},
+  32:{part:"P4D",domain:"WRT",label:"When답쓰기②",desc:"When 의문문 주관식 답"},
+  33:{part:"P4D",domain:"WRT",label:"When답쓰기③",desc:"When 의문문 주관식 답"},
+  34:{part:"P4D",domain:"WRT",label:"When답쓰기④",desc:"When 의문문 주관식 답"},
+  35:{part:"P4E",domain:"GRM",label:"의문사①",desc:"Who/Where/When/What 의문사"},
+  36:{part:"P4E",domain:"GRM",label:"의문사②",desc:"Who/Where/When/What 의문사"},
+  37:{part:"P4E",domain:"GRM",label:"의문사③",desc:"Who/Where/When/What 의문사"},
+  38:{part:"P4E",domain:"GRM",label:"의문사④",desc:"Who/Where/When/What 의문사"},
+  39:{part:"P4E",domain:"GRM",label:"의문사⑤",desc:"Who/Where/When/What 의문사"},
+  40:{part:"P4E",domain:"GRM",label:"의문사⑥",desc:"Who/Where/When/What 의문사"}
+};
+const QM_SA5 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"의문사·형용사①",desc:"How/outgoing"},
+  19:{part:"P4A",domain:"GRM",label:"빈도의문문①",desc:"how often·once"},
+  20:{part:"P4A",domain:"GRM",label:"조동사의문문①",desc:"can you·동사"},
+  21:{part:"P4A",domain:"GRM",label:"조동사의문문②",desc:"what should·be"},
+  22:{part:"P4B",domain:"WRT",label:"어순배열①",desc:"평서문 어순 (현재진행)"},
+  23:{part:"P4B",domain:"WRT",label:"어순배열②",desc:"평서문 어순 (want to)"},
+  24:{part:"P4B",domain:"WRT",label:"어순배열③",desc:"현재진행 어순 (looking forward)"},
+  25:{part:"P4B",domain:"WRT",label:"어순배열④",desc:"평서문 어순 (전치사구)"},
+  26:{part:"P4C",domain:"GRM",label:"형용사형①",desc:"형용사 형태 선택"},
+  27:{part:"P4C",domain:"GRM",label:"형용사형②",desc:"형용사 형태 선택"},
+  28:{part:"P4C",domain:"GRM",label:"형용사형③",desc:"형용사 형태 선택"},
+  29:{part:"P4C",domain:"GRM",label:"형용사형④",desc:"형용사 형태 선택"},
+  30:{part:"P4C",domain:"GRM",label:"형용사형⑤",desc:"형용사 형태 선택"},
+  31:{part:"P4D",domain:"WRT",label:"빈도답쓰기①",desc:"How often 주관식 답"},
+  32:{part:"P4D",domain:"WRT",label:"빈도답쓰기②",desc:"How often 주관식 답"},
+  33:{part:"P4D",domain:"WRT",label:"빈도답쓰기③",desc:"How often 주관식 답"},
+  34:{part:"P4D",domain:"WRT",label:"빈도답쓰기④",desc:"How often 주관식 답"},
+  35:{part:"P4E",domain:"GRM",label:"조동사①",desc:"can/may/have to/should"},
+  36:{part:"P4E",domain:"GRM",label:"조동사②",desc:"can/may/have to/should"},
+  37:{part:"P4E",domain:"GRM",label:"조동사③",desc:"can/may/have to/should"},
+  38:{part:"P4E",domain:"GRM",label:"조동사④",desc:"can/may/have to/should"},
+  39:{part:"P4E",domain:"GRM",label:"조동사⑤",desc:"can/may/have to/should"},
+  40:{part:"P4E",domain:"GRM",label:"조동사⑥",desc:"can/may/have to/should"}
+};
+const QM_SA6 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"의문사·전치사①",desc:"When/at around"},
+  19:{part:"P4A",domain:"GRM",label:"대명사·위치①",desc:"he/in front of"},
+  20:{part:"P4A",domain:"GRM",label:"의문사·위치①",desc:"Where's/across from"},
+  21:{part:"P4A",domain:"GRM",label:"수일치·이동①",desc:"go/through"},
+  22:{part:"P4B",domain:"WRT",label:"어순배열①",desc:"There are 구문 어순"},
+  23:{part:"P4B",domain:"WRT",label:"어순배열②",desc:"평서문 어순 (that절)"},
+  24:{part:"P4B",domain:"WRT",label:"어순배열③",desc:"평서문 어순 (전치사구)"},
+  25:{part:"P4B",domain:"WRT",label:"어순배열④",desc:"평서문 어순 (to부정사)"},
+  26:{part:"P4C",domain:"GRM",label:"시간전치사①",desc:"at/on/in 시간 전치사"},
+  27:{part:"P4C",domain:"GRM",label:"시간전치사②",desc:"at/on/in 시간 전치사"},
+  28:{part:"P4C",domain:"GRM",label:"시간전치사③",desc:"at/on/in 시간 전치사"},
+  29:{part:"P4C",domain:"GRM",label:"시간전치사④",desc:"at/on/in 시간 전치사"},
+  30:{part:"P4C",domain:"GRM",label:"시간전치사⑤",desc:"at/on/in 시간 전치사"},
+  31:{part:"P4D",domain:"WRT",label:"위치답쓰기①",desc:"Where 위치 주관식 답"},
+  32:{part:"P4D",domain:"WRT",label:"위치답쓰기②",desc:"Where 위치 주관식 답"},
+  33:{part:"P4D",domain:"WRT",label:"위치답쓰기③",desc:"Where 위치 주관식 답"},
+  34:{part:"P4D",domain:"WRT",label:"위치답쓰기④",desc:"Where 위치 주관식 답"},
+  35:{part:"P4E",domain:"GRM",label:"이동전치사①",desc:"into/along/through 이동 전치사"},
+  36:{part:"P4E",domain:"GRM",label:"이동전치사②",desc:"into/along/through 이동 전치사"},
+  37:{part:"P4E",domain:"GRM",label:"이동전치사③",desc:"into/along/through 이동 전치사"},
+  38:{part:"P4E",domain:"GRM",label:"이동전치사④",desc:"into/along/through 이동 전치사"},
+  39:{part:"P4E",domain:"GRM",label:"이동전치사⑤",desc:"into/along/through 이동 전치사"},
+  40:{part:"P4E",domain:"GRM",label:"이동전치사⑥",desc:"into/along/through 이동 전치사"}
+};
+const GROUPS_SA3 = [
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 3인칭 단수 동사",qs:[22,23,24,25,26,27]},
+    {label:"Part 4-C — 부정문 (don't/doesn't)",qs:[28,29,30,31,32,33,34,35]},
+    {label:"Part 4-D — Do/Does 의문문",qs:[36,37,38,39,40]}
+  ];
+const GROUPS_SA4 = [
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 어순 배열",qs:[22,23,24,25]},
+    {label:"Part 4-C — 장소 전치사 (on/in)",qs:[26,27,28,29,30]},
+    {label:"Part 4-D — When 주관식 답",qs:[31,32,33,34]},
+    {label:"Part 4-E — 의문사 선택",qs:[35,36,37,38,39,40]}
+  ];
+const GROUPS_SA5 = [
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 어순 배열",qs:[22,23,24,25]},
+    {label:"Part 4-C — 형용사 형태",qs:[26,27,28,29,30]},
+    {label:"Part 4-D — 빈도 주관식 답",qs:[31,32,33,34]},
+    {label:"Part 4-E — 조동사",qs:[35,36,37,38,39,40]}
+  ];
+const GROUPS_SA6 = [
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 어순 배열",qs:[22,23,24,25]},
+    {label:"Part 4-C — 시간 전치사",qs:[26,27,28,29,30]},
+    {label:"Part 4-D — 위치 주관식 답",qs:[31,32,33,34]},
+    {label:"Part 4-E — 이동 전치사",qs:[35,36,37,38,39,40]}
+  ];
+const QM_SB1 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"be과거·대명사 (Where/was)",desc:"의문사·be과거"},
+  19:{part:"P4A",domain:"GRM",label:"be과거 의문문 (Was/wasn't)",desc:"be과거 yes/no"},
+  20:{part:"P4A",domain:"GRM",label:"be과거 수일치 (was/were)",desc:"주어-be과거 일치"},
+  21:{part:"P4A",domain:"GRM",label:"의문사·There 구문 (What/were)",desc:"There was/were"},
+  22:{part:"P4B",domain:"WRT",label:"어순배열①",desc:"평서문 어순 (be과거)"},
+  23:{part:"P4B",domain:"WRT",label:"어순배열②",desc:"평서문 어순 (be과거)"},
+  24:{part:"P4B",domain:"WRT",label:"어순배열③",desc:"평서문 어순 (be과거)"},
+  25:{part:"P4B",domain:"WRT",label:"어순배열④",desc:"평서문 어순 (be과거)"},
+  26:{part:"P4C",domain:"GRM",label:"단복수 be과거①",desc:"was/were 수일치"},
+  27:{part:"P4C",domain:"GRM",label:"단복수 be과거②",desc:"was/were 수일치"},
+  28:{part:"P4C",domain:"GRM",label:"단복수 be과거③",desc:"was/were 수일치"},
+  29:{part:"P4C",domain:"GRM",label:"단복수 be과거④",desc:"was/were 수일치"},
+  30:{part:"P4C",domain:"GRM",label:"단복수 be과거⑤",desc:"was/were 수일치"},
+  31:{part:"P4D",domain:"WRT",label:"과거시제 전환①",desc:"현재→과거 동사 전환 쓰기"},
+  32:{part:"P4D",domain:"WRT",label:"과거시제 전환②",desc:"현재→과거 동사 전환 쓰기"},
+  33:{part:"P4D",domain:"WRT",label:"과거시제 전환③",desc:"현재→과거 동사 전환 쓰기"},
+  34:{part:"P4D",domain:"WRT",label:"과거시제 전환④",desc:"현재→과거 동사 전환 쓰기"},
+  35:{part:"P4E",domain:"GRM",label:"주어 단복수①",desc:"단수/복수 주어 일치"},
+  36:{part:"P4E",domain:"GRM",label:"주어 단복수②",desc:"단수/복수 주어 일치"},
+  37:{part:"P4E",domain:"GRM",label:"주어 단복수③",desc:"단수/복수 주어 일치"},
+  38:{part:"P4E",domain:"GRM",label:"주어 단복수④",desc:"단수/복수 주어 일치"},
+  39:{part:"P4E",domain:"GRM",label:"주어 단복수⑤",desc:"단수/복수 주어 일치"},
+  40:{part:"P4E",domain:"GRM",label:"주어 단복수⑥",desc:"단수/복수 주어 일치"}
+};
+const QM_SB2 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"의문사·과거 (When/did)",desc:"의문사·do과거"},
+  19:{part:"P4A",domain:"GRM",label:"의문사·불규칙과거 (What/read)",desc:"일반동사 과거형"},
+  20:{part:"P4A",domain:"GRM",label:"Did 의문문·과거 (Did/slept)",desc:"Did·동사원형"},
+  21:{part:"P4A",domain:"GRM",label:"be과거 의문문 (before/were)",desc:"be과거 시점"},
+  22:{part:"P4B",domain:"WRT",label:"어순배열①",desc:"평서문 어순 (과거)"},
+  23:{part:"P4B",domain:"WRT",label:"어순배열②",desc:"평서문 어순 (과거)"},
+  24:{part:"P4B",domain:"WRT",label:"어순배열③",desc:"평서문 어순 (과거)"},
+  25:{part:"P4B",domain:"WRT",label:"어순배열④",desc:"평서문 어순 (과거)"},
+  26:{part:"P4C",domain:"GRM",label:"일반동사 과거①",desc:"과거시제 동사형"},
+  27:{part:"P4C",domain:"GRM",label:"일반동사 과거②",desc:"과거시제 동사형"},
+  28:{part:"P4C",domain:"GRM",label:"일반동사 과거③",desc:"과거시제 동사형"},
+  29:{part:"P4C",domain:"GRM",label:"일반동사 과거④",desc:"과거시제 동사형"},
+  30:{part:"P4C",domain:"GRM",label:"일반동사 과거⑤",desc:"과거시제 동사형"},
+  31:{part:"P4D",domain:"WRT",label:"부정문 과거전환①",desc:"현재부정→과거 전환 쓰기"},
+  32:{part:"P4D",domain:"WRT",label:"부정문 과거전환②",desc:"현재부정→과거 전환 쓰기"},
+  33:{part:"P4D",domain:"WRT",label:"부정문 과거전환③",desc:"현재부정→과거 전환 쓰기"},
+  34:{part:"P4D",domain:"WRT",label:"부정문 과거전환④",desc:"현재부정→과거 전환 쓰기"},
+  35:{part:"P4E",domain:"GRM",label:"현재·과거 구분①",desc:"시점에 따른 시제"},
+  36:{part:"P4E",domain:"GRM",label:"현재·과거 구분②",desc:"시점에 따른 시제"},
+  37:{part:"P4E",domain:"GRM",label:"현재·과거 구분③",desc:"시점에 따른 시제"},
+  38:{part:"P4E",domain:"GRM",label:"현재·과거 구분④",desc:"시점에 따른 시제"},
+  39:{part:"P4E",domain:"GRM",label:"현재·과거 구분⑤",desc:"시점에 따른 시제"},
+  40:{part:"P4E",domain:"GRM",label:"현재·과거 구분⑥",desc:"시점에 따른 시제"}
+};
+const QM_SB3 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"의문사·현재진행 (is/knitting)",desc:"be동사·진행형"},
+  19:{part:"P4A",domain:"GRM",label:"현재진행 의문문 (playing/isn't)",desc:"진행 yes/no·isn't"},
+  20:{part:"P4A",domain:"GRM",label:"의문사·빈도 (did/write)",desc:"do·현재 습관"},
+  21:{part:"P4A",domain:"GRM",label:"현재진행 의문문 (Is/is reading)",desc:"Is·진행형"},
+  22:{part:"P4B",domain:"WRT",label:"어순배열①",desc:"평서문 어순 (현재진행)"},
+  23:{part:"P4B",domain:"WRT",label:"어순배열②",desc:"평서문 어순 (현재진행)"},
+  24:{part:"P4B",domain:"WRT",label:"어순배열③",desc:"평서문 어순 (현재진행)"},
+  25:{part:"P4B",domain:"WRT",label:"어순배열④",desc:"평서문 어순 (현재진행)"},
+  26:{part:"P4C",domain:"GRM",label:"진행 vs 현재①",desc:"현재진행/단순현재 구분"},
+  27:{part:"P4C",domain:"GRM",label:"진행 vs 현재②",desc:"현재진행/단순현재 구분"},
+  28:{part:"P4C",domain:"GRM",label:"진행 vs 현재③",desc:"현재진행/단순현재 구분"},
+  29:{part:"P4C",domain:"GRM",label:"진행 vs 현재④",desc:"현재진행/단순현재 구분"},
+  30:{part:"P4C",domain:"GRM",label:"진행 vs 현재⑤",desc:"현재진행/단순현재 구분"},
+  31:{part:"P4D",domain:"WRT",label:"현재진행 전환①",desc:"단순현재→진행형 전환 쓰기"},
+  32:{part:"P4D",domain:"WRT",label:"현재진행 전환②",desc:"단순현재→진행형 전환 쓰기"},
+  33:{part:"P4D",domain:"WRT",label:"현재진행 전환③",desc:"단순현재→진행형 전환 쓰기"},
+  34:{part:"P4D",domain:"WRT",label:"현재진행 전환④",desc:"단순현재→진행형 전환 쓰기"},
+  35:{part:"P4E",domain:"GRM",label:"현재/과거진행①",desc:"am/was 진행 시제"},
+  36:{part:"P4E",domain:"GRM",label:"현재/과거진행②",desc:"am/was 진행 시제"},
+  37:{part:"P4E",domain:"GRM",label:"현재/과거진행③",desc:"am/was 진행 시제"},
+  38:{part:"P4E",domain:"GRM",label:"현재/과거진행④",desc:"am/was 진행 시제"},
+  39:{part:"P4E",domain:"GRM",label:"현재/과거진행⑤",desc:"am/was 진행 시제"},
+  40:{part:"P4E",domain:"GRM",label:"현재/과거진행⑥",desc:"am/was 진행 시제"}
+};
+const QM_SB4 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"의문사·미래 (will/finish)",desc:"will·동사원형"},
+  19:{part:"P4A",domain:"GRM",label:"의문사·미래 (are/going)",desc:"be going to"},
+  20:{part:"P4A",domain:"GRM",label:"미래 의문문 (Are/won't)",desc:"미래 yes/no"},
+  21:{part:"P4A",domain:"GRM",label:"Will 의문문 (take/won't)",desc:"will·동사원형"},
+  22:{part:"P4B",domain:"WRT",label:"어순배열①",desc:"평서문 어순 (미래)"},
+  23:{part:"P4B",domain:"WRT",label:"어순배열②",desc:"평서문 어순 (미래)"},
+  24:{part:"P4B",domain:"WRT",label:"어순배열③",desc:"평서문 어순 (미래)"},
+  25:{part:"P4B",domain:"WRT",label:"어순배열④",desc:"평서문 어순 (미래)"},
+  26:{part:"P4C",domain:"GRM",label:"be going to①",desc:"am/are/is going to"},
+  27:{part:"P4C",domain:"GRM",label:"be going to②",desc:"am/are/is going to"},
+  28:{part:"P4C",domain:"GRM",label:"be going to③",desc:"am/are/is going to"},
+  29:{part:"P4C",domain:"GRM",label:"be going to④",desc:"am/are/is going to"},
+  30:{part:"P4C",domain:"GRM",label:"be going to⑤",desc:"am/are/is going to"},
+  31:{part:"P4D",domain:"WRT",label:"부정문 전환①",desc:"미래 평서문→부정 전환 쓰기"},
+  32:{part:"P4D",domain:"WRT",label:"부정문 전환②",desc:"미래 평서문→부정 전환 쓰기"},
+  33:{part:"P4D",domain:"WRT",label:"부정문 전환③",desc:"미래 평서문→부정 전환 쓰기"},
+  34:{part:"P4D",domain:"WRT",label:"부정문 전환④",desc:"미래 평서문→부정 전환 쓰기"},
+  35:{part:"P4E",domain:"GRM",label:"미래 의문·be①",desc:"will/be going to 의문"},
+  36:{part:"P4E",domain:"GRM",label:"미래 의문·be②",desc:"will/be going to 의문"},
+  37:{part:"P4E",domain:"GRM",label:"미래 의문·be③",desc:"will/be going to 의문"},
+  38:{part:"P4E",domain:"GRM",label:"미래 의문·be④",desc:"will/be going to 의문"},
+  39:{part:"P4E",domain:"GRM",label:"미래 의문·be⑤",desc:"will/be going to 의문"},
+  40:{part:"P4E",domain:"GRM",label:"미래 의문·be⑥",desc:"will/be going to 의문"}
+};
+const QM_SB5 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"의문사·동명사 (waterskiing/exciting)",desc:"동명사·형용사"},
+  19:{part:"P4A",domain:"GRM",label:"조동사 과거 (Can/couldn't)",desc:"could·동사원형"},
+  20:{part:"P4A",domain:"GRM",label:"조동사 (should/shouldn't)",desc:"should 조언"},
+  21:{part:"P4A",domain:"GRM",label:"의문사·조동사 (What/mustn't)",desc:"must/mustn't"},
+  22:{part:"P4B",domain:"WRT",label:"어순배열①",desc:"평서문 어순 (미래·조동사)"},
+  23:{part:"P4B",domain:"WRT",label:"어순배열②",desc:"평서문 어순 (미래·조동사)"},
+  24:{part:"P4B",domain:"WRT",label:"어순배열③",desc:"평서문 어순 (미래·조동사)"},
+  25:{part:"P4B",domain:"WRT",label:"어순배열④",desc:"평서문 어순 (미래·조동사)"},
+  26:{part:"P4C",domain:"GRM",label:"부사형①",desc:"형용사→부사 형태"},
+  27:{part:"P4C",domain:"GRM",label:"부사형②",desc:"형용사→부사 형태"},
+  28:{part:"P4C",domain:"GRM",label:"부사형③",desc:"형용사→부사 형태"},
+  29:{part:"P4C",domain:"GRM",label:"부사형④",desc:"형용사→부사 형태"},
+  30:{part:"P4C",domain:"GRM",label:"부사형⑤",desc:"형용사→부사 형태"},
+  31:{part:"P4D",domain:"WRT",label:"can/could 답①",desc:"조동사 의문 주관식 답"},
+  32:{part:"P4D",domain:"WRT",label:"can/could 답②",desc:"조동사 의문 주관식 답"},
+  33:{part:"P4D",domain:"WRT",label:"can/could 답③",desc:"조동사 의문 주관식 답"},
+  34:{part:"P4D",domain:"WRT",label:"can/could 답④",desc:"조동사 의문 주관식 답"},
+  35:{part:"P4E",domain:"GRM",label:"조동사①",desc:"may/can/should/must"},
+  36:{part:"P4E",domain:"GRM",label:"조동사②",desc:"may/can/should/must"},
+  37:{part:"P4E",domain:"GRM",label:"조동사③",desc:"may/can/should/must"},
+  38:{part:"P4E",domain:"GRM",label:"조동사④",desc:"may/can/should/must"},
+  39:{part:"P4E",domain:"GRM",label:"조동사⑤",desc:"may/can/should/must"},
+  40:{part:"P4E",domain:"GRM",label:"조동사⑥",desc:"may/can/should/must"}
+};
+const QM_SB6 = {
+  1:{part:"P1",domain:"VOC",label:"어휘선택①",desc:"문맥 어휘 파악"},
+  2:{part:"P1",domain:"VOC",label:"어휘선택②",desc:"문맥 어휘 파악"},
+  3:{part:"P1",domain:"VOC",label:"사진쓰기①",desc:"어휘 표현 쓰기"},
+  4:{part:"P1",domain:"VOC",label:"사진쓰기②",desc:"어휘 표현 쓰기"},
+  5:{part:"P1",domain:"VOC",label:"철자선택①",desc:"철자 정확도"},
+  6:{part:"P1",domain:"VOC",label:"철자선택②",desc:"철자 정확도"},
+  7:{part:"P2",domain:"RDG",label:"O/X 판단",desc:"지문 내용 일치 판단"},
+  8:{part:"P2",domain:"RDG",label:"독해선택①",desc:"주제·세부 내용 파악"},
+  9:{part:"P2",domain:"RDG",label:"독해선택②",desc:"세부 내용 파악"},
+  10:{part:"P2",domain:"RDG",label:"빈칸선택",desc:"문맥 추론·빈칸 완성"},
+  11:{part:"P2",domain:"RDG",label:"독해선택③",desc:"이유·결과 파악"},
+  12:{part:"P2",domain:"RDG",label:"독해선택④",desc:"세부 내용 파악"},
+  13:{part:"P3",domain:"LIS",label:"듣기①",desc:"구두 지시 파악"},
+  14:{part:"P3",domain:"LIS",label:"듣기②",desc:"대화 상황 파악"},
+  15:{part:"P3",domain:"LIS",label:"듣기③",desc:"세부 내용 청취"},
+  16:{part:"P3",domain:"LIS",label:"듣기④",desc:"세부 내용 청취"},
+  17:{part:"P3",domain:"LIS",label:"듣기⑤",desc:"세부 내용 청취"},
+  18:{part:"P4A",domain:"GRM",label:"감탄문 (How/What·lovely)",desc:"What/How 감탄문"},
+  19:{part:"P4A",domain:"GRM",label:"의문사·조동사 (could/Call)",desc:"should·명령"},
+  20:{part:"P4A",domain:"GRM",label:"조동사·접속 (should/or)",desc:"조언·명령+or"},
+  21:{part:"P4A",domain:"GRM",label:"부가의문문 (didn't/Yes)",desc:"부가의문문·응답"},
+  22:{part:"P4B",domain:"WRT",label:"어순배열①",desc:"평서문·감탄문 어순"},
+  23:{part:"P4B",domain:"WRT",label:"어순배열②",desc:"평서문·감탄문 어순"},
+  24:{part:"P4B",domain:"WRT",label:"어순배열③",desc:"평서문·감탄문 어순"},
+  25:{part:"P4B",domain:"WRT",label:"어순배열④",desc:"평서문·감탄문 어순"},
+  26:{part:"P4C",domain:"GRM",label:"감탄문 What/How①",desc:"What/How 감탄문"},
+  27:{part:"P4C",domain:"GRM",label:"감탄문 What/How②",desc:"What/How 감탄문"},
+  28:{part:"P4C",domain:"GRM",label:"감탄문 What/How③",desc:"What/How 감탄문"},
+  29:{part:"P4C",domain:"GRM",label:"감탄문 What/How④",desc:"What/How 감탄문"},
+  30:{part:"P4C",domain:"GRM",label:"감탄문 What/How⑤",desc:"What/How 감탄문"},
+  31:{part:"P4D",domain:"WRT",label:"부가의문문 답①",desc:"부가의문문 주관식 답"},
+  32:{part:"P4D",domain:"WRT",label:"부가의문문 답②",desc:"부가의문문 주관식 답"},
+  33:{part:"P4D",domain:"WRT",label:"부가의문문 답③",desc:"부가의문문 주관식 답"},
+  34:{part:"P4D",domain:"WRT",label:"부가의문문 답④",desc:"부가의문문 주관식 답"},
+  35:{part:"P4E",domain:"GRM",label:"명령문+and/or①",desc:"명령문 결과 접속사"},
+  36:{part:"P4E",domain:"GRM",label:"명령문+and/or②",desc:"명령문 결과 접속사"},
+  37:{part:"P4E",domain:"GRM",label:"명령문+and/or③",desc:"명령문 결과 접속사"},
+  38:{part:"P4E",domain:"GRM",label:"명령문+and/or④",desc:"명령문 결과 접속사"},
+  39:{part:"P4E",domain:"GRM",label:"명령문+and/or⑤",desc:"명령문 결과 접속사"},
+  40:{part:"P4E",domain:"GRM",label:"명령문+and/or⑥",desc:"명령문 결과 접속사"}
+};
+const GROUPS_SB1 = [
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 어순 배열",qs:[22,23,24,25]},
+    {label:"Part 4-C — be과거 수일치",qs:[26,27,28,29,30]},
+    {label:"Part 4-D — 과거시제 전환 쓰기",qs:[31,32,33,34]},
+    {label:"Part 4-E — 단복수 주어",qs:[35,36,37,38,39,40]}
+  ];
+const GROUPS_SB2 = [
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 어순 배열",qs:[22,23,24,25]},
+    {label:"Part 4-C — 일반동사 과거",qs:[26,27,28,29,30]},
+    {label:"Part 4-D — 부정문 과거전환 쓰기",qs:[31,32,33,34]},
+    {label:"Part 4-E — 현재·과거 구분",qs:[35,36,37,38,39,40]}
+  ];
+const GROUPS_SB3 = [
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 어순 배열",qs:[22,23,24,25]},
+    {label:"Part 4-C — 진행 vs 현재",qs:[26,27,28,29,30]},
+    {label:"Part 4-D — 현재진행 전환 쓰기",qs:[31,32,33,34]},
+    {label:"Part 4-E — 현재/과거진행",qs:[35,36,37,38,39,40]}
+  ];
+const GROUPS_SB4 = [
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 어순 배열",qs:[22,23,24,25]},
+    {label:"Part 4-C — be going to",qs:[26,27,28,29,30]},
+    {label:"Part 4-D — 부정문 전환 쓰기",qs:[31,32,33,34]},
+    {label:"Part 4-E — 미래 의문·be",qs:[35,36,37,38,39,40]}
+  ];
+const GROUPS_SB5 = [
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 어순 배열",qs:[22,23,24,25]},
+    {label:"Part 4-C — 부사형",qs:[26,27,28,29,30]},
+    {label:"Part 4-D — can/could 답쓰기",qs:[31,32,33,34]},
+    {label:"Part 4-E — 조동사",qs:[35,36,37,38,39,40]}
+  ];
+const GROUPS_SB6 = [
+    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
+    {label:"Part 4-B — 어순 배열",qs:[22,23,24,25]},
+    {label:"Part 4-C — 감탄문 What/How",qs:[26,27,28,29,30]},
+    {label:"Part 4-D — 부가의문문 답쓰기",qs:[31,32,33,34]},
+    {label:"Part 4-E — 명령문+and/or",qs:[35,36,37,38,39,40]}
+  ];
+const QMETA_MAP = { SA1:QM_SA1, SA2:QM_SA2, SA3:QM_SA3, SA4:QM_SA4, SA5:QM_SA5, SA6:QM_SA6, SB1:QM_SB1, SB2:QM_SB2, SB3:QM_SB3, SB4:QM_SB4, SB5:QM_SB5, SB6:QM_SB6 };
+const GROUPS_MAP = { SA1:GROUPS_SA1, SA2:GROUPS_SA2, SA3:GROUPS_SA3, SA4:GROUPS_SA4, SA5:GROUPS_SA5, SA6:GROUPS_SA6, SB1:GROUPS_SB1, SB2:GROUPS_SB2, SB3:GROUPS_SB3, SB4:GROUPS_SB4, SB5:GROUPS_SB5, SB6:GROUPS_SB6 };
+let Q_META = QM_SA2;
 
 const DOM_MAX = {VOC:15, RDG:15, LIS:12.5, GRM:47.5, WRT:10};
 const DOM_LABEL = {VOC:"어휘(VOC)",RDG:"읽기(RDG)",LIS:"듣기(LIS)",GRM:"문법(GRM)",WRT:"쓰기(WRT)"};
@@ -776,6 +1335,7 @@ function LS(action, key, data){
   const PFX = 'silver_B_';
   if(action==='get') return JSON.parse(localStorage.getItem(PFX+key)||'null');
   if(action==='set') localStorage.setItem(PFX+key, JSON.stringify(data));
+  if(action==='del') localStorage.removeItem(PFX+key);
 }
 
 // 학생 식별 키: 학교_이름 (레벨·담임 제외 — 월반/담임변경에도 이력 연결)
@@ -853,6 +1413,8 @@ function renderStuChips(){
 }
 function selectStudent(id){
   const st=roster.students[id]; if(!st)return;
+  const prevId=curStuId;
+  if(prevId&&prevId!==id&&typeof clearWorkInputs==='function')clearWorkInputs();
   curStuId=id;
   if(g('stuName'))g('stuName').value=st.name||'';
   if(g('stuSchool'))g('stuSchool').value=st.school||'';
@@ -860,6 +1422,12 @@ function selectStudent(id){
   if(g('stuGrade'))g('stuGrade').value=st.grade||'';
   if(g('teacher'))g('teacher').value=st.teacher||'';
   if(g('repMonth')){var __m=_rosterGet('reportMonth');if(__m)g('repMonth').value=__m;}
+  if(typeof loadDraftIfExists==='function'){
+    var _hadDraft=loadDraftIfExists();
+    var _dn=g('draftAlert');
+    if(_hadDraft&&_dn){_dn.style.display='block';_dn.innerHTML='<div style="display:flex;gap:6px;align-items:center"><i class="ti ti-edit" style="color:#a8730a"></i><span><strong>'+escR(st.name)+'</strong> 학생의 작성 중이던 내용을 불러왔습니다. 이어서 작성하세요.</span></div>';}
+    else if(_dn){_dn.style.display='none';}
+  }
   renderStuChips();
   if(typeof onNameInput==='function')onNameInput();
 }
@@ -1096,6 +1664,8 @@ function showHistory(){
 function onLvChange(){
   const lv = val('lvSel');
   if(!lv) return;
+  if(typeof QMETA_MAP!=='undefined' && QMETA_MAP[lv]) Q_META = QMETA_MAP[lv];
+  if(typeof buildWrongGrid==='function' && g('wrongGrid') && g('wrongGrid').innerHTML.trim()) buildWrongGrid();
   const d = LV[lv];
   if(!d) return;
   const box = g('lvInfo');
@@ -1141,15 +1711,7 @@ function syncWrongFromScores(){
 
 function buildWrongGrid(){
   syncWrongFromScores();
-  const groups = [
-    {label:"Part 1 — Vocabulary",qs:[1,2,3,4,5,6]},
-    {label:"Part 2 — Reading",qs:[7,8,9,10,11,12]},
-    {label:"Part 3 — Listening & Speaking",qs:[13,14,15,16,17]},
-    {label:"Part 4-A — Grammar 선택형",qs:[18,19,20,21]},
-    {label:"Part 4-B — Writing",qs:[22,23,24,25]},
-    {label:"Part 4-C — Grammar 응용·주관식",qs:[26,27,28,29,30,31,32,33,34]},
-    {label:"Part 4-D — Grammar 심화",qs:[35,36,37,38,39,40]}
-  ];
+  const groups = (typeof GROUPS_MAP!=='undefined' && GROUPS_MAP[_curLevel()]) ? GROUPS_MAP[_curLevel()] : GROUPS_DEFAULT;
   let html = '';
   groups.forEach(grp => {
     html += `<div style="font-size:10.5px;font-weight:700;color:#888;margin:10px 0 5px;letter-spacing:.4px;text-transform:uppercase">${grp.label}</div>`;
@@ -1186,6 +1748,7 @@ function toggleWrong(n){
   }
   calcTotal();
   updateWrongCount();
+  if(typeof saveDraftDebounced==='function')saveDraftDebounced();
 }
 
 function updateWrongCount(){
@@ -1496,8 +2059,10 @@ ${typeGuide}
 - 화자(매우 중요): 글쓴이는 담임 선생님 본인이다. 자신을 가리킬 때는 반드시 1인칭("저", "제가")을 쓴다. "선생님이", "선생님도", "선생님께서", "담임 선생님이"처럼 자신을 제3자로 지칭하지 않는다 (예: "선생님도 함께 독려하겠습니다" → "저도 함께 독려하겠습니다")
 - 지도 의지 표현: "제가 지도하겠습니다", "수업에서 함께 ~해 나가겠습니다", "앞으로 ~하도록 돕겠습니다" 처럼 1인칭으로
 - 문장 시작: "${name} 학생은" 또는 이름 뒤에 받침에 맞는 조사(이/가)를 붙여 자연스럽게 시작
-- 분량: 3~4문장. 간결하고 핵심만
+- 분량: 2~3문장으로 간결하게. 이전보다 한 문장가량 짧게, 군더더기 없이 핵심만
 - 절대 금지 표현: "부족", "미흡", "떨어지다", "못하다", "아쉽다", "개선이 필요하다"
+- "정말, 너무, 너무너무, 대단히, 충분히, 매우" 같은 과장으로 느껴질 수 있는 수식어는 쓰지 않는다
+- [측정 범위] 이 Monthly Test는 듣기·읽기 중심으로 배운 내용을 인식·이해하고 문제 상황에서 활용하는 능력을 측정합니다. 말하기·자유 작문 같은 산출(productive) 능력은 직접 측정하지 않으므로, 측정하지 않은 능력을 "할 수 있다"고 단정하지 말고(예: 어휘 점수가 높아도 "배운 어휘를 말하기에 활용할 수 있어요"처럼 비약 금지) 관찰된 사실로만 서술하세요. 교재에 표기된 CEFR·Lexile 지수는 교재 단계의 국제 기준선일 뿐 학생 개인이 도달한 수준이 아니므로, 그 표기 숫자를 근거로 학생의 영어 역량을 단정하지 마세요
 - 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 또는 "~을 함께 연습해 나갈 예정입니다" 식으로
 - 한국어로만 작성
 - 이모지(😊 🌟 등) 절대 사용 금지 — 텍스트 복사 시 깨질 수 있음
@@ -1761,6 +2326,19 @@ function saveReport(){
   let tot = 0; for(let i=1;i<=40;i++) tot += parseFloat(g('q'+i)?.value)||0;
   hist.push({name:val('stuName'),lv:val('lvSel'),school:val('stuSchool'),grade:val('stuGrade'),cls:val('sClass'),teacher:val('teacher'),month,score:Math.round(tot*10)/10,date:new Date().toISOString()});
   LS('set', k+'_hist', hist);
+  // 다시 보기용 리포트 전체 저장 + 작성중(draft) 정리
+  try{
+    const rk=_reportKey();
+    if(rk){
+      LS('set', rk, {
+        name:val("stuName"),school:val("stuSchool"),grade:val("stuGrade"),cls:val("sClass"),teacher:val("teacher"),
+        month:val("repMonth"),level:val("lvSel"),wrongSet:[...wrongSet],qvals:_collectQ(),
+        cmtStrength:val("cmtStrength"),cmtImprove:val("cmtImprove"),cmtExtra:val("cmtExtra"),cmtNext:val("cmtNext"),
+        savedAt:new Date().toISOString()
+      });
+    }
+    if(typeof clearDraft==='function')clearDraft();
+  }catch(e){}
   if(g('saveBtn')) g('saveBtn').textContent = '저장 완료';
   if(g('saveStatus')){ g('saveStatus').style.display='block'; g('saveStatus').style.color='#2d7a4f'; g('saveStatus').textContent='리포트가 이력에 저장되었습니다. (최근 3개월 보관)'; }
   const rb = g('resetConfirmBox'), rm = g('resetConfirmMsg');
@@ -1791,6 +2369,146 @@ function resetAll(){
   curStuId=null;if(typeof renderStuChips==="function")renderStuChips();
 }
 
+
+/* ===== 임시저장(Draft) · 이어하기 · 다시보기 · 반별 현황판 (Silver) ===== */
+function _siKeyParts(){
+  const name=val("stuName").trim().replace(/\s/g,""),school=val("stuSchool").trim().replace(/\s/g,""),lv=val("lvSel"),month=(val("repMonth")||"").replace(/\s/g,"");
+  if(!name||!lv)return null;
+  return {pre:`${school}_${name}`,lv,month};
+}
+function _draftKey(){
+  // draft는 학생(학교_이름) 기준 단일 — 레벨/월 미정 상태에서도 복원 가능
+  const name=val("stuName").trim().replace(/\s/g,""),school=val("stuSchool").trim().replace(/\s/g,"");
+  if(!name)return null;
+  return `draft:${school}_${name}`;
+}
+function _reportKey(){const p=_siKeyParts();return p?`report:${p.pre}:${p.lv}:${p.month}`:null;}
+let _draftTimer=null;
+function _collectQ(){const o={};for(let i=1;i<=40;i++){const el=g('q'+i);if(el)o[i]=el.value;}return o;}
+function saveDraft(){
+  const k=_draftKey(); if(!k)return;
+  const d={name:val("stuName"),school:val("stuSchool"),grade:val("stuGrade"),cls:val("sClass"),teacher:val("teacher"),month:val("repMonth"),level:val("lvSel"),
+    wrongSet:[...wrongSet],qvals:_collectQ(),
+    cmtStrength:val("cmtStrength"),cmtImprove:val("cmtImprove"),cmtExtra:val("cmtExtra"),cmtNext:val("cmtNext"),
+    chipsStrength:[...document.querySelectorAll('#strengthChips .chip.on')].map(c=>c.textContent),
+    chipsImprove:[...document.querySelectorAll('#attitudeChips .chip.on')].map(c=>c.textContent),
+    savedAt:new Date().toISOString()};
+  LS('set',k,d);
+}
+function saveDraftDebounced(){clearTimeout(_draftTimer);_draftTimer=setTimeout(saveDraft,500);}
+function clearDraft(){const k=_draftKey();if(k)LS('del',k);}
+function _applyDraftData(d){
+  if(g("sClass")&&d.cls)g("sClass").value=d.cls;
+  if(g("teacher")&&d.teacher)g("teacher").value=d.teacher;
+  if(g("cmtStrength"))g("cmtStrength").value=d.cmtStrength||"";
+  if(g("cmtImprove"))g("cmtImprove").value=d.cmtImprove||"";
+  if(g("cmtExtra"))g("cmtExtra").value=d.cmtExtra||"";
+  if(g("cmtNext"))g("cmtNext").value=d.cmtNext||"";
+  wrongSet=new Set(d.wrongSet||[]);
+  if(d.qvals){for(const i in d.qvals){const el=g('q'+i);if(el)el.value=d.qvals[i];}}
+  if(typeof calcTotal==='function')calcTotal();
+}
+function loadDraftIfExists(){
+  const k=_draftKey(); if(!k)return false;
+  const d=LS('get',k); if(!d)return false;
+  if(d.level&&g("lvSel")){g("lvSel").value=d.level;if(typeof onLvChange==='function')onLvChange();}
+  if(d.month&&g("repMonth"))g("repMonth").value=d.month;
+  _applyDraftData(d); return true;
+}
+function clearWorkInputs(){
+  ["repMonth","autoFb","cmtStrength","cmtImprove","cmtExtra","cmtNext"].forEach(id=>{const el=g(id);if(el){el.value="";if(el.dataset)delete el.dataset.edited;}});
+  wrongSet.clear();
+  for(let i=1;i<=40;i++){const el=g('q'+i);if(el)el.value='2.5';}
+  const sa=g("strengthAnalysis");if(sa)sa.textContent="";
+  const ia=g("improveAnalysis");if(ia)ia.textContent="";
+  if(g("wrongGrid"))g("wrongGrid").innerHTML="";
+  if(g("reportOut"))g("reportOut").innerHTML="";
+  if(g("saveStatus"))g("saveStatus").style.display="none";
+  if(g("resetConfirmBox"))g("resetConfirmBox").style.display="none";
+  if(typeof calcTotal==='function')calcTotal();
+}
+function studentStatus(st,lv,month){
+  const mk=(month||"").replace(/\s/g,"");
+  const pre=`${(st.school||"").replace(/\s/g,"")}_${(st.name||"").replace(/\s/g,"")}`;
+  if(LS('get',`report:${pre}:${lv}:${mk}`))return"done";
+  if(LS('get',`draft:${pre}`))return"draft";
+  return"none";
+}
+function _classToLevel(cls){const m=(cls||"").match(/Silver Stella\s+([AB])(\d)/i);return m?("S"+m[1]+m[2]).toUpperCase():val("lvSel");}
+function openDashboard(){
+  const modal=g("dashModal"); if(!modal)return;
+  const csel=g("dashClass");
+  if(csel){const cur=csel.value;csel.innerHTML='<option value="">— 반 선택 —</option>'+(roster.classes||[]).map(c=>`<option value="${escR(c)}">${escR(c)}</option>`).join("");if(cur)csel.value=cur;}
+  const msel=g("dashMonth");
+  if(msel&&!msel.value){msel.value=val("repMonth")||_rosterGet("reportMonth")||"";}
+  renderDashboard(); modal.classList.add("on");
+}
+function closeDashboard(){const m=g("dashModal");if(m)m.classList.remove("on");}
+function renderDashboard(){
+  const box=g("dashBody"); if(!box)return;
+  const cls=g("dashClass")?g("dashClass").value:"";
+  const month=g("dashMonth")?g("dashMonth").value.trim():"";
+  if(!cls){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">반을 선택하면 학생별 작성 현황이 표시됩니다.</div>';return;}
+  const studs=Object.values(roster.students||{}).filter(s=>s.currentClass===cls);
+  if(studs.length===0){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">이 반에 등록된 학생이 없습니다.</div>';return;}
+  let done=0,draft=0,none=0;
+  const rows=studs.map(st=>{
+    const lv=_classToLevel(cls);
+    const stt=studentStatus(st,lv,month);
+    if(stt==="done")done++;else if(stt==="draft")draft++;else none++;
+    const badge=stt==="done"?'<span style="background:#e3f3e9;color:#2d7a4f;border:1px solid #b5dcc4;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">완료</span>'
+      :stt==="draft"?'<span style="background:#fff3df;color:#a8730a;border:1px solid #f0cd8a;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">작성 중</span>'
+      :'<span style="background:#f2f2ef;color:#999;border:1px solid #ddd;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">미작성</span>';
+    const action=stt==="done"?"다시 보기":stt==="draft"?"이어 하기":"새로 작성";
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #f0efe9">
+      <div style="display:flex;align-items:center;gap:10px"><span style="font-weight:600;font-size:13px">${escR(st.name)}</span>${badge}</div>
+      <button onclick="dashOpenStudent('${escR(st.id)}','${stt}')" style="background:#f8f7f4;border:1px solid #d0d0cc;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;color:#555;font-weight:600">${action}</button></div>`;
+  }).join("");
+  box.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:10px;font-size:11px">
+    <span style="color:#2d7a4f">완료 ${done}</span><span style="color:#a8730a">작성 중 ${draft}</span><span style="color:#999">미작성 ${none}</span>
+    <span style="margin-left:auto;color:#aaa">총 ${studs.length}명</span></div>${rows}`;
+}
+function dashOpenStudent(id,stt){
+  closeDashboard();
+  let month=g("dashMonth")?g("dashMonth").value.trim():"";
+  if(!month)month=val("repMonth")||_rosterGet("reportMonth")||"";
+  resetAll();
+  const st=roster.students[id]; if(!st)return;
+  if(g("classSelect")){g("classSelect").value=st.currentClass||"";if(typeof renderStuChips==="function")renderStuChips();}
+  // 학생 기본정보 직접 채움 (done 경로에서 selectStudent의 draft 복원 간섭 방지)
+  curStuId=id;
+  if(g('stuName'))g('stuName').value=st.name||'';
+  if(g('stuSchool'))g('stuSchool').value=st.school||'';
+  if(g('sClass'))g('sClass').value=st.currentClass||'';
+  if(g('stuGrade'))g('stuGrade').value=st.grade||'';
+  if(g('teacher'))g('teacher').value=st.teacher||'';
+  if(typeof renderStuChips==="function")renderStuChips();
+  if(month&&g("repMonth"))g("repMonth").value=month;
+  const lv=_classToLevel(st.currentClass||"");
+  if(lv&&g("lvSel")){g("lvSel").value=lv;onLvChange();}
+  if(stt==="done"){_restoreReport(st,lv,month);}
+  else if(stt==="draft"){if(loadDraftIfExists())go(1);else go(1);}
+  else{go(1);}
+}
+function _restoreReport(st,lv,month){
+  const mk=(month||"").replace(/\s/g,"");
+  const pre=`${(st.school||"").replace(/\s/g,"")}_${(st.name||"").replace(/\s/g,"")}`;
+  const d=LS('get',`report:${pre}:${lv}:${mk}`);
+  if(!d){go(1);return;}
+  if(g("repMonth"))g("repMonth").value=d.month||month||"";
+  if(g("sClass"))g("sClass").value=d.cls||st.currentClass||"";
+  if(g("teacher"))g("teacher").value=d.teacher||"";
+  if(g("cmtStrength"))g("cmtStrength").value=d.cmtStrength||"";
+  if(g("cmtImprove"))g("cmtImprove").value=d.cmtImprove||"";
+  if(g("cmtExtra"))g("cmtExtra").value=d.cmtExtra||"";
+  if(g("cmtNext"))g("cmtNext").value=d.cmtNext||"";
+  wrongSet=new Set(d.wrongSet||[]);
+  if(d.qvals){for(const i in d.qvals){const el=g('q'+i);if(el)el.value=d.qvals[i];}}
+  if(g("lvSel")&&d.level){g("lvSel").value=d.level;onLvChange();}
+  if(typeof calcTotal==='function')calcTotal();
+  go(4);
+}
+
 function go(step){
   const steps = ['s0','s1','s2','s3','s4'];
   const btns = document.querySelectorAll('.sbtn');
@@ -1809,6 +2527,7 @@ function go(step){
     setTimeout(()=>{ const ds = computeDomScore(); buildAutoFeedback(ds); }, 0);
   }
   if(step===4){ const ds = computeDomScore(); buildReport(ds); }
+  if(typeof saveDraftDebounced==='function')saveDraftDebounced();
   window.scrollTo(0,0);
 }
 
@@ -1880,6 +2599,22 @@ function downloadPDF(){
 }
 
 </script>
+<div class="cm-bg" id="dashModal">
+  <div class="cm-modal" style="max-width:560px">
+    <h2 style="color:#185fa5"><i class="ti ti-clipboard-list"></i> 반별 작성 현황 · 다시 보기</h2>
+    <div style="font-size:11px;color:#888;margin-bottom:12px">반과 월을 선택하면 학생별로 <b style="color:#2d7a4f">완료</b> / <b style="color:#a8730a">작성 중</b> / <b style="color:#999">미작성</b> 상태가 표시됩니다. 항목을 눌러 다시 보거나 이어서 작성하세요.</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <div style="flex:1"><label style="font-size:11px;font-weight:700;color:#555">반</label>
+        <select id="dashClass" onchange="renderDashboard()" style="width:100%;margin-top:3px"><option value="">— 반 선택 —</option></select></div>
+      <div style="width:130px"><label style="font-size:11px;font-weight:700;color:#555">월</label>
+        <input type="text" id="dashMonth" placeholder="예: 2026년 6월" oninput="renderDashboard()" style="width:100%;margin-top:3px"></div>
+    </div>
+    <div id="dashBody" style="border:1px solid #eee;border-radius:8px;max-height:50vh;overflow:auto"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:14px">
+      <button onclick="closeDashboard()" style="background:#f0f0ec;border:1px solid #ddd;border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer;color:#555">닫기</button>
+    </div>
+  </div>
+</div>
 <div class="cm-bg" id="classManageModal">
   <div class="cm-modal">
     <h2><i class="ti ti-layout-grid"></i> 반 관리</h2>
