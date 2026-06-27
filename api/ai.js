@@ -118,7 +118,21 @@ module.exports = async (req, res) => {
     }
     if (!body) body = {};
 
-    const { model, max_tokens, system, messages } = body;
+    let { model, max_tokens, system, messages } = body;
+
+    // ── task 모드: 프롬프트 본문을 서버에서 조립 (지적 자산 보호) ──
+    // 프론트는 task 이름과 재료(input)만 보내고, 프롬프트 전문은 서버에만 존재.
+    // task가 없으면 기존처럼 messages를 그대로 중계 (하위 호환).
+    if (body.task) {
+      let BUILDERS;
+      try { ({ BUILDERS } = require('./_prompts')); }
+      catch (e) { res.status(500).json({ error: '프롬프트 모듈 로드 실패' }); return; }
+      const builder = BUILDERS[body.task];
+      if (!builder) { res.status(400).json({ error: '알 수 없는 task: ' + body.task }); return; }
+      const prompt = builder(body.input || {});
+      messages = [{ role: 'user', content: prompt }];
+    }
+
     if (!messages || !Array.isArray(messages)) {
       res.status(400).json({ error: '잘못된 요청입니다.' });
       return;
