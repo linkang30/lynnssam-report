@@ -129,8 +129,15 @@ module.exports = async (req, res) => {
       catch (e) { res.status(500).json({ error: '프롬프트 모듈 로드 실패' }); return; }
       const builder = BUILDERS[body.task];
       if (!builder) { res.status(400).json({ error: '알 수 없는 task: ' + body.task }); return; }
-      const prompt = builder(body.input || {});
-      messages = [{ role: 'user', content: prompt }];
+      const built = builder(body.input || {});
+      if (built && typeof built === 'object' && (built.system || built.user)) {
+        // system 프롬프트 분리 방식 (예: 실버)
+        if (built.system) system = built.system;
+        messages = [{ role: 'user', content: String(built.user || '') }];
+      } else {
+        // 단일 프롬프트 방식 (예: 프리스텔라)
+        messages = [{ role: 'user', content: String(built) }];
+      }
     }
 
     if (!messages || !Array.isArray(messages)) {
