@@ -315,6 +315,16 @@ textarea{resize:vertical}
     <div id="refineStatus_next" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
   </div>
 
+  <div class="card">
+    <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:6px">숫자 너머의 기록 <span style="font-weight:400;color:#aaa">(선택)</span></div>
+    <div style="font-size:10.5px;color:#999;line-height:1.6;margin-bottom:7px">오답 점수만으로는 보이지 않는, 이 학생만의 성장·돌파·슬럼프 순간을 자유롭게 적어주세요. 특별히 언급할 내용이 없으면 건너뛰어도 됩니다.</div>
+    <div style="position:relative">
+      <textarea id="cmtExtra" rows="3" oninput="this.dataset.edited='1'" style="font-size:12px;padding-bottom:34px" placeholder="예: ○○이는 이번 달에 처음으로 친구 앞에서 소리 내어 읽었어요."></textarea>
+      <button onclick="refineText('cmtExtra','extra')" style="position:absolute;bottom:8px;right:8px;background:#2ba89a;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>문장 다듬기</button>
+    </div>
+    <div id="refineStatus_extra" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
+  </div>
+
   <div class="navrow">
     <button class="btn bsec" onclick="go(2)"><i class="ti ti-arrow-left"></i> 분석</button>
     <button class="btn bprim" onclick="go(4)">리포트 <i class="ti ti-arrow-right"></i></button>
@@ -1557,6 +1567,7 @@ function buildReport(){
   const sBlock=[sAuto,val('cmtStrength')].filter(t=>t&&t.trim()).join('\n');
   const iBlock=[iAuto,val('cmtImprove')].filter(t=>t&&t.trim()).join('\n');
   const nBlock=val('cmtNext');
+  const exBlock=val('cmtExtra');
   const isArea=d.analysisMode==='area';
   const unitsHtml=(d.summary)
     ? `<div class="rpt-sec"><h3><i class="ti ti-book"></i>이번 단계 학습 내용</h3><div class="rpt-txt">${d.summary}</div></div>`
@@ -1582,6 +1593,7 @@ function buildReport(){
       <div><h3><i class="ti ti-bulb"></i>더 키워가요</h3><div class="rpt-txt">${iBlock||'-'}</div></div>
     </div>
     ${nBlock?`<div class="rpt-sec"><h3><i class="ti ti-arrow-up-right"></i>다음 달 지도 방안</h3><div class="rpt-txt">${nBlock}</div></div>`:''}
+    ${exBlock?`<div class="rpt-sec"><h3><i class="ti ti-pencil"></i>숫자 너머의 기록</h3><div class="rpt-txt">${exBlock}</div></div>`:''}
     <div class="rpt-foot">파머스국제어학원 광교브랜치 · ${d.line} Program · ${teacher} 드림</div>
   `;
 }
@@ -1596,6 +1608,7 @@ function copyReport(){
   const sBlock=['[이달의 강점]',sAuto,val('cmtStrength')].filter(t=>t&&t.trim()).join('\n');
   const iBlock=['[더 키워가요]',iAuto,val('cmtImprove')].filter(t=>t&&t.trim()).join('\n');
   const nBlock=val('cmtNext')?['[다음 달 지도 방안]',val('cmtNext')].join('\n'):'';
+  const exBlock=val('cmtExtra')?['[숫자 너머의 기록]',val('cmtExtra')].join('\n'):'';
   const uBlock=d.summary?['[이번 단계 학습 내용]',d.summary].join('\n'):'';
   const teacher=val('teacher')||'선생님';
   const parts=[
@@ -1603,7 +1616,7 @@ function copyReport(){
     stu,
     uBlock,
     '영역별 · '+(LV[curLv].areas||[]).map(a=>`${a.name.replace(/^PART \d+ · /,'')} ${sc.byId[a.id]||0}/${areaMaxOf(LV[curLv],a)}`).join(' · '),
-    sBlock, iBlock, nBlock,
+    sBlock, iBlock, nBlock, exBlock,
     `파머스국제어학원 광교브랜치 ${teacher} 드림`
   ].filter(t=>t&&t.trim());
   const text=parts.join('\n\n');
@@ -1701,7 +1714,7 @@ function saveReport(){
 
 function resetAll(){
   gridState={};countState={};bonusOn=false;curLv="";
-  ['stuName','stuSchool','stuGrade','sClass','teacher','repMonth','cmtStrength','cmtImprove','cmtNext'].forEach(id=>{
+  ['stuName','stuSchool','stuGrade','sClass','teacher','repMonth','cmtStrength','cmtImprove','cmtNext','cmtExtra'].forEach(id=>{
     const el=g(id); if(el){el.value='';delete el.dataset.edited;}
   });
   if(g('gradeAreas'))g('gradeAreas').innerHTML='';
