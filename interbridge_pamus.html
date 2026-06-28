@@ -111,9 +111,9 @@ textarea{resize:vertical}
 <!-- STEP 0 -->
 <div id="s0">
   <div class="card">
-    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openClassManage()" style="margin-left:auto;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button></div>
+    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택</div>
     <div class="row3">
-      <div style="grid-column:1/2"><label>반 선택</label><select id="classSelect" onchange="onClassSelect()"><option value="">— 반을 선택하세요 —</option></select></div>
+      <div style="grid-column:1/2"><label>반 선택 <button onclick="openClassManage()" style="margin-left:4px;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:700;cursor:pointer;vertical-align:middle"><i class="ti ti-settings" style="font-size:10px"></i> 반 관리</button></label><select id="classSelect" onchange="onClassSelect()"><option value="">— 반을 선택하세요 —</option></select></div>
       <div style="grid-column:2/4"><label>학생 선택 <span style="color:#aaa;font-weight:400;font-size:10px">(선택 시 이름·학교·반 자동 입력)</span></label><div id="stuChipArea" class="stu-chip-area"><span style="color:#bbb;font-size:11px">반을 먼저 선택하세요</span></div></div>
     </div>
   </div>
@@ -203,7 +203,7 @@ textarea{resize:vertical}
     <div class="ctitle"><i class="ti ti-sparkles"></i>자동 피드백 초안</div>
     <div style="position:relative">
       <textarea id="autoFb" rows="5" style="font-size:13px;line-height:1.9;color:#333;background:#f8f8fd;border:1px solid #ddd;border-radius:8px;padding:11px 16px;border-left:3px solid #4338ca;width:100%;padding-right:110px"></textarea>
-      <button onclick="refineText('autoFb','auto')" style="position:absolute;bottom:8px;right:8px;background:#4338ca;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+      <button onclick="refineText('autoFb','auto')" style="position:absolute;bottom:8px;right:8px;background:#4338ca;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>문장 다듬기</button>
     </div>
     <div id="refineStatus_auto" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
   </div>
@@ -226,7 +226,7 @@ textarea{resize:vertical}
         <div class="chips" id="strengthChips" style="margin-bottom:8px"></div>
         <div style="position:relative">
           <textarea id="cmtStrength" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
-          <button onclick="refineText('cmtStrength','strength')" style="position:absolute;bottom:8px;right:8px;background:#2d7a4f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+          <button onclick="refineText('cmtStrength','strength')" style="position:absolute;bottom:8px;right:8px;background:#2d7a4f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>문장 다듬기</button>
         </div>
         <div id="refineStatus_strength" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
       </div>
@@ -245,7 +245,7 @@ textarea{resize:vertical}
         <div class="chips" id="attitudeChips" style="margin-bottom:8px"></div>
         <div style="position:relative">
           <textarea id="cmtImprove" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1'" style="font-size:12px;padding-right:110px"></textarea>
-          <button onclick="refineText('cmtImprove','improve')" style="position:absolute;bottom:8px;right:8px;background:#854f0b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+          <button onclick="refineText('cmtImprove','improve')" style="position:absolute;bottom:8px;right:8px;background:#854f0b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>문장 다듬기</button>
         </div>
         <div id="refineStatus_improve" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
       </div>
@@ -263,7 +263,7 @@ textarea{resize:vertical}
     <div class="chips" id="nextChips"></div>
     <div style="position:relative">
       <textarea id="cmtNext" rows="3" style="font-size:12px;padding-right:110px"></textarea>
-      <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#4338ca;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+      <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#4338ca;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>문장 다듬기</button>
     </div>
     <div id="refineStatus_next" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
   </div>
@@ -596,7 +596,7 @@ function renderSuspendedList(){
   </div>`).join('');
 }
 function getStudentKey(){const n=val('stuName').replace(/\s/g,'');const s=val('stuSchool').replace(/\s/g,'');return n?`${s}_${n}`:null;}
-function onNameInput(){const k=getStudentKey();if(k&&LS('get',k+'_kw'))showHistoryAlert();else{const b=g('historyAlert');if(b)b.style.display='none';}}
+function onNameInput(){if(curStuId&&roster.students[curStuId]){roster.students[curStuId].name=(g('stuName').value||'').trim();if(g('stuSchool'))roster.students[curStuId].school=(g('stuSchool').value||'').trim();saveRoster();}const k=getStudentKey();if(k&&LS('get',k+'_kw'))showHistoryAlert();else{const b=g('historyAlert');if(b)b.style.display='none';}}
 function toggleHistoryPanel(){const b=g('historyAlertBody'),ic=g('histToggleIcon');if(!b)return;const open=b.style.display==='none'||!b.style.display;b.style.display=open?'block':'none';if(ic)ic.className='ti '+(open?'ti-chevron-up':'ti-chevron-down');}
 function showHistoryAlert(){const k=getStudentKey();if(!k)return;const data=LS('get',k+'_kw');const box=g('historyAlert'),head=g('historyAlertHead'),body=g('historyAlertBody');if(!box||!data){if(box)box.style.display='none';return;}const months=Object.keys(data).sort().reverse().slice(0,3);if(!months.length){box.style.display='none';return;}const name=val('stuName')||'\uD559\uC0DD';head.innerHTML=`<i class="ti ti-history" style="font-size:14px;color:#854f0b"></i><div style="flex:1"><strong>${name}</strong> \uD559\uC0DD\uC758 \uCD5C\uADFC ${months.length}\uAC1C\uC6D4 \uC774\uB825\uC774 \uC788\uC2B5\uB2C8\uB2E4. <span style="color:#7a5fc0;margin-left:5px">${months.join(' \u00B7 ')}</span></div><i id="histToggleIcon" class="ti ti-chevron-down" style="color:#854f0b"></i>`;body.innerHTML=months.map((m,i)=>{const r=data[m]||{};const sC=(r.strength&&r.strength.length)?r.strength.map(x=>`<span style="background:#eaf3de;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#bbb;font-size:10px">\uC5C6\uC74C</span>';const aC=(r.improve&&r.improve.length)?r.improve.map(x=>`<span style="background:#faeeda;color:#854f0b;border-radius:4px;padding:1px 6px;font-size:10px;margin:0 3px 3px 0;display:inline-block">${x}</span>`).join(''):'<span style="color:#bbb;font-size:10px">\uC5C6\uC74C</span>';return `<div style="padding-top:11px"><div style="font-size:11px;font-weight:700;color:#4338ca;margin-bottom:5px">${m}</div><div style="margin-bottom:4px"><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">\uAC15\uC810</span>${sC}</div><div><span style="font-size:10px;color:#888;font-weight:600;margin-right:4px">\uBCF4\uC644\uC810</span>${aC}</div></div>`;}).join('');box.style.display='block';}
 function showHistory(){const k=getStudentKey();const box=g('historyBox');if(!box)return;if(!k){box.innerHTML='<div style="font-size:12px;color:#888">\uD559\uC0DD \uC774\uB984\uACFC \uD559\uAD50\uB97C \uBA3C\uC800 \uC785\uB825\uD574\uC8FC\uC138\uC694.</div>';box.style.display='block';return;}const data=LS('get',k+'_kw');if(!data){box.innerHTML='<div style="font-size:12px;color:#888">\uC774\uC804 \uB9AC\uD3EC\uD2B8 \uAE30\uB85D\uC774 \uC5C6\uC2B5\uB2C8\uB2E4.</div>';box.style.display='block';return;}const months=Object.keys(data).sort().reverse().slice(0,3);box.style.display='block';box.innerHTML=`<div style="font-size:11px;font-weight:700;color:#854f0b;margin-bottom:8px"><i class="ti ti-history"></i> \uCD5C\uADFC ${months.length}\uAC1C\uC6D4 \uD0A4\uC6CC\uB4DC \uC774\uB825</div>`+months.map(m=>{const r=data[m]||{};const lvTag=r.level?` <span style="color:#4338ca;font-weight:700">[IB${r.level}]</span>`:'';return `<div style="font-size:11px;margin-bottom:5px;padding:6px 9px;background:#fff;border-radius:6px"><b style="color:#4338ca">${m}</b>${lvTag} \u2014 \uAC15\uC810: ${(r.strength||[]).join(', ')||'-'} / \uBCF4\uC644: ${(r.improve||[]).join(', ')||'-'}</div>`;}).join('');}
@@ -695,19 +695,8 @@ function buildAutoText(type){const taId=type==='strength'?'cmtStrength':'cmtImpr
 function buildNextCmt(){const nC=g('nextChips');const ta=g('cmtNext');if(!nC||!ta)return;const chips=[...nC.querySelectorAll('.chip.on')].map(c=>{const cl=c.cloneNode(true);const b=cl.querySelector('.kw-dom');if(b)b.remove();return cl.textContent.trim();}).filter(t=>t);if(!chips.length){ta.value='';delete ta.dataset.edited;return;}ta.value=`\uB2E4\uC74C \uB2EC\uC5D0\uB294 ${chips.join(', ')} \uB4F1\uC744 \uC911\uC2EC\uC73C\uB85C \uC9C0\uB3C4\uD560 \uC608\uC815\uC785\uB2C8\uB2E4.`;delete ta.dataset.edited;}
 
 async function refineText(taId,type){const orig=g(taId).value.trim();if(!orig){alert('\uBA3C\uC800 \uB0B4\uC6A9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694.');return;}const statusId='refineStatus_'+type;if(g(statusId)){g(statusId).style.display='block';g(statusId).textContent='\u2728 AI\uAC00 \uC791\uC131 \uC911\uC785\uB2C8\uB2E4...';}const name=val('stuName')||'\uD559\uC0DD';const typeGuide={auto:'\uC804\uCCB4 \uD53C\uB4DC\uBC31 \u2014 \uC774\uBC88 \uB2EC \uD559\uC2B5 \uCD1D\uD3C9',strength:'\uC774\uB2EC\uC758 \uAC15\uC810 \u2014 \uC798\uD55C \uC810 \uCE6D\uCC2C',improve:'\uBCF4\uC644\uC810 \u2014 \uC131\uC7A5 \uBC29\uD5A5 \uACA9\uB824',next:'\uB2E4\uC74C \uB2EC \uC9C0\uB3C4 \uBC29\uC548'}[type]||'\uD53C\uB4DC\uBC31';
-  const systemPrompt=`\uB2F9\uC2E0\uC740 \uD30C\uBA38\uC2A4\uAD6D\uC81C\uC5B4\uD559\uC6D0 \uAD11\uAD50\uBE0C\uB79C\uCE58\uC5D0\uC11C ${name} \uD559\uC0DD\uC744 \uC9C1\uC811 \uAC00\uB974\uCE58\uB294 \uB2F4\uC784 \uC120\uC0DD\uB2D8\uC785\uB2C8\uB2E4. 20\uB144 \uACBD\uB825\uC758 \uC601\uC5B4 \uAD50\uC721 \uC804\uBB38\uAC00\uC785\uB2C8\uB2E4. \uC774 \uB9AC\uD3EC\uD2B8\uB294 \uB2F4\uC784 \uC120\uC0DD\uB2D8\uC774 \uD559\uBD80\uBAA8\uB2D8\uAED8 \uC9C1\uC811 \uC4F0\uB294 \uAE00\uC785\uB2C8\uB2E4.
-\uC544\uB798 \uB0B4\uC6A9\uC744 \uD559\uBD80\uBAA8\uC5D0\uAC8C \uBCF4\uB0B4\uB294 \uC6D4\uAC04 \uB9AC\uD3EC\uD2B8 \uBB38\uC7A5\uC73C\uB85C \uC790\uC5F0\uC2A4\uB7FD\uAC8C \uB2E4\uB4EC\uC5B4 \uC8FC\uC138\uC694.
-[\uC774 \uC139\uC158\uC758 \uBAA9\uC801] ${typeGuide}
-[\uC791\uC131 \uADDC\uCE59]
-- \uD559\uC0DD \uC774\uB984(${name})\uC744 \uD638\uCE6D\uD560 \uB54C: "\uC774\uB984 \uD559\uC0DD\uC774" \uB610\uB294 "\uC774\uB984\uC774" \uD615\uD0DC\uB85C \uC790\uC5F0\uC2A4\uB7FD\uAC8C
-- \uBB38\uCCB4: \uB2F4\uC784 \uC120\uC0DD\uB2D8\uC774 \uC9C1\uC811 \uC4F4 \uB4EF\uD55C \uB530\uB73B\uD558\uACE0 \uAD6C\uCCB4\uC801\uC778 \uC5B4\uD22C. AI \uB290\uB08C \uAE08\uC9C0
-- \uD654\uC790: \uAE00\uC4F4\uC774\uB294 \uB2F4\uC784 \uC120\uC0DD\uB2D8 \uBCF8\uC778. \uC790\uC2E0\uC744 \uAC00\uB9AC\uD0AC \uB54C \uBC18\uB4DC\uC2DC 1\uC778\uCE6D("\uC800","\uC81C\uAC00")\uC744 \uC4F4\uB2E4
-- \uBD84\uB7C9: 3~4\uBB38\uC7A5. \uAC04\uACB0\uD558\uAC8C
-- \uC808\uB300 \uAE08\uC9C0 \uD45C\uD604: "\uBD80\uC871", "\uBBF8\uD761", "\uBABB\uD558\uB2E4", "\uC544\uC27D\uB2E4"
-- \uBCF4\uC644\uC810\uC740 "\uC55E\uC73C\uB85C ~\uD558\uBA74 \uB354 \uC88B\uC744 \uAC83 \uAC19\uC544\uC694" \uC2DD\uC73C\uB85C \uAE0D\uC815\uC801\uC73C\uB85C
-- \uD55C\uAD6D\uC5B4\uB85C\uB9CC \uC791\uC131, \uC774\uBAA8\uC9C0 \uC0AC\uC6A9 \uAE08\uC9C0
-- \uBC14\uB85C \uBCF8\uBB38 \uB0B4\uC6A9\uBD80\uD130 \uC2DC\uC791\uD560 \uAC83`;
-  try{const resp=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:orig}]})});if(!resp.ok)throw new Error('HTTP '+resp.status);const data=await resp.json();const out=data.content?.find(c=>c.type==='text')?.text||orig;g(taId).value=out;g(taId).dataset.edited='1';if(g(statusId)){g(statusId).textContent='\uC644\uB8CC!';setTimeout(()=>{g(statusId).style.display='none';},2000);}}catch(e){if(g(statusId))g(statusId).textContent='\uC624\uB958 \uBC1C\uC0DD. \uB2E4\uC2DC \uC2DC\uB3C4\uD574\uC8FC\uC138\uC694.';}
+  
+  try{const resp=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},body:JSON.stringify({task:'refine_interbridge',input:{name:name,type:type,raw:orig}})});if(!resp.ok)throw new Error('HTTP '+resp.status);const data=await resp.json();const out=data.content?.find(c=>c.type==='text')?.text||orig;g(taId).value=out;g(taId).dataset.edited='1';if(g(statusId)){g(statusId).textContent='\uC644\uB8CC!';setTimeout(()=>{g(statusId).style.display='none';},2000);}}catch(e){if(g(statusId))g(statusId).textContent='\uC624\uB958 \uBC1C\uC0DD. \uB2E4\uC2DC \uC2DC\uB3C4\uD574\uC8FC\uC138\uC694.';}
 }
 
 function buildReport(){
