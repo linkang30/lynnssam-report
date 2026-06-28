@@ -122,15 +122,54 @@ function buildInterbridgeRefinePrompt(input) {
   return { system: system, user: raw };
 }
 
+// ── Neuro Phonics 월간 리포트 "유아·저학년 파닉스 담임" refine 프롬프트 ──
+// courseLine(Sound Doctor/Tooth Phonics)에 따라 설명이 갈리고,
+// 이름 유무에 따라 호칭 규칙(받침 어법)이 정교하게 달라진다.
+function buildNeurophonicsRefinePrompt(input) {
+  const name = (input && input.name) ? String(input.name) : '';
+  const type = (input && input.type) ? String(input.type) : 'strength';
+  const raw = (input && input.raw) ? String(input.raw) : '';
+  const courseLine = (input && input.courseLine) ? String(input.courseLine) : 'Sound Doctor';
+  const courseLabel = (input && input.courseLabel) ? String(input.courseLabel) : courseLine;
+
+  const typeGuide = {
+    strength: '이달의 강점 — 발음과 소리 학습에서 잘한 점을 따뜻하게 칭찬',
+    improve: '더 키울점 — 앞으로 발음과 읽기에서 성장할 방향을 다정하게 격려',
+    next: '다음 달 지도 방안 — 이번 달 약했던 소리·시각어를 다시 반복하고, 배운 소리를 단어와 문장으로 이어 읽어가도록 안내하는 계획을 따뜻하게 안내'
+  }[type] || '피드백';
+
+  const nameRule = name
+    ? `- 학생 이름은 "${name}". 첫 문장에서 한 번만 자연스러운 호칭으로 부를 것(받침 있는 이름은 "○○이는/○○이가/○○이", 받침 없는 이름은 "○○는/○○가" 식으로 한국어 어법에 맞게). 그 다음 문장부터는 이름을 반복하지 말고, 주어를 생략(무주어)하거나 문맥으로 자연스럽게 이어 쓸 것. 같은 이름을 매 문장 반복하면 어색하다.
+- "그/그녀/그 아이" 같은 3인칭 대명사는 한국어 리포트에서 어색하므로 쓰지 말 것. 이름을 다시 부르는 대신 주어를 생략하라.`
+    : `- 학생 이름이 입력되지 않았다. 이름이나 "그/그녀" 같은 대명사를 지어내지 말 것. 주어를 생략(무주어)해 자연스럽게 쓰고, 꼭 호칭이 필요하면 "이 친구" 정도만 한 번 사용할 것.`;
+
+  const courseDesc = courseLine === 'Tooth Phonics'
+    ? `투스파닉스(Tooth Phonics)는 시각어를 빠르게 정리해 단어와 문장, 스토리북으로 확장해 읽어내는 과정`
+    : `사운드닥터(Sound Doctor)는 알파벳 시각과 발음, 소리 내어 읽기를 배우는 과정`;
+
+  const system = `당신은 파머스국제어학원 광교브랜치에서 ${name || '이 친구'} 학생의 ${courseLabel} 과정을 직접 가르치는 파닉스 담임 선생님입니다. ${courseDesc}이고, 학생들은 유아나 초등 저학년의 어린 친구들입니다. 이 리포트는 담임 선생님이 학부모님께 직접 쓰는 글입니다.
+아래 내용을 학부모에게 보내는 월간 리포트 문장으로 자연스럽게 다듬어 주세요.
+[이 섹션의 목적] ${typeGuide}
+[작성 규칙]
+${nameRule}
+- 문체: 어린 학생의 담임 선생님이 직접 쓴 듯한 아주 따뜻하고 다정한 어투. 받아쓰기·읽기 같은 파닉스 맥락을 살려 구체적으로. AI 느낌 금지
+- 화자: 글쓴이는 담임 선생님 본인. 자신을 가리킬 때 반드시 1인칭("저","제가")을 쓴다
+- 분량: 2~3문장. 간결하고 쉽게
+- 절대 금지 표현: "부족","미흡","못하다","아쉽다", 그리고 "분명히/반드시/꼭" 같은 단정적 표현
+- 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 식으로 긍정적으로
+- 한국어로만 작성, 이모지 사용 금지
+- 바로 본문 내용부터 시작할 것`;
+
+  return { system: system, user: raw };
+}
+
 const BUILDERS = {
   refine_prestella: buildPrestellaRefinePrompt,
   refine_silver: buildSilverRefinePrompt,
   refine_interbridge: buildInterbridgeRefinePrompt,
-  // 인터스텔라는 인터브릿지와 동일한 담임 1인칭 톤 — 빌더 재사용.
-  // 추후 톤을 따로 조정하려면 전용 함수로 분리하면 됨.
   refine_interstella: buildInterbridgeRefinePrompt,
-  // 골드스텔라도 동일한 담임 1인칭 톤 — 빌더 재사용
   refine_goldstella: buildInterbridgeRefinePrompt,
+  refine_neurophonics: buildNeurophonicsRefinePrompt,
 };
 
 module.exports = { BUILDERS };
