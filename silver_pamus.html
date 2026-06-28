@@ -154,9 +154,9 @@ textarea{resize:vertical}
 <!-- STEP 0: 학생 정보 -->
 <div id="s0">
   <div class="card">
-    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openDashboard()" style="margin-left:auto;background:#e6f1fb;color:#185fa5;border:1px solid #aacdf0;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-clipboard-list"></i> 작성 현황 · 다시 보기</button><button onclick="openClassManage()" style="margin-left:8px;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-settings"></i> 반 관리</button></div>
+    <div class="ctitle"><i class="ti ti-users"></i>반 · 학생 선택 <button onclick="openDashboard()" style="margin-left:auto;background:#e6f1fb;color:#185fa5;border:1px solid #aacdf0;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer"><i class="ti ti-clipboard-list"></i> 리포트 현황 · 다시 보기</button></div>
     <div class="row3">
-      <div style="grid-column:1/2"><label>반 선택</label><select id="classSelect" onchange="onClassSelect()"><option value="">— 반을 선택하세요 —</option></select></div>
+      <div style="grid-column:1/2"><label>반 선택 <button onclick="openClassManage()" style="margin-left:4px;background:#f0ece0;color:#8a6d1f;border:1px solid #e3d9bd;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:700;cursor:pointer;vertical-align:middle"><i class="ti ti-settings" style="font-size:10px"></i> 반 관리</button></label><select id="classSelect" onchange="onClassSelect()"><option value="">— 반을 선택하세요 —</option></select></div>
       <div style="grid-column:2/4"><label>학생 선택 <span style="color:#aaa;font-weight:400;font-size:10px">(선택 시 이름·학교·반 자동 입력)</span></label><div id="stuChipArea" class="stu-chip-area"><span style="color:#bbb;font-size:11px">반을 먼저 선택하세요</span></div></div>
     </div>
     <div id="draftAlert" style="display:none;background:#fff3df;border:1px solid #f0cd8a;border-radius:8px;padding:10px 13px;margin-top:10px;font-size:12px;color:#8a6d1f"></div>
@@ -261,7 +261,7 @@ textarea{resize:vertical}
     <div class="ctitle"><i class="ti ti-sparkles"></i>자동 피드백 초안</div>
     <div style="position:relative">
       <textarea id="autoFb" rows="5" style="font-size:13px;line-height:1.9;color:#333;background:#fdf9f9;border:1px solid #e8d8d8;border-radius:8px;padding:11px 16px;border-left:3px solid #c0392b;width:100%;resize:vertical;font-family:inherit;padding-right:110px"></textarea>
-      <button onclick="refineText('autoFb','auto')" style="position:absolute;bottom:8px;right:8px;background:#c0392b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+      <button onclick="refineText('autoFb','auto')" style="position:absolute;bottom:8px;right:8px;background:#c0392b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>문장 다듬기</button>
     </div>
     <div id="refineStatus_auto" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
   </div>
@@ -294,7 +294,7 @@ textarea{resize:vertical}
         <div class="chips" id="strengthChips" style="margin-bottom:8px"></div>
         <div style="position:relative">
           <textarea id="cmtStrength" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1';if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
-          <button onclick="refineText('cmtStrength','strength')" style="position:absolute;bottom:8px;right:8px;background:#2d7a4f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+          <button onclick="refineText('cmtStrength','strength')" style="position:absolute;bottom:8px;right:8px;background:#2d7a4f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>문장 다듬기</button>
         </div>
         <div id="refineStatus_strength" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
       </div>
@@ -322,7 +322,7 @@ textarea{resize:vertical}
         <div class="chips" id="attitudeChips" style="margin-bottom:8px"></div>
         <div style="position:relative">
           <textarea id="cmtImprove" rows="3" placeholder="키워드를 선택하면 자동 작성됩니다" oninput="this.dataset.edited='1';if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
-          <button onclick="refineText('cmtImprove','improve')" style="position:absolute;bottom:8px;right:8px;background:#854f0b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+          <button onclick="refineText('cmtImprove','improve')" style="position:absolute;bottom:8px;right:8px;background:#854f0b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>문장 다듬기</button>
         </div>
         <div id="refineStatus_improve" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
       </div>
@@ -349,7 +349,7 @@ textarea{resize:vertical}
     <div class="chips" id="nextChips"></div>
     <div style="position:relative">
       <textarea id="cmtNext" rows="3" oninput="if(typeof saveDraftDebounced==='function')saveDraftDebounced()" style="font-size:12px;padding-right:110px"></textarea>
-      <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#c0392b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>린쌤 톤으로</button>
+      <button onclick="refineText('cmtNext','next')" style="position:absolute;bottom:8px;right:8px;background:#c0392b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px"><i class="ti ti-sparkles" style="font-size:12px"></i>문장 다듬기</button>
     </div>
     <div id="refineStatus_next" style="font-size:11px;color:#888;margin-top:4px;display:none"></div>
   </div>
@@ -1599,6 +1599,11 @@ function getStudentKey(){
 }
 
 function onNameInput(){
+  if(curStuId&&roster.students[curStuId]){
+    roster.students[curStuId].name=(g('stuName').value||'').trim();
+    if(g('stuSchool'))roster.students[curStuId].school=(g('stuSchool').value||'').trim();
+    saveRoster();
+  }
   const k = getStudentKey();
   if(k && LS('get', k+'_kw')) showHistoryAlert();
   else { const box=g('historyAlert'); if(box) box.style.display='none'; }
@@ -2040,44 +2045,13 @@ async function refineText(taId, type){
   const statusId = 'refineStatus_'+type;
   if(g(statusId)){ g(statusId).style.display='block'; g(statusId).textContent='✨ AI가 작성 중입니다...'; }
   const name = val('stuName')||'학생';
-  const typeDesc = type==='strength'?'강점/칭찬':type==='improve'?'보완점/격려':type==='next'?'다음달 지도계획':'전체 피드백';
-  const typeGuide = {
-    auto: '전체 피드백 — 이번 달 학습 총평',
-    strength: '이달의 강점 — 잘한 점 칭찬',
-    improve: '보완점 — 앞으로의 성장 방향 격려',
-    next: '다음 달 지도 방안 — 계획 안내'
-  }[type] || typeDesc;
-  const systemPrompt = `당신은 파머스국제어학원 광교브랜치에서 ${name} 학생을 직접 가르치는 담임 선생님입니다. 20년 경력의 영어 교육 전문가입니다. 이 리포트는 담임 선생님이 학부모님께 직접 쓰는 글입니다.
-아래 내용을 학부모에게 보내는 월간 리포트 문장으로 자연스럽게 다듬어 주세요.
-
-[이 섹션의 목적]
-${typeGuide}
-
-[작성 규칙]
-- 학생 이름(${name})을 호칭할 때: "이름 학생이" 또는 "이름이" 형태로 자연스럽게. "이름 학생의"처럼 소유격 남발 금지
-- 문체: 담임 선생님이 직접 쓴 듯한 따뜻하고 구체적인 어투. AI 느낌 나는 표현 금지
-- 화자(매우 중요): 글쓴이는 담임 선생님 본인이다. 자신을 가리킬 때는 반드시 1인칭("저", "제가")을 쓴다. "선생님이", "선생님도", "선생님께서", "담임 선생님이"처럼 자신을 제3자로 지칭하지 않는다 (예: "선생님도 함께 독려하겠습니다" → "저도 함께 독려하겠습니다")
-- 지도 의지 표현: "제가 지도하겠습니다", "수업에서 함께 ~해 나가겠습니다", "앞으로 ~하도록 돕겠습니다" 처럼 1인칭으로
-- 문장 시작: "${name} 학생은" 또는 이름 뒤에 받침에 맞는 조사(이/가)를 붙여 자연스럽게 시작
-- 분량: 2~3문장으로 간결하게. 이전보다 한 문장가량 짧게, 군더더기 없이 핵심만
-- 절대 금지 표현: "부족", "미흡", "떨어지다", "못하다", "아쉽다", "개선이 필요하다"
-- "정말, 너무, 너무너무, 대단히, 충분히, 매우" 같은 과장으로 느껴질 수 있는 수식어는 쓰지 않는다
-- [측정 범위] 이 Monthly Test는 듣기·읽기 중심으로 배운 내용을 인식·이해하고 문제 상황에서 활용하는 능력을 측정합니다. 말하기·자유 작문 같은 산출(productive) 능력은 직접 측정하지 않으므로, 측정하지 않은 능력을 "할 수 있다"고 단정하지 말고(예: 어휘 점수가 높아도 "배운 어휘를 말하기에 활용할 수 있어요"처럼 비약 금지) 관찰된 사실로만 서술하세요. 교재에 표기된 CEFR·Lexile 지수는 교재 단계의 국제 기준선일 뿐 학생 개인이 도달한 수준이 아니므로, 그 표기 숫자를 근거로 학생의 영어 역량을 단정하지 마세요
-- 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 또는 "~을 함께 연습해 나갈 예정입니다" 식으로
-- 한국어로만 작성
-- 이모지(😊 🌟 등) 절대 사용 금지 — 텍스트 복사 시 깨질 수 있음
-- 문장 끝 강조는 '!' 또는 '~' 사용
-- 절대 금지 문구: '아래와 같이', '다음과 같이', '다듬어 보았습니다', '작성해 보았습니다' 등 AI 전형 표현 금지
-- 바로 본문 내용부터 시작할 것`;
   try {
     const resp = await fetch('/api/ai', {
       method:'POST',
       headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},
       body: JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        system: systemPrompt,
-        messages:[{role:'user',content:orig}]
+        task:'refine_silver',
+        input:{ name:name, type:type, raw:orig }
       })
     });
     if(!resp.ok) throw new Error('HTTP '+resp.status);
@@ -2448,7 +2422,7 @@ function renderDashboard(){
   const box=g("dashBody"); if(!box)return;
   const cls=g("dashClass")?g("dashClass").value:"";
   const month=g("dashMonth")?g("dashMonth").value.trim():"";
-  if(!cls){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">반을 선택하면 학생별 작성 현황이 표시됩니다.</div>';return;}
+  if(!cls){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">반을 선택하면 학생별 리포트 현황이 표시됩니다.</div>';return;}
   const studs=Object.values(roster.students||{}).filter(s=>s.currentClass===cls);
   if(studs.length===0){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">이 반에 등록된 학생이 없습니다.</div>';return;}
   let done=0,draft=0,none=0;
@@ -2601,7 +2575,7 @@ function downloadPDF(){
 </script>
 <div class="cm-bg" id="dashModal">
   <div class="cm-modal" style="max-width:560px">
-    <h2 style="color:#185fa5"><i class="ti ti-clipboard-list"></i> 반별 작성 현황 · 다시 보기</h2>
+    <h2 style="color:#185fa5"><i class="ti ti-clipboard-list"></i> 반별 리포트 현황 · 다시 보기</h2>
     <div style="font-size:11px;color:#888;margin-bottom:12px">반과 월을 선택하면 학생별로 <b style="color:#2d7a4f">완료</b> / <b style="color:#a8730a">작성 중</b> / <b style="color:#999">미작성</b> 상태가 표시됩니다. 항목을 눌러 다시 보거나 이어서 작성하세요.</div>
     <div style="display:flex;gap:8px;margin-bottom:12px">
       <div style="flex:1"><label style="font-size:11px;font-weight:700;color:#555">반</label>
