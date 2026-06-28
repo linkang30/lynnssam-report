@@ -129,6 +129,8 @@ const BUILDERS = {
   // 인터스텔라는 인터브릿지와 동일한 담임 1인칭 톤 — 빌더 재사용.
   // 추후 톤을 따로 조정하려면 전용 함수로 분리하면 됨.
   refine_interstella: buildInterbridgeRefinePrompt,
+  // 골드스텔라도 동일한 담임 1인칭 톤 — 빌더 재사용
+  refine_goldstella: buildInterbridgeRefinePrompt,
 };
 
 module.exports = { BUILDERS };
