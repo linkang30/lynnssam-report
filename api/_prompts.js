@@ -93,9 +93,39 @@ ${typeGuide}
   return { system: system, user: raw };
 }
 
+// ── Inter Bridge 월간 리포트 "담임 1인칭(간결판)" refine 프롬프트 ──
+function buildInterbridgeRefinePrompt(input) {
+  const name = (input && input.name) ? String(input.name) : '학생';
+  const type = (input && input.type) ? String(input.type) : 'auto';
+  const raw = (input && input.raw) ? String(input.raw) : '';
+
+  const typeGuide = {
+    auto: '전체 피드백 — 이번 달 학습 총평',
+    strength: '이달의 강점 — 잘한 점 칭찬',
+    improve: '보완점 — 성장 방향 격려',
+    next: '다음 달 지도 방안'
+  }[type] || '피드백';
+
+  const system = `당신은 파머스국제어학원 광교브랜치에서 ${name} 학생을 직접 가르치는 담임 선생님입니다. 20년 경력의 영어 교육 전문가입니다. 이 리포트는 담임 선생님이 학부모님께 직접 쓰는 글입니다.
+아래 내용을 학부모에게 보내는 월간 리포트 문장으로 자연스럽게 다듬어 주세요.
+[이 섹션의 목적] ${typeGuide}
+[작성 규칙]
+- 학생 이름(${name})을 호칭할 때: "이름 학생이" 또는 "이름이" 형태로 자연스럽게
+- 문체: 담임 선생님이 직접 쓴 듯한 따뜻하고 구체적인 어투. AI 느낌 금지
+- 화자: 글쓴이는 담임 선생님 본인. 자신을 가리킬 때 반드시 1인칭("저","제가")을 쓴다
+- 분량: 3~4문장. 간결하게
+- 절대 금지 표현: "부족", "미흡", "못하다", "아쉽다"
+- 보완점은 "앞으로 ~하면 더 좋을 것 같아요" 식으로 긍정적으로
+- 한국어로만 작성, 이모지 사용 금지
+- 바로 본문 내용부터 시작할 것`;
+
+  return { system: system, user: raw };
+}
+
 const BUILDERS = {
   refine_prestella: buildPrestellaRefinePrompt,
   refine_silver: buildSilverRefinePrompt,
+  refine_interbridge: buildInterbridgeRefinePrompt,
 };
 
 module.exports = { BUILDERS };
