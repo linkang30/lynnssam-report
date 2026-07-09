@@ -21,9 +21,11 @@ function callAnthropic(apiKey, payload) {
       },
     };
     const req = https.request(options, (resp) => {
-      let raw = '';
-      resp.on('data', (chunk) => { raw += chunk; });
+      const chunks = [];
+      resp.on('data', (chunk) => { chunks.push(chunk); });
       resp.on('end', () => {
+        // Buffer로 모은 뒤 한 번에 UTF-8 디코드 (chunk 경계에서 한글이 깨지는 것 방지)
+        const raw = Buffer.concat(chunks).toString('utf8');
         let parsed;
         try { parsed = JSON.parse(raw); } catch (e) { parsed = { error: { message: raw } }; }
         resolve({ status: resp.statusCode, body: parsed });
@@ -50,9 +52,10 @@ function verifySupabaseToken(supabaseUrl, anonKey, token) {
         },
       };
       const req = https.request(options, (resp) => {
-        let raw = '';
-        resp.on('data', (c) => { raw += c; });
+        const chunks = [];
+        resp.on('data', (c) => { chunks.push(c); });
         resp.on('end', () => {
+          const raw = Buffer.concat(chunks).toString('utf8');
           // 200이고 user id가 있으면 유효한 로그인
           if (resp.statusCode === 200) {
             try {
