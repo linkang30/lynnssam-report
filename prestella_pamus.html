@@ -39,6 +39,8 @@ textarea{resize:vertical}
 .qbtn .qt{font-size:11px;font-weight:600;color:#555}
 .qbtn .qd{display:block;font-size:8.5px;color:#999;margin-top:2px;line-height:1.25}
 .qbtn.wrong{background:#fcebeb;border-color:#e24b4a}
+.qbtn.half{background:#fff7e6;border-color:#f0a020}
+.qbtn[data-subj] .qn::after{content:" ✎";color:#9c27b0;font-size:8px}
 .qbtn.wrong .qn,.qbtn.wrong .qt,.qbtn.wrong .qd{color:#a32d2d}
 .dombar{margin-bottom:9px}
 .dbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
@@ -891,7 +893,7 @@ const ATTITUDE_LIST_B=[
 const BANNED=["문법이 부족","독해력이 약","독해력이 부족","이해력이 낮","집중력이 부족","못합니다","부족합니다","분석력이 부족","약합니다"];
 
 // ═══ 상태 ═══
-let wrongQs=new Set(),selNext=new Set(),selAttitude=new Set(),selStrength=new Set();
+let wrongQs=new Set(),partialQs=new Set(),selNext=new Set(),selAttitude=new Set(),selStrength=new Set();
 let curStep=0,domFilter="all",nameInputTimer=null;
 
 // ═══ 헬퍼 ═══
@@ -899,7 +901,9 @@ function g(id){return document.getElementById(id);}
 function val(id){return g(id)?g(id).value||"":"";}
 function isB(){return val("sLevel").startsWith("B");}
 function getQM(){return QM_MAP[val("sLevel")]||QM_A;}
-function getDW(){const dw={Vocabulary:0,Reading:0,Listening:0,Structure:0};wrongQs.forEach(n=>{const q=getQM().find(q=>q.n===n);if(q)dw[q.dom]++;});return dw;}
+const PRESTELLA_SUBJ=new Set([22,23,24,25]); // 주관식(Unscramble 어순배열) — 세모(0.5) 허용. 18~21 circle 등은 객관식.
+function isSubjQ(n){return PRESTELLA_SUBJ.has(n);}
+function getDW(){const dw={Vocabulary:0,Reading:0,Listening:0,Structure:0};getQM().forEach(q=>{let d=0;if(wrongQs.has(q.n))d=1;else if(partialQs.has(q.n))d=0.5;if(d)dw[q.dom]=(dw[q.dom]||0)+d;});return dw;}
 // 도메인 만점 (문항 1개=1점): Voc6 Read6 Lis5 Struct8 = 25
 const DOM_FULL={Vocabulary:6,Reading:6,Listening:5,Structure:8};
 // 오답 기반 도메인 점수 = 만점 - 도메인 오답수
@@ -1199,17 +1203,28 @@ function onLvChange(){
   const lv=val("sLevel"),d=LV[lv];
   const badge=d.course==="B"?`<span style="background:#eaf3de;color:#2d7a4f;border-radius:6px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px">B 과정</span>`:`<span style="background:#e6f1fb;color:#185fa5;border-radius:6px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px">A 과정</span>`;
   g("lvinfoTxt").innerHTML=`<strong>${lv} — ${d.book}</strong>${badge} · ${d.theme} · CEFR: ${d.cefr} · Lexile: ${d.lexile}<br>핵심 패턴: <em>${d.pattern}</em><br><span style="color:#2d7a4f;font-weight:600">${d.funcFlow}</span> — ${d.msg}`;
-  wrongQs.clear();selNext.clear();
+  wrongQs.clear();partialQs.clear();selNext.clear();
 }
 
 function calcTotal(){const tot=scoreTot();const el=g("totNum");if(el)el.textContent=tot;const gr=g("totGrade");if(gr){gr.style.display="";const p=Math.round(tot/25*100);gr.innerHTML=`<b>${p}%</b> ${p>=88?"우수":p>=72?"양호":p>=56?"보통":"관찰 필요"}`;}}
 
 function buildQGrid(){
   const QM=getQM(),el=g("qgrid");el.innerHTML="";
-  QM.forEach(q=>{const b=document.createElement("div");b.className="qbtn"+(wrongQs.has(q.n)?" wrong":"");b.id="qb"+q.n;b.style.display=(domFilter==="all"||domFilter===q.dom)?"":"none";b.innerHTML=`<span class="qn">Q${q.n}</span><span class="qt">${q.code}</span><span class="qd">${q.skill}</span>`;b.onclick=()=>{if(wrongQs.has(q.n)){wrongQs.delete(q.n);b.classList.remove("wrong");}else{wrongQs.add(q.n);b.classList.add("wrong");}updWC();calcTotal();if(typeof saveDraftDebounced==='function')saveDraftDebounced();};el.appendChild(b);});updWC();calcTotal();
+  QM.forEach(q=>{const b=document.createElement("div");const subj=isSubjQ(q.n);b.className="qbtn"+(wrongQs.has(q.n)?" wrong":partialQs.has(q.n)?" half":"");b.id="qb"+q.n;if(subj)b.setAttribute("data-subj","1");b.title=subj?"주관식 · 클릭: 정답→오답→세모":"클릭: 정답↔오답";b.style.display=(domFilter==="all"||domFilter===q.dom)?"":"none";b.innerHTML=`<span class="qn">Q${q.n}</span><span class="qt">${q.code}</span><span class="qd">${q.skill}</span>`;b.onclick=()=>{cycleQ(q.n,b);};el.appendChild(b);});updWC();calcTotal();
+}
+function cycleQ(n,b){
+  if(isSubjQ(n)){
+    if(!wrongQs.has(n)&&!partialQs.has(n)){wrongQs.add(n);}
+    else if(wrongQs.has(n)){wrongQs.delete(n);partialQs.add(n);}
+    else{partialQs.delete(n);}
+  }else{
+    if(wrongQs.has(n))wrongQs.delete(n);else wrongQs.add(n);
+  }
+  if(b){b.classList.remove("wrong","half");if(wrongQs.has(n))b.classList.add("wrong");else if(partialQs.has(n))b.classList.add("half");}
+  updWC();calcTotal();if(typeof saveDraftDebounced==='function')saveDraftDebounced();
 }
 function filterDom(d,el){domFilter=d;document.querySelectorAll(".qtab").forEach(t=>t.classList.remove("on"));el.classList.add("on");getQM().forEach(q=>{const b=g("qb"+q.n);if(b)b.style.display=(d==="all"||d===q.dom)?"":"none";});}
-function updWC(){g("wrongCount").textContent=`오답: ${wrongQs.size}문항${wrongQs.size>0?" ("+[...wrongQs].sort((a,b)=>a-b).map(n=>"Q"+n).join(", ")+")":""}`;}
+function updWC(){const w=[...wrongQs].sort((a,b)=>a-b),p=[...partialQs].sort((a,b)=>a-b);let t=`오답: ${wrongQs.size}문항`+(w.length?" ("+w.map(n=>"Q"+n).join(", ")+")":"");if(partialQs.size)t+=` · 세모: ${partialQs.size}문항 (`+p.map(n=>"Q"+n).join(", ")+")";g("wrongCount").textContent=t;}
 
 function buildStrengthChips(){const el=g("strengthChips");if(!el)return;el.innerHTML="";const STRENGTH_LIST=isB()?STRENGTH_LIST_B:STRENGTH_LIST_A;STRENGTH_LIST.forEach(item=>{const c=document.createElement("span");c.className="chip";if(selStrength.has(item.key))c.style.cssText="background:#2d7a4f;color:#fff;border-color:#2d7a4f";c.textContent=item.label;c.onclick=()=>{if(selStrength.has(item.key)){selStrength.delete(item.key);c.style.cssText="";}else{selStrength.add(item.key);c.style.cssText="background:#2d7a4f;color:#fff;border-color:#2d7a4f";}buildStrengthText();};el.appendChild(c);});}
 function buildAttitudeChips(){const el=g("attitudeChips");if(!el)return;el.innerHTML="";const ATTITUDE_LIST=isB()?ATTITUDE_LIST_B:ATTITUDE_LIST_A;ATTITUDE_LIST.forEach(item=>{const c=document.createElement("span");c.className="chip";if(selAttitude.has(item.key))c.style.cssText="background:#854f0b;color:#fff;border-color:#854f0b";c.textContent=item.label;c.onclick=()=>{if(selAttitude.has(item.key)){selAttitude.delete(item.key);c.style.cssText="";}else{selAttitude.add(item.key);c.style.cssText="background:#854f0b;color:#fff;border-color:#854f0b";}buildImproveText();};el.appendChild(c);});}
@@ -1232,9 +1247,10 @@ function buildAnalysis(){
   const lv=val("sLevel");
   QM.forEach(q=>{
     const w=wrongQs.has(q.n);
+    const pp=partialQs.has(q.n);
     const isChunk=[22,23,24,25].includes(q.n);
-    const stag=w?(isChunk?`<span class="tag tinfo">정상 오답</span>`:(q.warn&&q.warn!=="—"?`<span class="tag twrn">확인 필요</span>`:`<span class="tag tgray">일반 오답</span>`)):`<span class="tag tok">정답</span>`;
-    const interp=w?(isChunk?`${lv} 정상 범위`:(q.warn&&q.warn!=="—"?q.warn:q.norm)):"—";
+    const stag=w?(isChunk?`<span class="tag tinfo">정상 오답</span>`:(q.warn&&q.warn!=="—"?`<span class="tag twrn">확인 필요</span>`:`<span class="tag tgray">일반 오답</span>`)):(pp?`<span class="tag" style="background:#fff2d6;color:#9a6b06">세모(부분)</span>`:`<span class="tag tok">정답</span>`);
+    const interp=w?(isChunk?`${lv} 정상 범위`:(q.warn&&q.warn!=="—"?q.warn:q.norm)):(pp?`어순 일부 정확 — 부분 정답`:"—");
     tb.innerHTML+=`<div class="ar"><div style="font-weight:600">Q${q.n}</div><div><span class="code">${q.code}</span></div><div style="color:#555">${q.skill}</div><div>${stag}</div><div style="color:#666;font-size:11px">${interp}</div></div>`;
   });
   const az=g("alertZone");az.innerHTML="";
@@ -1471,7 +1487,7 @@ function saveKeywordHistory(){
 
 function resetAll(){
   ["sName","sSchool","sGrade","sClass","sTeacher","sMonth","autoFb","cmtStrength","cmtImprove","cmtExtra","cmtNext"].forEach(id=>{const el=g(id);if(el){el.value="";delete el.dataset.edited;}});
-  wrongQs.clear();selNext.clear();selAttitude.clear();selStrength.clear();domFilter="all";
+  wrongQs.clear();partialQs.clear();selNext.clear();selAttitude.clear();selStrength.clear();domFilter="all";
   {const _sa=g("strengthAnalysis");if(_sa)_sa.textContent="";const _ia=g("improveAnalysis");if(_ia)_ia.textContent="";}
   g("totNum").textContent="25";const gr=g("totGrade");if(gr)gr.style.display="none";
   const ha=g("historyAlert");if(ha)ha.style.display="none";
@@ -1496,7 +1512,7 @@ function saveReport(){
     saveKeywordHistory();
     const name=val("sName").trim(),month=val("sMonth").trim();
     const reportKey=`report:${getStudentKey()}:${(month||"").replace(/\s/g,"")}`;
-    const reportData={name,month,level:val("sLevel"),school:val("sSchool"),grade:val("sGrade"),cls:val("sClass"),teacher:val("sTeacher"),scores:getDS(),wrongQs:[...wrongQs],cmtStrength:val("cmtStrength"),cmtImprove:val("cmtImprove"),cmtExtra:val("cmtExtra"),cmtNext:val("cmtNext"),savedAt:new Date().toISOString()};
+    const reportData={name,month,level:val("sLevel"),school:val("sSchool"),grade:val("sGrade"),cls:val("sClass"),teacher:val("sTeacher"),scores:getDS(),wrongQs:[...wrongQs],partialQs:[...partialQs],cmtStrength:val("cmtStrength"),cmtImprove:val("cmtImprove"),cmtExtra:val("cmtExtra"),cmtNext:val("cmtNext"),savedAt:new Date().toISOString()};
     LS.set(reportKey,JSON.stringify(reportData));
     if(typeof clearDraft==='function')clearDraft();
     if(statusEl){statusEl.style.display="block";statusEl.style.color="#2d7a4f";statusEl.textContent=`✓ ${name} 학생 (${month}) 이력이 저장되었습니다.`;}
@@ -1523,7 +1539,7 @@ let _draftTimer=null;
 function saveDraft(){
   const k=_draftKey(); if(!k)return;
   const d={name:val("sName"),school:val("sSchool"),grade:val("sGrade"),cls:val("sClass"),teacher:val("sTeacher"),month:val("sMonth"),level:val("sLevel"),
-    wrongQs:[...wrongQs],selStrength:[...selStrength],selAttitude:[...selAttitude],selNext:[...selNext],
+    wrongQs:[...wrongQs],partialQs:[...partialQs],selStrength:[...selStrength],selAttitude:[...selAttitude],selNext:[...selNext],
     cmtStrength:val("cmtStrength"),cmtImprove:val("cmtImprove"),cmtExtra:val("cmtExtra"),cmtNext:val("cmtNext"),
     curStep:curStep,savedAt:new Date().toISOString()};
   LS.set(k,JSON.stringify(d));
@@ -1545,7 +1561,7 @@ function loadDraftIfExists(){
   if(g("cmtExtra"))g("cmtExtra").value=d.cmtExtra||"";
   if(g("cmtNext"))g("cmtNext").value=d.cmtNext||"";
   // 상태 복원
-  wrongQs=new Set(d.wrongQs||[]);
+  wrongQs=new Set(d.wrongQs||[]);partialQs=new Set(d.partialQs||[]);
   selStrength=new Set(d.selStrength||[]);
   selAttitude=new Set(d.selAttitude||[]);
   selNext=new Set(d.selNext||[]);
@@ -1554,7 +1570,7 @@ function loadDraftIfExists(){
 // 입력란만 비우기 (학생 전환 시 — draft 는 건드리지 않음)
 function clearWorkInputs(){
   ["sMonth","autoFb","cmtStrength","cmtImprove","cmtExtra","cmtNext"].forEach(id=>{const el=g(id);if(el){el.value="";delete el.dataset.edited;}});
-  wrongQs.clear();selNext.clear();selAttitude.clear();selStrength.clear();domFilter="all";
+  wrongQs.clear();partialQs.clear();selNext.clear();selAttitude.clear();selStrength.clear();domFilter="all";
   const _sa=g("strengthAnalysis");if(_sa)_sa.textContent="";
   const _ia=g("improveAnalysis");if(_ia)_ia.textContent="";
   const ro=g("reportOut");if(ro)ro.innerHTML="";
@@ -1658,7 +1674,7 @@ function _restoreReport(st,lv,month){
   if(g("cmtImprove"))g("cmtImprove").value=d.cmtImprove||"";
   if(g("cmtExtra"))g("cmtExtra").value=d.cmtExtra||"";
   if(g("cmtNext"))g("cmtNext").value=d.cmtNext||"";
-  wrongQs=new Set(d.wrongQs||[]);
+  wrongQs=new Set(d.wrongQs||[]);partialQs=new Set(d.partialQs||[]);
   if(g("sLevel")&&d.level){g("sLevel").value=d.level;onLvChange();}
   go(4); // 리포트 화면
 }
