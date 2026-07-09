@@ -686,7 +686,8 @@ const LV={
 let curLv="";
 let bonusOn=false;
 // areas 기반 상태: gridState[areaId] = {idx:true/false}, countState[areaId] = 정수
-let gridState={};   // type:"grid" 영역의 항목별 맞음(true)/틀림(false)
+let gridState={};   // type:"grid" 영역 항목별 점수 1(맞음)/0.5(세모, writeMatch만)/0(틀림)
+const SUBJ_GRID=new Set(["writeMatch"]); // 세모(0.5) 허용 그리드 — 쓰기(주관식)만. 음가 grid(spkSound/spkWord)는 객관식이라 이진 유지.
 let countState={};  // type:"count" 영역의 맞은 개수
 
 /* ===== 이력 저장 (silver 방식 · prefix np_ · 음가 포함) ===== */
@@ -1080,7 +1081,7 @@ function buildGradeAreas(){
       const cols=a.cols||7;
       let cells='';
       items.forEach((it,i)=>{
-        gridState[a.id][i]=true; // 기본 맞음
+        gridState[a.id][i]=1; // 기본 맞음
         // 셀 라벨: writeMatch는 문자열, spkSound는 {w,t}, spkWord는 {w,v}
         let label, sub='';
         if(typeof it==='string'){ label=it; }
@@ -1092,8 +1093,9 @@ function buildGradeAreas(){
         `<div class="area-head"><div><div class="area-name">${a.name}</div><div class="area-sub">${a.sub||''}</div></div>`+
         `<div class="area-score"><span id="sc_${a.id}">${items.length}</span> / ${items.length}점</div></div>`+
         `<div class="legend"><span><i class="ldot" style="background:#2d9b5f"></i>맞음 1점</span>`+
+        (SUBJ_GRID.has(a.id)?`<span><i class="ldot" style="background:#e6a417"></i>세모 0.5점</span>`:``)+
         `<span><i class="ldot" style="background:#e24b4a"></i>틀림 0점</span>`+
-        `<span style="color:#bbb">틀린 것만 탭하세요</span></div>`+
+        `<span style="color:#bbb">${SUBJ_GRID.has(a.id)?'탭: 맞음→틀림→세모':'틀린 것만 탭하세요'}</span></div>`+
         `<div class="qgrid c${cols}" id="grid_${a.id}">${cells}</div>`+
         `</div>`;
     }
@@ -1115,12 +1117,15 @@ function onCountInput(id){
 
 function toggleGrid(id,i){
   if(!gridState[id])return;
-  gridState[id][i]=!gridState[id][i];
+  const cur=(+gridState[id][i]||0);
+  let next;
+  if(SUBJ_GRID.has(id)){ next=cur>=1?0:(cur<=0?0.5:1); } // 정답→오답→세모→정답
+  else { next=cur>=1?0:1; }                               // 정답↔오답
+  gridState[id][i]=next;
   const el=g(`gc_${id}_${i}`);
-  if(el)el.classList.toggle('wrong',!gridState[id][i]);
-  // 영역 점수 갱신
-  let ok=0; Object.values(gridState[id]).forEach(v=>{if(v)ok++;});
-  if(g('sc_'+id))g('sc_'+id).textContent=ok;
+  if(el){el.classList.remove('ok','half','wrong');if(next<=0)el.classList.add('wrong');else if(next<1)el.classList.add('half');}
+  let sum=0; Object.values(gridState[id]).forEach(v=>{sum+=(+v||0);});
+  if(g('sc_'+id))g('sc_'+id).textContent=(sum%1?sum.toFixed(1):sum);
   recalc();
 }
 
@@ -1143,8 +1148,8 @@ function areaScore(d,a){
   // 현재 상태에서 영역 점수 산출
   const w=(a.weight!=null)?a.weight:1;
   if(a.type==='count')return (countState[a.id]||0)*w;
-  let ok=0; const st=gridState[a.id]||{}; Object.values(st).forEach(v=>{if(v)ok++;});
-  return ok;
+  let sum=0; const st=gridState[a.id]||{}; Object.values(st).forEach(v=>{sum+=(+v||0);});
+  return sum;
 }
 
 function recalc(){
