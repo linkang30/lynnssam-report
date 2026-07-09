@@ -32,6 +32,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .qbtn.rdg{border-color:#a9dab9}.qbtn.rdg .qn{color:#2f855a}
 .qbtn.grm{border-color:#cfb0e6}.qbtn.grm .qn{color:#7c3aed}
 .qbtn.wrong{background:#fdeaea!important;border-color:#e24b4a!important}
+.qbtn.half{background:#fff7e6!important;border-color:#f0a020!important}
+.qbtn.half .qd{color:#b5730a!important}
+.qbtn[data-subj] .qn::after{content:" ✎";color:#b07de0;font-size:8px}
 .qbtn.wrong .qn,.qbtn.wrong .qt,.qbtn.wrong .qd{color:#c0392b!important}
 label{display:block;font-size:11px;color:#666;margin-bottom:3px;font-weight:500}
 input[type=text],select,textarea{width:100%;border:1px solid #cfcfe6;border-radius:8px;padding:7px 10px;font-size:13px;font-family:inherit;color:#1a1a2e;background:#fff;outline:none}
@@ -156,7 +159,7 @@ select option{background:#fff;color:#1a1a2e}
 <div id="s1" class="hidden">
   <div class="card">
     <div class="ctitle"><i class="ti ti-target"></i>틀린 문항 선택 &mdash; 45문항</div>
-    <p style="font-size:11px;color:#888;margin-bottom:12px">문항을 클릭하면 오답(빨간색) 처리됩니다. 다시 클릭하면 정답으로 복원됩니다. 기본값은 모두 정답입니다.</p>
+    <p style="font-size:11px;color:#888;margin-bottom:12px">문항을 클릭하면 오답(빨강)으로 표시됩니다. 주관식(문법·서술형, ✎ 표시)은 한 번 더 누르면 세모(½·주황)로 바뀌고, 다시 누르면 정답으로 복원됩니다. 객관식은 정답↔오답만 전환됩니다. 기본값은 모두 정답입니다.</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;font-size:10.5px">
       <span style="background:#fdf6e3;border:1px solid #e6cd8a;color:#b8860b;padding:3px 9px;border-radius:5px;font-weight:600">&#9632; VOC 어휘 /20</span>
       <span style="background:#eaf3fb;border:1px solid #a9cdee;color:#2b6cb0;padding:3px 9px;border-radius:5px;font-weight:600">&#9632; LIS 듣기 /10</span>
@@ -164,7 +167,7 @@ select option{background:#fff;color:#1a1a2e}
       <span style="background:#f5eefb;border:1px solid #cfb0e6;color:#7c3aed;padding:3px 9px;border-radius:5px;font-weight:600">&#9632; GRM 문법 /5</span>
     </div>
     <div id="wrongGrid"></div>
-    <div style="margin-top:10px;font-size:12px;color:#888" id="wrongCount">오답: 0문항</div>
+    <div style="margin-top:10px;font-size:12px;color:#888" id="wrongCount">오답: 0문항 · 세모: 0문항 / 45문항</div>
   </div>
   <div class="navrow">
     <button class="btn bsec" onclick="go(0)"><i class="ti ti-arrow-left"></i> 이전</button>
@@ -364,6 +367,7 @@ function applyGramMeta(lv){
 }
 
 const DOM_MAX={VOC:20,LIS:10,RDG:10,GRM:5};
+const SUBJ_DOMAINS = new Set(["GRM"]); // 세모(0.5) 허용 영역 — 주관식(문법·영작). 개별 문항은 Q_META의 subj:true로도 지정 가능.
 const DOM_LABEL={VOC:"어휘(VOC)",LIS:"듣기(LIS)",RDG:"읽기(RDG)",GRM:"문법(GRM)"};
 const DOM_COLOR={VOC:"#e0b94d",LIS:"#5aa9e6",RDG:"#6cc06c",GRM:"#b07de0"};
 const QBTN_CLS={VOC:"voc",LIS:"lis",RDG:"rdg",GRM:"grm"};
@@ -630,7 +634,12 @@ function showHistory(){const k=getStudentKey();const box=g('historyBox');if(!box
 function onLvChange(){const lv=val('lvSel');if(!lv)return;const d=LV[lv];if(!d)return;const box=g('lvInfo');box.style.display='block';box.innerHTML=`<span style="font-weight:700;color:#8c7bff">Inter Stella ${lv}</span> &mdash; ${d.name} <span style="color:#888">| ${d.grammar}</span><br><span style="font-size:11px;color:#888">테마: ${d.theme} · CEFR ${d.cefr} · Lexile ${d.lexile}</span>`;applyGramMeta(lv);buildWrongGrid();}
 
 function initScoreInputs(){let h='';for(let i=1;i<=45;i++)h+=`<input type="hidden" id="q${i}" value="1">`;g('scoreInputs').innerHTML=h;}
-function syncWrongFromScores(){for(let i=1;i<=45;i++){const s=parseFloat(g('q'+i)?.value);if(s<1)wrongSet.add(i);else wrongSet.delete(i);}}
+function qScore(n){const v=parseFloat(g('q'+n)?.value);return isNaN(v)?1:v;}
+function qState(n){const s=qScore(n);return s>=1?'ok':(s<=0?'wrong':'half');}
+function isSubjective(n){const m=Q_META[n];return !!m&&(SUBJ_DOMAINS.has(m.domain)||m.subj===true);}
+function qStateLabel(st){return st==='ok'?'정답':(st==='wrong'?'오답':'세모(½)');}
+function paintQ(n){const el=g('wb'+n),dd=g('wd'+n),st=qState(n);if(el){el.classList.remove('wrong','half');if(st==='wrong')el.classList.add('wrong');else if(st==='half')el.classList.add('half');}if(dd)dd.textContent=qStateLabel(st);}
+function syncWrongFromScores(){for(let i=1;i<=45;i++){const s=qScore(i);if(s<1)wrongSet.add(i);else wrongSet.delete(i);}}
 function buildWrongGrid(){
   syncWrongFromScores();
   const groups=[
@@ -643,15 +652,15 @@ function buildWrongGrid(){
   groups.forEach(grp=>{
     html+=`<div style="font-size:10.5px;font-weight:700;color:#666;margin:10px 0 5px;letter-spacing:.4px">${grp.label}</div>`;
     html+=`<div class="q-grid" style="grid-template-columns:repeat(${grp.cols},1fr)">`;
-    grp.qs.forEach(n=>{const m=Q_META[n];const isW=wrongSet.has(n);html+=`<div class="qbtn ${QBTN_CLS[m.domain]}${isW?' wrong':''}" id="wb${n}" onclick="toggleWrong(${n})"><span class="qn">Q${n}</span><span class="qt">${m.label}</span><span class="qd" id="wd${n}">${isW?'오답':'정답'}</span></div>`;});
+    grp.qs.forEach(n=>{const m=Q_META[n];const st=qState(n);const cls=st==='wrong'?' wrong':(st==='half'?' half':'');const sj=isSubjective(n)?' data-subj="1" title="주관식 · 클릭: 정답→오답→세모"':' title="클릭: 정답↔오답"';html+=`<div class="qbtn ${QBTN_CLS[m.domain]}${cls}"${sj} id="wb${n}" onclick="cycleScore(${n})"><span class="qn">Q${n}</span><span class="qt">${m.label}</span><span class="qd" id="wd${n}">${qStateLabel(st)}</span></div>`;});
     html+='</div>';
   });
   g('wrongGrid').innerHTML=html;updateWrongCount();
 }
-function toggleWrong(n){const sEl=g('q'+n);if(wrongSet.has(n)){wrongSet.delete(n);if(sEl)sEl.value='1';g('wb'+n)?.classList.remove('wrong');if(g('wd'+n))g('wd'+n).textContent='정답';}else{wrongSet.add(n);if(sEl)sEl.value='0';g('wb'+n)?.classList.add('wrong');if(g('wd'+n))g('wd'+n).textContent='오답';}updateWrongCount();}
-function updateWrongCount(){const c=wrongSet.size;if(g('wrongCount'))g('wrongCount').textContent=`오답: ${c}문항 / 45문항`;}
+function cycleScore(n){const sEl=g('q'+n);const cur=qScore(n);let next;if(isSubjective(n)){next=cur>=1?0:(cur<=0?0.5:1);}else{next=cur>=1?0:1;}if(sEl)sEl.value=String(next);syncWrongFromScores();paintQ(n);updateWrongCount();}
+function updateWrongCount(){let w=0,h=0;for(let i=1;i<=45;i++){const st=qState(i);if(st==='wrong')w++;else if(st==='half')h++;}if(g('wrongCount'))g('wrongCount').textContent=`오답: ${w}문항 · 세모: ${h}문항 / 45문항`;}
 
-function computeDomScore(){const ds={VOC:0,LIS:0,RDG:0,GRM:0};for(let i=1;i<=45;i++){const m=Q_META[i];if(!m)continue;if(wrongSet.has(i))continue;ds[m.domain]+=1;}return ds;}
+function computeDomScore(){const ds={VOC:0,LIS:0,RDG:0,GRM:0};for(let i=1;i<=45;i++){const m=Q_META[i];if(!m)continue;ds[m.domain]+=qScore(i);}return ds;}
 function rawTotal(){let t=0;for(let i=1;i<=45;i++)t+=parseFloat(g('q'+i)?.value)||0;return t;}
 function to100(raw){return Math.round(raw/TOTAL_RAW*1000)/10;}
 function gradeOf(pct){return pct>=95?'A+':pct>=90?'A':pct>=85?'B+':pct>=80?'B':pct>=75?'C+':pct>=70?'C':pct>=60?'D':'F';}
@@ -665,7 +674,7 @@ function buildAnalysis(){
   ['VOC','LIS','RDG','GRM'].forEach(dom=>{const r=ds[dom];const mx=DOM_MAX[dom];const p=Math.round(r/mx*100);const bf=p>=80?'bf-ok':p>=60?'bf-mid':'bf-low';bars+=`<div class="dombar"><div class="dbl"><span class="dbn">${DOM_LABEL[dom]}</span><span class="dbpct">${r}/${mx} (${p}%)</span></div><div class="bg"><div class="bf ${bf}" style="width:${p}%"></div></div></div>`;});
   if(g('domBars'))g('domBars').innerHTML=bars;
   let rows='';
-  for(let i=1;i<=45;i++){const m=Q_META[i];const w=wrongSet.has(i);const j=w?'오답':'정답';const jc=w?'#c0392b':'#2f855a';const dc=DOM_COLOR[m.domain];rows+=`<div class="ar" style="align-items:center"><div style="font-weight:700;color:#444">Q${i}</div><div><span style="background:${dc}22;color:${dc};border-radius:4px;padding:2px 6px;font-size:9.5px;font-weight:700">${m.domain}</span></div><div style="font-size:11px;color:#666">${m.desc}</div><div style="font-weight:700;color:${jc};font-size:11px">${j}</div><div style="font-size:10.5px;color:#888">${m.label}</div></div>`;}
+  for(let i=1;i<=45;i++){const m=Q_META[i];const st=qState(i);const j=qStateLabel(st);const jc=st==='wrong'?'#c0392b':(st==='half'?'#b5730a':'#2f855a');const dc=DOM_COLOR[m.domain];rows+=`<div class="ar" style="align-items:center"><div style="font-weight:700;color:#444">Q${i}</div><div><span style="background:${dc}22;color:${dc};border-radius:4px;padding:2px 6px;font-size:9.5px;font-weight:700">${m.domain}</span></div><div style="font-size:11px;color:#666">${m.desc}</div><div style="font-weight:700;color:${jc};font-size:11px">${j}</div><div style="font-size:10.5px;color:#888">${m.label}</div></div>`;}
   if(g('atblBody'))g('atblBody').innerHTML=rows;
   const weak=['VOC','LIS','RDG','GRM'].filter(d=>ds[d]/DOM_MAX[d]<0.6);
   const sb=g('sigBox'),sr=g('sigRow');if(sb&&sr){if(weak.length){sb.style.display='block';sr.innerHTML=weak.map(d=>`<span class="sig-badge">${DOM_LABEL[d]}</span>`).join('');}else sb.style.display='none';}
