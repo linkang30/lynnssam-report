@@ -54,6 +54,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .qbtn.wrt .qn{color:#b0104a}
 .qbtn.wrong{background:#fcebeb!important;border-color:#e24b4a!important}
 .qbtn.wrong .qn,.qbtn.wrong .qt,.qbtn.wrong .qd{color:#a32d2d!important}
+.qbtn.half{background:#fff7e6!important;border-color:#f0a020!important}
+.qbtn.half .qn,.qbtn.half .qt,.qbtn.half .qd{color:#b5730a!important}
+.qbtn[data-subj] .qn::after{content:" ✎";color:#9c27b0;font-size:8px}
 .score-input-area{display:flex;align-items:center;gap:8px;background:#f8f7f4;border-radius:9px;padding:8px 12px;margin-bottom:6px}
 .score-input-area input{width:56px;text-align:center;font-size:18px;font-weight:800;border:1.5px solid #e0dfd8;border-radius:7px;padding:4px 0;color:#c0392b;background:#fff;outline:none}
 .score-input-area input:focus{border-color:#c0392b}
@@ -213,7 +216,7 @@ textarea{resize:vertical}
 <div id="s1" class="hidden">
   <div class="card">
     <div class="ctitle"><i class="ti ti-target"></i>틀린 문항 확인 — 점수 0점 문항이 자동 오답 표시됩니다</div>
-    <p style="font-size:11px;color:#888;margin-bottom:12px">문항을 클릭하면 오답(빨간색) 처리됩니다. 다시 클릭하면 정답으로 복원됩니다. 기본값은 모두 정답입니다.</p>
+    <p style="font-size:11px;color:#888;margin-bottom:12px">문항을 클릭하면 오답(0점·빨강)으로 표시됩니다. 주관식 쓰기(✎ 표시)는 한 번 더 누르면 세모(1.25점·주황)로, 다시 누르면 정답(2.5점)으로 바뀝니다. 객관식은 정답↔오답만 전환됩니다. 기본값은 모두 정답입니다.</p>
 
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;font-size:10.5px">
       <span style="background:#fff8e1;border:1px solid #f39c12;color:#c0860a;padding:3px 9px;border-radius:5px;font-weight:600">■ VOC</span>
@@ -224,7 +227,7 @@ textarea{resize:vertical}
     </div>
 
     <div id="wrongGrid"></div>
-    <div style="margin-top:10px;font-size:12px;color:#aaa" id="wrongCount">오답: 0문항 · 감점: 0점</div>
+    <div style="margin-top:10px;font-size:12px;color:#aaa" id="wrongCount">오답: 0문항 · 세모: 0문항 · 감점: 0점</div>
   </div>
   <div class="navrow">
     <button class="btn bsec" onclick="go(0)"><i class="ti ti-arrow-left"></i> 이전</button>
@@ -1728,19 +1731,25 @@ function calcTotal(){
     for(let i=1; i<=40; i++){
       const btn = g('wb'+i);
       if(!btn) continue;
-      const isWrong = wrongSet.has(i);
-      btn.classList.toggle('wrong', isWrong);
+      const st = silverState(i);
+      btn.classList.remove('wrong','half');
+      if(st==='wrong') btn.classList.add('wrong'); else if(st==='half') btn.classList.add('half');
       const wd = g('wd'+i);
-      if(wd) wd.textContent = isWrong ? '0점' : '2.5점';
+      if(wd) wd.textContent = silverScoreLabel(i);
     }
     updateWrongCount();
   }
 }
 
+const SUBJ_DOMAINS = new Set(["WRT"]); // 세모(0.5) 허용 — 실버는 쓰기(WRT)만 명확한 주관식. GRM은 선택/쓰기 혼합이라 제외. 개별 문항은 Q_META의 subj:true로 지정 가능.
+function isSubjective(n){const m=Q_META[n];return !!m&&(SUBJ_DOMAINS.has(m.domain)||m.subj===true);}
+function silverScore(n){const v=parseFloat(g('q'+n)?.value);return isNaN(v)?2.5:Math.max(0,Math.min(2.5,v));}
+function silverState(n){const s=silverScore(n);return s>=2.5?'ok':(s<=0?'wrong':'half');}
+function silverScoreLabel(n){const s=silverScore(n);return s<=0?'0점':(s>=2.5?'2.5점':(Math.round(s*100)/100)+'점');}
+function paintSilverQ(n){const el=g('wb'+n),wd=g('wd'+n),st=silverState(n);if(el){el.classList.remove('wrong','half');if(st==='wrong')el.classList.add('wrong');else if(st==='half')el.classList.add('half');}if(wd)wd.textContent=silverScoreLabel(n);}
 function syncWrongFromScores(){
   for(let i=1; i<=40; i++){
-    const score = parseFloat(g('q'+i)?.value)||0;
-    if(score < 2.5) wrongSet.add(i);
+    if(silverScore(i) < 2.5) wrongSet.add(i);
     else wrongSet.delete(i);
   }
 }
@@ -1754,12 +1763,13 @@ function buildWrongGrid(){
     html += `<div style="display:grid;grid-template-columns:repeat(${Math.min(grp.qs.length,6)},1fr);gap:5px;margin-bottom:4px">`;
     grp.qs.forEach(n => {
       const m = Q_META[n];
-      const score = parseFloat(g('q'+n)?.value)||0;
-      const isWrong = wrongSet.has(n);
-      html += `<div class="qbtn ${QBTN_CLS[m.domain]}${isWrong?' wrong':''}" id="wb${n}" onclick="toggleWrong(${n})">
+      const st = silverState(n);
+      const cls = st==='wrong'?' wrong':(st==='half'?' half':'');
+      const sj = isSubjective(n)?' data-subj="1" title="주관식 · 클릭: 정답→오답→세모"':' title="클릭: 정답↔오답"';
+      html += `<div class="qbtn ${QBTN_CLS[m.domain]}${cls}"${sj} id="wb${n}" onclick="toggleWrong(${n})">
         <span class="qn">Q${n}</span>
         <span class="qt">${m.label}</span>
-        <span class="qd" id="wd${n}">${score===0?'0점':'2.5점'}</span>
+        <span class="qd" id="wd${n}">${silverScoreLabel(n)}</span>
       </div>`;
     });
     html += '</div>';
@@ -1769,28 +1779,24 @@ function buildWrongGrid(){
 }
 
 function toggleWrong(n){
-  const el = g('wb'+n);
   const scoreEl = g('q'+n);
-  if(wrongSet.has(n)){
-    wrongSet.delete(n);
-    if(scoreEl) scoreEl.value = '2.5';
-    if(el) el.classList.remove('wrong');
-    if(g('wd'+n)) g('wd'+n).textContent = '2.5점';
-  } else {
-    wrongSet.add(n);
-    if(scoreEl) scoreEl.value = '0';
-    if(el) el.classList.add('wrong');
-    if(g('wd'+n)) g('wd'+n).textContent = '0점';
-  }
+  const cur = silverScore(n);
+  let next;
+  if(isSubjective(n)){ next = cur>=2.5 ? 0 : (cur<=0 ? 1.25 : 2.5); }
+  else { next = cur>=2.5 ? 0 : 2.5; }
+  if(scoreEl) scoreEl.value = String(next);
+  syncWrongFromScores();
+  paintSilverQ(n);
   calcTotal();
   updateWrongCount();
   if(typeof saveDraftDebounced==='function')saveDraftDebounced();
 }
 
 function updateWrongCount(){
-  const cnt = wrongSet.size;
-  const deduct = (cnt * 2.5).toFixed(1);
-  if(g('wrongCount')) g('wrongCount').textContent = `오답: ${cnt}문항 · 감점: ${deduct}점`;
+  let w=0,h=0,deduct=0;
+  for(let i=1;i<=40;i++){const st=silverState(i);if(st==='wrong')w++;else if(st==='half')h++;deduct+=(2.5-silverScore(i));}
+  deduct=Math.round(deduct*10)/10;
+  if(g('wrongCount')) g('wrongCount').textContent = `오답: ${w}문항 · 세모: ${h}문항 · 감점: ${deduct}점`;
 }
 
 function computeDomScore(){
@@ -1798,10 +1804,7 @@ function computeDomScore(){
   for(let i=1; i<=40; i++){
     const m = Q_META[i];
     if(!m) continue;
-    if(wrongSet.has(i)){ domScore[m.domain] += 0; continue; }
-    const raw = parseFloat(g('q'+i)?.value);
-    const score = isNaN(raw) ? 2.5 : Math.max(0, Math.min(2.5, raw));
-    domScore[m.domain] += score;
+    domScore[m.domain] += silverScore(i);
   }
   Object.keys(domScore).forEach(k => {
     domScore[k] = Math.round(domScore[k] * 10) / 10;
@@ -1814,9 +1817,7 @@ function buildAnalysis(){
   const itemRows = [];
   for(let i=1; i<=40; i++){
     const m = Q_META[i];
-    const isWrong = wrongSet.has(i);
-    const raw = parseFloat(g('q'+i)?.value)||0;
-    const score = isWrong ? 0 : Math.max(0, Math.min(2.5, raw));
+    const score = silverScore(i);
     const judgeTxt = score>=2.5?'정답':score>0?'부분':'오답';
     const jcol = score>=2.5?'#27ae60':score>0?'#f39c12':'#a32d2d';
     const domColor = DOM_COLOR[m.domain];
