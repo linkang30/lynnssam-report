@@ -1230,7 +1230,11 @@ const QMETA_MAP = { SA1:QM_SA1, SA2:QM_SA2, SA3:QM_SA3, SA4:QM_SA4, SA5:QM_SA5, 
 const GROUPS_MAP = { SA1:GROUPS_SA1, SA2:GROUPS_SA2, SA3:GROUPS_SA3, SA4:GROUPS_SA4, SA5:GROUPS_SA5, SA6:GROUPS_SA6, SB1:GROUPS_SB1, SB2:GROUPS_SB2, SB3:GROUPS_SB3, SB4:GROUPS_SB4, SB5:GROUPS_SB5, SB6:GROUPS_SB6 };
 let Q_META = QM_SA2;
 
-const DOM_MAX = {VOC:15, RDG:15, LIS:12.5, GRM:47.5, WRT:10};
+let DOM_MAX = {VOC:15, RDG:15, LIS:12.5, GRM:47.5, WRT:10};
+// 레벨별 실제 문항수×2.5로 영역 만점 동적 계산 (하드코딩=SA2 분포라 타 레벨 백분율 오류 방지)
+function recomputeDomMax(){const d={VOC:0,RDG:0,LIS:0,GRM:0,WRT:0};for(const k in Q_META){const dm=Q_META[k]&&Q_META[k].domain;if(dm&&d[dm]!=null)d[dm]+=2.5;}DOM_MAX=d;}
+function activeDoms(){return ['VOC','RDG','LIS','GRM','WRT'].filter(d=>DOM_MAX[d]>0);}
+if(typeof Q_META!=='undefined')recomputeDomMax();
 const DOM_LABEL = {VOC:"어휘(VOC)",RDG:"읽기(RDG)",LIS:"듣기(LIS)",GRM:"문법(GRM)",WRT:"쓰기(WRT)"};
 const DOM_COLOR = {VOC:"#f39c12",RDG:"#27ae60",LIS:"#2196f3",GRM:"#9c27b0",WRT:"#e91e63"};
 const DOM_BF   = {VOC:"bf-voc",RDG:"bf-rdg",LIS:"bf-lis",GRM:"bf-grm",WRT:"bf-wrt"};
@@ -1413,21 +1417,24 @@ function mergeSeedUpdate(){
   _rosterSet('prevSeedIds',Object.keys(seed));
 }
 function saveRoster(){_rosterSet('roster',roster);}
+function _timeMin(c){var m=String(c).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1],10)*60+parseInt(m[2],10):0;}
+function _roomRank(c){var m=String(c).match(/\(([^)]+)\)/);var t=m?m[1].trim():'';if(t==='Bille')t='Billie';if(t==='HJ')t='Heejeong';if(!t){var ST={Citrine:'Kaya',Emerald:'Annie',Peridot:'Angela',Sapphire:'Clare',Topaz:'Jinny'};var k=Object.keys(ST).find(x=>String(c).toLowerCase().startsWith(x.toLowerCase()));if(k)t=ST[k];}var R={Jinny:0,Angela:2,Annie:3,Clare:4,Kaya:5,Billie:6,Heejeong:7};return (t in R)?R[t]:99;}
 function classList(){
   const set=new Set(roster.classes||[]);
   Object.values(roster.students).forEach(s=>{if(s.currentClass)set.add(s.currentClass);});
-  return [...set].sort((a,b)=>a.localeCompare(b,'ko'));
+  return [...set].sort((a,b)=>(_roomRank(a)-_roomRank(b))||(_timeMin(a)-_timeMin(b))||a.localeCompare(b,'ko'));
 }
 function studentsInClass(cls){
   return Object.values(roster.students).filter(s=>s.currentClass===cls&&s.status!=='inactive').sort((a,b)=>a.name.localeCompare(b.name,'ko'));
 }
+function fmtClassName(raw){if(!raw)return raw;var __ROOM={Kaya:'Citrine #5',Annie:'Emerald #3',Angela:'Peridot #Lab',Clare:'Sapphire #4',Jinny:'Topaz #1',Billie:'초등C',Heejeong:'중등 B'},__ST={Citrine:'Kaya',Emerald:'Annie',Peridot:'Angela',Sapphire:'Clare',Topaz:'Jinny'};var s=String(raw),teacher='',time='',days='';s=s.replace(/\(([^)]*)\)/,(m,t)=>{teacher=t.trim();return ' ';});s=s.replace(/#\s*[^\s()]+/,' ');s=s.replace(/(\d{1,2}:\d{2})/,(m,t)=>{time=t;return ' ';});s=s.replace(/((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|Th|Sa|Su|M|T|W|F)(?:\s*\/\s*(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|Th|Sa|Su|M|T|W|F))+)/,(m,d)=>{days=d.replace(/[\s\/]/g,'');return ' ';});var name=s.replace(/\s+/g,' ').trim();if(teacher==='Bille')teacher='Billie';if(teacher==='HJ')teacher='Heejeong';if(!teacher){var stone=Object.keys(__ST).find(st=>name.toLowerCase().startsWith(st.toLowerCase()));if(stone)teacher=__ST[stone];}var room=__ROOM[teacher]||name;var out=room;if(teacher)out+=' ('+teacher+')';if(days)out+=' '+days;if(time)out+=' '+time;return out.replace(/\s+/g,' ').trim();}
 function escR(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 let curStuId=null;
 function renderClassSelect(){
   const sel=g('classSelect'); if(!sel)return;
   const prev=sel.value;
   const cls=classList();
-  sel.innerHTML='<option value="">— 반을 선택하세요 —</option>'+cls.map(c=>`<option value="${escR(c)}">${escR(c)}</option>`).join('');
+  sel.innerHTML='<option value="">— 반을 선택하세요 —</option>'+cls.map(c=>`<option value="${escR(c)}">${escR(fmtClassName(c))}</option>`).join('');
   if(prev&&cls.includes(prev))sel.value=prev;
   const dl=g('classDatalist'); if(dl)dl.innerHTML=cls.map(c=>`<option value="${escR(c)}">`).join('');
 }
@@ -1557,7 +1564,7 @@ function openStuEdit(mode,id){
   g('seMode').value=mode; g('seId').value=id||'';
   // 반 드롭다운 채우기
   const sel=g('seClass'); const cls=classList();
-  sel.innerHTML=cls.map(c=>`<option value="${escR(c)}">${escR(c)}</option>`).join('');
+  sel.innerHTML=cls.map(c=>`<option value="${escR(c)}">${escR(fmtClassName(c))}</option>`).join('');
   if(mode==='edit'&&id&&roster.students[id]){
     const st=roster.students[id];
     g('seName').value=st.name||''; g('seSchool').value=st.school||''; g('seSid').value=st.id||'';
@@ -1704,6 +1711,7 @@ function onLvChange(){
   const lv = val('lvSel');
   if(!lv) return;
   if(typeof QMETA_MAP!=='undefined' && QMETA_MAP[lv]) Q_META = QMETA_MAP[lv];
+  if(typeof recomputeDomMax==='function')recomputeDomMax();
   if(typeof buildWrongGrid==='function' && g('wrongGrid') && g('wrongGrid').innerHTML.trim()) buildWrongGrid();
   const d = LV[lv];
   if(!d) return;
@@ -1830,7 +1838,7 @@ function buildAnalysis(){
     </div>`);
   }
   let bars = '';
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(dom => {
+  activeDoms().forEach(dom => {
     const raw = domScore[dom];
     const max = DOM_MAX[dom];
     const pct = Math.round(raw/max*100);
@@ -1842,7 +1850,7 @@ function buildAnalysis(){
   });
   if(g('domBars')) g('domBars').innerHTML = bars;
   if(g('atblBody')) g('atblBody').innerHTML = itemRows.join('');
-  const weak = ['VOC','RDG','LIS','GRM','WRT'].filter(d => domScore[d]/DOM_MAX[d] < 0.6);
+  const weak = activeDoms().filter(d => domScore[d]/DOM_MAX[d] < 0.6);
   const sigBox = g('sigBox');
   const sigRow = g('sigRow');
   if(sigBox && sigRow){
@@ -1873,10 +1881,10 @@ function buildNextPriorityBar(rates){
   const el = g('nextPriorityBar');
   if(!el) return;
   const prio = {};
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(d=>{ prio[d] = rates[d]<60?'weak':rates[d]<80?'mid':'strong'; });
+  activeDoms().forEach(d=>{ prio[d] = rates[d]<60?'weak':rates[d]<80?'mid':'strong'; });
   const style = {weak:{dot:'[!]',tip:'보완 필요',col:'#a32d2d',bg:'#fcebeb'},mid:{dot:'[~]',tip:'성장 중',col:'#854f0b',bg:'#faeeda'},strong:{dot:'[+]',tip:'강점',col:'#2d7a4f',bg:'#eef6e3'}};
   const order = {weak:0,mid:1,strong:2};
-  const items = ['VOC','RDG','LIS','GRM','WRT'].sort((a,b)=>order[prio[a]]-order[prio[b]]).map(dom=>{
+  const items = activeDoms().sort((a,b)=>order[prio[a]]-order[prio[b]]).map(dom=>{
     const s = style[prio[dom]];
     return `<span style="display:inline-block;background:${s.bg};color:${s.col};border:0.5px solid ${s.col}33;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;margin:0 5px 5px 0;cursor:default">${s.dot} ${DOM_LABEL[dom]} ${rates[dom]}% · ${s.tip}</span>`;
   }).join('');
@@ -1887,11 +1895,11 @@ function buildNextChipsByAnalysis(lv){
   if(!nChips) return;
   const ds = computeDomScore();
   const rates = {};
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(dom => {
+  activeDoms().forEach(dom => {
     rates[dom] = DOM_MAX[dom] > 0 ? Math.round((ds[dom] ?? 0) / DOM_MAX[dom] * 100) : 100;
   });
   buildNextPriorityBar(rates);
-  const sortedDoms = ['VOC','RDG','LIS','GRM','WRT'].sort((a,b) => rates[a] - rates[b]);
+  const sortedDoms = activeDoms().sort((a,b) => rates[a] - rates[b]);
   const result = [];
   sortedDoms.forEach(dom => {
     const kwList = (NEXT_BY_DOM[dom]?.[lv]) || [];
@@ -1927,14 +1935,14 @@ function buildAutoFeedback(domScore){
   const keys = Object.keys(domScore||{});
   const ds = keys.length>0 ? domScore : computeDomScore();
   const rates = {};
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(dom => {
+  activeDoms().forEach(dom => {
     const score = ds[dom] ?? 0;
     const max = DOM_MAX[dom];
     rates[dom] = max > 0 ? Math.round(score / max * 100) : 100;
   });
-  const strong = ['VOC','RDG','LIS','GRM','WRT'].filter(dom => rates[dom] >= 80);
-  const mid    = ['VOC','RDG','LIS','GRM','WRT'].filter(dom => rates[dom] >= 60 && rates[dom] < 80);
-  const weak   = ['VOC','RDG','LIS','GRM','WRT'].filter(dom => rates[dom] < 60);
+  const strong = activeDoms().filter(dom => rates[dom] >= 80);
+  const mid    = activeDoms().filter(dom => rates[dom] >= 60 && rates[dom] < 80);
+  const weak   = activeDoms().filter(dom => rates[dom] < 60);
   const total = Math.round(Object.values(ds).reduce((a,b)=>a+b,0)*10)/10;
   let fb = '';
   if(lv && d){
@@ -1968,11 +1976,11 @@ function generateStrengthAnalysis(){
   const box = g('strengthAnalysis');
   if(!box) return;
   const rates = {};
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(dom => {
+  activeDoms().forEach(dom => {
     rates[dom] = DOM_MAX[dom]>0 ? Math.round((ds[dom]??0)/DOM_MAX[dom]*100) : 100;
   });
-  const strong = ['VOC','RDG','LIS','GRM','WRT'].filter(d=>rates[d]>=80);
-  const mid    = ['VOC','RDG','LIS','GRM','WRT'].filter(d=>rates[d]>=60&&rates[d]<80);
+  const strong = activeDoms().filter(d=>rates[d]>=80);
+  const mid    = activeDoms().filter(d=>rates[d]>=60&&rates[d]<80);
   if(strong.length===0 && mid.length===0){
     box.textContent = '(정답률 80% 이상 영역이 없습니다. 오답을 확인해주세요.)';
     return;
@@ -1995,11 +2003,11 @@ function generateImproveAnalysis(){
   const box = g('improveAnalysis');
   if(!box) return;
   const rates = {};
-  ['VOC','RDG','LIS','GRM','WRT'].forEach(dom => {
+  activeDoms().forEach(dom => {
     rates[dom] = DOM_MAX[dom]>0 ? Math.round((ds[dom]??0)/DOM_MAX[dom]*100) : 100;
   });
-  const weak = ['VOC','RDG','LIS','GRM','WRT'].filter(d=>rates[d]<60);
-  const mid  = ['VOC','RDG','LIS','GRM','WRT'].filter(d=>rates[d]>=60&&rates[d]<80);
+  const weak = activeDoms().filter(d=>rates[d]<60);
+  const mid  = activeDoms().filter(d=>rates[d]>=60&&rates[d]<80);
   if(weak.length===0 && mid.length===0){
     box.textContent = '(모든 영역이 80% 이상입니다. 탁월한 성취입니다!)';
     return;
@@ -2112,11 +2120,11 @@ function buildReport(domScore){
   tot = Math.round(tot*10)/10;
   const pct = Math.round(tot);
   const gradeTxt = pct>=95?'A+':pct>=90?'A':pct>=85?'B+':pct>=80?'B':pct>=75?'C+':pct>=70?'C':pct>=60?'D':'F';
-  const domScoreCopyLines = ['VOC','RDG','LIS','GRM','WRT'].map(dom => {
+  const domScoreCopyLines = activeDoms().map(dom => {
     const raw = domScore[dom]; const max = DOM_MAX[dom]; const p = Math.round(raw/max*100);
     return `${DOM_LABEL[dom]}  ${raw.toFixed(1)}/${max}점 (${p}%)`;
   }).join('\n');
-  const domBarsHtml = ['VOC','RDG','LIS','GRM','WRT'].map(dom => {
+  const domBarsHtml = activeDoms().map(dom => {
     const raw = domScore[dom]; const max = DOM_MAX[dom]; const p = Math.round(raw/max*100);
     const col = p>=80?'#27ae60':p>=60?'#f39c12':'#e24b4a';
     return `<div style="margin-bottom:9px">
@@ -2444,7 +2452,7 @@ function _classToLevel(cls){const m=(cls||"").match(/Silver Stella\s+([AB])(\d)/
 function openDashboard(){
   const modal=g("dashModal"); if(!modal)return;
   const csel=g("dashClass");
-  if(csel){const cur=csel.value;csel.innerHTML='<option value="">— 반 선택 —</option>'+(roster.classes||[]).map(c=>`<option value="${escR(c)}">${escR(c)}</option>`).join("");if(cur)csel.value=cur;}
+  if(csel){const cur=csel.value;csel.innerHTML='<option value="">— 반 선택 —</option>'+(roster.classes||[]).map(c=>`<option value="${escR(c)}">${escR(fmtClassName(c))}</option>`).join("");if(cur)csel.value=cur;}
   const msel=g("dashMonth");
   if(msel&&!msel.value){msel.value=val("repMonth")||_rosterGet("reportMonth")||"";}
   renderDashboard(); modal.classList.add("on");
