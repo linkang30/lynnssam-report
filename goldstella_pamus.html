@@ -657,21 +657,24 @@ function mergeSeedUpdate(){
   _rosterSet('prevSeedIds',Object.keys(seed));
 }
 function saveRoster(){_rosterSet('roster',roster);}
+function _timeMin(c){var m=String(c).match(/(\d{1,2}):(\d{2})/);return m?parseInt(m[1],10)*60+parseInt(m[2],10):0;}
+function _roomRank(c){var m=String(c).match(/\(([^)]+)\)/);var t=m?m[1].trim():'';if(t==='Bille')t='Billie';if(t==='HJ')t='Heejeong';if(!t){var ST={Citrine:'Kaya',Emerald:'Annie',Peridot:'Angela',Sapphire:'Clare',Topaz:'Jinny'};var k=Object.keys(ST).find(x=>String(c).toLowerCase().startsWith(x.toLowerCase()));if(k)t=ST[k];}var R={Jinny:0,Angela:2,Annie:3,Clare:4,Kaya:5,Billie:6,Heejeong:7};return (t in R)?R[t]:99;}
 function classList(){
   const set=new Set(roster.classes||[]);
   Object.values(roster.students).forEach(s=>{if(s.currentClass)set.add(s.currentClass);});
-  return [...set].sort((a,b)=>a.localeCompare(b,'ko'));
+  return [...set].sort((a,b)=>(_roomRank(a)-_roomRank(b))||(_timeMin(a)-_timeMin(b))||a.localeCompare(b,'ko'));
 }
 function studentsInClass(cls){
   return Object.values(roster.students).filter(s=>s.currentClass===cls&&s.status!=='inactive').sort((a,b)=>a.name.localeCompare(b.name,'ko'));
 }
+function fmtClassName(raw){if(!raw)return raw;var __ROOM={Kaya:'Citrine #5',Annie:'Emerald #3',Angela:'Peridot #Lab',Clare:'Sapphire #4',Jinny:'Topaz #1',Billie:'초등C',Heejeong:'중등 B'},__ST={Citrine:'Kaya',Emerald:'Annie',Peridot:'Angela',Sapphire:'Clare',Topaz:'Jinny'};var s=String(raw),teacher='',time='',days='';s=s.replace(/\(([^)]*)\)/,(m,t)=>{teacher=t.trim();return ' ';});s=s.replace(/#\s*[^\s()]+/,' ');s=s.replace(/(\d{1,2}:\d{2})/,(m,t)=>{time=t;return ' ';});s=s.replace(/((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|Th|Sa|Su|M|T|W|F)(?:\s*\/\s*(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|Th|Sa|Su|M|T|W|F))+)/,(m,d)=>{days=d.replace(/[\s\/]/g,'');return ' ';});var name=s.replace(/\s+/g,' ').trim();if(teacher==='Bille')teacher='Billie';if(teacher==='HJ')teacher='Heejeong';if(!teacher){var stone=Object.keys(__ST).find(st=>name.toLowerCase().startsWith(st.toLowerCase()));if(stone)teacher=__ST[stone];}var room=__ROOM[teacher]||name;var out=room;if(teacher)out+=' ('+teacher+')';if(days)out+=' '+days;if(time)out+=' '+time;return out.replace(/\s+/g,' ').trim();}
 function escR(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 let curStuId=null;
 function renderClassSelect(){
   const sel=g('classSelect'); if(!sel)return;
   const prev=sel.value;
   const cls=classList();
-  sel.innerHTML='<option value="">— 반을 선택하세요 —</option>'+cls.map(c=>`<option value="${escR(c)}">${escR(c)}</option>`).join('');
+  sel.innerHTML='<option value="">— 반을 선택하세요 —</option>'+cls.map(c=>`<option value="${escR(c)}">${escR(fmtClassName(c))}</option>`).join('');
   if(prev&&cls.includes(prev))sel.value=prev;
   const dl=g('classDatalist'); if(dl)dl.innerHTML=cls.map(c=>`<option value="${escR(c)}">`).join('');
 }
@@ -792,7 +795,7 @@ function openStuEdit(mode,id){
   g('seMode').value=mode; g('seId').value=id||'';
   // 반 드롭다운 채우기
   const sel=g('seClass'); const cls=classList();
-  sel.innerHTML=cls.map(c=>`<option value="${escR(c)}">${escR(c)}</option>`).join('');
+  sel.innerHTML=cls.map(c=>`<option value="${escR(c)}">${escR(fmtClassName(c))}</option>`).join('');
   if(mode==='edit'&&id&&roster.students[id]){
     const st=roster.students[id];
     g('seName').value=st.name||''; g('seSchool').value=st.school||''; g('seSid').value=st.id||'';
