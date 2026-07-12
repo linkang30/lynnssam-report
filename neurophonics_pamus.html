@@ -1165,31 +1165,30 @@ function recalc(){
     if(g('sc_'+a.id))g('sc_'+a.id).textContent=(v%1?v.toFixed(1):v);
     base+=v;
   });
-  let bonusPts=0;
+  const _fresh=GRADE&&_lastGradeSig===_gradeSig();
   if(bonusOn){
-    bonusPts=bonusPoints();
+    const bonusPts=_fresh?GRADE.bonusPts:'—';
     if(g('bonusPts'))g('bonusPts').textContent='+'+bonusPts+'점';
     if(g('liveBonus'))g('liveBonus').textContent='보너스 +'+bonusPts;
   }
-  let raw=base+bonusPts;
-  let total=raw*100/(d.maxRaw||110);
-  if(total>100)total=100;
-  total=Math.round(total*10)/10;
-  if(g('liveTotal'))g('liveTotal').textContent=total%1?total.toFixed(1):total;
+  if(g('liveTotal'))g('liveTotal').textContent=_fresh?(GRADE.total%1?GRADE.total.toFixed(1):GRADE.total):'—';
   if(typeof saveDraftDebounced==='function')saveDraftDebounced();
 }
 
-function computeScores(){
-  const d=LV[curLv];
-  const out={byId:{},base:0};
-  if(!d)return out;
-  (d.areas||[]).forEach(a=>{
-    const v=areaScore(d,a);
-    out.byId[a.id]=v;
-    out.base+=v;
-  });
-  return out;
+/* ── 총점 환산·maxRaw·보너스 등 배점·공식은 서버(_grading.js)에만 존재. 프론트는 마킹 상태만 보내고 결과를 캐시(GRADE)해서 읽는다. ── */
+let GRADE=null, _lastGradeSig='';
+function _gradeSig(){return String(curLv)+'|'+JSON.stringify(gridState||{})+'|'+JSON.stringify(countState||{})+'|'+(bonusOn?'1':'0')+'|'+(g('cBonus')?g('cBonus').value:'0');}
+async function refreshGrade(){
+  const sig=_gradeSig();
+  if(GRADE && sig===_lastGradeSig) return true;
+  try{
+    const resp=await fetch('/api/grade',{method:'POST',headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},body:JSON.stringify({app:'neurophonics',level:curLv,gridState:gridState,countState:countState,bonusOn:bonusOn,bonus:(g('cBonus')?g('cBonus').value:'0')})});
+    if(!resp.ok){let m='HTTP '+resp.status;try{const e=await resp.json();if(e&&e.error)m=e.error;}catch(_){}throw new Error(m);}
+    const data=await resp.json(); GRADE=data; _lastGradeSig=sig;
+    return true;
+  }catch(e){ alert('채점 계산 중 오류가 발생했습니다.\n('+(e.message||e)+')\n네트워크/로그인을 확인해 주세요.'); return false; }
 }
+function computeScores(){return GRADE?{byId:GRADE.byId,base:GRADE.base}:{byId:{},base:0};}
 
 function phonemeStats(){
   const d=LV[curLv]; if(!d)return null;
@@ -1555,10 +1554,9 @@ function buildReport(){
   if(!d){out.innerHTML='<p style="color:#999;font-size:13px">먼저 과정을 선택하고 채점해주세요.</p>';return;}
   const sc=computeScores();
   const base=sc.base;
-  let bonusPts=0;
-  if(bonusOn){bonusPts=bonusPoints();}
-  let raw=base+bonusPts;
-  let total=raw*100/((LV[curLv]&&LV[curLv].maxRaw)||110); if(total>100)total=100; total=Math.round(total*10)/10;
+  let bonusPts=GRADE?GRADE.bonusPts:0;
+  let raw=GRADE?GRADE.raw:0;
+  let total=GRADE?GRADE.total:0;
   const name=val('stuName')||'이름 없음';
   const school=val('stuSchool')||'-';
   const grade=val('stuGrade')||'-';
@@ -1795,7 +1793,7 @@ function closeDashboard(){const m=g('dashModal');if(m)m.classList.remove('on');}
 function renderDashboard(){const box=g('dashBody');if(!box)return;const cls=g('dashClass')?g('dashClass').value:'';const month=g('dashMonth')?g('dashMonth').value.trim():'';if(!cls){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">반을 선택하면 학생별 리포트 현황이 표시됩니다.</div>';return;}const studs=studentsInClass(cls);if(!studs.length){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">이 반에 등록된 학생이 없습니다.</div>';return;}let done=0,draft=0,none=0;const rows=studs.map(st=>{const lv=_classToLevelNP(cls);const stt=studentStatus(st,lv,month);if(stt==='done')done++;else if(stt==='draft')draft++;else none++;const badge=stt==='done'?'<span style="background:#e3f3e9;color:#2d7a4f;border:1px solid #b5dcc4;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">완료</span>':stt==='draft'?'<span style="background:#fff3df;color:#a8730a;border:1px solid #f0cd8a;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">작성 중</span>':'<span style="background:#f2f2ef;color:#999;border:1px solid #ddd;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">미작성</span>';const action=stt==='done'?'다시 보기':stt==='draft'?'이어 하기':'새로 작성';return `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #f0efe9"><div style="display:flex;align-items:center;gap:10px"><span style="font-weight:600;font-size:13px">${escR(st.name)}</span>${badge}</div><button onclick="dashOpenStudent('${escR(st.id)}','${stt}')" style="background:#f8f7f4;border:1px solid #d0d0cc;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;color:#555;font-weight:600">${action}</button></div>`;}).join('');box.innerHTML=`<div style="display:flex;gap:10px;margin-bottom:10px;font-size:11px"><span style="color:#2d7a4f">완료 ${done}</span><span style="color:#a8730a">작성 중 ${draft}</span><span style="color:#999">미작성 ${none}</span><span style="margin-left:auto;color:#aaa">총 ${studs.length}명</span></div>${rows}`;}
 function dashOpenStudent(id,stt){closeDashboard();let month=g('dashMonth')?g('dashMonth').value.trim():'';if(!month)month=val('repMonth')||_rosterGet('reportMonth')||'';resetAll();const st=roster.students[id];if(!st)return;curStuId=id;if(g('classSelect')){g('classSelect').value=st.currentClass||'';if(typeof renderStuChips==='function')renderStuChips();}if(g('stuName'))g('stuName').value=st.name||'';if(g('stuSchool'))g('stuSchool').value=st.school||'';if(g('sClass'))g('sClass').value=st.currentClass||'';if(g('stuGrade'))g('stuGrade').value=st.grade||'';if(g('teacher'))g('teacher').value=st.teacher||'';if(typeof onNameInput==='function')onNameInput();if(month&&g('repMonth'))g('repMonth').value=month;const lv=_classToLevelNP(st.currentClass||'');if(lv&&g('lvSel')){g('lvSel').value=lv;if(typeof onLvChange==='function')onLvChange();}if(stt==='done'){_restoreReport(st,lv,month);}else if(stt==='draft'){loadDraftIfExists();go(1);}else{go(1);}}
 function _restoreReport(st,lv,month){const mk=(month||'').replace(/\s/g,'');const pre=`${(st.school||'').replace(/\s/g,'')}_${(st.name||'').replace(/\s/g,'')}`;const d=LS('get',`report:${pre}:${lv}:${mk}`);if(!d){go(1);return;}if(g('repMonth'))g('repMonth').value=d.month||month||'';if(g('teacher'))g('teacher').value=d.teacher||'';if(g('cmtStrength'))g('cmtStrength').value=d.cmtStrength||'';if(g('cmtImprove'))g('cmtImprove').value=d.cmtImprove||'';if(g('cmtExtra'))g('cmtExtra').value=d.cmtExtra||'';if(g('cmtNext'))g('cmtNext').value=d.cmtNext||'';_npApply(d.state);go(4);}
-function go(step){
+async function go(step){
   const steps=['s0','s1','s2','s3','s4'];
   const btns=document.querySelectorAll('.sbtn');
   steps.forEach((id,i)=>{
@@ -1804,6 +1802,7 @@ function go(step){
     if(btns[i]){btns[i].classList.toggle('active',i===step);btns[i].classList.toggle('done',i<step);}
   });
   if(step===1&&curLv){recalc();}
+  if(step>=2){const ok=await refreshGrade();if(!ok)return;}
   if(step===2){buildAnalysis();}
   if(step===3){setTimeout(()=>{buildAutoFeedback();buildNextPlan();},0);}
   if(step===4){setTimeout(()=>{buildAutoFeedback();buildReport();},0);}

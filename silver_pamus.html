@@ -1230,9 +1230,9 @@ const QMETA_MAP = { SA1:QM_SA1, SA2:QM_SA2, SA3:QM_SA3, SA4:QM_SA4, SA5:QM_SA5, 
 const GROUPS_MAP = { SA1:GROUPS_SA1, SA2:GROUPS_SA2, SA3:GROUPS_SA3, SA4:GROUPS_SA4, SA5:GROUPS_SA5, SA6:GROUPS_SA6, SB1:GROUPS_SB1, SB2:GROUPS_SB2, SB3:GROUPS_SB3, SB4:GROUPS_SB4, SB5:GROUPS_SB5, SB6:GROUPS_SB6 };
 let Q_META = QM_SA2;
 
-let DOM_MAX = {VOC:15, RDG:15, LIS:12.5, GRM:47.5, WRT:10};
+let DOM_MAX = {VOC:0, RDG:0, LIS:0, GRM:0, WRT:0}; /* 배점은 서버(_grading.js)에서 채점 시 채워짐 */
 // 레벨별 실제 문항수×2.5로 영역 만점 동적 계산 (하드코딩=SA2 분포라 타 레벨 백분율 오류 방지)
-function recomputeDomMax(){const d={VOC:0,RDG:0,LIS:0,GRM:0,WRT:0};for(const k in Q_META){const dm=Q_META[k]&&Q_META[k].domain;if(dm&&d[dm]!=null)d[dm]+=2.5;}DOM_MAX=d;}
+function recomputeDomMax(){/* 배점 계산은 서버(_grading.js)로 이전됨 — 클라이언트에서 계산하지 않음 */}
 function activeDoms(){return ['VOC','RDG','LIS','GRM','WRT'].filter(d=>DOM_MAX[d]>0);}
 if(typeof Q_META!=='undefined')recomputeDomMax();
 const DOM_LABEL = {VOC:"어휘(VOC)",RDG:"읽기(RDG)",LIS:"듣기(LIS)",GRM:"문법(GRM)",WRT:"쓰기(WRT)"};
@@ -1721,17 +1721,11 @@ function onLvChange(){
 }
 
 function calcTotal(){
-  let tot = 0;
-  for(let i=1; i<=40; i++){
-    const v = parseFloat(g('q'+i)?.value) || 0;
-    tot += Math.max(0, Math.min(2.5, v));
-  }
-  const rounded = Math.round(tot * 10) / 10;
-  const pct = Math.round(rounded);
-  const grade = pct>=95?'A+':pct>=90?'A':pct>=85?'B+':pct>=80?'B':pct>=75?'C+':pct>=70?'C':pct>=60?'D':'F';
-  if(g('totalDisp')) g('totalDisp').textContent = rounded;
+  const fresh = GRADE && _lastGradeSig===_gradeSig();
+  const pct = fresh?GRADE.pct:0;
+  if(g('totalDisp')) g('totalDisp').textContent = fresh?GRADE.raw:'—';
   if(g('gradeDisp')){
-    g('gradeDisp').textContent = grade;
+    g('gradeDisp').textContent = fresh?GRADE.grade:'—';
     g('gradeDisp').style.background = pct>=80?'rgba(255,255,255,.25)':pct>=70?'rgba(255,200,0,.3)':'rgba(255,100,100,.3)';
   }
   if(g('s1') && !g('s1').classList.contains('hidden')){
@@ -1807,18 +1801,24 @@ function updateWrongCount(){
   if(g('wrongCount')) g('wrongCount').textContent = `오답: ${w}문항 · 세모: ${h}문항 · 감점: ${deduct}점`;
 }
 
-function computeDomScore(){
-  const domScore = {VOC:0, RDG:0, LIS:0, GRM:0, WRT:0};
-  for(let i=1; i<=40; i++){
-    const m = Q_META[i];
-    if(!m) continue;
-    domScore[m.domain] += silverScore(i);
-  }
-  Object.keys(domScore).forEach(k => {
-    domScore[k] = Math.round(domScore[k] * 10) / 10;
-  });
-  return domScore;
+/* ── 배점·공식·등급컷은 서버(_grading.js)에만 존재. 프론트는 마크만 보내고 결과를 캐시(GRADE)해서 읽는다. ── */
+let GRADE=null, _lastGradeSig='';
+function _gradeSig(){var lv=val('lvSel');var s=String(lv)+'|';for(var i=1;i<=40;i++){s+=silverScore(i)+',';}return s;}
+async function refreshGrade(){
+  const lv=val('lvSel');
+  const marks={}; for(let i=1;i<=40;i++)marks[i]=silverScore(i);
+  const sig=_gradeSig();
+  if(GRADE && sig===_lastGradeSig) return true;
+  try{
+    const resp=await fetch('/api/grade',{method:'POST',headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},body:JSON.stringify({app:'silver',level:lv,marks:marks})});
+    if(!resp.ok){let m='HTTP '+resp.status;try{const e=await resp.json();if(e&&e.error)m=e.error;}catch(_){}throw new Error(m);}
+    const data=await resp.json();
+    GRADE=data; _lastGradeSig=sig;
+    if(data.max) DOM_MAX=Object.assign({VOC:0,RDG:0,LIS:0,GRM:0,WRT:0},data.max);
+    return true;
+  }catch(e){ alert('채점 계산 중 오류가 발생했습니다.\n('+(e.message||e)+')\n네트워크/로그인을 확인해 주세요.'); return false; }
 }
+function computeDomScore(){return (GRADE&&GRADE.ds)?GRADE.ds:{VOC:0,RDG:0,LIS:0,GRM:0,WRT:0};}
 
 function buildAnalysis(){
   const domScore = computeDomScore();
@@ -2115,11 +2115,9 @@ function buildReport(domScore){
   const teacher = val('teacher')||'선생님';
   const sClass = val('sClass')||'-';
   const month = val('repMonth')||'-';
-  let tot = 0;
-  for(let i=1;i<=40;i++) tot += parseFloat(g('q'+i)?.value)||0;
-  tot = Math.round(tot*10)/10;
-  const pct = Math.round(tot);
-  const gradeTxt = pct>=95?'A+':pct>=90?'A':pct>=85?'B+':pct>=80?'B':pct>=75?'C+':pct>=70?'C':pct>=60?'D':'F';
+  const tot = GRADE?GRADE.raw:0;
+  const pct = GRADE?GRADE.pct:0;
+  const gradeTxt = GRADE?GRADE.grade:'';
   const domScoreCopyLines = activeDoms().map(dom => {
     const raw = domScore[dom]; const max = DOM_MAX[dom]; const p = Math.round(raw/max*100);
     return `${DOM_LABEL[dom]}  ${raw.toFixed(1)}/${max}점 (${p}%)`;
@@ -2523,7 +2521,7 @@ function _restoreReport(st,lv,month){
   go(4);
 }
 
-function go(step){
+async function go(step){
   const steps = ['s0','s1','s2','s3','s4'];
   const btns = document.querySelectorAll('.sbtn');
   steps.forEach((id,i)=>{
@@ -2535,6 +2533,7 @@ function go(step){
     }
   });
   if(step===1){ buildWrongGrid(); }
+  if(step>=2){ const ok=await refreshGrade(); if(!ok)return; }
   if(step===2){ buildAnalysis(); }
   if(step===3){
     setupCommentTab();

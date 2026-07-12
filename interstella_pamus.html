@@ -366,7 +366,7 @@ function applyGramMeta(lv){
  for(let n=41;n<=45;n++){ if(gm[n]) Q_META[n]=gm[n]; }
 }
 
-const DOM_MAX={VOC:20,LIS:10,RDG:10,GRM:5};
+let DOM_MAX={VOC:0,LIS:0,RDG:0,GRM:0}; /* 배점은 서버(_grading.js)에서 채점 시 채워짐 */
 const SUBJ_DOMAINS = new Set(["GRM"]); // 세모(0.5) 허용 영역 — 주관식(문법·영작). 개별 문항은 Q_META의 subj:true로도 지정 가능.
 const DOM_LABEL={VOC:"어휘(VOC)",LIS:"듣기(LIS)",RDG:"읽기(RDG)",GRM:"문법(GRM)"};
 const DOM_COLOR={VOC:"#e0b94d",LIS:"#5aa9e6",RDG:"#6cc06c",GRM:"#b07de0"};
@@ -664,10 +664,26 @@ function buildWrongGrid(){
 function cycleScore(n){const sEl=g('q'+n);const cur=qScore(n);let next;if(isSubjective(n)){next=cur>=1?0:(cur<=0?0.5:1);}else{next=cur>=1?0:1;}if(sEl)sEl.value=String(next);syncWrongFromScores();paintQ(n);updateWrongCount();if(typeof saveDraftDebounced==='function')saveDraftDebounced();}
 function updateWrongCount(){let w=0,h=0;for(let i=1;i<=45;i++){const st=qState(i);if(st==='wrong')w++;else if(st==='half')h++;}if(g('wrongCount'))g('wrongCount').textContent=`오답: ${w}문항 · 세모: ${h}문항 / 45문항`;}
 
-function computeDomScore(){const ds={VOC:0,LIS:0,RDG:0,GRM:0};for(let i=1;i<=45;i++){const m=Q_META[i];if(!m)continue;ds[m.domain]+=qScore(i);}return ds;}
-function rawTotal(){let t=0;for(let i=1;i<=45;i++)t+=parseFloat(g('q'+i)?.value)||0;return t;}
-function to100(raw){return Math.round(raw/TOTAL_RAW*1000)/10;}
-function gradeOf(pct){return pct>=95?'A+':pct>=90?'A':pct>=85?'B+':pct>=80?'B':pct>=75?'C+':pct>=70?'C':pct>=60?'D':'F';}
+/* ── 배점·공식·등급컷은 서버(_grading.js)에만 존재. 프론트는 마크만 보내고 결과를 캐시(GRADE)해서 읽는다. ── */
+let GRADE=null, _lastGradeSig='';
+async function refreshGrade(){
+  const lv=val('lvSel');
+  const marks={}; let sig=String(lv)+'|';
+  for(let i=1;i<=45;i++){const v=qScore(i);marks[i]=v;sig+=v+',';}
+  if(GRADE && sig===_lastGradeSig) return true;
+  try{
+    const resp=await fetch('/api/grade',{method:'POST',headers:{'Content-Type':'application/json','x-site-password':(sessionStorage.getItem('sitePw')||'')},body:JSON.stringify({app:'interstella',level:lv,marks:marks})});
+    if(!resp.ok){let msg='HTTP '+resp.status;try{const e=await resp.json();if(e&&e.error)msg=e.error;}catch(_){}throw new Error(msg);}
+    const data=await resp.json();
+    GRADE=data; _lastGradeSig=sig;
+    if(data.max) DOM_MAX=Object.assign({VOC:0,LIS:0,RDG:0,GRM:0},data.max);
+    return true;
+  }catch(e){ alert('채점 계산 중 오류가 발생했습니다.\n('+(e.message||e)+')\n네트워크/로그인을 확인해 주세요.'); return false; }
+}
+function computeDomScore(){return (GRADE&&GRADE.ds)?GRADE.ds:{VOC:0,LIS:0,RDG:0,GRM:0};}
+function rawTotal(){return GRADE?GRADE.raw:0;}
+function to100(raw){return GRADE?GRADE.pct:0;}
+function gradeOf(pct){return GRADE?GRADE.grade:'';}
 
 function buildAnalysis(){
   const ds=computeDomScore();const raw=rawTotal();const pct=to100(raw);
@@ -834,7 +850,7 @@ function closeDashboard(){const m=g('dashModal');if(m)m.classList.remove('on');}
 function renderDashboard(){const box=g('dashBody');if(!box)return;const cls=g('dashClass')?g('dashClass').value:'';const month=g('dashMonth')?g('dashMonth').value.trim():'';if(!cls){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">반을 선택하면 학생별 리포트 현황이 표시됩니다.</div>';return;}const studs=studentsInClass(cls);if(!studs.length){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">이 반에 등록된 학생이 없습니다.</div>';return;}let done=0,draft=0,none=0;const rows=studs.map(st=>{const lv=_classToLevelIS(cls);const stt=studentStatus(st,lv,month);if(stt==='done')done++;else if(stt==='draft')draft++;else none++;const badge=stt==='done'?'<span style="background:#e3f3e9;color:#2d7a4f;border:1px solid #b5dcc4;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">완료</span>':stt==='draft'?'<span style="background:#fff3df;color:#a8730a;border:1px solid #f0cd8a;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">작성 중</span>':'<span style="background:#f2f2ef;color:#999;border:1px solid #ddd;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">미작성</span>';const action=stt==='done'?'다시 보기':stt==='draft'?'이어 하기':'새로 작성';return `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #f0efe9"><div style="display:flex;align-items:center;gap:10px"><span style="font-weight:600;font-size:13px">${escR(st.name)}</span>${badge}</div><button onclick="dashOpenStudent('${escR(st.id)}','${stt}')" style="background:#f8f7f4;border:1px solid #d0d0cc;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;color:#555;font-weight:600">${action}</button></div>`;}).join('');box.innerHTML=`<div style="display:flex;gap:10px;margin-bottom:10px;font-size:11px"><span style="color:#2d7a4f">완료 ${done}</span><span style="color:#a8730a">작성 중 ${draft}</span><span style="color:#999">미작성 ${none}</span><span style="margin-left:auto;color:#aaa">총 ${studs.length}명</span></div>${rows}`;}
 function dashOpenStudent(id,stt){closeDashboard();let month=g('dashMonth')?g('dashMonth').value.trim():'';if(!month)month=val('repMonth')||_rosterGet('reportMonth')||'';resetAll();const st=roster.students[id];if(!st)return;curStuId=id;if(g('classSelect')){g('classSelect').value=st.currentClass||'';if(typeof renderStuChips==='function')renderStuChips();}if(g('stuName'))g('stuName').value=st.name||'';if(g('stuSchool'))g('stuSchool').value=st.school||'';if(g('stuGrade'))g('stuGrade').value=st.grade||'';if(g('teacher'))g('teacher').value=st.teacher||'';if(typeof onNameInput==='function')onNameInput();if(month&&g('repMonth'))g('repMonth').value=month;const lv=_classToLevelIS(st.currentClass||'');if(lv&&g('lvSel')){g('lvSel').value=lv;if(typeof onLvChange==='function')onLvChange();}if(stt==='done'){_restoreReport(st,lv,month);}else if(stt==='draft'){loadDraftIfExists();go(1);}else{go(1);}}
 function _restoreReport(st,lv,month){const mk=(month||'').replace(/\s/g,'');const pre=`${(st.school||'').replace(/\s/g,'')}_${(st.name||'').replace(/\s/g,'')}`;const d=LS('get',`report:${pre}:${lv}:${mk}`);if(!d){go(1);return;}if(g('repMonth'))g('repMonth').value=d.month||month||'';if(g('teacher'))g('teacher').value=d.teacher||'';if(g('cmtStrength'))g('cmtStrength').value=d.cmtStrength||'';if(g('cmtImprove'))g('cmtImprove').value=d.cmtImprove||'';if(g('cmtExtra'))g('cmtExtra').value=d.cmtExtra||'';if(g('cmtNext'))g('cmtNext').value=d.cmtNext||'';wrongSet=new Set(d.wrongSet||[]);if(d.qvals){for(const i in d.qvals){const el=g('q'+i);if(el)el.value=d.qvals[i];}}if(g('lvSel')&&d.level){g('lvSel').value=d.level;if(typeof onLvChange==='function')onLvChange();}go(4);}
-function go(step){const steps=['s0','s1','s2','s3','s4'];const btns=document.querySelectorAll('.sbtn');steps.forEach((id,i)=>{const el=g(id);if(el)el.classList.toggle('hidden',i!==step);if(btns[i]){btns[i].classList.toggle('active',i===step);btns[i].classList.toggle('done',i<step);}});if(step===1)buildWrongGrid();if(step===2)buildAnalysis();if(step===3){setupCommentTab();setTimeout(buildAutoFeedback,0);}if(step===4)buildReport();if(typeof saveDraftDebounced==='function')saveDraftDebounced();window.scrollTo(0,0);}
+async function go(step){const steps=['s0','s1','s2','s3','s4'];const btns=document.querySelectorAll('.sbtn');steps.forEach((id,i)=>{const el=g(id);if(el)el.classList.toggle('hidden',i!==step);if(btns[i]){btns[i].classList.toggle('active',i===step);btns[i].classList.toggle('done',i<step);}});if(step===1)buildWrongGrid();if(step>=2){const ok=await refreshGrade();if(!ok)return;}if(step===2)buildAnalysis();if(step===3){setupCommentTab();setTimeout(buildAutoFeedback,0);}if(step===4)buildReport();if(typeof saveDraftDebounced==='function')saveDraftDebounced();window.scrollTo(0,0);}
 
 document.addEventListener('DOMContentLoaded',()=>{const al=g('appLogo');if(al)al.src=LOGO_LIGHT;initScoreInputs();g('lvSel')?.addEventListener('change',onLvChange);g('stuName')?.addEventListener('input',onNameInput);go(0); loadRoster(); renderClassSelect();});
 
