@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>파머스 리포트 · 로그인</title>
+<style>
+  :root{ --pri:#2f6fed; --bg:#f4f6fb; --line:#e3e8f0; --ink:#1f2733; --muted:#6b7686; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo",sans-serif;
+        background:var(--bg); color:var(--ink); display:flex; min-height:100vh; align-items:center; justify-content:center; padding:20px; }
+  .card{ width:100%; max-width:380px; background:#fff; border:1px solid var(--line); border-radius:16px;
+         box-shadow:0 8px 30px rgba(20,40,80,.08); padding:28px 26px; }
+  h1{ font-size:19px; margin:0 0 4px; }
+  .sub{ color:var(--muted); font-size:13px; margin:0 0 22px; }
+  label{ display:block; font-size:13px; color:var(--muted); margin:14px 0 6px; }
+  input{ width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:10px; font-size:15px; }
+  input:focus{ outline:none; border-color:var(--pri); }
+  button{ width:100%; margin-top:20px; padding:12px; border:0; border-radius:10px; background:var(--pri);
+          color:#fff; font-size:15px; font-weight:600; cursor:pointer; }
+  button:disabled{ opacity:.6; cursor:default; }
+  .msg{ margin-top:14px; font-size:13px; min-height:18px; }
+  .msg.err{ color:#c0392b; }
+  .msg.ok{ color:#1e874b; }
+  .panel{ display:none; }
+  .row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px dashed var(--line); font-size:14px; }
+  .row .k{ color:var(--muted); }
+  .row .v{ font-weight:600; }
+  .badge{ display:inline-block; background:#eef3ff; color:var(--pri); border-radius:999px; padding:2px 9px; font-size:12px; margin-left:4px; }
+  .linkbtn{ background:#eef1f6; color:var(--ink); margin-top:12px; }
+  .ghost{ background:transparent; color:var(--muted); margin-top:6px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <!-- 로그인 폼 -->
+    <div id="loginView">
+      <h1>파머스 리포트</h1>
+      <p class="sub">계정으로 로그인하세요</p>
+      <form id="loginForm">
+        <label for="email">이메일</label>
+        <input id="email" type="email" autocomplete="username" placeholder="admin-all@pamus.local" required>
+        <label for="pw">비밀번호</label>
+        <input id="pw" type="password" autocomplete="current-password" required>
+        <button id="loginBtn" type="submit">로그인</button>
+      </form>
+      <div id="msg" class="msg"></div>
+    </div>
+
+    <!-- 로그인 후 확인 패널 -->
+    <div id="okView" class="panel">
+      <h1>로그인됨 ✓</h1>
+      <p class="sub">아래 정보가 맞으면 인증·권한이 정상 작동하는 것입니다.</p>
+      <div class="row"><span class="k">이름</span><span class="v" id="pName">—</span></div>
+      <div class="row"><span class="k">역할</span><span class="v" id="pRole">—</span></div>
+      <div class="row"><span class="k">밴드</span><span class="v" id="pBands">—</span></div>
+      <div class="row"><span class="k">이메일</span><span class="v" id="pEmail">—</span></div>
+      <button class="linkbtn" onclick="location.href='index_pamus.html'">리포트 앱 목록으로 이동 →</button>
+      <button class="ghost" id="logoutBtn">로그아웃</button>
+      <div id="msg2" class="msg"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  (function(){
+    const SUPA_URL = 'https://bkgvmkbwxmfrocjsmshq.supabase.co';
+    const SUPA_KEY = 'sb_publishable_lzkStKN2FmQCBfGStKEl4Q_-NbC5GdV';
+    const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+    const $ = (id)=>document.getElementById(id);
+    const loginView=$('loginView'), okView=$('okView');
+    const msg=$('msg'), msg2=$('msg2');
+
+    function showLogin(){ loginView.style.display='block'; okView.style.display='none'; }
+    function showOk(){ loginView.style.display='none'; okView.style.display='block'; }
+
+    async function loadProfile(user){
+      // 본인 프로필 읽기 (RLS: read own profile)
+      const { data, error } = await sb.from('profiles')
+        .select('name, role, bands').eq('id', user.id).single();
+      $('pEmail').textContent = user.email || '—';
+      if(error || !data){
+        $('pName').textContent = '(프로필 없음)';
+        $('pRole').textContent = '—';
+        $('pBands').textContent = '—';
+        msg2.className='msg err';
+        msg2.textContent = '이 계정에 연결된 프로필이 없습니다. (profiles 테이블 확인 필요)';
+        return;
+      }
+      $('pName').textContent = data.name || '—';
+      $('pRole').innerHTML = (data.role==='admin'?'관리자':'강사') + ' <span class="badge">'+data.role+'</span>';
+      $('pBands').textContent = (data.bands && data.bands.length) ? data.bands.join(', ') : '(밴드 없음 — 강사)';
+      msg2.className='msg'; msg2.textContent='';
+    }
+
+    async function refresh(){
+      const { data:{ session } } = await sb.auth.getSession();
+      if(session && session.user){ showOk(); await loadProfile(session.user); }
+      else { showLogin(); }
+    }
+
+    $('loginForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const btn=$('loginBtn'); btn.disabled=true;
+      msg.className='msg'; msg.textContent='로그인 중…';
+      const email=$('email').value.trim(), password=$('pw').value;
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+      btn.disabled=false;
+      if(error){
+        msg.className='msg err';
+        msg.textContent = '로그인 실패: ' + (error.message==='Invalid login credentials' ? '이메일 또는 비밀번호가 올바르지 않습니다.' : error.message);
+        return;
+      }
+      msg.className='msg ok'; msg.textContent='성공!';
+      showOk(); await loadProfile(data.user);
+    });
+
+    $('logoutBtn').addEventListener('click', async ()=>{
+      await sb.auth.signOut();
+      $('email').value=''; $('pw').value='';
+      msg.className='msg'; msg.textContent='';
+      showLogin();
+    });
+
+    refresh();
+  })();
+  </script>
+</body>
+</html>
