@@ -65,7 +65,14 @@ module.exports = async (req, res) => {
     const grader = GRADERS[body.app];
     if (!grader) { res.status(400).json({ error: '알 수 없는 app: ' + body.app }); return; }
 
-    const result = grader({ level: body.level, marks: body.marks || {} });
+    const result = grader({
+      level: body.level,
+      marks: body.marks || {},
+      gridState: body.gridState || {},
+      countState: body.countState || {},
+      bonusOn: !!body.bonusOn,
+      bonus: body.bonus || 0
+    });
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({ error: '서버 오류: ' + (e.message || 'unknown') });
