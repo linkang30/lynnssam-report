@@ -65,14 +65,12 @@ module.exports = async (req, res) => {
     const grader = GRADERS[body.app];
     if (!grader) { res.status(400).json({ error: '알 수 없는 app: ' + body.app }); return; }
 
-    const result = grader({
-      level: body.level,
-      marks: body.marks || {},
-      gridState: body.gridState || {},
-      countState: body.countState || {},
-      bonusOn: !!body.bonusOn,
-      bonus: body.bonus || 0
-    });
+    // 채점기마다 입력 키가 다르므로(marks / countState·gridState / state 등)
+    // 안전한 기본값 위에 요청 본문 전체를 얹어 그대로 전달한다.
+    const result = grader(Object.assign(
+      { marks: {}, gridState: {}, countState: {}, state: {}, bonusOn: false, bonus: 0 },
+      body
+    ));
     res.status(200).json(result);
   } catch (e) {
     res.status(500).json({ error: '서버 오류: ' + (e.message || 'unknown') });
