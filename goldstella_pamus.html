@@ -1112,5 +1112,67 @@ function downloadPDF(){
   _fns.forEach(function(fn){ if(typeof window[fn]==='function'){ window[fn]=function(){ return _lockMsg(); }; } });
 })();
 </script>
+
+<!-- ===== 중앙 저장(Supabase) — 리포트를 DB에도 저장. 로그인돼 있을 때만 동작, 로컬 저장은 그대로 ===== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  const SUPA_URL='https://bkgvmkbwxmfrocjsmshq.supabase.co';
+  const SUPA_KEY='sb_publishable_lzkStKN2FmQCBfGStKEl4Q_-NbC5GdV';
+  const APP='goldstella', BAND='초등';
+  if(!window.supabase||!window.supabase.createClient){ console.warn('[pamus] supabase-js 로드 실패'); return; }
+  const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+  window.__pamusSb = sb;
+
+  function normMonth(s){
+    s=(s||'').trim();
+    const m=s.match(/(\d{4})\D+(\d{1,2})/);
+    if(m) return m[1]+'-'+String(m[2]).padStart(2,'0');
+    if(/^\d{4}-\d{2}$/.test(s)) return s;
+    return s || new Date().toISOString().slice(0,7);
+  }
+  async function currentUser(){ try{ const {data:{session}}=await sb.auth.getSession(); return session?session.user:null; }catch(e){ return null; } }
+
+  async function saveReportToDB(){
+    const user = await currentUser();
+    if(!user) return;
+    try{
+      const sid = (typeof curStuId!=='undefined' && curStuId) ? curStuId : null;
+      const name = (val('stuName')||'').trim();
+      if(!name) return;
+      const student_key = APP+':'+(sid||name);
+      const cls = (sid && typeof roster!=='undefined' && roster.students && roster.students[sid]) ? roster.students[sid].currentClass : '';
+      const { data:stu, error:e1 } = await sb.from('students').upsert({
+        student_key, name,
+        school: (val('stuSchool')||null),
+        grade: (val('stuGrade')||null),
+        band: BAND,
+        class_name: cls||null,
+        teacher_id: user.id
+      }, { onConflict:'student_key' }).select('id').single();
+      if(e1){ console.warn('[pamus] student', e1); return; }
+      const G=(typeof GRADE!=='undefined')?GRADE:null;
+      const scores={ raw:G?G.raw:null, pct:G?G.pct:null, grade:G?G.grade:null,
+                     domains:G?G.ds:null, wrongSet:(typeof wrongSet!=='undefined')?[...wrongSet]:[] };
+      const comments={ strength:val('cmtStrength'), improve:val('cmtImprove'),
+                       extra:val('cmtExtra'), next:val('cmtNext') };
+      const { error:e2 } = await sb.from('reports').upsert({
+        student_id: stu.id, author_id: user.id, app: APP,
+        level: (val('lvSel')||null),
+        report_month: normMonth(val('repMonth')),
+        scores, comments
+      }, { onConflict:'student_id,app,report_month' });
+      if(e2){ console.warn('[pamus] report', e2); return; }
+      const s=g('saveStatus'); if(s){ s.style.display='block'; s.textContent=(s.textContent||'')+' \u00b7 \u2601\ufe0f \uc911\uc559 \uc800\uc7a5\ub428'; }
+    }catch(e){ console.warn('[pamus] saveReportToDB', e); }
+  }
+  window.saveReportToDB = saveReportToDB;
+
+  if(typeof window.saveReport==='function'){
+    const _orig = window.saveReport;
+    window.saveReport = function(){ const r=_orig.apply(this,arguments); saveReportToDB(); return r; };
+  }
+})();
+</script>
 </body>
 </html>
