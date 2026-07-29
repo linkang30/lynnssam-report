@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>파머스 리포트 · 최고관리자 검색</title>
+<style>
+  :root{ --pri:#2f6fed; --bg:#f4f6fb; --line:#e3e8f0; --ink:#1f2733; --muted:#6b7686; --ok:#1e874b; --lock:#a8730a; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo",sans-serif;
+        background:var(--bg); color:var(--ink); }
+  .wrap{ max-width:1040px; margin:0 auto; padding:22px 18px 60px; }
+  h1{ font-size:20px; margin:0 0 2px; }
+  .sub{ color:var(--muted); font-size:13px; margin:0 0 18px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 18px; box-shadow:0 4px 18px rgba(20,40,80,.05); }
+  /* 로그인 */
+  #loginBox{ max-width:360px; margin:60px auto; }
+  label{ display:block; font-size:13px; color:var(--muted); margin:12px 0 6px; }
+  input,select{ width:100%; padding:10px 11px; border:1px solid var(--line); border-radius:9px; font-size:14px; }
+  input:focus,select:focus{ outline:none; border-color:var(--pri); }
+  button{ padding:10px 14px; border:0; border-radius:9px; background:var(--pri); color:#fff; font-size:14px; font-weight:600; cursor:pointer; }
+  button.ghost{ background:#eef1f6; color:var(--ink); }
+  .msg{ font-size:13px; margin-top:10px; min-height:16px; }
+  .msg.err{ color:#c0392b; }
+  /* 툴바 */
+  .topbar{ display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .who{ font-size:13px; color:var(--muted); margin-left:auto; }
+  .filters{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+  .filters .f{ flex:1; min-width:150px; }
+  .filters .f.sm{ flex:0 0 150px; }
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  th,td{ text-align:left; padding:9px 8px; border-bottom:1px solid #eef1f6; }
+  th{ color:var(--muted); font-weight:600; font-size:12px; }
+  tr.rrow{ cursor:pointer; }
+  tr.rrow:hover{ background:#f8faff; }
+  .pill{ display:inline-block; border-radius:999px; padding:2px 9px; font-size:11px; font-weight:700; }
+  .pill.edit{ background:#e9f6ee; color:var(--ok); }
+  .pill.lock{ background:#fdf3e2; color:var(--lock); }
+  .count{ font-size:12px; color:var(--muted); margin:6px 2px; }
+  /* 상세 모달 */
+  .bg{ position:fixed; inset:0; background:rgba(15,25,45,.4); display:none; align-items:center; justify-content:center; padding:20px; z-index:50; }
+  .bg.on{ display:flex; }
+  .modal{ background:#fff; border-radius:14px; max-width:620px; width:100%; max-height:86vh; overflow:auto; padding:22px 24px; }
+  .modal h2{ font-size:17px; margin:0 0 2px; }
+  .modal .meta{ color:var(--muted); font-size:13px; margin-bottom:14px; }
+  .sec{ margin:14px 0; }
+  .sec .lab{ font-size:12px; color:var(--pri); font-weight:700; margin-bottom:4px; }
+  .sec .body{ white-space:pre-wrap; font-size:13.5px; line-height:1.5; background:#f8faff; border:1px solid var(--line); border-radius:8px; padding:10px 12px; }
+  .scorebar{ display:flex; gap:14px; flex-wrap:wrap; font-size:13px; margin-bottom:6px; }
+  .scorebar b{ font-size:16px; }
+  .x{ float:right; background:none; border:none; font-size:22px; cursor:pointer; color:#999; padding:0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>파머스 리포트 · 최고관리자 검색</h1>
+  <p class="sub">강사명·학생명으로 리포트를 조회합니다. (권한 밴드 범위 내 리포트만 표시됩니다.)</p>
+
+  <!-- 로그인 -->
+  <div id="loginBox" class="card" style="display:none">
+    <div style="font-weight:700;margin-bottom:2px">로그인</div>
+    <div class="sub" style="margin:0">관리자 계정으로 로그인하세요.</div>
+    <form id="loginForm">
+      <label>이메일</label>
+      <input id="email" type="email" autocomplete="username" placeholder="admin-all@pamus.local" required>
+      <label>비밀번호</label>
+      <input id="pw" type="password" autocomplete="current-password" required>
+      <button id="loginBtn" type="submit" style="margin-top:16px;width:100%">로그인</button>
+    </form>
+    <div id="lmsg" class="msg"></div>
+  </div>
+
+  <!-- 검색 화면 -->
+  <div id="app" style="display:none">
+    <div class="topbar">
+      <button class="ghost" id="reloadBtn">↻ 새로고침</button>
+      <span class="who" id="who">—</span>
+      <button class="ghost" id="logoutBtn">로그아웃</button>
+    </div>
+    <div class="card">
+      <div class="filters">
+        <div class="f"><label>강사명</label><input id="fTeacher" placeholder="예: Jinny"></div>
+        <div class="f"><label>학생명</label><input id="fStudent" placeholder="예: 김정우"></div>
+        <div class="f sm"><label>과정</label>
+          <select id="fApp"><option value="">전체</option>
+            <option>interbridge</option><option>interstella</option><option>silver</option>
+            <option>prestella</option><option>neurophonics</option><option>goldstella</option>
+          </select>
+        </div>
+        <div class="f sm"><label>월</label><input id="fMonth" placeholder="예: 2026-06 또는 6월"></div>
+      </div>
+      <div class="count" id="count">—</div>
+      <div style="overflow:auto">
+        <table>
+          <thead><tr>
+            <th>학생</th><th>학교</th><th>반</th><th>과정</th><th>월</th>
+            <th>점수</th><th>상태</th><th>작성강사</th><th>저장일</th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 상세 모달 -->
+<div class="bg" id="detailBg">
+  <div class="modal">
+    <button class="x" onclick="closeDetail()">&times;</button>
+    <h2 id="dName">—</h2>
+    <div class="meta" id="dMeta">—</div>
+    <div class="scorebar" id="dScore"></div>
+    <div id="dComments"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  const SUPA_URL='https://bkgvmkbwxmfrocjsmshq.supabase.co';
+  const SUPA_KEY='sb_publishable_lzkStKN2FmQCBfGStKEl4Q_-NbC5GdV';
+  const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+  const $=(id)=>document.getElementById(id);
+  let ALL=[]; // 로드된 리포트 전체
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  async function boot(){
+    const { data:{ session } } = await sb.auth.getSession();
+    if(!session){ $('loginBox').style.display='block'; $('app').style.display='none'; return; }
+    // 프로필/역할 확인
+    const { data:prof } = await sb.from('profiles').select('name, role, bands').eq('id', session.user.id).single();
+    if(!prof || prof.role!=='admin'){
+      $('loginBox').style.display='none'; $('app').style.display='block';
+      $('who').textContent = (prof?prof.name:'') + ' · 관리자 전용';
+      $('rows').innerHTML='<tr><td colspan="9" style="padding:24px;color:#c0392b">이 화면은 최고관리자 전용입니다. 강사 계정으로는 조회할 수 없습니다.</td></tr>';
+      $('count').textContent='';
+      return;
+    }
+    $('loginBox').style.display='none'; $('app').style.display='block';
+    $('who').textContent = prof.name + ' · ' + (prof.bands||[]).join('/');
+    await loadReports();
+  }
+
+  async function loadReports(){
+    $('count').textContent='불러오는 중…';
+    const { data, error } = await sb.from('reports')
+      .select('id, app, level, report_month, status, created_at, scores, comments, student:students(name, school, grade, class_name, band), author:profiles(name)')
+      .order('created_at', { ascending:false });
+    if(error){ $('count').textContent='오류: '+error.message; return; }
+    ALL = data||[];
+    render();
+  }
+
+  function render(){
+    const t=$('fTeacher').value.trim().toLowerCase();
+    const s=$('fStudent').value.trim().toLowerCase();
+    const a=$('fApp').value;
+    const m=$('fMonth').value.trim().toLowerCase();
+    const rows = ALL.filter(r=>{
+      if(a && r.app!==a) return false;
+      if(t && !((r.author&&r.author.name||'').toLowerCase().includes(t))) return false;
+      if(s && !((r.student&&r.student.name||'').toLowerCase().includes(s))) return false;
+      if(m && !((r.report_month||'').toLowerCase().includes(m))) return false;
+      return true;
+    });
+    $('count').textContent = `${rows.length}건`;
+    if(!rows.length){ $('rows').innerHTML='<tr><td colspan="9" style="padding:20px;color:#999">해당하는 리포트가 없습니다.</td></tr>'; return; }
+    $('rows').innerHTML = rows.map((r,i)=>{
+      const st=r.student||{}, au=r.author||{};
+      const pct=r.scores&&r.scores.pct!=null?r.scores.pct:'';
+      const gr=r.scores&&r.scores.grade?(' ('+r.scores.grade+')'):'';
+      const stat=r.status==='locked'?'<span class="pill lock">잠금</span>':'<span class="pill edit">수정가능</span>';
+      const dt=(r.created_at||'').slice(0,10);
+      return `<tr class="rrow" data-i="${ALL.indexOf(r)}">
+        <td><b>${esc(st.name)}</b></td><td>${esc(st.school)}</td><td>${esc(st.class_name)}</td>
+        <td>${esc(r.app)}</td><td>${esc(r.report_month)}</td>
+        <td>${pct!==''?esc(pct)+gr:'—'}</td><td>${stat}</td>
+        <td>${esc(au.name)}</td><td>${esc(dt)}</td></tr>`;
+    }).join('');
+    [...document.querySelectorAll('.rrow')].forEach(tr=>tr.addEventListener('click',()=>openDetail(+tr.dataset.i)));
+  }
+
+  function openDetail(i){
+    const r=ALL[i]; if(!r) return;
+    const st=r.student||{}, au=r.author||{}, sc=r.scores||{}, cm=r.comments||{};
+    $('dName').textContent = (st.name||'') + '  ·  ' + (r.app||'') + ' ' + (r.level||'');
+    $('dMeta').textContent = [st.school, st.class_name, r.report_month, '작성: '+(au.name||''),
+                              r.status==='locked'?'잠금':'수정가능'].filter(Boolean).join('  ·  ');
+    let sb2='';
+    if(sc.pct!=null) sb2+=`<div>총점 <b>${esc(sc.pct)}</b>${sc.grade?' ('+esc(sc.grade)+')':''}</div>`;
+    if(sc.domains){ for(const k in sc.domains) sb2+=`<div>${esc(k)}: <b>${esc(sc.domains[k])}</b></div>`; }
+    $('dScore').innerHTML = sb2 || '<div style="color:#999">점수 정보 없음</div>';
+    const secs=[['이달의 강점',cm.strength],['보완점',cm.improve],['추가 관찰',cm.extra],['다음 달 지도',cm.next]];
+    $('dComments').innerHTML = secs.filter(x=>x[1]&&String(x[1]).trim())
+      .map(x=>`<div class="sec"><div class="lab">${x[0]}</div><div class="body">${esc(x[1])}</div></div>`).join('')
+      || '<div class="sec" style="color:#999">작성된 코멘트가 없습니다.</div>';
+    $('detailBg').classList.add('on');
+  }
+  window.closeDetail=()=>$('detailBg').classList.remove('on');
+  $('detailBg').addEventListener('click',(e)=>{ if(e.target===$('detailBg')) closeDetail(); });
+
+  // 필터 입력 → 즉시 반영
+  ['fTeacher','fStudent','fApp','fMonth'].forEach(id=>$(id).addEventListener('input',render));
+  $('reloadBtn').addEventListener('click',loadReports);
+  $('logoutBtn').addEventListener('click',async()=>{ await sb.auth.signOut(); location.reload(); });
+
+  // 인라인 로그인
+  $('loginForm').addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    $('lmsg').className='msg'; $('lmsg').textContent='로그인 중…';
+    const { error } = await sb.auth.signInWithPassword({ email:$('email').value.trim(), password:$('pw').value });
+    if(error){ $('lmsg').className='msg err'; $('lmsg').textContent='로그인 실패: '+(error.message==='Invalid login credentials'?'이메일 또는 비밀번호가 올바르지 않습니다.':error.message); return; }
+    $('lmsg').textContent=''; boot();
+  });
+
+  boot();
+})();
+</script>
+</body>
+</html>
