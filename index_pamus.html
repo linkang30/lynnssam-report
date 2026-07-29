@@ -42,4 +42,231 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .inter h2{color:#4338ca}
 .card.soon{cursor:default;background:#faf9f6;border-style:dashed;border-color:#dcdbd4}
 .card.soon:hover{transform:none;box-shadow:none}
-.
+.card.soon .ic{filter:grayscale(.3);opacity:.65}
+.card.soon h2{color:#aaa}
+.card.soon .sub{color:#bbb}
+.stellar .ic{background:#e3f3f1;color:#13a89e}
+.stellar h2{color:#13a89e}
+.gold .ic{background:#fbf3df;color:#c79a17}
+.gold h2{color:#c79a17}
+.badge-soon{position:absolute;top:14px;right:14px;font-size:9.5px;font-weight:700;color:#fff;background:#c9c7bf;border-radius:20px;padding:2px 9px;letter-spacing:.3px}
+.sectitle{display:flex;align-items:center;gap:10px;margin:30px 0 14px;font-size:13px;font-weight:800;color:#555;letter-spacing:.3px}
+.sectitle::after{content:'';flex:1;height:1px;background:#e0dfd8}
+.sectitle:first-child{margin-top:0}
+.tc .ic{background:#e7eefb;color:#1d3f8a}
+.tc h2{color:#1d3f8a}
+.tc .step{color:#5a7bc4;background:#eef3fc}
+.foot{text-align:center;margin-top:26px;font-size:11px;color:#aaa}
+.userbar{max-width:760px;margin:0 auto 14px;display:none;align-items:center;justify-content:flex-end;gap:10px;font-size:12px;color:#888}
+.userbar a{color:#4338ca;text-decoration:none}
+.hidden{display:none}
+@media(max-width:680px){.cards{grid-template-columns:1fr 1fr}}
+@media(max-width:460px){.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>파머스국제어학원 광교브랜치 <span style="font-size:13px;background:#b8860b;color:#fff;padding:2px 9px;border-radius:6px;vertical-align:middle;margin-left:6px">자사 전용</span></h1>
+    <p>월간 학습 리포트 작성 시스템 · 강사용</p>
+  </div>
+  <div id="userbar" class="userbar">
+    <span id="whoami"></span>
+    <a href="#" id="logoutLink">로그아웃</a>
+  </div>
+  <div id="gate" class="gate">
+    <div class="lock"><i class="ti ti-lock"></i></div>
+    <h2>강사 인증</h2>
+    <p>이용을 위해 비밀번호를 입력해 주세요.</p>
+    <input type="password" id="pw" placeholder="비밀번호" autocomplete="off" onkeydown="if(event.key==='Enter')checkPw()">
+    <button onclick="checkPw()">입장</button>
+    <div class="err" id="err">비밀번호가 올바르지 않습니다.</div>
+    <div class="loginlink"><a href="/login.html">계정으로 로그인 →</a></div>
+  </div>
+  <div id="apps" class="hidden">
+    <div class="sectitle">초등부 · Elementary</div>
+    <div class="steplabel"><b>학습 단계</b> &nbsp;Neuro Phonics → Pre Stella → Silver Stella → Inter Bridge → Inter Stella → Gold Stella</div>
+    <div class="cards">
+      <a class="card neuro" href="/neurophonics_pamus.html">
+        <span class="step">STEP 1</span>
+        <div class="ic"><i class="ti ti-abc"></i></div>
+        <h2>Neuro Phonics</h2>
+        <div class="sub">Sound Doctor · Tooth Phonics<br>음가 · 발음 · 읽기 기초</div>
+      </a>
+      <a class="card pre" href="/prestella_pamus.html">
+        <span class="step">STEP 2</span>
+        <div class="ic"><i class="ti ti-book-2"></i></div>
+        <h2>Pre Stella</h2>
+        <div class="sub">A1~A6 · B1~B6<br>리더 스토리 · 25점 기반</div>
+      </a>
+      <a class="card silver" href="/silver_pamus.html">
+        <span class="step">STEP 3</span>
+        <div class="ic"><i class="ti ti-star-filled"></i></div>
+        <h2>Silver Stella</h2>
+        <div class="sub">SA1~SA6 · SB1~SB6<br>40문항 · 100점 기반</div>
+      </a>
+      <a class="card inter" href="/interbridge_pamus.html">
+        <span class="step">STEP 4</span>
+        <div class="ic"><i class="ti ti-rocket"></i></div>
+        <h2>Inter Bridge</h2>
+        <div class="sub">IB1 · IB2 · IB3<br>45문항 · 구문(Syntax) 시작</div>
+      </a>
+      <a class="card stellar" href="/interstella_pamus.html">
+        <span class="step">STEP 5</span>
+        <div class="ic"><i class="ti ti-planet"></i></div>
+        <h2>Inter Stella</h2>
+        <div class="sub">S1~S6<br>45문항 · 100점 기반</div>
+      </a>
+      <a class="card gold" href="/goldstella_pamus.html">
+        <span class="step">STEP 6</span>
+        <div class="ic"><i class="ti ti-award"></i></div>
+        <h2>Gold Stella</h2>
+        <div class="sub">Gold 1~5<br>Reading · Listening&amp;Writing 통합</div>
+      </a>
+    </div>
+    <div class="sectitle">초등부 · Daily Vocab <span style="font-size:13px;font-weight:400;color:#888">단어시험 입력</span></div>
+    <div class="steplabel"><b>단어</b> &nbsp;정규 Daily Vocab + 외부교재(능률보카 · 워드맥스) &nbsp;·&nbsp; Neuro Phonics는 단어시험이 없습니다</div>
+    <div class="cards">
+      <a class="card pre" href="/vocab_prestella_pamus.html">
+        <span class="step">VOCAB</span>
+        <div class="ic"><i class="ti ti-vocabulary"></i></div>
+        <h2>Pre Stella 단어</h2>
+        <div class="sub">16 Days · 회당 6단어<br>정규 Daily Vocab</div>
+      </a>
+      <a class="card sil" href="/vocab_silver_pamus.html">
+        <span class="step">VOCAB</span>
+        <div class="ic"><i class="ti ti-vocabulary"></i></div>
+        <h2>Silver Stella 단어</h2>
+        <div class="sub">16 Days · 회당 8단어<br>정규 Daily Vocab</div>
+      </a>
+      <a class="card ib" href="/vocab_interbridge_pamus.html">
+        <span class="step">VOCAB</span>
+        <div class="ic"><i class="ti ti-vocabulary"></i></div>
+        <h2>Inter Bridge 단어</h2>
+        <div class="sub">16 Days · 회당 10단어<br>정규 Daily Vocab</div>
+      </a>
+      <a class="card is" href="/vocab_interstella_pamus.html">
+        <span class="step">VOCAB</span>
+        <div class="ic"><i class="ti ti-vocabulary"></i></div>
+        <h2>Inter Stella 단어</h2>
+        <div class="sub">Reading 6 + Listening 6 · 회당 20단어<br>정규 + 외부교재</div>
+      </a>
+      <a class="card gold" href="/vocab_goldstella_pamus.html">
+        <span class="step">VOCAB</span>
+        <div class="ic"><i class="ti ti-vocabulary"></i></div>
+        <h2>Gold Stella 단어</h2>
+        <div class="sub">Reading 6 + Listening 6 · 회당 25단어<br>정규 + 외부교재</div>
+      </a>
+    </div>
+    <div class="sectitle">중·고등부 · The Class</div>
+    <div class="steplabel"><b>레벨</b> &nbsp;Bridge → The Class 7 → 8 · 9 · 10 &nbsp;·&nbsp; 레벨 전환은 앱 안에서 선택합니다</div>
+    <div class="cards">
+      <a class="card tc" href="/theclass_bridge-3_cumulative.html">
+        <span class="step">BRIDGE</span>
+        <div class="ic"><i class="ti ti-stairs-up"></i></div>
+        <h2>The Class · Bridge</h2>
+        <div class="sub">Bridge 1 · 2 · 3<br>누적 성적표 · 4영역 진단</div>
+      </a>
+      <a class="card tc" href="/theclass_bridge-3_cumulative.html">
+        <span class="step">7</span>
+        <div class="ic"><i class="ti ti-number-7-small"></i></div>
+        <h2>The Class 7</h2>
+        <div class="sub">7-1 · 7-2 · 7-3<br>누적 성적표 · 4영역 진단</div>
+      </a>
+      <div class="card tc soon">
+        <span class="badge-soon">준비중</span>
+        <div class="ic"><i class="ti ti-school"></i></div>
+        <h2>The Class 8 · 9 · 10</h2>
+        <div class="sub">중등 심화 · 고등<br>매핑 준비 중</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">파머스국제어학원 · 강사 전용 내부 도구</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  var SUPA_URL='https://bkgvmkbwxmfrocjsmshq.supabase.co';
+  var SUPA_KEY='sb_publishable_lzkStKN2FmQCBfGStKEl4Q_-NbC5GdV';
+  var sb = (window.supabase && window.supabase.createClient) ? window.supabase.createClient(SUPA_URL, SUPA_KEY) : null;
+  function showApps(){
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('apps').classList.remove('hidden');
+  }
+  window.showApps = showApps;
+  async function showUserBar(){
+    if(!sb) return;
+    try{
+      var s = (await sb.auth.getSession()).data.session;
+      if(!s || !s.user) return;
+      var bar = document.getElementById('userbar');
+      var who = document.getElementById('whoami');
+      var name = s.user.email || '';
+      try{
+        var pr = await sb.from('profiles').select('name,role').eq('id', s.user.id).single();
+        if(pr && pr.data && pr.data.name) name = pr.data.name + (pr.data.role==='admin'?' (관리자)':'');
+      }catch(e){}
+      who.textContent = name;
+      bar.style.display = 'flex';
+      document.getElementById('logoutLink').addEventListener('click', async function(ev){
+        ev.preventDefault();
+        try{ await sb.auth.signOut(); }catch(e){}
+        sessionStorage.removeItem('authed');
+        sessionStorage.removeItem('sitePw');
+        location.href = '/login.html';
+      });
+    }catch(e){}
+  }
+  async function bridgeSitePw(session){
+    try{
+      var res = await fetch('/api/sitepw', { headers: { 'Authorization': 'Bearer ' + session.access_token } });
+      if(!res.ok) return false;
+      var d = await res.json();
+      if(d && typeof d.sitePw === 'string'){
+        sessionStorage.setItem('sitePw', d.sitePw);
+        sessionStorage.setItem('authed','1');
+        return true;
+      }
+    }catch(e){}
+    return false;
+  }
+  async function init(){
+    if(sessionStorage.getItem('authed')==='1'){ showApps(); showUserBar(); return; }
+    if(sb){
+      try{
+        var session = (await sb.auth.getSession()).data.session;
+        if(session && session.access_token){
+          var ok = await bridgeSitePw(session);
+          if(ok){ showApps(); showUserBar(); return; }
+        }
+      }catch(e){}
+    }
+  }
+  init();
+})();
+async function checkPw(){
+  var pw = document.getElementById('pw').value;
+  var err = document.getElementById('err');
+  err.style.display='none';
+  try{
+    var res = await fetch('/api/auth',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ password: pw })
+    });
+    if(res.ok){
+      sessionStorage.setItem('authed','1');
+      sessionStorage.setItem('sitePw', pw);
+      window.showApps();
+    } else {
+      err.textContent='비밀번호가 올바르지 않습니다.';
+      err.style.display='block';
+    }
+  }catch(e){
+    err.textContent='연결 오류. 잠시 후 다시 시도해 주세요.';
+    err.style.display='block';
+  }
+}
+</script>
+</body>
+</html>
