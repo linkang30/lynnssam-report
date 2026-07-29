@@ -1152,8 +1152,8 @@ function downloadPDF(){
       }, { onConflict:'student_key' }).select('id').single();
       if(e1){ console.warn('[pamus] student', e1); return; }
       const G=(typeof GRADE!=='undefined')?GRADE:null;
-      const scores={ raw:G?G.raw:null, pct:G?G.pct:null, grade:G?G.grade:null,
-                     domains:G?G.ds:null, wrongSet:(typeof wrongSet!=='undefined')?[...wrongSet]:[] };
+      const _num=(v)=> (v!=null? v : null);
+      const scores={ raw:G?_num(G.raw):null, pct:G?(G.pct!=null?G.pct:(G.total!=null?G.total:null)):null, grade:G?_num(G.grade):null, total:G?_num(G.total):null, domains:G?(G.ds!=null?G.ds:(G.domains!=null?G.domains:null)):null, wrongSet:(typeof wrongSet!=='undefined')?[...wrongSet]:[] };
       const comments={ strength:val('cmtStrength'), improve:val('cmtImprove'),
                        extra:val('cmtExtra'), next:val('cmtNext') };
       const { error:e2 } = await sb.from('reports').upsert({
