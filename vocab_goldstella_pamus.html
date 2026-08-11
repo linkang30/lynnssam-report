@@ -1,6 +1,36 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<!-- ===== PAMUS 로그인 가드 (2026-08-10 추가) =====
+     로그인하지 않은 사람이 이 주소를 직접 열면 첫 화면으로 돌려보냅니다.
+     첫 화면에서 계정 로그인 또는 공통 비밀번호를 통과하면 여기로 다시 옵니다. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  try{ if(sessionStorage.getItem('authed')==='1') return; }catch(e){ return; }
+  var de=document.documentElement;
+  de.style.visibility='hidden';
+  var done=false;
+  function ok(){ if(done)return; done=true; de.style.visibility=''; }
+  function go(){ if(done)return; done=true; location.replace('/?next='+encodeURIComponent(location.pathname)); }
+  setTimeout(function(){ if(!done) go(); }, 7000);
+  try{
+    var sb=window.supabase.createClient('https://bkgvmkbwxmfrocjsmshq.supabase.co','sb_publishable_lzkStKN2FmQCBfGStKEl4Q_-NbC5GdV');
+    sb.auth.getSession().then(function(r){
+      var s=r&&r.data&&r.data.session;
+      if(!s||!s.access_token){ go(); return; }
+      return fetch('/api/sitepw',{headers:{'Authorization':'Bearer '+s.access_token}})
+        .then(function(res){ if(!res.ok) throw 0; return res.json(); })
+        .then(function(d){
+          try{ sessionStorage.setItem('sitePw', (d&&d.sitePw)||''); sessionStorage.setItem('authed','1'); }catch(e){}
+          ok();
+        });
+    }).catch(go);
+  }catch(e){ go(); }
+})();
+</script>
+<!-- ===== 가드 끝 ===== -->
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>[PAMUS] Gold Stella — Daily Vocab</title>

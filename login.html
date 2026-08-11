@@ -55,7 +55,7 @@
       <div class="row"><span class="k">역할</span><span class="v" id="pRole">—</span></div>
       <div class="row"><span class="k">밴드</span><span class="v" id="pBands">—</span></div>
       <div class="row"><span class="k">이메일</span><span class="v" id="pEmail">—</span></div>
-      <button class="linkbtn" onclick="location.href='index_pamus.html'">리포트 앱 목록으로 이동 →</button>
+      <button class="linkbtn" onclick="location.href='/'">리포트 앱 목록으로 이동 →</button>
       <button class="ghost" id="logoutBtn">로그아웃</button>
       <div id="msg2" class="msg"></div>
     </div>
@@ -112,8 +112,11 @@
         msg.textContent = '로그인 실패: ' + (error.message==='Invalid login credentials' ? '이메일 또는 비밀번호가 올바르지 않습니다.' : error.message);
         return;
       }
-      msg.className='msg ok'; msg.textContent='성공!';
-      showOk(); await loadProfile(data.user);
+      msg.className='msg ok'; msg.textContent='성공! 이동 중…';
+      var _n=''; try{ var _p=new URLSearchParams(location.search).get('next');
+                      if(_p && _p.charAt(0)==='/' && _p.indexOf('//')!==0) _n=_p; }catch(e){}
+      location.replace(_n || '/');
+      return;
     });
 
     $('logoutBtn').addEventListener('click', async ()=>{

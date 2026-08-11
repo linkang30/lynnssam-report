@@ -76,12 +76,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   <div id="gate" class="gate" style="display:none">
     <div class="lock"><i class="ti ti-lock"></i></div>
-    <h2>강사 인증</h2>
-    <p>이용을 위해 비밀번호를 입력해 주세요.</p>
-    <input type="password" id="pw" placeholder="비밀번호" autocomplete="off" onkeydown="if(event.key==='Enter')checkPw()">
-    <button onclick="checkPw()">입장</button>
-    <div class="err" id="err">비밀번호가 올바르지 않습니다.</div>
-    <div class="loginlink"><a href="/login.html">계정으로 로그인 →</a></div>
+    <h2>강사 인증 · Teacher Login</h2>
+    <p id="gateMsg">계정으로 로그인해 주세요.</p>
+    <button id="acctBtn" onclick="location.href='/login.html?next='+encodeURIComponent(new URLSearchParams(location.search).get('next')||'/')">계정으로 로그인 →</button>
+    <div id="pwBox" style="display:none;margin-top:18px;padding-top:16px;border-top:1px dashed #e0dfd8">
+      <p style="font-size:11.5px;color:#aaa;margin-bottom:10px">계정이 아직 없는 선생님은 공통 비밀번호로 들어오세요.<br>Teachers without an account can use the shared password.</p>
+      <input type="password" id="pw" placeholder="공통 비밀번호" autocomplete="off" onkeydown="if(event.key==='Enter')checkPw()">
+      <button onclick="checkPw()" style="background:#6b7280">비밀번호로 입장</button>
+      <div class="err" id="err">비밀번호가 올바르지 않습니다.</div>
+    </div>
   </div>
   <div id="apps" class="hidden">
     <div class="sectitle">초등부 · Elementary</div>
@@ -185,12 +188,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* =========================================================================
+   로그인 방식 스위치  ·  Login mode switch
+   ALLOW_SITE_PW = true   → 계정 로그인 + 공통 비밀번호 둘 다 사용
+   ALLOW_SITE_PW = false  → 계정 로그인만 사용 (공통 비밀번호 칸이 사라짐)
+   선생님들 계정이 모두 만들어지면 아래 true 를 false 로 바꾸세요.
+   ========================================================================= */
+var ALLOW_SITE_PW = true;
+
 (function(){
   var SUPA_URL='https://bkgvmkbwxmfrocjsmshq.supabase.co';
   var SUPA_KEY='sb_publishable_lzkStKN2FmQCBfGStKEl4Q_-NbC5GdV';
   var sb = (window.supabase && window.supabase.createClient) ? window.supabase.createClient(SUPA_URL, SUPA_KEY) : null;
 
+  function nextUrl(){
+    try{ var n=new URLSearchParams(location.search).get('next');
+         if(n && n.charAt(0)==='/' && n!=='/' && n.indexOf('//')!==0) return n; }catch(e){}
+    return '';
+  }
   function showApps(){
+    var n=nextUrl();
+    if(n){ location.replace(n); return; }
     document.getElementById('gate').style.display='none';
     document.getElementById('gate').classList.add('hidden');
     document.getElementById('apps').classList.remove('hidden');
@@ -201,6 +219,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     if(_gateShown) return; _gateShown=true;
     var g=document.getElementById('gate');
     g.style.display=''; g.classList.remove('hidden');
+    var box=document.getElementById('pwBox');
+    if(box) box.style.display = ALLOW_SITE_PW ? 'block' : 'none';
   }
 
   async function showUserBar(){
@@ -259,6 +279,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 })();
 
 async function checkPw(){
+  if(!ALLOW_SITE_PW) return;
   var pw = document.getElementById('pw').value;
   var err = document.getElementById('err');
   err.style.display='none';
