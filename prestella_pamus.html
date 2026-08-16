@@ -1,29 +1,69 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<!-- ===== PAMUS 로그인 가드 (2026-08-10 추가) =====
-     로그인하지 않은 사람이 이 주소를 직접 열면 첫 화면으로 돌려보냅니다.
-     첫 화면에서 계정 로그인 또는 공통 비밀번호를 통과하면 여기로 다시 옵니다. -->
+<!-- ===== PAMUS 로그인 가드 v2 (2026-08-16) =====
+     (1) 로그인하지 않은 사람이 이 주소를 직접 열면 첫 화면으로 돌려보냅니다.
+     (2) 로그인했더라도 이 레벨 담당이 아니면 첫 화면으로 돌려보냅니다.
+     담당 레벨은 아래 PAMUS_ACL 표에 계정별로 적혀 있습니다. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
-  try{ if(sessionStorage.getItem('authed')==='1') return; }catch(e){ return; }
+  
+var PAMUS_ACL = {"t-jinny@pamus.local": ["pre"], "t-kaya@pamus.local": ["pre", "silver", "theclass"], "t-annie@pamus.local": ["silver", "interstella", "neuro"], "t-clare@pamus.local": ["pre", "neuro"], "t-billie@pamus.local": "*", "t-heejeong@pamus.local": "*", "t-sinae@pamus.local": "*", "admin-em@pamus.local": "*", "admin-mh@pamus.local": "*", "admin-all@pamus.local": "*"};
+function pamusLevelOf(p){
+  p=(p||'').toLowerCase();
+  if(p.indexOf('neurophonics')>-1) return 'neuro';
+  if(p.indexOf('prestella')>-1)    return 'pre';
+  if(p.indexOf('silver')>-1)       return 'silver';
+  if(p.indexOf('interbridge')>-1)  return 'interbridge';
+  if(p.indexOf('interstella')>-1)  return 'interstella';
+  if(p.indexOf('goldstella')>-1)   return 'gold';
+  if(p.indexOf('theclass')>-1)     return 'theclass';
+  return '';
+}
+function pamusLevelsFor(email){
+  var v = PAMUS_ACL[(email||'').toLowerCase()];
+  if(v===undefined) return '*';          // 명단에 없는 계정은 일단 막지 않는다
+  if(v==='*') return '*';
+  return v.join(',');
+}
+function pamusAllowed(levels, lv){
+  if(!lv) return true;                   // 레벨과 무관한 페이지
+  if(!levels || levels==='*') return true;
+  return levels.split(',').indexOf(lv) > -1;
+}
+
+  var PAGE_LEVEL = pamusLevelOf(location.pathname);
   var de=document.documentElement;
-  de.style.visibility='hidden';
   var done=false;
   function ok(){ if(done)return; done=true; de.style.visibility=''; }
   function go(){ if(done)return; done=true; location.replace('/?next='+encodeURIComponent(location.pathname)); }
+  function deny(){ if(done)return; done=true; location.replace('/?denied='+encodeURIComponent(PAGE_LEVEL)); }
+  try{
+    if(sessionStorage.getItem('authed')==='1'){
+      var lv = sessionStorage.getItem('myLevels');
+      if(lv===null) lv='*';
+      if(pamusAllowed(lv, PAGE_LEVEL)) return;
+      deny(); return;
+    }
+  }catch(e){ return; }
+  de.style.visibility='hidden';
   setTimeout(function(){ if(!done) go(); }, 7000);
   try{
     var sb=window.supabase.createClient('https://bkgvmkbwxmfrocjsmshq.supabase.co','sb_publishable_lzkStKN2FmQCBfGStKEl4Q_-NbC5GdV');
     sb.auth.getSession().then(function(r){
       var s=r&&r.data&&r.data.session;
       if(!s||!s.access_token){ go(); return; }
+      var myLevels = pamusLevelsFor(s.user && s.user.email);
       return fetch('/api/sitepw',{headers:{'Authorization':'Bearer '+s.access_token}})
         .then(function(res){ if(!res.ok) throw 0; return res.json(); })
         .then(function(d){
-          try{ sessionStorage.setItem('sitePw', (d&&d.sitePw)||''); sessionStorage.setItem('authed','1'); }catch(e){}
-          ok();
+          try{
+            sessionStorage.setItem('sitePw', (d&&d.sitePw)||'');
+            sessionStorage.setItem('authed','1');
+            sessionStorage.setItem('myLevels', myLevels);
+          }catch(e){}
+          if(pamusAllowed(myLevels, PAGE_LEVEL)) ok(); else deny();
         });
     }).catch(go);
   }catch(e){ go(); }

@@ -194,6 +194,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
    ALLOW_SITE_PW = false  → 계정 로그인만 사용 (공통 비밀번호 칸이 사라짐)
    선생님들 계정이 모두 만들어지면 아래 true 를 false 로 바꾸세요.
    ========================================================================= */
+
+var PAMUS_ACL = {"t-jinny@pamus.local": ["pre"], "t-kaya@pamus.local": ["pre", "silver", "theclass"], "t-annie@pamus.local": ["silver", "interstella", "neuro"], "t-clare@pamus.local": ["pre", "neuro"], "t-billie@pamus.local": "*", "t-heejeong@pamus.local": "*", "t-sinae@pamus.local": "*", "admin-em@pamus.local": "*", "admin-mh@pamus.local": "*", "admin-all@pamus.local": "*"};
+function pamusLevelOf(p){
+  p=(p||'').toLowerCase();
+  if(p.indexOf('neurophonics')>-1) return 'neuro';
+  if(p.indexOf('prestella')>-1)    return 'pre';
+  if(p.indexOf('silver')>-1)       return 'silver';
+  if(p.indexOf('interbridge')>-1)  return 'interbridge';
+  if(p.indexOf('interstella')>-1)  return 'interstella';
+  if(p.indexOf('goldstella')>-1)   return 'gold';
+  if(p.indexOf('theclass')>-1)     return 'theclass';
+  return '';
+}
+function pamusLevelsFor(email){
+  var v = PAMUS_ACL[(email||'').toLowerCase()];
+  if(v===undefined) return '*';          // 명단에 없는 계정은 일단 막지 않는다
+  if(v==='*') return '*';
+  return v.join(',');
+}
+function pamusAllowed(levels, lv){
+  if(!lv) return true;                   // 레벨과 무관한 페이지
+  if(!levels || levels==='*') return true;
+  return levels.split(',').indexOf(lv) > -1;
+}
+
 var ALLOW_SITE_PW = true;
 
 (function(){
@@ -212,6 +237,28 @@ var ALLOW_SITE_PW = true;
     document.getElementById('gate').style.display='none';
     document.getElementById('gate').classList.add('hidden');
     document.getElementById('apps').classList.remove('hidden');
+    pamusFilterCards();
+  }
+  function pamusFilterCards(){
+    var lv='*';
+    try{ lv = sessionStorage.getItem('myLevels'); if(lv===null) lv='*'; }catch(e){}
+    var hidden=0;
+    var cards=document.querySelectorAll('a.card[href]');
+    for(var i=0;i<cards.length;i++){
+      var c=cards[i];
+      var l=pamusLevelOf(c.getAttribute('href')||'');
+      if(!pamusAllowed(lv,l)){ c.style.display='none'; hidden++; }
+    }
+    try{
+      var dn=new URLSearchParams(location.search).get('denied');
+      if(dn){
+        var b=document.createElement('div');
+        b.style.cssText='margin:14px 0;padding:11px 15px;border-radius:10px;background:#fdf0f0;border:1px solid #f0cccc;color:#a0342f;font-size:13px;line-height:1.6';
+        b.textContent='담당하지 않는 레벨입니다. 열람이 필요하시면 원장님께 말씀해 주세요.';
+        var ap=document.getElementById('apps');
+        if(ap) ap.insertBefore(b, ap.firstChild);
+      }
+    }catch(e){}
   }
   window.showApps = showApps;
   var _gateShown=false;
@@ -255,6 +302,7 @@ var ALLOW_SITE_PW = true;
       if(d && typeof d.sitePw === 'string'){
         sessionStorage.setItem('sitePw', d.sitePw);
         sessionStorage.setItem('authed','1');
+        try{ sessionStorage.setItem('myLevels', pamusLevelsFor(session.user && session.user.email)); }catch(e){}
         return true;
       }
     }catch(e){}
@@ -292,6 +340,7 @@ async function checkPw(){
     if(res.ok){
       sessionStorage.setItem('authed','1');
       sessionStorage.setItem('sitePw', pw);
+      sessionStorage.setItem('myLevels','*');
       window.showApps();
     } else {
       err.textContent='비밀번호가 올바르지 않습니다.';
