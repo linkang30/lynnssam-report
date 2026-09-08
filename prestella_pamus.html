@@ -32,7 +32,6 @@ function pamusAllowed(levels, lv){
   if(!levels || levels==='*') return true;
   return levels.split(',').indexOf(lv) > -1;
 }
-
   var PAGE_LEVEL = pamusLevelOf(location.pathname);
   var de=document.documentElement;
   var done=false;
@@ -70,7 +69,6 @@ function pamusAllowed(levels, lv){
 })();
 </script>
 <!-- ===== 가드 끝 ===== -->
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
@@ -192,7 +190,6 @@ textarea{resize:vertical}
 .course-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;margin-left:6px;vertical-align:middle}
 .badge-a{background:#e6f1fb;color:#185fa5}
 .badge-b{background:#eaf3de;color:#2d7a4f}
-
 .stu-chip-area{display:flex;flex-wrap:wrap;gap:6px;min-height:38px;align-items:center;padding:7px 8px;background:#faf8f1;border:1px solid #e8e2cf;border-radius:8px}
 .stu-chip{display:inline-flex;align-items:center;gap:4px;background:#fff;border:1px solid #e0d7bd;border-radius:16px;padding:4px 11px;font-size:12px;cursor:pointer;color:#5a4a1f;transition:all .12s}
 .stu-chip:hover{background:#fbf6e8;border-color:#cbb87f}
@@ -209,7 +206,6 @@ textarea{resize:vertical}
 .cm-btn.grn{background:#2d7a4f;color:#fff}
 .cm-btn.del{background:#fdeaea;color:#c0392b}
 .cm-btn.del:hover{background:#f8d7d5}
-
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -228,7 +224,6 @@ textarea{resize:vertical}
   <button class="sbtn" onclick="go(3)" id="sb3"><i class="ti ti-message"></i>코멘트</button>
   <button class="sbtn" onclick="go(4)" id="sb4"><i class="ti ti-eye"></i>리포트</button>
 </div>
-
 <!-- S0 -->
 <div id="s0">
   <div class="card">
@@ -278,7 +273,6 @@ textarea{resize:vertical}
   </div>
   <div class="navrow"><div></div><button class="btn bprim" onclick="go(1)">다음 <i class="ti ti-arrow-right"></i></button></div>
 </div>
-
 <!-- S1 -->
 <div id="s1" class="hidden">
   <div class="card">
@@ -299,7 +293,6 @@ textarea{resize:vertical}
     <button class="btn bprim" onclick="go(2)">역량 분석 <i class="ti ti-arrow-right"></i></button>
   </div>
 </div>
-
 <!-- S2 -->
 <div id="s2" class="hidden">
   <div class="card">
@@ -320,7 +313,6 @@ textarea{resize:vertical}
     <button class="btn bprim" onclick="go(3)">코멘트 작성 <i class="ti ti-arrow-right"></i></button>
   </div>
 </div>
-
 <!-- S3 -->
 <div id="s3" class="hidden">
   <div class="card">
@@ -393,7 +385,6 @@ textarea{resize:vertical}
     <button class="btn bprim" onclick="go(4)">리포트 보기 <i class="ti ti-eye"></i></button>
   </div>
 </div>
-
 <!-- S4 -->
 <div id="s4" class="hidden">
   <div id="reportOut"></div>
@@ -437,7 +428,6 @@ const LV = {
   B5:{course:"B",book:"The Golden Card",theme:"Shopping",mainTheme:"Doing, Feeling, Count, Can",pattern:"What are you doing? / I have a headache. / How much jelly is there? / What will you do after school? / Can she play the flute?",grammar:"현재진행 + 수량 표현 + will 미래",growth:"현재 상황, 수량, 미래 계획을 연결해 설명",msg:"현재 상황, 수량, 미래 계획을 연결해 설명하는 단계",cefr:"A1",lexile:"125L",funcFlow:"계획/상황 연결 단계",summary:"「The Golden Card」 스토리를 통해 현재 진행 중인 상황과 신체 상태, 미래 계획을 영어로 연결하는 연습을 했습니다. What are you doing~, I have a~, What will you do~ 패턴을 반복 훈련하며 상황을 연결해 설명하는 힘을 키웠습니다. 현재진행형, 수량 표현, will 미래 표현을 스토리와 I-pattern 활동과 함께 진행했습니다."},
   B6:{course:"B",book:"I am sorry",theme:"My friends",mainTheme:"Country, City, be going to, have to, frequency",pattern:"Where are you from? / Where will you go this summer? / Are you going to do your homework? / How often do you go jogging? / What do you have to do?",grammar:"be going to + have to + 빈도 표현",growth:"장소, 계획, 빈도, 의무 표현을 연결해 자기 생각을 확장",msg:"장소, 계획, 빈도, 의무 표현을 연결해 자기 생각을 확장하는 단계",cefr:"A1",lexile:"125L",funcFlow:"독립적 자기표현 단계",summary:"「I am sorry」 스토리를 통해 출신 국가, 미래 계획, 빈도, 의무 표현을 영어로 연결하는 연습을 했습니다. Where are you from~, Are you going to~, How often do you~ 패턴을 반복 훈련하며 자기 생각을 스스로 확장하는 힘을 키웠습니다. be going to, have to, 빈도 표현을 스토리와 I-pattern 활동과 함께 진행했습니다."}
 };
-
 // ═══ QM — A 과정 공통 (v5.2 그대로) ═══
 const QM_A=[
   {n:1,dom:"Vocabulary",code:"VR",skill:"사물 이름 인식",norm:"—",warn:"기초 명사 반복 오답"},
@@ -466,7 +456,6 @@ const QM_A=[
   {n:24,dom:"Structure",code:"SC",skill:"plural response",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
   {n:25,dom:"Structure",code:"SO",skill:"yes/no automation",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
 ];
-
 // ═══ QM — A3 전용 (실제 시험지·답안지 기준) ═══
 // 18~21 Look, choose, and circle (그림 보고 어휘·표현 선택) / 22~25 Unscramble (평서문 어순 배열)
 const QM_A1=[
@@ -631,7 +620,6 @@ const QM_A3=[
   {n:24,dom:"Structure",code:"SO",skill:"평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"},
   {n:25,dom:"Structure",code:"SO",skill:"평서문 어순 배열",norm:"어순 혼동 — A1 정상",warn:"단어 하나도 못 씀"}
 ];
-
 // ═══ QM — B1 전용 ═══
 // B1 Monthly Test 구조: Vocabulary 1~6 / Reading 7~12 / Listening 13~17 / Structure 18~25
 // 출처: B1 데이터 패키지 (Answer Key + 문항 구조 분석)
@@ -666,7 +654,6 @@ const QM_B1=[
   {n:24,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (3인칭 brings)",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"},
   {n:25,dom:"Structure",code:"SC",skill:"평서문 어순 배열 (전치사구 sits around)",norm:"어순 혼동 — B1 정상",warn:"단어 하나도 못 씀"}
 ];
-
 // QM 레벨별 매핑
 // ═══ QM_B2 — 상호작용 (관계·선호·요청) ═══
 const QM_B2=[
@@ -809,7 +796,6 @@ const QM_B6=[
   {n:25,dom:"Structure",code:"SC",skill:"분사구문 어순 배열 (holding)",norm:"어순 혼동 — B6 정상",warn:"단어 하나도 못 씀"}
 ];
 const QM_MAP={A1:QM_A1,A2:QM_A2,A3:QM_A3,A4:QM_A4,A5:QM_A5,A6:QM_A6,B1:QM_B1,B2:QM_B2,B3:QM_B3,B4:QM_B4,B5:QM_B5,B6:QM_B6};
-
 // CODELAB — A + B1 통합
 const CODELAB={
   VR:"어휘 인식",PR:"스펠링 Decoding",QR:"질문 반응",SP:"단수/복수 패턴",
@@ -822,14 +808,11 @@ const CODELAB={
   PG:"현재진행",BH:"신체 증상",FT:"미래 계획",TR:"교통수단",QT:"수량 듣기",CA:"능력 표현",
   OR:"출신 표현",OB:"의무 표현",SN:"감각 표현",WL:"여행 정보",SL:"상황 표현"
 };
-
 const DMMAX={Vocabulary:6,Reading:6,Listening:5,Structure:8};
 const PROMPT_QS=["수업 중 영어로 처음 말했거나 전보다 더 길게 말한 순간이 있었나요?","질문을 들었을 때 바로 반응했나요, 아니면 망설이다가 답했나요?","발표할 때 긴장하는 편인가요, 자신 있게 나서는 편인가요?","Storytelling 활동에서 적극적으로 참여했나요?","이번 달 특별히 기억에 남는 이 아이만의 장면이나 에피소드가 있나요?"];
-
 // A 과정 Next 목록 (v5.2 그대로)
 const NEXTLIST_A=["단수/복수 질문 패턴 안정화","sentence chunk 길이 확장","Storytelling 연결 확장","반복 패턴 자동화","질문 응답 속도 향상","그림-문장 연결 심화","자신감 있는 발화 유지","I-pattern 질문 반응 강화","sight word 반복 노출","그림 보고 문장 말하기 확장"];
 const NEXT2S_A={"단수/복수 질문 패턴 안정화":"다음 수업에서는 단수·복수를 구분하는 질문 패턴에 자연스럽게 반응할 수 있도록 반복 게임과 그림 활동을 통해 집중적으로 훈련할 예정입니다.","sentence chunk 길이 확장":"앞으로는 짧은 단어 단위에서 벗어나 배운 문장을 chunk 단위로 이어 말하는 연습을 단계적으로 확장해 나갈 예정입니다.","Storytelling 연결 확장":"그림을 보고 단어를 말하는 것에서 나아가 이야기를 짧은 문장으로 연결해 말하는 Storytelling 활동을 심화할 예정입니다.","반복 패턴 자동화":"배운 핵심 질문 패턴이 자동으로 입에서 나올 수 있도록 반복 훈련을 꾸준히 이어갈 예정입니다.","질문 응답 속도 향상":"질문을 듣고 머뭇거리지 않고 짧게라도 바로 반응하는 힘을 키울 수 있도록 빠른 응답 훈련 활동을 진행할 예정입니다.","그림-문장 연결 심화":"그림을 보고 단어를 떠올리는 것에서 나아가 완전한 문장으로 연결해 말하는 연습을 심화할 예정입니다.","자신감 있는 발화 유지":"영어로 말하려는 자신감과 시도하는 태도가 유지될 수 있도록 발표 기회를 충분히 제공할 예정입니다.","I-pattern 질문 반응 강화":"I-pattern 40개 질문에 짧게라도 스스로 답하는 힘을 키울 수 있도록 짝 활동과 개별 훈련을 병행할 예정입니다.","sight word 반복 노출":"자주 등장하는 sight word를 게임과 읽기 활동 속에서 자연스럽게 반복 노출해 의미와 형태가 함께 자리잡히도록 도울 예정입니다.","그림 보고 문장 말하기 확장":"32개 삽화를 활용해 그림을 보고 단어뿐 아니라 완전한 문장으로 말하는 Storytelling 훈련을 이어갈 예정입니다."};
-
 // B1 전용 Next 목록
 // ── B 과정 레벨별 Next 목록 ──
 const NEXTLIST_B={
@@ -882,7 +865,6 @@ const NEXT2S_B={
   "감각 표현 훈련":"It looks~, It smells~, It tastes~ 등 감각 표현 패턴을 그림과 실물 활동을 통해 훈련할 예정입니다.",
   "자기 표현 연결 훈련":"B 과정에서 배운 모든 표현을 연결해 자신의 생각과 경험을 스스로 말하는 통합 표현 훈련을 심화할 예정입니다."
 };
-
 // ═══ 강점 키워드 — A 과정 ═══
 const STRENGTH_LIST_A=[
   {key:"s_speaking",label:"영어로 말하기 시도",sent:"영어로 말하려는 시도가 꾸준히 이어지고 있습니다. 짧은 단어라도 스스로 표현하려는 용기가 눈에 띄게 성장했습니다."},
@@ -904,7 +886,6 @@ const STRENGTH_LIST_A=[
   {key:"s_plural",label:"단수·복수 구분 시작",sent:"this/these, that/those를 상황에 맞게 구분해 반응하기 시작했습니다. 단수와 복수 패턴이 자연스럽게 자리잡혀 가고 있습니다."},
   {key:"s_sight",label:"sight word 자동 인식",sent:"자주 등장하는 sight word를 보자마자 바로 읽어내는 자동화가 이루어지고 있습니다."}
 ];
-
 // ═══ 강점 키워드 — B 과정 (B1 기준, 이후 레벨별 확장 예정) ═══
 const STRENGTH_LIST_B=[
   {key:"b_yesno",label:"Yes/No 반응 안정",sent:"질문을 듣고 Yes/No로 자신 있게 반응하는 힘이 안정적으로 자리잡히고 있습니다. 짧게라도 스스로 먼저 답하려는 모습이 인상적입니다."},
@@ -923,7 +904,6 @@ const STRENGTH_LIST_B=[
   {key:"b_story",label:"스토리 내용 이해",sent:"리더 스토리의 흐름을 따라가며 내용을 파악하는 힘이 잘 형성되고 있습니다. 그림과 문장을 연결하는 능력이 성장하고 있습니다."},
   {key:"b_enjoy",label:"영어 수업 즐기는 태도",sent:"영어 수업에 적극적으로 참여하며 즐기는 모습이 느껴집니다. 긍정적인 학습 경험이 쌓이면서 자신감도 함께 성장하고 있습니다."}
 ];
-
 // ═══ 보완점 키워드 — A 과정 ═══
 const ATTITUDE_LIST_A=[
   {key:"att_improve",label:"수업 태도 개선 필요",improve:"수업 중 집중력을 유지하는 연습이 조금 더 필요합니다. 개별적인 관심을 기울이며 참여도를 높여나갈 예정입니다."},
@@ -940,7 +920,6 @@ const ATTITUDE_LIST_A=[
   {key:"chatting",label:"수업 중 잡담",improve:"수업과 관련 없는 대화를 나누는 모습이 간헐적으로 관찰되었습니다. 수업 흐름에 집중할 수 있도록 자리 배치와 활동 구성을 조율해 나가겠습니다."},
   {key:"offtopic",label:"주제 벗어난 질문",improve:"수업 흐름과 관계없는 질문을 하는 경우가 있어 진행이 끊기는 경우가 있었습니다. 호기심 자체는 긍정적으로 바라보되, 질문 타이밍을 익힐 수 있도록 안내하겠습니다."}
 ];
-
 // ═══ 보완점 키워드 — B 과정 (B1 기준, 이후 레벨별 확장 예정) ═══
 const ATTITUDE_LIST_B=[
   {key:"b_att_focus",label:"수업 집중력 개선 필요",improve:"수업 중 집중력을 유지하는 연습이 조금 더 필요합니다. 활동 단위를 짧게 구성하고 개별적으로 참여도를 높여나갈 예정입니다."},
@@ -959,13 +938,10 @@ const ATTITUDE_LIST_B=[
   {key:"b_chatting",label:"수업 중 잡담",improve:"수업과 관련 없는 대화를 나누는 모습이 간헐적으로 관찰되었습니다. 수업 흐름에 집중할 수 있도록 자리 배치와 활동 구성을 조율해 나가겠습니다."},
   {key:"b_offtopic",label:"주제 벗어난 질문",improve:"수업 흐름과 관계없는 질문을 하는 경우가 있어 진행이 끊기는 경우가 있었습니다. 호기심 자체는 긍정적으로 바라보되, 질문 타이밍을 익힐 수 있도록 안내하겠습니다."}
 ];
-
 const BANNED=["문법이 부족","독해력이 약","독해력이 부족","이해력이 낮","집중력이 부족","못합니다","부족합니다","분석력이 부족","약합니다"];
-
 // ═══ 상태 ═══
 let wrongQs=new Set(),partialQs=new Set(),selNext=new Set(),selAttitude=new Set(),selStrength=new Set();
 let curStep=0,domFilter="all",nameInputTimer=null;
-
 // ═══ 헬퍼 ═══
 function g(id){return document.getElementById(id);}
 function val(id){return g(id)?g(id).value||"":"";}
@@ -1116,7 +1092,6 @@ function renderSuspendedList(){
     <button class="cm-btn del" style="font-size:11px;padding:4px 9px" onclick="withdrawStudent('${escR(st.id)}')"><i class="ti ti-trash"></i> 퇴원</button>
   </div>`).join('');
 }
-
 function saveRoster(){_rosterSet('roster',roster);}
 const CURRICULUM_ORDER=["Sound Doctor","Tooth Phonics","Pre Stella","Silver Stella","Inter Bridge","Inter Stella","Gold Stella","The Class"];
 function _curRank(c){const i=CURRICULUM_ORDER.findIndex(k=>String(c).startsWith(k));return i<0?CURRICULUM_ORDER.length:i;}
@@ -1132,7 +1107,6 @@ function studentsInClass(cls){
 }
 function fmtClassName(raw){if(!raw)return raw;var __ROOM={Kaya:'Citrine #5',Annie:'Emerald #3',Angela:'Peridot #Lab',Clare:'Sapphire #4',Jinny:'Topaz #1',Billie:'초등C',Heejeong:'중등 B'},__ST={Citrine:'Kaya',Emerald:'Annie',Peridot:'Angela',Sapphire:'Clare',Topaz:'Jinny'};var s=String(raw),teacher='',time='',days='';s=s.replace(/\(([^)]*)\)/,(m,t)=>{teacher=t.trim();return ' ';});s=s.replace(/#\s*[^\s()]+/,' ');s=s.replace(/(\d{1,2}:\d{2})/,(m,t)=>{time=t;return ' ';});s=s.replace(/((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|Th|Sa|Su|M|T|W|F)(?:\s*\/\s*(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|Th|Sa|Su|M|T|W|F))+)/,(m,d)=>{days=d.replace(/[\s\/]/g,'');return ' ';});var name=s.replace(/\s+/g,' ').trim();if(teacher==='Bille')teacher='Billie';if(teacher==='HJ')teacher='Heejeong';if(!teacher){var stone=Object.keys(__ST).find(st=>name.toLowerCase().startsWith(st.toLowerCase()));if(stone)teacher=__ST[stone];}if(!teacher)return String(raw).replace(/\s+/g,' ').trim();var room=__ROOM[teacher]||name;var out=room;if(teacher)out+=' ('+teacher+')';if(days)out+=' '+days;if(time)out+=' '+time;return out.replace(/\s+/g,' ').trim();}
 function escR(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-
 let curStuId=null;
 function renderClassSelect(){
   const sel=g('classSelect'); if(!sel)return;
@@ -1266,17 +1240,13 @@ function renameClass(input){
   if(g('sClass')&&g('sClass').value===orig)g('sClass').value=next;
   renderStuChips();
 }
-
 function getStudentKey(){const name=val("sName").trim(),school=val("sSchool").trim(),grade=val("sGrade").trim(),lv=val("sLevel");const prefix=[school,grade,name].filter(Boolean).join("_");return `history:${prefix}:${lv}`;}
-
 function onNameInput(){if(curStuId&&roster.students[curStuId]){roster.students[curStuId].name=(g('sName').value||'').trim();saveRoster();}clearTimeout(nameInputTimer);nameInputTimer=setTimeout(()=>{loadHistoryAlert();},600);}
-
 const LS={
   get(key){try{const v=localStorage.getItem(key);return v?{value:v}:null;}catch(e){return null;}},
   set(key,val){try{localStorage.setItem(key,val);return true;}catch(e){return false;}},
   remove(key){try{localStorage.removeItem(key);}catch(e){}}
 };
-
 function loadHistoryAlert(){
   const name=val("sName").trim(),alertEl=g("historyAlert");
   if(!alertEl)return;
@@ -1285,16 +1255,13 @@ function loadHistoryAlert(){
   if(res){try{const h=JSON.parse(res.value);if(h&&h.length>0){const last=h[0];alertEl.style.display="block";alertEl.innerHTML=`<div style="display:flex;gap:6px;align-items:flex-start"><i class="ti ti-history" style="font-size:14px;color:#185fa5;flex-shrink:0;margin-top:1px"></i><div><strong>${name}</strong> 학생의 이전 보고서 이력이 있습니다. (${last.month})<br><span style="color:#555">지난 강점 키워드: ${last.strength&&last.strength.length>0?last.strength.map(k=>{const f=(isB()?STRENGTH_LIST_B:STRENGTH_LIST_A).find(a=>a.key===k);return f?f.label:k;}).join(", "):"없음"}</span></div></div>`;return;}}catch(e){}}
   alertEl.style.display="none";
 }
-
 function onLvChange(){
   const lv=val("sLevel"),d=LV[lv];
   const badge=d.course==="B"?`<span style="background:#eaf3de;color:#2d7a4f;border-radius:6px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px">B 과정</span>`:`<span style="background:#e6f1fb;color:#185fa5;border-radius:6px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px">A 과정</span>`;
   g("lvinfoTxt").innerHTML=`<strong>${lv} — ${d.book}</strong>${badge} · ${d.theme} · CEFR: ${d.cefr} · Lexile: ${d.lexile}<br>핵심 패턴: <em>${d.pattern}</em><br><span style="color:#2d7a4f;font-weight:600">${d.funcFlow}</span> — ${d.msg}`;
   wrongQs.clear();partialQs.clear();selNext.clear();
 }
-
 function calcTotal(){const fresh=GRADE&&_lastGradeSig===_gradeSig();const el=g("totNum");if(el)el.textContent=fresh?GRADE.tot:'—';const gr=g("totGrade");if(gr){gr.style.display="";if(fresh){const p=GRADE.pct;gr.innerHTML=`<b>${p}%</b> ${p>=88?"우수":p>=72?"양호":p>=56?"보통":"관찰 필요"}`;}else{gr.innerHTML='<span style="color:#aaa">채점 완료 시 계산</span>';}}}
-
 function buildQGrid(){
   const QM=getQM(),el=g("qgrid");el.innerHTML="";
   QM.forEach(q=>{const b=document.createElement("div");const subj=isSubjQ(q.n);b.className="qbtn"+(wrongQs.has(q.n)?" wrong":partialQs.has(q.n)?" half":"");b.id="qb"+q.n;if(subj)b.setAttribute("data-subj","1");b.title=subj?"주관식 · 클릭: 정답→오답→세모":"클릭: 정답↔오답";b.style.display=(domFilter==="all"||domFilter===q.dom)?"":"none";b.innerHTML=`<span class="qn">Q${q.n}</span><span class="qt">${q.code}</span><span class="qd">${q.skill}</span>`;b.onclick=()=>{cycleQ(q.n,b);};el.appendChild(b);});updWC();calcTotal();
@@ -1312,7 +1279,6 @@ function cycleQ(n,b){
 }
 function filterDom(d,el){domFilter=d;document.querySelectorAll(".qtab").forEach(t=>t.classList.remove("on"));el.classList.add("on");getQM().forEach(q=>{const b=g("qb"+q.n);if(b)b.style.display=(d==="all"||d===q.dom)?"":"none";});}
 function updWC(){const w=[...wrongQs].sort((a,b)=>a-b),p=[...partialQs].sort((a,b)=>a-b);let t=`오답: ${wrongQs.size}문항`+(w.length?" ("+w.map(n=>"Q"+n).join(", ")+")":"");if(partialQs.size)t+=` · 세모: ${partialQs.size}문항 (`+p.map(n=>"Q"+n).join(", ")+")";g("wrongCount").textContent=t;}
-
 function buildStrengthChips(){const el=g("strengthChips");if(!el)return;el.innerHTML="";const STRENGTH_LIST=isB()?STRENGTH_LIST_B:STRENGTH_LIST_A;STRENGTH_LIST.forEach(item=>{const c=document.createElement("span");c.className="chip";if(selStrength.has(item.key))c.style.cssText="background:#2d7a4f;color:#fff;border-color:#2d7a4f";c.textContent=item.label;c.onclick=()=>{if(selStrength.has(item.key)){selStrength.delete(item.key);c.style.cssText="";}else{selStrength.add(item.key);c.style.cssText="background:#2d7a4f;color:#fff;border-color:#2d7a4f";}buildStrengthText();};el.appendChild(c);});}
 function buildAttitudeChips(){const el=g("attitudeChips");if(!el)return;el.innerHTML="";const ATTITUDE_LIST=isB()?ATTITUDE_LIST_B:ATTITUDE_LIST_A;ATTITUDE_LIST.forEach(item=>{const c=document.createElement("span");c.className="chip";if(selAttitude.has(item.key))c.style.cssText="background:#854f0b;color:#fff;border-color:#854f0b";c.textContent=item.label;c.onclick=()=>{if(selAttitude.has(item.key)){selAttitude.delete(item.key);c.style.cssText="";}else{selAttitude.add(item.key);c.style.cssText="background:#854f0b;color:#fff;border-color:#854f0b";}buildImproveText();};el.appendChild(c);});}
 function buildStrengthText(){const STRENGTH_LIST=isB()?STRENGTH_LIST_B:STRENGTH_LIST_A;const sents=[...selStrength].map(k=>{const f=STRENGTH_LIST.find(a=>a.key===k);return f?f.sent:"";}).filter(Boolean);const ta=g("cmtStrength");if(ta&&!ta.dataset.edited)ta.value=sents.join(" ");}
@@ -1322,7 +1288,6 @@ function buildNextCmt(){
   const sents=[...selNext].map(k=>NEXT2S[k]).filter(Boolean);
   if(sents.length)g("cmtNext").value=sents.join("\n");
 }
-
 function buildAnalysis(){
   const QM=getQM(),dw=getDW();
   const bars=g("domBars");bars.innerHTML="";
@@ -1362,7 +1327,6 @@ function buildAnalysis(){
   }
   buildAutoFb(dw);
 }
-
 function buildAutoFb(dw){
   const name=val("sName")||"학생",lv=val("sLevel"),d=LV[lv];
   const lines=[];
@@ -1401,7 +1365,6 @@ function buildAutoFb(dw){
     g("autoFb").value=txt;
   }
 }
-
 // ── Layer 1 자동 분석: 오답(도메인) 기반 강점/보완 ──────────────
 const DOM_KO={Vocabulary:"어휘(Vocabulary)",Reading:"읽기(Reading)",Listening:"듣기(Listening)",Structure:"문장 구조(Structure)"};
 function domRates(){
@@ -1435,7 +1398,6 @@ function generateImproveAnalysis(){
   mid.forEach(d=>{txt+=`• ${DOM_KO[d]} (${rates[d]}%): ${mDesc[d]}\n`;});
   box.textContent=txt.trim();
 }
-
 function setupCommentTab(){
   buildStrengthChips();buildAttitudeChips();
   g("promptQs").innerHTML=PROMPT_QS.map(q=>`· ${q}`).join("<br>");
@@ -1450,14 +1412,12 @@ function setupCommentTab(){
   const el=g("nextChips");if(!el)return;el.innerHTML="";
   NEXTLIST.forEach(a=>{const c=document.createElement("span");c.className="chip"+(selNext.has(a)?" sel":"");c.textContent=a;c.onclick=()=>{if(selNext.has(a)){selNext.delete(a);c.classList.remove("sel");}else{selNext.add(a);c.classList.add("sel");}buildNextCmt();};el.appendChild(c);});
 }
-
 function showHistoryWarnings(){
   const hbox=g("historyBox");if(!hbox)return;
   const res=LS.get(getStudentKey());
   if(res){try{const history=JSON.parse(res.value);if(history&&history.length>0){hbox.style.display="block";const items=history.map((h,i)=>{const sLabels=h.strength&&h.strength.length>0?h.strength.map(k=>{const SL=isB()?STRENGTH_LIST_B:STRENGTH_LIST_A;const f=SL.find(a=>a.key===k);return f?`<span style="background:#eaf3de;color:#2d7a4f;border-radius:4px;padding:1px 6px;font-size:10px;margin-right:3px">${f.label}</span>`:k;}).join(""):"없음";const aLabels=h.attitude&&h.attitude.length>0?h.attitude.map(k=>{const AL=isB()?ATTITUDE_LIST_B:ATTITUDE_LIST_A;const f=AL.find(a=>a.key===k);return f?`<span style="background:#faeeda;color:#854f0b;border-radius:4px;padding:1px 6px;font-size:10px;margin-right:3px">${f.label}</span>`:k;}).join(""):"없음";return `<div style="margin-bottom:${i<history.length-1?10:0}px"><div style="font-size:10px;font-weight:700;color:#854f0b;margin-bottom:4px">${h.month}</div><div style="margin-bottom:3px"><span style="font-size:10px;color:#666;font-weight:600">강점: </span>${sLabels}</div><div><span style="font-size:10px;color:#666;font-weight:600">보완점: </span>${aLabels}</div></div>`;}).join('<hr style="border:none;border-top:0.5px solid #f0d090;margin:8px 0">');hbox.innerHTML=`<div style="font-size:11px;font-weight:700;color:#854f0b;margin-bottom:8px;display:flex;align-items:center;gap:5px"><i class="ti ti-history" style="font-size:13px"></i>이전 보고서 키워드 이력</div>${items}`;return;}}catch(e){}}
   hbox.style.display="block";hbox.innerHTML=`<div style="font-size:12px;color:#888">저장된 이력이 없습니다.</div>`;
 }
-
 async function refineText(taId,type){
   const ta=g(taId);if(!ta)return;
   const raw=ta.value.trim();if(!raw){alert("먼저 키워드를 선택하거나 내용을 입력해 주세요.");return;}
@@ -1483,13 +1443,11 @@ async function refineText(taId,type){
   }catch(e){if(statusEl){statusEl.textContent="오류: "+(e.message||"다시 시도해 주세요.");statusEl.style.color="#e24b4a";}}
   finally{if(btn){btn.disabled=false;btn.innerHTML=`<i class="ti ti-sparkles" style="font-size:12px"></i>문장 다듬기`;}}
 }
-
 function buildGrowthAnalysis(dw){
   const lv=val("sLevel"),d=LV[lv];
   const vW=dw.Vocabulary||0,rW=dw.Reading||0,lW=dw.Listening||0;
   const chunkW=[22,23,24,25].filter(n=>wrongQs.has(n)).length;
   const patW=[18,19,20,21].filter(n=>wrongQs.has(n)).length;
-
   let vocab,story,listening,pattern;
   if(isB()){
     // B1 전용 성장 분석 텍스트
@@ -1507,11 +1465,9 @@ function buildGrowthAnalysis(dw){
     listening=lW===0?"질문을 듣고 반응하는 힘이 매우 안정적이며, 영어 귀가 잘 열려 있는 상태입니다.":lW<=2?"질문 패턴을 듣고 반응하는 힘을 키워가고 있습니다.":"질문을 듣고 반응하는 연습이 조금 더 필요하며, Listening 훈련을 이어가겠습니다.";
     pattern=(patW===0&&chunkW===0)?`"${d.pattern.split("/")[0].trim()}" 같은 질문 패턴에 안정적으로 반응하고 있습니다.`:patW>=2?"단수·복수를 구분하는 질문 패턴에 반응하는 힘을 키워가고 있습니다.":"배운 문장을 순서대로 연결하는 힘(sentence chunk)을 익혀가고 있습니다.";
   }
-
   const growthLabel=isB()?`영어 성장 분석 <span style="font-size:10px;font-weight:400;color:#2d7a4f">${d.funcFlow}</span>`:"영어 성장 분석";
   return `<div style="margin-bottom:8px"><div style="font-size:12px;font-weight:700;color:#1e3a5f;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e0dfd8">${growthLabel}</div><div style="font-size:13px;color:#2a2a2a;line-height:1.7"><div style="margin-bottom:5px"><span style="font-weight:700;color:#1e3a5f">어휘 인식</span> · ${vocab}</div><div style="margin-bottom:5px"><span style="font-weight:700;color:#1e3a5f">스토리 이해</span> · ${story}</div><div style="margin-bottom:5px"><span style="font-weight:700;color:#1e3a5f">듣고 반응하기</span> · ${listening}</div><div><span style="font-weight:700;color:#1e3a5f">패턴 &amp; 문장 구조</span> · ${pattern}</div></div></div>`;
 }
-
 function buildReport(){
   const name=val("sName")||"(이름)",lv=val("sLevel"),d=LV[lv];
   const school=val("sSchool")||"—",grade=val("sGrade")||"—",cls=val("sClass")||"—",teacher=val("sTeacher")||"—",month=val("sMonth")||"—";
@@ -1526,7 +1482,6 @@ function buildReport(){
   const lexileDesc=d.course==="B"?"스토리와 패턴 문장을 읽으며 영어 표현을 익혀가는 수준입니다.":"그림과 반복 문장을 읽으며 영어 문장을 익혀가는 수준입니다.";
   g("reportOut").innerHTML=`<div class="rpt"><div class="rpt-title-bar" style="position:relative"><img src="${LOGO_LIGHT}" alt="PAMUS" style="position:absolute;top:18px;right:24px;height:26px;width:auto;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))"><div class="course">Pre Stella · Monthly Report</div><h2>${name}</h2><div class="subtitle">${month} · Pre Stella ${lv} — ${d.book}</div></div><div class="rpt-info-band"><div class="rpt-info-item"><div class="ril">학교</div><div class="riv">${school}</div></div><div class="rpt-info-item"><div class="ril">학년</div><div class="riv">${grade}</div></div><div class="rpt-info-item"><div class="ril">학원 반</div><div class="riv">${cls}</div></div><div class="rpt-info-item"><div class="ril">담임</div><div class="riv">${teacher}</div></div></div><div class="rpt-body"><div class="rpt-sec"><div class="rpt-sec-hdr"><div class="rpt-sec-num">1</div><div class="rpt-sec-title">학습 내용</div></div><div class="book-card"><div><div style="font-size:10px;font-weight:700;color:#1e3a5f;letter-spacing:1.2px;margin-bottom:6px">PRE STELLA ${lv}${courseBadge}</div><div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:4px">READER STORY</div><div class="book-title-rpt">「${d.book}」</div><div style="font-size:12px;color:#555;line-height:1.7;margin:8px 0 12px">스토리 기반 영어 노출을 통해 ${d.growth}하는 연습을 진행했습니다.</div><div style="margin-bottom:10px"><div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:5px">말이 되는 패턴</div>${d.pattern.split("/").map(p=>`<div class="pattern-item">${p.trim()}</div>`).join("")}</div><div><div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.5px;margin-bottom:4px">핵심 표현 영역</div><div style="font-size:12px;color:#444">${d.mainTheme}</div></div></div><div style="display:flex;flex-direction:column;gap:12px"><div style="background:#fff;border-radius:8px;padding:12px 14px;border:0.5px solid #e0dfd8"><div style="font-size:10px;font-weight:700;color:#185fa5;margin-bottom:5px">국제 영어 성장 단계</div><div style="font-size:13px;font-weight:600;color:#185fa5;margin-bottom:3px">CEFR ${d.cefr}</div><div style="font-size:12px;color:#555">${cefrDesc}</div></div><div style="background:#fff;border-radius:8px;padding:12px 14px;border:0.5px solid #e0dfd8"><div style="font-size:10px;font-weight:700;color:#2d7a4f;margin-bottom:5px">영어 리딩 성장 단계</div><div style="font-size:13px;font-weight:600;color:#2d7a4f;margin-bottom:3px">Lexile ${d.lexile}</div><div style="font-size:12px;color:#555">${lexileDesc}</div></div></div></div><div class="summary-box">${d.summary}</div></div><div class="rpt-sec"><div class="rpt-sec-hdr"><div class="rpt-sec-num">2</div><div class="rpt-sec-title">Monthly Test 결과 및 영어 성장 분석</div></div><div class="score-grid-rpt"><div class="score-domain-box"><div class="sdb-name">VOCABULARY</div><div class="sdb-score export-hide">${v}</div><div class="sdb-total export-hide">/ 6점</div>${sBar(v,6)}</div><div class="score-domain-box"><div class="sdb-name">READING</div><div class="sdb-score export-hide">${r}</div><div class="sdb-total export-hide">/ 6점</div>${sBar(r,6)}</div><div class="score-domain-box"><div class="sdb-name">LISTENING</div><div class="sdb-score export-hide">${l}</div><div class="sdb-total export-hide">/ 5점</div>${sBar(l,5)}</div><div class="score-domain-box"><div class="sdb-name">STRUCTURE</div><div class="sdb-score export-hide">${s}</div><div class="sdb-total export-hide">/ 8점</div>${sBar(s,8)}</div></div><div class="total-row"><span class="total-label">총점</span><span><span class="total-score-rpt export-hide">${tot}</span><span class="total-pct export-hide">/ 25점 · ${pct}%</span></span></div>${growthHtml}</div><div class="rpt-sec"><div class="rpt-sec-hdr"><div class="rpt-sec-num">3</div><div class="rpt-sec-title">담임선생님 코멘트</div></div>${(strengthA||strength)?`<div class="comment-block"><div class="cb-label-rpt"><i class="ti ti-star"></i>이달의 강점</div>${strengthA?`<div class="cb-text" style="white-space:pre-wrap;background:#f0faf4;border-radius:7px;padding:8px 11px;margin-bottom:6px;border-left:3px solid #2d7a4f">${strengthA}</div>`:""}${strength?`<div class="cb-text">${strength}</div>`:""}</div>`:""}${(improveA||improve)?`<div class="comment-block"><div class="cb-label-rpt"><i class="ti ti-adjustments"></i>파악된 보완점</div>${improveA?`<div class="cb-text" style="white-space:pre-wrap;background:#fffbf0;border-radius:7px;padding:8px 11px;margin-bottom:6px;border-left:3px solid #854f0b">${improveA}</div>`:""}${improve?`<div class="cb-text">${improve}</div>`:""}</div>`:""}${extra?`<div class="comment-block"><div class="cb-label-rpt"><i class="ti ti-pencil"></i>숫자 너머의 기록</div><div class="cb-text">${extra}</div></div>`:""}${next?`<div class="comment-block"><div class="cb-label-rpt"><i class="ti ti-arrow-up-right"></i>다음 지도 방안</div><div class="cb-text">${next}</div></div>`:""}</div></div><div class="rpt-footer"><div class="academy">린쌤파머스 국제어학원 ${teacher} 드림</div><div class="stamp">${month} · Pre Stella ${lv}</div></div></div>`;
 }
-
 function copyRpt(){
   const name=val("sName")||"학생",lv=val("sLevel"),d=LV[lv];
   const school=val("sSchool")||"—",grade=val("sGrade")||"—",cls=val("sClass")||"—",teacher=val("sTeacher")||"담임강사",month=val("sMonth")||"—";
@@ -1560,7 +1515,6 @@ function copyRpt(){
   const txt=lines.join("\n");
   navigator.clipboard.writeText(txt).then(()=>alert("복사되었습니다!")).catch(()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.cssText="position:fixed;opacity:0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);alert("복사되었습니다!");});
 }
-
 function saveKeywordHistory(){
   const name=val("sName").trim(),month=val("sMonth").trim();
   if(!name||!month)return;
@@ -1571,7 +1525,6 @@ function saveKeywordHistory(){
   if(history.length>2)history=history.slice(0,2);
   LS.set(key,JSON.stringify(history));
 }
-
 function resetAll(){
   ["sName","sSchool","sGrade","sClass","sTeacher","sMonth","autoFb","cmtStrength","cmtImprove","cmtExtra","cmtNext"].forEach(id=>{const el=g(id);if(el){el.value="";delete el.dataset.edited;}});
   wrongQs.clear();partialQs.clear();selNext.clear();selAttitude.clear();selStrength.clear();domFilter="all";
@@ -1590,7 +1543,6 @@ function resetAll(){
   curStuId=null;if(g("classSelect"))g("classSelect").value="";if(typeof renderStuChips==="function")renderStuChips();
   window.scrollTo({top:0,behavior:"smooth"});
 }
-
 function saveReport(){
   const btn=g("saveBtn"),statusEl=g("saveStatus");
   btn.disabled=true;btn.innerHTML=`<i class="ti ti-loader" style="font-size:13px;animation:spin 1s linear infinite"></i> 저장 중...`;
@@ -1611,8 +1563,6 @@ function saveReport(){
     if(statusEl){statusEl.style.display="block";statusEl.style.color="#e24b4a";statusEl.textContent="저장 중 오류가 발생했습니다.";}
   }
 }
-
-
 /* ===== 임시저장(Draft) · 이어하기 · 다시보기 · 반별 현황판 ===== */
 // 현재 입력 상태로 draft 키 생성 (리포트 키와 동일 식별자, 접두사만 draft:)
 function _draftKey(){
@@ -1698,9 +1648,15 @@ function renderDashboard(){
   if(!cls){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">반을 선택하면 학생별 리포트 현황이 표시됩니다.</div>';return;}
   const studs=Object.values(roster.students||{}).filter(s=>s.currentClass===cls);
   if(studs.length===0){box.innerHTML='<div style="color:#999;font-size:13px;padding:20px;text-align:center">이 반에 등록된 학생이 없습니다.</div>';return;}
+  const lv=_classToLevel(cls);
+  // 시간 순서 정렬: 최근에 저장/작성한 학생을 맨 위로, 미작성은 아래로(가나다순)
+  studs.sort(function(a,b){
+    var ta=_studentActTime(a,lv,month), tb=_studentActTime(b,lv,month);
+    if(tb!==ta) return tb-ta;
+    return String(a.name||'').localeCompare(String(b.name||''),'ko');
+  });
   let done=0,draft=0,none=0;
   const rows=studs.map(st=>{
-    const lv=_classToLevel(cls);
     const stt=studentStatus(st,lv,month);
     if(stt==="done")done++;else if(stt==="draft")draft++;else none++;
     const badge=stt==="done"?'<span style="background:#e3f3e9;color:#2d7a4f;border:1px solid #b5dcc4;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">완료</span>'
@@ -1715,6 +1671,18 @@ function renderDashboard(){
   box.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:10px;font-size:11px">
     <span style="color:#2d7a4f">완료 ${done}</span><span style="color:#a8730a">작성 중 ${draft}</span><span style="color:#999">미작성 ${none}</span>
     <span style="margin-left:auto;color:#aaa">총 ${studs.length}명</span></div>${rows}`;
+}
+// 학생의 최근 작업 시각(ms) — 저장 완료 우선, 없으면 임시저장(draft) 최신, 둘 다 없으면 0
+function _studentActTime(st,lv,month){
+  var mk=(month||"").replace(/\s/g,"");
+  var pre=[st.school,st.grade,st.name].filter(Boolean).join("_");
+  var rk="report:history:"+pre+":"+lv+":"+mk;
+  var rr=LS.get(rk);
+  if(rr){try{var d=JSON.parse(rr.value);if(d&&d.savedAt){var t=new Date(d.savedAt).getTime();return isNaN(t)?1:t;}}catch(e){}return 1;}
+  var dpre="draft:"+pre+":";
+  var best=0;
+  try{for(var i=0;i<localStorage.length;i++){var key=localStorage.key(i);if(key&&key.indexOf(dpre)===0){var rv=LS.get(key);if(rv){try{var dd=JSON.parse(rv.value);if(dd&&dd.savedAt){var tt=new Date(dd.savedAt).getTime();if(!isNaN(tt)&&tt>best)best=tt;}}catch(e){}}}}}catch(e){}
+  return best;
 }
 // 반 이름에서 레벨 추정 (예: "Pre Stella A3(Clare) ..." → "A3")
 function _classToLevel(cls){
@@ -1765,7 +1733,6 @@ function _restoreReport(st,lv,month){
   if(g("sLevel")&&d.level){g("sLevel").value=d.level;onLvChange();}
   go(4); // 리포트 화면
 }
-
 async function go(n){
   g("s"+curStep).classList.add("hidden");
   document.querySelectorAll(".sbtn").forEach((b,i)=>{b.classList.remove("active");if(i<n)b.classList.add("done");else b.classList.remove("done");});
@@ -1780,10 +1747,8 @@ async function go(n){
   if(typeof saveDraftDebounced==='function')saveDraftDebounced();
   window.scrollTo({top:0,behavior:"smooth"});
 }
-
 onLvChange();
 loadRoster(); renderClassSelect();
-
 function fileBaseName(){
   const sel=g('sLevel');
   let lvName='리포트';
@@ -1808,9 +1773,7 @@ function captureReport(){
   document.body.appendChild(wrap);
   return wrap;
 }
-
 function _setExportHide(on){document.querySelectorAll('.export-hide').forEach(e=>{e.style.visibility=on?'hidden':'';});}
-
 function downloadImage(){
   const el=g('reportOut');
   if(!el||!el.innerHTML.trim()){alert('먼저 리포트를 생성해주세요.');return;}
@@ -1843,11 +1806,8 @@ function downloadPDF(){
     pdf.save(fileBaseName()+'.pdf');
   }).catch(()=>{if(wrap.parentNode)document.body.removeChild(wrap);alert('PDF 저장 중 오류가 발생했습니다.');});
 }
-
-
 (function(){var _al=document.getElementById('appLogo');if(_al)_al.src=LOGO_LIGHT;})();
 </script>
-
 <div class="cm-bg" id="dashModal">
   <div class="cm-modal" style="max-width:560px">
     <h2 style="color:#185fa5"><i class="ti ti-clipboard-list"></i> 반별 리포트 현황 · 다시 보기</h2>
@@ -1908,14 +1868,30 @@ function downloadPDF(){
   </div>
 </div>
 <script>
-/* 명단 읽기 전용 잠금 — 반·학생 편집은 최고관리자만. 선생님 앱에서는 안내만 표시하고 데이터는 바뀌지 않음. */
+/* 명단 읽기 전용 잠금 — 반·학생 편집은 최고관리자(role=admin)만. 강사 계정은 안내만 표시하고 데이터는 바뀌지 않음.
+   기본은 잠금 → 로그인 계정이 관리자로 확인되면 잠금 해제(원래 기능 복원). */
 (function(){
-  function _lockMsg(){ try{ alert('명단(반·학생)은 최고관리자가 관리합니다.\n변경이 필요하면 관리자에게 요청해 주세요.'); }catch(e){} return false; }
+  function _lockMsg(){ try{ alert('명단(반·학생)은 최고관리자만 관리할 수 있습니다.\n변경이 필요하면 대표관리자 계정으로 로그인해 주세요.'); }catch(e){} return false; }
   var _fns=['addClass','renameClass','deleteClass','withdrawStudent','suspendStudent','restoreStudent','openStuEdit','saveStuEdit'];
-  _fns.forEach(function(fn){ if(typeof window[fn]==='function'){ window[fn]=function(){ return _lockMsg(); }; } });
+  var _orig={};
+  _fns.forEach(function(fn){ if(typeof window[fn]==='function'){ _orig[fn]=window[fn]; window[fn]=function(){ return _lockMsg(); }; } });
+  function _unlock(){ _fns.forEach(function(fn){ if(_orig[fn]) window[fn]=_orig[fn]; }); }
+  function _isAdminEmail(e){ e=(e||'').toLowerCase(); return e.indexOf('admin-')===0; }
+  try{
+    var sb = window.__pamusSb || (window.supabase && window.supabase.createClient && window.supabase.createClient('https://bkgvmkbwxmfrocjsmshq.supabase.co','sb_publishable_lzkStKN2FmQCBfGStKEl4Q_-NbC5GdV'));
+    if(sb && sb.auth && sb.auth.getSession){
+      sb.auth.getSession().then(function(r){
+        var u = r && r.data && r.data.session && r.data.session.user;
+        if(!u) return;
+        if(_isAdminEmail(u.email)){ _unlock(); return; }   // admin-* 계정은 즉시 해제
+        return sb.from('profiles').select('role').eq('id', u.id).single().then(function(pr){
+          if(pr && pr.data && pr.data.role==='admin') _unlock();
+        });
+      }).catch(function(){});
+    }
+  }catch(e){}
 })();
 </script>
-
 <!-- ===== 중앙 저장(Supabase) — 범용 필드 인식(stuName/sName 양쪽 지원) ===== -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -1926,11 +1902,9 @@ function downloadPDF(){
   if(!window.supabase||!window.supabase.createClient){ console.warn('[pamus] supabase-js 로드 실패'); return; }
   const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
   window.__pamusSb = sb;
-
   function fv(){ for(var i=0;i<arguments.length;i++){ var id=arguments[i]; try{ var el=(typeof g==='function')?g(id):document.getElementById(id); if(el&&el.value!=null&&String(el.value).trim()!=='') return el.value; }catch(e){} } return ''; }
   function normMonth(s){ s=(s||'').trim(); const m=s.match(/(\d{4})\D+(\d{1,2})/); if(m) return m[1]+'-'+String(m[2]).padStart(2,'0'); if(/^\d{4}-\d{2}$/.test(s)) return s; return s || new Date().toISOString().slice(0,7); }
   async function currentUser(){ try{ const {data:{session}}=await sb.auth.getSession(); return session?session.user:null; }catch(e){ return null; } }
-
   async function saveReportToDB(){
     const user = await currentUser();
     if(!user) return;
@@ -1965,7 +1939,6 @@ function downloadPDF(){
     }catch(e){ console.warn('[pamus] saveReportToDB', e); }
   }
   window.saveReportToDB = saveReportToDB;
-
   if(typeof window.saveReport==='function'){
     const _orig = window.saveReport;
     window.saveReport = function(){ const r=_orig.apply(this,arguments); saveReportToDB(); return r; };
